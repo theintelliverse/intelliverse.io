@@ -1,19 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Background from "@/components/Background";
-import Header from "@/components/Header";
-import Hero from "@/components/Hero";
-import About from "@/components/About";
-import Services from "@/components/Services";
-import Team from "@/components/Team";
-import Projects from "@/components/Projects";
-import Stats from "@/components/Stats";
-import Testimonials from "@/components/Testimonials";
-import Contact from "@/components/Contact";
-import Chatbot from "@/components/Chatbot";
-import ScrollToTop from "@/components/ScrollToTop";
-import Footer from "@/components/Footer";
+import Background from "@/components/ui/Background";
+import Header from "@/components/sections/Header";
+import Hero from "@/components/sections/Hero";
+import About from "@/components/sections/About";
+import Services from "@/components/sections/Services";
+import Team from "@/components/sections/Team";
+import Projects from "@/components/sections/Projects";
+import Stats from "@/components/sections/Stats";
+import Testimonials from "@/components/sections/Testimonials";
+import Contact from "@/components/sections/Contact";
+import Chatbot from "@/components/ui/Chatbot";
+import ScrollToTop from "@/components/ui/ScrollToTop";
+import Footer from "@/components/sections/Footer";
 
 export default function Home() {
   // --- Content Data State (Modifiable by Admin Panel) ---
@@ -146,11 +146,23 @@ export default function Home() {
         {/* Dynamic Worked Projects Portfolio (Hides if empty) */}
         <Projects data={projects} />
 
-        {/* Statistics Numbers Section */}
-        <Stats data={contentData.stats} />
+        {/* Statistics Numbers Section (Hides if no projects) */}
+        {projects.length > 0 && (
+          <Stats
+            data={{
+              projects: projects.length,
+              satisfaction: Math.round(
+                (projects.reduce((sum, p) => sum + (Number(p.rating) || 5), 0) / (projects.length * 5)) * 100
+              ),
+              clients: testimonials.length
+            }}
+          />
+        )}
 
-        {/* Client Reviews Section */}
-        <Testimonials data={testimonials} />
+        {/* Client Reviews Section (Hides if empty) */}
+        {testimonials.length > 0 && (
+          <Testimonials data={testimonials} />
+        )}
 
         {/* Contact Submission & Address Section */}
         <Contact />

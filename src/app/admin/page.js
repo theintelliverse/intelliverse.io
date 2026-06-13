@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
 import { clientPromise, localMockDb } from "@/lib/db";
 import { verifySession, ensureDefaultAdmin } from "@/lib/auth";
-import AdminLoginForm from "@/components/AdminLoginForm";
-import AdminPanel from "@/components/AdminPanel";
+import AdminLoginForm from "@/components/admin/AdminLoginForm";
+import AdminPanel from "@/components/admin/AdminPanel";
 
 const defaultTestimonials = [
   { text: "The Intelliverse delivered an outstanding product on time and on budget. Highly recommended!", author: "Client A" },
@@ -60,6 +60,7 @@ export default async function AdminPage() {
   let projects = [];
   let submissions = [];
   let admins = ["admin"];
+  let chatbotKnowledge = localMockDb.chatbotKnowledge || [];
 
   if (isDbConnected && db) {
     try {
@@ -82,7 +83,10 @@ export default async function AdminPage() {
           description: p.description,
           link: p.link,
           review: p.review,
-          rating: p.rating
+          rating: p.rating,
+          type: p.type || "",
+          featureLink: p.featureLink || "",
+          featureText: p.featureText || ""
         }));
       }
 
@@ -99,6 +103,11 @@ export default async function AdminPage() {
       const dbAdmins = await db.collection("admins").find({}).project({ username: 1, _id: 0 }).toArray();
       if (dbAdmins.length > 0) {
         admins = dbAdmins.map(a => a.username);
+      }
+
+      const dbKnowledge = await db.collection("chatbot_knowledge").find({}).toArray();
+      if (dbKnowledge.length > 0) {
+        chatbotKnowledge = dbKnowledge.map(k => ({ keywords: k.keywords, response: k.response }));
       }
     } catch (err) {
       console.error("Error pre-fetching admin data:", err);
@@ -133,6 +142,7 @@ export default async function AdminPage() {
           projects={projects}
           submissions={submissions}
           admins={admins}
+          chatbotKnowledge={chatbotKnowledge}
           currentUser={currentUser}
           dbStatus={isDbConnected ? "Connected" : "Mock DB Fallback (Offline)"}
         />

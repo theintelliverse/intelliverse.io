@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-
 export default function Footer() {
   return (
     <footer className="bg-gray-900 py-8">
@@ -32,12 +30,6 @@ export default function Footer() {
           </a>
         </div>
         <p>&copy; 2024 The Intelliverse. All Rights Reserved.</p>
-        <Link
-          href="/admin"
-          className="text-sm hover:underline mt-2 inline-block"
-        >
-          Admin Access
-        </Link>
       </div>
     </footer>
   );
