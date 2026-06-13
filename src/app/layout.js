@@ -149,7 +149,7 @@ export default function RootLayout({ children }) {
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-        
+
         {/* Organization Schema */}
         <script
           type="application/ld+json"
@@ -197,15 +197,21 @@ export default function RootLayout({ children }) {
               "founder": [
                 {
                   "@type": "Person",
-                  "name": "Dhruvil Thummar"
+                  "name": "Dhruvil Thummar",
+                  "jobTitle": "Co-founder & CTO",
+                  "sameAs": "https://www.linkedin.com/in/dhruvilthummar"
                 },
                 {
                   "@type": "Person",
-                  "name": "Rudra Patel"
+                  "name": "Rudra Kankotiya",
+                  "jobTitle": "Co-founder & CMO",
+                  "sameAs": "https://www.linkedin.com/in/rudra-kankotiya-2173ab31a"
                 },
                 {
                   "@type": "Person",
-                  "name": "Jal Patel"
+                  "name": "Jal Anghan",
+                  "jobTitle": "Founder & Director",
+                  "sameAs": "https://www.linkedin.com/in/jal-anghan-534628309"
                 }
               ],
               "knowsAbout": ["Software Development", "Web Development", "IT Services", "Mobile Applications", "AI Solutions", "SaaS Portals"]
