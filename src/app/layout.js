@@ -289,6 +289,54 @@ export default function RootLayout({ children }) {
             })
           }}
         />
+
+        {/* Services Schemas */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "Service",
+                "serviceType": "Web Development",
+                "provider": {
+                  "@type": "Organization",
+                  "name": "The Intelliverse",
+                  "url": "https://intelliverse.io/",
+                  "logo": "https://raw.githubusercontent.com/DhruvilThummar/The-Intelliverse/06e4998906bcd13f5d1dd0bdf0ff672bddf85832/the%20intelliverse%20logo.jpg"
+                },
+                "areaServed": ["IN", "US", "GB", "CA"],
+                "description": "Crafting beautiful, responsive, and high-performing websites and web applications tailored to your business needs."
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "Service",
+                "serviceType": "Software Development",
+                "provider": {
+                  "@type": "Organization",
+                  "name": "The Intelliverse",
+                  "url": "https://intelliverse.io/",
+                  "logo": "https://raw.githubusercontent.com/DhruvilThummar/The-Intelliverse/06e4998906bcd13f5d1dd0bdf0ff672bddf85832/the%20intelliverse%20logo.jpg"
+                },
+                "areaServed": ["IN", "US", "GB", "CA"],
+                "description": "Building custom software solutions, multi-tenant SaaS platforms, and native mobile applications to streamline operations."
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "Service",
+                "serviceType": "IT Services",
+                "provider": {
+                  "@type": "Organization",
+                  "name": "The Intelliverse",
+                  "url": "https://intelliverse.io/",
+                  "logo": "https://raw.githubusercontent.com/DhruvilThummar/The-Intelliverse/06e4998906bcd13f5d1dd0bdf0ff672bddf85832/the%20intelliverse%20logo.jpg"
+                },
+                "areaServed": ["IN", "US", "GB", "CA"],
+                "description": "Providing reliable IT support, cloud services, DevOps pipelines, and continuous maintenance."
+              }
+            ])
+          }}
+        />
       </head>
       <body>
         {children}
