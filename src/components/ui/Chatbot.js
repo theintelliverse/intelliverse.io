@@ -38,21 +38,21 @@ export default function Chatbot() {
       role: "Co-founder & CTO",
       initials: "DT",
       linkedin: "https://www.linkedin.com/in/dhruvilthummar",
-      photo: "https://placehold.co/200x200/2563eb/ffffff?text=DT"
+      photo: "/founder_dhruvil.jpg"
     },
     {
       name: "Rudra Kankotiya",
       role: "Co-founder & CMO",
       initials: "RK",
       linkedin: "https://www.linkedin.com/in/rudra-kankotiya-2173ab31a",
-      photo: "https://placehold.co/200x200/2563eb/ffffff?text=RK"
+      photo: "/founder_rudra.jpg"
     },
     {
       name: "Jal Anghan",
       role: "Founder & Director",
       initials: "JA",
       linkedin: "https://www.linkedin.com/in/jal-anghan-534628309",
-      photo: "https://placehold.co/200x200/2563eb/ffffff?text=JA"
+      photo: "/founder_jal.jpg"
     }
   ];
 
