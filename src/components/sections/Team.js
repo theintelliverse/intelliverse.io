@@ -12,8 +12,8 @@ export default function Team() {
           {/* Dhruvil Thummar */}
           <div className="team-card glass-card p-6 rounded-lg shadow-lg text-center w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
             <img
-              className="w-32 h-32 rounded-full mx-auto mb-4 border-2 border-blue-500/35 hover:border-blue-500 hover:scale-105 transition-all duration-300"
-              src="https://placehold.co/200x200/2563eb/ffffff?text=DT"
+              className="w-32 h-32 rounded-full mx-auto mb-4 border-2 border-blue-500/35 hover:border-blue-500 hover:scale-105 transition-all duration-300 object-cover"
+              src="/founder_dhruvil.jpg"
               alt="Photo of Dhruvil Thummar"
             />
             <h3 className="text-xl font-bold mb-1">Dhruvil Thummar</h3>
@@ -32,8 +32,8 @@ export default function Team() {
           {/* Rudra Kankotiya */}
           <div className="team-card glass-card p-6 rounded-lg shadow-lg text-center w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
             <img
-              className="w-32 h-32 rounded-full mx-auto mb-4 border-2 border-blue-500/35 hover:border-blue-500 hover:scale-105 transition-all duration-300"
-              src="https://placehold.co/200x200/2563eb/ffffff?text=RK"
+              className="w-32 h-32 rounded-full mx-auto mb-4 border-2 border-blue-500/35 hover:border-blue-500 hover:scale-105 transition-all duration-300 object-cover"
+              src="/founder_rudra.jpg"
               alt="Photo of Rudra Kankotiya"
             />
             <h3 className="text-xl font-bold mb-1">Rudra Kankotiya</h3>
@@ -52,8 +52,8 @@ export default function Team() {
           {/* Jal Anghan */}
           <div className="team-card glass-card p-6 rounded-lg shadow-lg text-center w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
             <img
-              className="w-32 h-32 rounded-full mx-auto mb-4 border-2 border-blue-500/35 hover:border-blue-500 hover:scale-105 transition-all duration-300"
-              src="https://placehold.co/200x200/2563eb/ffffff?text=JA"
+              className="w-32 h-32 rounded-full mx-auto mb-4 border-2 border-blue-500/35 hover:border-blue-500 hover:scale-105 transition-all duration-300 object-cover"
+              src="/founder_jal.jpg"
               alt="Photo of Jal Anghan"
             />
             <h3 className="text-xl font-bold mb-1">Jal Anghan</h3>
