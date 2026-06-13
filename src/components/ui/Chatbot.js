@@ -14,7 +14,7 @@ export default function Chatbot() {
 
   // Lead capture state machine
   const [leadState, setLeadState] = useState("idle"); // idle, waiting_email, waiting_name
-  const [leadData, setLeadData] = useState({ email: "", initialQuery: "" });
+  const [leadData, setLeadData] = useState({ email: "", initialQuery: "", pendingEmail: "", suggestedEmail: "" });
 
   // Dynamic layout data from database
   const [dbData, setDbData] = useState(null);
@@ -427,7 +427,7 @@ export default function Chatbot() {
       // Cancel lead capture
       if (leadState !== "idle" && ["cancel", "exit", "quit", "cancel request", "back", "nevermind", "no"].includes(lowerInput)) {
         setLeadState("idle");
-        setLeadData({ email: "", initialQuery: "" });
+        setLeadData({ email: "", initialQuery: "", pendingEmail: "", suggestedEmail: "" });
         botResponse = "No worries! Lead capture cancelled. 👍\n\nWhat else would you like to know?";
         setMessages((prev) => [...prev, { text: botResponse, sender: "bot" }]);
         updateSuggestions("general");
@@ -437,6 +437,30 @@ export default function Chatbot() {
 
       // Lead capture - waiting for email
       if (leadState === "waiting_email") {
+        // If we are confirming a typo correction
+        if (text.toLowerCase().startsWith("yes") && leadData.suggestedEmail) {
+          const email = leadData.suggestedEmail;
+          setLeadData((prev) => ({ ...prev, email, pendingEmail: "", suggestedEmail: "" }));
+          setLeadState("waiting_name");
+          botResponse = `Perfect! ✅ Using **${email}**.\n\nAnd what is your **full name**?`;
+          setMessages((prev) => [...prev, { text: botResponse, sender: "bot" }]);
+          updateSuggestions("lead_capture");
+          playChime();
+          return;
+        }
+        
+        if (text.toLowerCase().startsWith("no") && leadData.pendingEmail) {
+          const email = leadData.pendingEmail;
+          setLeadData((prev) => ({ ...prev, email, pendingEmail: "", suggestedEmail: "" }));
+          setLeadState("waiting_name");
+          botResponse = `Got it! Using **${email}**.\n\nAnd what is your **full name**?`;
+          setMessages((prev) => [...prev, { text: botResponse, sender: "bot" }]);
+          updateSuggestions("lead_capture");
+          playChime();
+          return;
+        }
+
+        // Standard format validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(text)) {
           botResponse = "Hmm, that doesn't look like a valid email address. Could you double-check and try again?\n\n*(Type **cancel** to go back)*";
@@ -444,10 +468,53 @@ export default function Chatbot() {
           playChime();
           return;
         }
-        setLeadData((prev) => ({ ...prev, email: text }));
+
+        // Typo domain checking
+        const typoDomains = {
+          "gmial.com": "gmail.com",
+          "gamil.com": "gmail.com",
+          "gmal.com": "gmail.com",
+          "gmaill.com": "gmail.com",
+          "gmil.com": "gmail.com",
+          "gmeil.com": "gmail.com",
+          "gmil.co": "gmail.com",
+          "gmail.co": "gmail.com",
+          "gimail.com": "gmail.com",
+          "yaho.com": "yahoo.com",
+          "yahooo.com": "yahoo.com",
+          "yhoo.com": "yahoo.com",
+          "hotmial.com": "hotmail.com",
+          "hotmal.com": "hotmail.com",
+          "hotamil.com": "hotmail.com",
+          "outlok.com": "outlook.com",
+        };
+        const parts = text.split("@");
+        const username = parts[0];
+        const domain = parts[1]?.toLowerCase().trim();
+
+        if (typoDomains[domain]) {
+          const suggestedDomain = typoDomains[domain];
+          const suggestedEmail = `${username}@${suggestedDomain}`;
+
+          setLeadData((prev) => ({
+            ...prev,
+            pendingEmail: text,
+            suggestedEmail: suggestedEmail
+          }));
+
+          botResponse = `It looks like you entered **${text}**. Did you mean **${suggestedEmail}**? 🧐\n\n*(Please choose an option below or re-type your email)*`;
+          setMessages((prev) => [...prev, { text: botResponse, sender: "bot" }]);
+          setSuggestions([`Yes, use ${suggestedEmail}`, `No, keep ${text}`, "Cancel request"]);
+          playChime();
+          return;
+        }
+
+        // Valid with no typo detected
+        setLeadData((prev) => ({ ...prev, email: text, pendingEmail: "", suggestedEmail: "" }));
         setLeadState("waiting_name");
         botResponse = "Perfect! ✅ And what is your **full name**?";
         setMessages((prev) => [...prev, { text: botResponse, sender: "bot" }]);
+        updateSuggestions("lead_capture");
         playChime();
         return;
       }
@@ -458,7 +525,7 @@ export default function Chatbot() {
         const email = leadData.email;
         const initialQuery = leadData.initialQuery;
         setLeadState("idle");
-        setLeadData({ email: "", initialQuery: "" });
+        setLeadData({ email: "", initialQuery: "", pendingEmail: "", suggestedEmail: "" });
 
         try {
           const res = await fetch("/api/contact", {
@@ -505,7 +572,7 @@ export default function Chatbot() {
       // Priority 1: Price inquiry → lead capture
       if (isPriceInquiry && !isProjectInquiry) {
         setLeadState("waiting_email");
-        setLeadData({ email: "", initialQuery: text });
+        setLeadData({ email: "", initialQuery: text, pendingEmail: "", suggestedEmail: "" });
         botResponse = "I'd love to help you get a custom project quote! 💼\n\nCould you please provide your **email address** so our team can prepare a personalized estimate?";
         category = "pricing";
       }
@@ -610,13 +677,13 @@ export default function Chatbot() {
       { text: "Hello! 👋 I am the **Intelliverse AI** assistant — your guide to everything about our services, portfolio, and team.\n\nHow can I help you today?", sender: "bot" }
     ]);
     setLeadState("idle");
-    setLeadData({ email: "", initialQuery: "" });
+    setLeadData({ email: "", initialQuery: "", pendingEmail: "", suggestedEmail: "" });
     setSuggestions(["What services do you offer?", "Who are the founders?", "Show worked projects", "How can I get a quote?"]);
     try { sessionStorage.removeItem("chatbot_messages"); } catch (e) { /* ignore */ }
   };
 
   // --- Advanced Formatting Parser ---
-  const formatMessageText = (text) => {
+  const formatMessageText = (text, msgIdx) => {
     if (!text) return "";
 
     // Split by triple backticks for code blocks
@@ -631,20 +698,20 @@ export default function Chatbot() {
               const isLang = ["javascript", "js", "html", "css", "python", "bash", "json", "typescript", "ts"].includes(firstLine);
               const codeContent = isLang ? lines.slice(1).join("\n") : block;
               return (
-                <pre key={index} className="bg-gray-950 border border-gray-800 rounded-lg p-3 my-2 overflow-x-auto text-[11px] font-mono text-pink-400 max-w-full">
+                <pre key={`block-pre-${msgIdx}-${index}`} className="bg-gray-950 border border-gray-800 rounded-lg p-3 my-2 overflow-x-auto text-[11px] font-mono text-pink-400 max-w-full">
                   <code>{codeContent.trim()}</code>
                 </pre>
               );
             }
-            return parseInlineContent(block, index);
+            return parseInlineContent(block, index, msgIdx);
           })}
         </div>
       );
     }
-    return parseInlineContent(text, 0);
+    return parseInlineContent(text, 0, msgIdx);
   };
 
-  const parseInlineContent = (textVal, sectionIdx) => {
+  const parseInlineContent = (textVal, sectionIdx, msgIdx) => {
     const lines = textVal.split("\n");
     const parsedLines = lines.map((line, lineIdx) => {
       let content = line.trim();
@@ -660,22 +727,22 @@ export default function Chatbot() {
         if (numMatch) content = numMatch[2];
       }
 
-      const formattedParts = parseInlineFormatting(content, sectionIdx, lineIdx);
+      const formattedParts = parseInlineFormatting(content, sectionIdx, lineIdx, msgIdx);
 
       if (isBullet || isNumbered) {
         return (
-          <li key={`li-${sectionIdx}-${lineIdx}`} className="ml-4 list-disc my-0.5 text-gray-300 text-[13px] leading-relaxed">
+          <li key={`li-${msgIdx}-${sectionIdx}-${lineIdx}`} className="ml-4 list-disc my-0.5 text-gray-300 text-[13px] leading-relaxed">
             {formattedParts}
           </li>
         );
       }
-      return <p key={`p-${sectionIdx}-${lineIdx}`} className="my-0.5 text-gray-200 text-[13px] leading-relaxed">{formattedParts}</p>;
+      return <p key={`p-${msgIdx}-${sectionIdx}-${lineIdx}`} className="my-0.5 text-gray-200 text-[13px] leading-relaxed">{formattedParts}</p>;
     });
 
-    return <div key={`sec-${sectionIdx}`} className="space-y-0.5 w-full">{parsedLines}</div>;
+    return <div key={`sec-${msgIdx}-${sectionIdx}`} className="space-y-0.5 w-full">{parsedLines}</div>;
   };
 
-  const parseInlineFormatting = (content, sectionIdx, lineIdx) => {
+  const parseInlineFormatting = (content, sectionIdx, lineIdx, msgIdx) => {
     const parts = [];
     let lastIndex = 0;
 
@@ -689,7 +756,7 @@ export default function Chatbot() {
       codeParts.forEach((part, cIdx) => {
         if (cIdx % 2 === 1) {
           subParts.push(
-            <code key={`code-${sectionIdx}-${lineIdx}-${cIdx}`} className="bg-gray-800/80 border border-gray-700 px-1.5 py-0.5 rounded text-pink-400 font-mono text-[11px] mx-0.5">
+            <code key={`code-${msgIdx}-${sectionIdx}-${lineIdx}-${cIdx}`} className="bg-gray-800/80 border border-gray-700 px-1.5 py-0.5 rounded text-pink-400 font-mono text-[11px] mx-0.5">
               {part}
             </code>
           );
@@ -698,16 +765,16 @@ export default function Chatbot() {
           boldParts.forEach((bPart, bIdx) => {
             if (bIdx % 2 === 1) {
               subParts.push(
-                <strong key={`bold-${sectionIdx}-${lineIdx}-${bIdx}`} className="font-extrabold text-blue-400">
+                <strong key={`bold-${msgIdx}-${sectionIdx}-${lineIdx}-${cIdx}-${bIdx}`} className="font-extrabold text-blue-400">
                   {bPart}
                 </strong>
               );
             } else {
               // Parse italic *text*
-              const italicParts = bPart.split(/(?<!\*)\*(?!\*)/);
+              const italicParts = bPart.split("*");
               italicParts.forEach((iPart, iIdx) => {
                 if (iIdx % 2 === 1) {
-                  subParts.push(<em key={`it-${sectionIdx}-${lineIdx}-${iIdx}`} className="italic text-gray-300">{iPart}</em>);
+                  subParts.push(<em key={`it-${msgIdx}-${sectionIdx}-${lineIdx}-${cIdx}-${bIdx}-${iIdx}`} className="italic text-gray-300">{iPart}</em>);
                 } else {
                   subParts.push(iPart);
                 }
@@ -724,7 +791,7 @@ export default function Chatbot() {
       const plainText = content.substring(lastIndex, match.index);
       if (plainText) parts.push(...parseBackticksAndBold(plainText));
       parts.push(
-        <a key={`link-${sectionIdx}-${lineIdx}-${match.index}`} href={match[2]} target="_blank" rel="noopener noreferrer"
+        <a key={`link-${msgIdx}-${sectionIdx}-${lineIdx}-${match.index}`} href={match[2]} target="_blank" rel="noopener noreferrer"
           className="text-blue-400 underline hover:text-blue-300 font-semibold mx-0.5" onClick={(e) => e.stopPropagation()}>
           {match[1]}
         </a>
@@ -802,7 +869,7 @@ export default function Chatbot() {
               )}
               <div className="flex flex-col max-w-[85%] min-w-0">
                 <div className={`chat-message ${msg.sender === "user" ? "user-message" : "bot-message"} relative group`}>
-                  {formatMessageText(msg.text)}
+                  {formatMessageText(msg.text, idx)}
                   {msg.sender === "bot" && (
                     <button onClick={() => handleSpeech(msg.text, idx)}
                       className={`absolute -bottom-1 -right-6 p-0.5 text-[9px] rounded-full bg-gray-800/80 border border-gray-700/50 text-gray-500 hover:text-white transition duration-200 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer ${speakingMsgIndex === idx ? "!opacity-100 !text-blue-400 !border-blue-500/50 animate-pulse" : ""}`}
