@@ -1,3 +1,5 @@
+import { MongoClient } from "mongodb";
+
 // Fallback in-memory DB in case MongoDB Atlas is not configured or offline
 let localMockDb = {
   hero: {
@@ -14,21 +16,20 @@ const uri = process.env.MONGODB_URI;
 
 if (uri && (uri.startsWith("mongodb://") || uri.startsWith("mongodb+srv://"))) {
   try {
-    // Dynamic import to prevent crash if npm installation fails or is missing
-    const { MongoClient } = require("mongodb");
+    const options = {};
     
     if (process.env.NODE_ENV === "development") {
       if (!global._mongoClientPromise) {
-        const client = new MongoClient(uri);
+        const client = new MongoClient(uri, options);
         global._mongoClientPromise = client.connect();
       }
       clientPromise = global._mongoClientPromise;
     } else {
-      const client = new MongoClient(uri);
+      const client = new MongoClient(uri, options);
       clientPromise = client.connect();
     }
   } catch (error) {
-    console.error("Failed to initialize MongoDB client. Make sure 'mongodb' package is installed.", error);
+    console.error("Failed to initialize MongoDB client.", error);
   }
 }
 
