@@ -63,8 +63,8 @@ export async function POST(request) {
     // Send emails using Nodemailer (Dual Confirmation)
     const smtpHost = process.env.SMTP_HOST || "smtp.gmail.com";
     const smtpPort = parseInt(process.env.SMTP_PORT) || 587;
-    const smtpUser = process.env.SMTP_USER;
-    const smtpPass = process.env.SMTP_PASS;
+    const smtpUser = process.env.SMTP_USER || process.env.EMAIL_USER;
+    const smtpPass = process.env.SMTP_PASS || process.env.EMAIL_PASS;
 
     if (smtpUser && smtpPass) {
       try {
