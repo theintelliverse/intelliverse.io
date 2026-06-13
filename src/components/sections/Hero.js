@@ -38,7 +38,7 @@ export default function Hero({ data }) {
       </h1>
       <div className="container mx-auto px-6 text-center hero-content">
         <h1 id="hero-title" className="text-4xl md:text-6xl font-extrabold mb-4">
-          <span ref={typedEl}></span>
+          <span ref={typedEl}>The Intelliverse - Your Innovation Partner in Software &amp; Web Development</span>
         </h1>
         <p id="hero-subtitle" className="text-lg md:text-xl text-gray-300 mb-8">
           {data.subtitle}
