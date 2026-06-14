@@ -1,6 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import audioManager from "@/lib/audioManager";
+
+function getRandomDelay() {
+  return 800 + Math.random() * 500;
+}
 
 export default function Chatbot() {
   const [chatbotOpen, setChatbotOpen] = useState(false);
@@ -283,21 +289,25 @@ export default function Chatbot() {
 
   // Session Chat History Persistence - Load on Mount
   useEffect(() => {
+    let parsed = null;
     try {
       const saved = sessionStorage.getItem("chatbot_messages");
       if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed && parsed.length > 0) {
-          setMessages(parsed);
-          return;
-        }
+        parsed = JSON.parse(saved);
       }
     } catch (e) {
       console.warn("Could not load chatbot history from sessionStorage:", e);
     }
-    setMessages([
-      { text: "Hello! 👋 I am the **Intelliverse AI** assistant — your guide to everything about our services, portfolio, and team.\n\nHow can I help you today?", sender: "bot" }
-    ]);
+    
+    setTimeout(() => {
+      if (parsed && parsed.length > 0) {
+        setMessages(parsed);
+      } else {
+        setMessages([
+          { text: "Hello! 👋 I am the **Intelliverse AI** assistant — your guide to everything about our services, portfolio, and team.\n\nHow can I help you today?", sender: "bot" }
+        ]);
+      }
+    }, 0);
   }, []);
 
   // Session Chat History Persistence - Save on change
@@ -315,39 +325,18 @@ export default function Chatbot() {
   useEffect(() => {
     try {
       const saved = localStorage.getItem("chatbot_sound_enabled");
-      if (saved !== null) setSoundEnabled(saved === "true");
+      if (saved !== null) {
+        setTimeout(() => {
+          setSoundEnabled(saved === "true");
+        }, 0);
+      }
     } catch (e) { /* ignore */ }
   }, []);
 
   // Play synthetic chime
   const playChime = () => {
     if (!soundEnabled) return;
-    try {
-      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContextClass) return;
-      const ctx = new AudioContextClass();
-      const now = ctx.currentTime;
-      const osc1 = ctx.createOscillator();
-      const gain1 = ctx.createGain();
-      osc1.type = "sine";
-      osc1.frequency.setValueAtTime(523.25, now);
-      gain1.gain.setValueAtTime(0.06, now);
-      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-      osc1.connect(gain1);
-      gain1.connect(ctx.destination);
-      osc1.start(now);
-      osc1.stop(now + 0.15);
-      const osc2 = ctx.createOscillator();
-      const gain2 = ctx.createGain();
-      osc2.type = "sine";
-      osc2.frequency.setValueAtTime(659.25, now + 0.07);
-      gain2.gain.setValueAtTime(0.06, now + 0.07);
-      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-      osc2.connect(gain2);
-      gain2.connect(ctx.destination);
-      osc2.start(now + 0.07);
-      osc2.stop(now + 0.25);
-    } catch (err) { /* ignore */ }
+    audioManager.playChatBubble();
   };
 
   const toggleSound = () => {
@@ -668,7 +657,7 @@ export default function Chatbot() {
       setMessages((prev) => [...prev, { text: botResponse, sender: "bot", type: msgType }]);
       updateSuggestions(category);
       playChime();
-    }, 800 + Math.random() * 500); // Slightly variable delay for realism
+    }, getRandomDelay()); // Slightly variable delay for realism
   };
 
   const handleClearChat = () => {
@@ -823,176 +812,201 @@ export default function Chatbot() {
       )}
 
       {/* Chatbot Window */}
-      <div id="chatbot-window" className={`${chatbotOpen ? "open" : ""} ${isMinimized ? "minimized" : ""}`}>
-        {/* Chat Header */}
-        <div id="chat-header" onClick={() => isMinimized && setIsMinimized(false)}
-          className={`flex justify-between items-center select-none ${isMinimized ? "cursor-pointer" : ""}`}>
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-xs shadow-lg shadow-blue-500/20 border border-blue-400/30 flex-shrink-0">
-              <i className="fas fa-robot"></i>
-            </div>
-            <div className="flex flex-col text-left">
-              <span className="text-xs font-bold leading-tight">Intelliverse AI</span>
-              <span className="text-[9px] text-emerald-400 font-medium flex items-center gap-1">
-                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse inline-block"></span>
-                Online • AI Assistant
-              </span>
-            </div>
-          </div>
-          <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
-            <button onClick={toggleSound} className="text-gray-400 hover:text-white transition p-1 text-xs cursor-pointer"
-              title={soundEnabled ? "Mute" : "Unmute"}>
-              <i className={`fas ${soundEnabled ? "fa-volume-up" : "fa-volume-mute"}`}></i>
-            </button>
-            <button onClick={handleClearChat} className="text-gray-400 hover:text-white transition p-1 text-xs cursor-pointer" title="Clear chat">
-              <i className="fas fa-trash-alt"></i>
-            </button>
-            <button onClick={() => setIsMinimized(!isMinimized)} className="text-gray-400 hover:text-white transition p-1 text-xs cursor-pointer"
-              title={isMinimized ? "Expand" : "Minimize"}>
-              <i className={`fas ${isMinimized ? "fa-chevron-up" : "fa-minus"}`}></i>
-            </button>
-            <button onClick={() => { setChatbotOpen(false); setIsMinimized(false); }}
-              className="text-gray-400 hover:text-white transition p-1 text-xs cursor-pointer" title="Close">
-              <i className="fas fa-times"></i>
-            </button>
-          </div>
-        </div>
-
-        {/* Messages Area */}
-        <div id="chat-messages" className="flex-1 relative">
-          {messages.map((msg, idx) => (
-            <div key={idx} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"} items-end gap-2 my-1`}>
-              {msg.sender === "bot" && (
-                <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-[9px] shadow-md shadow-blue-500/20 border border-blue-400/30 flex-shrink-0 mb-1">
+      <AnimatePresence>
+        {chatbotOpen && (
+          <motion.div
+            id="chatbot-window"
+            initial={{ opacity: 0, scale: 0.85, y: 60, rotate: 1 }}
+            animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
+            exit={{ opacity: 0, scale: 0.85, y: 60, rotate: 1 }}
+            transition={{ type: "spring", damping: 20, stiffness: 180 }}
+            className={`open ${isMinimized ? "minimized" : ""}`}
+            style={{ display: "flex" }}
+          >
+            {/* Chat Header */}
+            <div id="chat-header" onClick={() => isMinimized && setIsMinimized(false)}
+              className={`flex justify-between items-center select-none ${isMinimized ? "cursor-pointer" : ""}`}>
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white text-xs shadow-lg shadow-blue-500/20 border border-blue-400/30 flex-shrink-0">
                   <i className="fas fa-robot"></i>
                 </div>
-              )}
-              <div className="flex flex-col max-w-[85%] min-w-0">
-                <div className={`chat-message ${msg.sender === "user" ? "user-message" : "bot-message"} relative group`}>
-                  {formatMessageText(msg.text, idx)}
-                  {msg.sender === "bot" && (
-                    <button onClick={() => handleSpeech(msg.text, idx)}
-                      className={`absolute -bottom-1 -right-6 p-0.5 text-[9px] rounded-full bg-gray-800/80 border border-gray-700/50 text-gray-500 hover:text-white transition duration-200 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer ${speakingMsgIndex === idx ? "!opacity-100 !text-blue-400 !border-blue-500/50 animate-pulse" : ""}`}
-                      title={speakingMsgIndex === idx ? "Stop" : "Read aloud"}>
-                      <i className={`fas ${speakingMsgIndex === idx ? "fa-stop" : "fa-volume-up"}`}></i>
-                    </button>
-                  )}
+                <div className="flex flex-col text-left">
+                  <span className="text-xs font-bold leading-tight">Intelliverse AI</span>
+                  <span className="text-[9px] text-emerald-400 font-medium flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse inline-block"></span>
+                    Online • AI Assistant
+                  </span>
                 </div>
+              </div>
+              <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                <button onClick={toggleSound} className="text-gray-400 hover:text-white transition p-1 text-xs cursor-pointer"
+                  title={soundEnabled ? "Mute" : "Unmute"}>
+                  <i className={`fas ${soundEnabled ? "fa-volume-up" : "fa-volume-mute"}`}></i>
+                </button>
+                <button onClick={handleClearChat} className="text-gray-400 hover:text-white transition p-1 text-xs cursor-pointer" title="Clear chat">
+                  <i className="fas fa-trash-alt"></i>
+                </button>
+                <button onClick={() => setIsMinimized(!isMinimized)} className="text-gray-400 hover:text-white transition p-1 text-xs cursor-pointer"
+                  title={isMinimized ? "Expand" : "Minimize"}>
+                  <i className={`fas ${isMinimized ? "fa-chevron-up" : "fa-minus"}`}></i>
+                </button>
+                <button onClick={() => { setChatbotOpen(false); setIsMinimized(false); }}
+                  className="text-gray-400 hover:text-white transition p-1 text-xs cursor-pointer" title="Close">
+                  <i className="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
 
-                {/* Founders visual cards */}
-                {msg.type === "founders" && (
-                  <div className="chat-founders-grid mt-2 grid grid-cols-3 gap-1.5 w-full">
-                    {foundersData.map((f, fIdx) => (
-                      <a key={fIdx} href={f.linkedin} target="_blank" rel="noopener noreferrer"
-                        className="founder-chat-card bg-gray-900/90 border border-gray-800 hover:border-blue-500/40 rounded-xl p-2 text-center flex flex-col items-center shadow-lg transition-all duration-300 hover:shadow-blue-500/10 hover:-translate-y-0.5 group/card cursor-pointer">
-                        <img className="w-10 h-10 rounded-full border border-blue-500/30 mb-1 object-cover group-hover/card:border-blue-400 transition"
-                          src={f.photo} alt={`Photo of ${f.name}`} />
-                        <h4 className="text-[10px] font-bold text-white leading-tight">{f.name}</h4>
-                        <p className="text-[8px] text-blue-400 font-medium mt-0.5">{f.role}</p>
-                        <span className="text-[8px] text-gray-500 group-hover/card:text-blue-400 mt-1 flex items-center gap-0.5 transition">
-                          <i className="fab fa-linkedin-in text-[8px]"></i> LinkedIn
-                        </span>
-                      </a>
-                    ))}
-                  </div>
-                )}
-
-                {/* Projects visual cards */}
-                {msg.type === "projects" && dbData?.projects && dbData.projects.length > 0 && (
-                  <div className="chat-projects-list mt-2 space-y-1.5 w-full">
-                    {dbData.projects.map((p, pIdx) => (
-                      <div key={pIdx} className="project-chat-card bg-gray-900/90 border border-gray-800 rounded-xl p-2.5 shadow-lg flex flex-col gap-1 hover:border-gray-700 transition">
-                        <div className="flex justify-between items-center">
-                          <h4 className="text-[11px] font-bold text-white flex items-center gap-1.5">
-                            <i className="fas fa-folder-open text-blue-400 text-[9px]"></i>
-                            {p.name}
-                          </h4>
-                          {p.rating && <span className="text-[9px] text-amber-400 font-bold flex items-center gap-0.5"><i className="fas fa-star text-[7px]"></i> {p.rating}</span>}
-                        </div>
-                        <p className="text-[10px] text-gray-400 leading-normal">{p.description}</p>
-                        {p.review && (
-                          <p className="text-[9px] text-gray-500 italic border-l-2 border-blue-500/30 pl-2 mt-0.5">"{p.review}"</p>
-                        )}
-                        <div className="flex gap-1.5 mt-1">
-                          {p.link && (
-                            <a href={p.link} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
-                              className="px-2 py-0.5 bg-blue-600/80 hover:bg-blue-500 text-white text-[8px] font-bold rounded transition">
-                              <i className="fas fa-external-link-alt mr-0.5 text-[7px]"></i> Live Site
-                            </a>
-                          )}
-                          {p.featureLink && (
-                            <a href={p.featureLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
-                              className="px-2 py-0.5 bg-purple-600/80 hover:bg-purple-500 text-white text-[8px] font-bold rounded transition">
-                              <i className="fas fa-play-circle mr-0.5 text-[7px]"></i> {p.featureText || "How its work!"}
-                            </a>
-                          )}
-                        </div>
+            {/* Messages Area */}
+            <div id="chat-messages" className="flex-1 relative">
+              <AnimatePresence initial={false}>
+                {messages.map((msg, idx) => (
+                  <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ type: "spring", stiffness: 220, damping: 18 }}
+                    key={idx}
+                    className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"} items-end gap-2 my-1`}
+                  >
+                    {msg.sender === "bot" && (
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white text-[9px] shadow-md shadow-blue-500/20 border border-blue-400/30 flex-shrink-0 mb-1">
+                        <i className="fas fa-robot"></i>
                       </div>
-                    ))}
+                    )}
+                    <div className="flex flex-col max-w-[85%] min-w-0">
+                      <div className={`chat-message ${msg.sender === "user" ? "user-message" : "bot-message"} relative group`}>
+                        {formatMessageText(msg.text, idx)}
+                        {msg.sender === "bot" && (
+                          <button onClick={() => handleSpeech(msg.text, idx)}
+                            className={`absolute -bottom-1 -right-6 p-0.5 text-[9px] rounded-full bg-gray-800/80 border border-gray-700/50 text-gray-500 hover:text-white transition duration-200 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer ${speakingMsgIndex === idx ? "!opacity-100 !text-blue-400 !border-blue-500/50 animate-pulse" : ""}`}
+                            title={speakingMsgIndex === idx ? "Stop" : "Read aloud"}>
+                            <i className={`fas ${speakingMsgIndex === idx ? "fa-stop" : "fa-volume-up"}`}></i>
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Founders visual cards */}
+                      {msg.type === "founders" && (
+                        <div className="chat-founders-grid mt-2 grid grid-cols-3 gap-1.5 w-full">
+                          {foundersData.map((f, fIdx) => (
+                            <a key={fIdx} href={f.linkedin} target="_blank" rel="noopener noreferrer"
+                              className="founder-chat-card glassmorphic-card hover:border-blue-500/40 rounded-xl p-2 text-center flex flex-col items-center shadow-lg transition-all duration-300 hover:shadow-blue-500/10 hover:-translate-y-0.5 group/card cursor-pointer">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img className="w-10 h-10 rounded-full border border-blue-500/30 mb-1 object-cover group-hover/card:border-blue-400 transition"
+                                src={f.photo} alt={`Photo of ${f.name}`} />
+                              <h4 className="text-[10px] font-bold text-white leading-tight">{f.name}</h4>
+                              <p className="text-[8px] text-blue-400 font-medium mt-0.5">{f.role}</p>
+                              <span className="text-[8px] text-gray-500 group-hover/card:text-blue-400 mt-1 flex items-center gap-0.5 transition">
+                                <i className="fab fa-linkedin-in text-[8px]"></i> LinkedIn
+                              </span>
+                            </a>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Projects visual cards */}
+                      {msg.type === "projects" && dbData?.projects && dbData.projects.length > 0 && (
+                        <div className="chat-projects-list mt-2 space-y-1.5 w-full">
+                          {dbData.projects.map((p, pIdx) => (
+                            <div key={pIdx} className="project-chat-card glassmorphic-card rounded-xl p-2.5 shadow-lg flex flex-col gap-1 hover:border-gray-700 transition">
+                              <div className="flex justify-between items-center">
+                                <h4 className="text-[11px] font-bold text-white flex items-center gap-1.5">
+                                  <i className="fas fa-folder-open text-blue-400 text-[9px]"></i>
+                                  {p.name}
+                                </h4>
+                                {p.rating && <span className="text-[9px] text-amber-400 font-bold flex items-center gap-0.5"><i className="fas fa-star text-[7px]"></i> {p.rating}</span>}
+                              </div>
+                              <p className="text-[10px] text-gray-400 leading-normal">{p.description}</p>
+                              {p.review && (
+                                <p className="text-[9px] text-gray-500 italic border-l-2 border-blue-500/30 pl-2 mt-0.5">&quot;{p.review}&quot;</p>
+                              )}
+                              <div className="flex gap-1.5 mt-1">
+                                {p.link && (
+                                  <a href={p.link} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
+                                    className="px-2 py-0.5 bg-blue-600/80 hover:bg-blue-500 text-white text-[8px] font-bold rounded transition">
+                                    <i className="fas fa-external-link-alt mr-0.5 text-[7px]"></i> Live Site
+                                  </a>
+                                )}
+                                {p.featureLink && (
+                                  <a href={p.featureLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
+                                    className="px-2 py-0.5 bg-purple-600/80 hover:bg-purple-500 text-white text-[8px] font-bold rounded transition">
+                                    <i className="fas fa-play-circle mr-0.5 text-[7px]"></i> {p.featureText || "How its work!"}
+                                  </a>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+
+              {/* Gemini-style 2x2 starter cards grid */}
+              {messages.length <= 1 && !isTyping && (
+                <div className="starter-cards-grid mt-3 grid grid-cols-2 gap-2 w-full">
+                  {[
+                    { icon: "fa-laptop-code", color: "text-blue-400", label: "Services", prompt: "What services do you offer?", border: "hover:border-blue-500/40" },
+                    { icon: "fa-users", color: "text-purple-400", label: "Founders", prompt: "Who are the founders?", border: "hover:border-purple-500/40" },
+                    { icon: "fa-briefcase", color: "text-emerald-400", label: "Portfolio", prompt: "Show worked projects", border: "hover:border-emerald-500/40" },
+                    { icon: "fa-file-invoice-dollar", color: "text-amber-400", label: "Quote", prompt: "How can I get a quote?", border: "hover:border-amber-500/40" }
+                  ].map((card, cIdx) => (
+                    <button key={cIdx} onClick={() => handleChatSend(card.prompt)}
+                      className={`starter-card text-left p-2.5 rounded-xl glassmorphic-card ${card.border} hover:bg-white/[0.04] transition-all duration-300 group cursor-pointer hover:-translate-y-0.5`}>
+                      <i className={`fas ${card.icon} ${card.color} group-hover:scale-110 transition duration-300 mb-1 block text-sm`}></i>
+                      <span className="text-[9px] text-gray-500 block font-semibold uppercase tracking-wider">{card.label}</span>
+                      <span className="text-[10px] text-gray-300 block font-medium leading-tight mt-0.5">{card.prompt}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {isTyping && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex justify-start items-end gap-2 my-1"
+                >
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white text-[9px] shadow-md shadow-blue-500/20 border border-blue-400/30 flex-shrink-0 mb-1">
+                    <i className="fas fa-robot"></i>
                   </div>
-                )}
-              </div>
+                  <div className="chat-message bot-message typing-indicator">
+                    <span></span><span></span><span></span>
+                  </div>
+                </motion.div>
+              )}
+              <div ref={messagesEndRef} />
             </div>
-          ))}
 
-          {/* Gemini-style 2x2 starter cards grid */}
-          {messages.length <= 1 && !isTyping && (
-            <div className="starter-cards-grid mt-3 grid grid-cols-2 gap-2 w-full">
-              {[
-                { icon: "fa-laptop-code", color: "text-blue-400", label: "Services", prompt: "What services do you offer?", border: "hover:border-blue-500/40" },
-                { icon: "fa-users", color: "text-purple-400", label: "Founders", prompt: "Who are the founders?", border: "hover:border-purple-500/40" },
-                { icon: "fa-briefcase", color: "text-emerald-400", label: "Portfolio", prompt: "Show worked projects", border: "hover:border-emerald-500/40" },
-                { icon: "fa-file-invoice-dollar", color: "text-amber-400", label: "Quote", prompt: "How can I get a quote?", border: "hover:border-amber-500/40" }
-              ].map((card, cIdx) => (
-                <button key={cIdx} onClick={() => handleChatSend(card.prompt)}
-                  className={`starter-card text-left p-2.5 rounded-xl bg-gray-900/60 border border-gray-800 ${card.border} hover:bg-gray-800/60 transition-all duration-300 group cursor-pointer hover:-translate-y-0.5`}>
-                  <i className={`fas ${card.icon} ${card.color} group-hover:scale-110 transition duration-300 mb-1 block text-sm`}></i>
-                  <span className="text-[9px] text-gray-500 block font-semibold uppercase tracking-wider">{card.label}</span>
-                  <span className="text-[10px] text-gray-300 block font-medium leading-tight mt-0.5">{card.prompt}</span>
-                </button>
-              ))}
-            </div>
-          )}
-
-          {isTyping && (
-            <div className="flex justify-start items-end gap-2 my-1">
-              <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-[9px] shadow-md shadow-blue-500/20 border border-blue-400/30 flex-shrink-0 mb-1">
-                <i className="fas fa-robot"></i>
+            {/* Dynamic Suggestion Chips */}
+            {!isMinimized && (
+              <div id="quick-replies-container">
+                <div className="quick-replies">
+                  {suggestions.map((replyText, idx) => (
+                    <button key={idx} onClick={() => handleChatSend(replyText)}
+                      className={`quick-reply ${replyText === "Cancel request" ? "border-red-500/30 text-red-400 hover:bg-red-500 hover:text-white font-bold" : ""}`}>
+                      {replyText === "Cancel request" && <i className="fas fa-times-circle mr-1"></i>}
+                      {replyText}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="chat-message bot-message typing-indicator">
-                <span></span><span></span><span></span>
-              </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
+            )}
 
-        {/* Dynamic Suggestion Chips */}
-        {!isMinimized && (
-          <div id="quick-replies-container">
-            <div className="quick-replies">
-              {suggestions.map((replyText, idx) => (
-                <button key={idx} onClick={() => handleChatSend(replyText)}
-                  className={`quick-reply ${replyText === "Cancel request" ? "border-red-500/30 text-red-400 hover:bg-red-500 hover:text-white font-bold" : ""}`}>
-                  {replyText === "Cancel request" && <i className="fas fa-times-circle mr-1"></i>}
-                  {replyText}
-                </button>
-              ))}
+            {/* Chat Input */}
+            <div id="chat-input-container">
+              <input type="text" id="chat-input" value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleChatSend()}
+                placeholder={leadState === "waiting_email" ? "Enter your email address..." : leadState === "waiting_name" ? "Enter your name..." : "Ask anything about Intelliverse..."} />
+              <button id="chat-send" onClick={() => handleChatSend()} title="Send message">
+                <i className="fas fa-paper-plane"></i>
+              </button>
             </div>
-          </div>
+          </motion.div>
         )}
-
-        {/* Chat Input */}
-        <div id="chat-input-container">
-          <input type="text" id="chat-input" value={chatInput}
-            onChange={(e) => setChatInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleChatSend()}
-            placeholder={leadState === "waiting_email" ? "Enter your email address..." : leadState === "waiting_name" ? "Enter your name..." : "Ask anything about Intelliverse..."} />
-          <button id="chat-send" onClick={() => handleChatSend()} title="Send message">
-            <i className="fas fa-paper-plane"></i>
-          </button>
-        </div>
-      </div>
+      </AnimatePresence>
 
       {/* Floating Chat Bubble */}
       <div id="chatbot-bubble" className="chatbot-pulse-container"

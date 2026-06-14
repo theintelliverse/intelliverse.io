@@ -61,6 +61,7 @@ export default async function AdminPage() {
   let submissions = [];
   let admins = ["admin"];
   let chatbotKnowledge = localMockDb.chatbotKnowledge || [];
+  let founders = [...localMockDb.founders];
 
   if (isDbConnected && db) {
     try {
@@ -86,7 +87,11 @@ export default async function AdminPage() {
           rating: p.rating,
           type: p.type || "",
           featureLink: p.featureLink || "",
-          featureText: p.featureText || ""
+          featureText: p.featureText || "",
+          features: p.features || [],
+          techTags: p.techTags || [],
+          tagline: p.tagline || "",
+          isFeatured: p.isFeatured || false
         }));
       }
 
@@ -109,6 +114,24 @@ export default async function AdminPage() {
       if (dbKnowledge.length > 0) {
         chatbotKnowledge = dbKnowledge.map(k => ({ keywords: k.keywords, response: k.response }));
       }
+
+      const dbFounders = await db.collection("founders").find({}).sort({ order: 1 }).toArray();
+      if (dbFounders.length > 0) {
+        founders = dbFounders.map(f => ({
+          name: f.name,
+          role: f.role,
+          tagline: f.tagline || "",
+          image: f.image || "",
+          imageX: f.imageX !== undefined ? Number(f.imageX) : 50,
+          imageY: f.imageY !== undefined ? Number(f.imageY) : 50,
+          linkedin: f.linkedin || "",
+          instagram: f.instagram || "",
+          customLinkUrl: f.customLinkUrl || "",
+          customLinkName: f.customLinkName || "",
+          customLinkIcon: f.customLinkIcon || "",
+          order: f.order !== undefined ? Number(f.order) : 1
+        }));
+      }
     } catch (err) {
       console.error("Error pre-fetching admin data:", err);
     }
@@ -117,6 +140,7 @@ export default async function AdminPage() {
     if (localMockDb.stats) stats = localMockDb.stats;
     if (localMockDb.testimonials) testimonials = localMockDb.testimonials;
     if (localMockDb.projects) projects = localMockDb.projects;
+    if (localMockDb.founders) founders = localMockDb.founders;
     submissions = dummySubmissions;
   }
 
@@ -143,6 +167,7 @@ export default async function AdminPage() {
           submissions={submissions}
           admins={admins}
           chatbotKnowledge={chatbotKnowledge}
+          founders={founders}
           currentUser={currentUser}
           dbStatus={isDbConnected ? "Connected" : "Mock DB Fallback (Offline)"}
         />

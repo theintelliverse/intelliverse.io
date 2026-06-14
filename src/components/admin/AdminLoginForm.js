@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function AdminLoginForm() {
   const [username, setUsername] = useState("");
@@ -52,6 +53,7 @@ export default function AdminLoginForm() {
       <div className="w-full max-w-md bg-gray-900/40 backdrop-blur-xl border border-gray-800/80 p-8 rounded-2xl shadow-2xl relative z-10 animate-fade-in">
         <div className="text-center mb-8">
           <div className="inline-block p-1 bg-gray-950 border border-gray-850 rounded-2xl mb-3 shadow-lg">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/the%20intelliverse%20logo.jpg"
               alt="The Intelliverse Logo"
@@ -136,13 +138,13 @@ export default function AdminLoginForm() {
         </form>
 
         <div className="text-center mt-6">
-          <a
+          <Link
             href="/"
             className="text-xs text-gray-500 hover:text-gray-300 transition-colors inline-flex items-center gap-1.5"
           >
             <i className="fas fa-home text-[10px]"></i>
             Return to Homepage
-          </a>
+          </Link>
         </div>
       </div>
     </div>

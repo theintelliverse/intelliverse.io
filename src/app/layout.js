@@ -1,5 +1,11 @@
+import { Inter } from "next/font/google";
 import "./globals.css";
-import { Analytics } from '@vercel/analytics/next'
+import { Analytics } from '@vercel/analytics/next';
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const viewport = {
   themeColor: "#111827",
@@ -147,7 +153,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
         {/* Organization Schema */}
@@ -344,7 +349,7 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body>
+      <body className={inter.className}>
         {children}
         <Analytics />
       </body>

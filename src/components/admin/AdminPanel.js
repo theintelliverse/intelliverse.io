@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function AdminPanel({ isOpen, data, testimonials: initialTestimonials, projects: initialProjects, submissions: initialSubmissions, admins: initialAdmins, chatbotKnowledge: initialChatbotKnowledge, currentUser, dbStatus }) {
+export default function AdminPanel({ isOpen, data, testimonials: initialTestimonials, projects: initialProjects, submissions: initialSubmissions, admins: initialAdmins, chatbotKnowledge: initialChatbotKnowledge, founders: initialFounders, currentUser, dbStatus }) {
   const router = useRouter();
 
   // --- Responsive mobile states ---
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // --- Active Tab State ---
-  const [activeTab, setActiveTab] = useState("dashboard"); // dashboard | cms | projects | testimonials | chatbot | crm | settings
+  const [activeTab, setActiveTab] = useState("dashboard"); // dashboard | cms | team | projects | testimonials | chatbot | crm | settings
 
   // --- CMS Content States ---
   const [heroSubtitle, setHeroSubtitle] = useState(data.hero.subtitle);
@@ -22,6 +22,9 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
   // --- Dynamic Lists States ---
   const [testimonials, setTestimonials] = useState(initialTestimonials || []);
   const [projects, setProjects] = useState(initialProjects || []);
+  const [founders, setFounders] = useState(initialFounders || []);
+  const [selectedFounderIndex, setSelectedFounderIndex] = useState(initialFounders && initialFounders.length > 0 ? 0 : null);
+  const [teamEditorTab, setTeamEditorTab] = useState("basic"); // basic | photo | socials
   const [contactLogs, setContactLogs] = useState(initialSubmissions || []);
   const [adminsList, setAdminsList] = useState(initialAdmins || ["admin"]);
   const [chatbotKnowledge, setChatbotKnowledge] = useState(initialChatbotKnowledge || []);
@@ -79,15 +82,114 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
     setTestimonials(testimonials.filter((_, i) => i !== index));
   };
 
+  // --- Handlers for Founders ---
+  const handleAddFounder = () => {
+    const newFounder = { name: "", role: "", tagline: "", image: "", imageX: 50, imageY: 50, linkedin: "", instagram: "", order: founders.length + 1 };
+    setFounders([...founders, newFounder]);
+    setSelectedFounderIndex(founders.length);
+    setTeamEditorTab("basic");
+  };
+
+  const handleFounderChange = (index, field, value) => {
+    const updated = founders.map((founder, i) => {
+      if (i === index) {
+        let parsedValue = value;
+        if (field === "imageX" || field === "imageY" || field === "order") {
+          const num = parseInt(value, 10);
+          parsedValue = isNaN(num) ? (field === "order" ? 1 : 50) : num;
+        }
+        return { ...founder, [field]: parsedValue };
+      }
+      return founder;
+    });
+    setFounders(updated);
+  };
+
+  const handleDeleteFounder = (index) => {
+    const updated = founders.filter((_, i) => i !== index);
+    setFounders(updated);
+    if (selectedFounderIndex === index) {
+      setSelectedFounderIndex(updated.length > 0 ? Math.max(0, index - 1) : null);
+    } else if (selectedFounderIndex > index) {
+      setSelectedFounderIndex(selectedFounderIndex - 1);
+    }
+  };
+
+  const handleImageClick = (e, index) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const clickY = e.clientY - rect.top;
+    const pctX = Math.min(100, Math.max(0, Math.round((clickX / rect.width) * 100)));
+    const pctY = Math.min(100, Math.max(0, Math.round((clickY / rect.height) * 100)));
+    handleFounderChange(index, "imageX", pctX);
+    handleFounderChange(index, "imageY", pctY);
+  };
+
+  const handleImageUpload = async (e, index) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    notify("Uploading image to server...", "info");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const json = await response.json();
+      if (response.ok && json.url) {
+        handleFounderChange(index, "image", json.url);
+        notify("Image uploaded successfully!", "success");
+      } else {
+        notify(json.error || "Failed to upload image.", "error");
+      }
+    } catch (err) {
+      console.error("Failed to upload image:", err);
+      notify("Network error. Image upload failed.", "error");
+    }
+  };
+
+  const handleMoveFounder = (index, direction) => {
+    if (direction === "up" && index === 0) return;
+    if (direction === "down" && index === founders.length - 1) return;
+
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    const updated = [...founders];
+
+    const temp = updated[index];
+    updated[index] = updated[targetIndex];
+    updated[targetIndex] = temp;
+
+    const resorted = updated.map((founder, i) => ({
+      ...founder,
+      order: i + 1
+    }));
+
+    setFounders(resorted);
+    
+    // Maintain selection index on the moved item
+    if (selectedFounderIndex === index) {
+      setSelectedFounderIndex(targetIndex);
+    } else if (selectedFounderIndex === targetIndex) {
+      setSelectedFounderIndex(index);
+    }
+  };
+
   // --- Handlers for Projects ---
   const handleAddProject = () => {
-    setProjects([...projects, { name: "", description: "", link: "", review: "", rating: 5, type: "", featureLink: "", featureText: "" }]);
+    setProjects([...projects, { name: "", description: "", link: "", review: "", rating: 5, type: "", featureLink: "", featureText: "", features: [], techTags: [], tagline: "", isFeatured: false }]);
   };
 
   const handleProjectChange = (index, field, value) => {
     const updated = [...projects];
     if (field === "rating") {
       updated[index][field] = parseInt(value) || 5;
+    } else if (field === "isFeatured") {
+      updated[index][field] = !!value;
     } else {
       updated[index][field] = value;
     }
@@ -128,7 +230,8 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
       },
       testimonials,
       projects,
-      chatbotKnowledge
+      chatbotKnowledge,
+      founders
     };
 
     try {
@@ -338,6 +441,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
       {/* Mobile Top Header (Sticky on phone views) */}
       <div className="md:hidden flex items-center justify-between bg-gray-900 border-b border-gray-800 p-4 sticky top-0 z-30 backdrop-blur-md bg-gray-900/80">
         <div className="flex items-center gap-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/the%20intelliverse%20logo.jpg"
             alt="Intelliverse Logo"
@@ -374,6 +478,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
         {/* Brand Header */}
         <div className="p-6 border-b border-gray-800 flex items-center justify-between">
           <div className="flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/the%20intelliverse%20logo.jpg"
               alt="Intelliverse Logo"
@@ -397,6 +502,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
           {[
             { id: "dashboard", label: "Dashboard", icon: "fa-chart-pie" },
             { id: "cms", label: "Hero & About", icon: "fa-edit" },
+            { id: "team", label: "Team Members", icon: "fa-users" },
             { id: "projects", label: "Projects Portfolio", icon: "fa-briefcase" },
             { id: "testimonials", label: "Client Reviews", icon: "fa-comments" },
             { id: "chatbot", label: "Chatbot Q&A", icon: "fa-robot" },
@@ -707,22 +813,13 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
               {/* Statistics Metrics Numbers */}
               <div className="space-y-4 border-t border-gray-850 pt-6">
                 <h3 className="text-xs md:text-sm font-bold text-white">Statistics Counters</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                   <div>
                     <label className="text-[10px] text-gray-400 uppercase font-semibold">Projects Completed</label>
                     <input
                       type="number"
                       value={statsProjects}
                       onChange={(e) => setStatsProjects(e.target.value)}
-                      className="w-full mt-1.5 p-3 bg-gray-950 border border-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-gray-400 uppercase font-semibold">Client Satisfaction (%)</label>
-                    <input
-                      type="number"
-                      value={statsSatisfaction}
-                      onChange={(e) => setStatsSatisfaction(e.target.value)}
                       className="w-full mt-1.5 p-3 bg-gray-950 border border-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition"
                     />
                   </div>
@@ -749,6 +846,500 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                   Save Layout Changes
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Team Members Tab */}
+        {activeTab === "team" && (
+          <div className="space-y-6 md:space-y-8 animate-fade-in">
+            {/* Header Area */}
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+              <div>
+                <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white">Team Members Editor</h2>
+                <p className="text-xs md:text-sm text-gray-400 mt-1">Manage founders and team members, their roles, images, positions, and display order.</p>
+              </div>
+              <div className="flex gap-3 w-full sm:w-auto">
+                <button
+                  onClick={handleAddFounder}
+                  className="flex-1 sm:flex-none px-4 py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-green-500/10 active:scale-95"
+                >
+                  <i className="fas fa-plus"></i>
+                  <span>Add Member</span>
+                </button>
+                <button
+                  onClick={handleSaveCMS}
+                  disabled={loading}
+                  className="flex-1 sm:flex-none px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-blue-500/10 disabled:opacity-50 active:scale-95"
+                >
+                  <i className="fas fa-save"></i>
+                  <span>Save Changes</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Split Dual-Pane Container */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              
+              {/* LEFT SIDEBAR: Members list */}
+              <div className="lg:col-span-4 bg-gray-900/40 border border-gray-800 rounded-2xl p-4 md:p-5 backdrop-blur-sm space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-gray-800">
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Member Cards ({founders.length})</h3>
+                  {founders.length > 0 && (
+                    <span className="text-[10px] text-gray-500 font-mono">Select to Edit</span>
+                  )}
+                </div>
+
+                <div className="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1 scrollbar-none">
+                  {founders.map((founder, index) => {
+                    const isSelected = selectedFounderIndex === index;
+                    const imageX = founder.imageX !== undefined ? founder.imageX : 50;
+                    const imageY = founder.imageY !== undefined ? founder.imageY : 50;
+                    const avatarImg = founder.image || "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+                    return (
+                      <div
+                        key={index}
+                        onClick={() => setSelectedFounderIndex(index)}
+                        className={`group/item p-3 rounded-xl border flex items-center justify-between gap-3 cursor-pointer transition-all duration-300 relative select-none ${
+                          isSelected
+                            ? "bg-blue-600/10 border-blue-500/40 shadow-lg shadow-blue-500/5"
+                            : "bg-gray-950/40 border-gray-800 hover:border-gray-700/60 hover:bg-gray-950/80"
+                        }`}
+                      >
+                        {/* Selected Indicator Bar */}
+                        {isSelected && (
+                          <div className="absolute left-0 top-3 bottom-3 w-1 bg-blue-500 rounded-r-md"></div>
+                        )}
+
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          {/* Mini Cropped Avatar */}
+                          <div className="w-9 h-9 rounded-full overflow-hidden border border-white/10 shrink-0 bg-gray-900">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={avatarImg}
+                              alt={founder.name || "Avatar"}
+                              className="w-full h-full object-cover"
+                              style={{ objectPosition: `${imageX}% ${imageY}%` }}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+                              }}
+                            />
+                          </div>
+                          
+                          <div className="min-w-0">
+                            <h4 className="text-xs font-bold text-white truncate max-w-[120px] sm:max-w-none">
+                              {founder.name || <span className="text-gray-600 italic">Unnamed Member</span>}
+                            </h4>
+                            <p className="text-[10px] text-gray-500 font-mono truncate mt-0.5 max-w-[120px] sm:max-w-none">
+                              {founder.role || <span className="text-gray-600 italic">No role specified</span>}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Controls (Move & Delete) */}
+                        <div className="flex items-center gap-1 shrink-0 opacity-80 group-hover/item:opacity-100 transition-opacity">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleMoveFounder(index, "up");
+                            }}
+                            disabled={index === 0}
+                            className="w-6 h-6 rounded bg-gray-900/60 hover:bg-gray-850 hover:text-blue-400 disabled:opacity-20 text-gray-400 text-[10px] flex items-center justify-center border border-gray-800 transition"
+                            title="Move Up"
+                          >
+                            <i className="fas fa-chevron-up"></i>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleMoveFounder(index, "down");
+                            }}
+                            disabled={index === founders.length - 1}
+                            className="w-6 h-6 rounded bg-gray-900/60 hover:bg-gray-850 hover:text-blue-400 disabled:opacity-20 text-gray-400 text-[10px] flex items-center justify-center border border-gray-800 transition"
+                            title="Move Down"
+                          >
+                            <i className="fas fa-chevron-down"></i>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteFounder(index);
+                            }}
+                            className="w-6 h-6 rounded bg-red-950/10 hover:bg-red-950/40 text-red-500 hover:text-red-400 text-[10px] flex items-center justify-center border border-red-900/10 transition ml-1"
+                            title="Delete Card"
+                          >
+                            <i className="fas fa-trash-alt"></i>
+                          </button>
+                        </div>
+
+                        {/* Order badge */}
+                        <div className="absolute right-2 top-1.5 text-[8px] font-mono text-gray-600">
+                          #{founder.order || index + 1}
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {founders.length === 0 && (
+                    <div className="text-center py-10 border border-dashed border-gray-850 rounded-xl bg-gray-950/20">
+                      <i className="fas fa-users-slash text-gray-600 text-lg mb-2 block"></i>
+                      <p className="text-[11px] text-gray-500">No members configured.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* RIGHT DETAIL PANEL */}
+              <div className="lg:col-span-8 space-y-6">
+                {selectedFounderIndex !== null && founders[selectedFounderIndex] ? (
+                  (() => {
+                    const index = selectedFounderIndex;
+                    const founder = founders[index];
+                    const imageX = founder.imageX !== undefined ? founder.imageX : 50;
+                    const imageY = founder.imageY !== undefined ? founder.imageY : 50;
+                    const previewImg = founder.image || "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+                    return (
+                      <div className="bg-gray-900/40 border border-gray-800 rounded-2xl p-5 md:p-6 backdrop-blur-sm space-y-6 relative transition-all duration-300">
+                        {/* Detail Header */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-gray-800 gap-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-full overflow-hidden border border-blue-500/20 bg-gray-950 shadow-inner">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={previewImg}
+                                alt="Active edit thumbnail"
+                                className="w-full h-full object-cover"
+                                style={{ objectPosition: `${imageX}% ${imageY}%` }}
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+                                }}
+                              />
+                            </div>
+                            <div className="text-left">
+                              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                                <span>Editing: {founder.name || "New Team Member"}</span>
+                                <span className="text-[10px] bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2.5 py-0.5 rounded-full font-mono font-bold">
+                                  INDEX #{index + 1}
+                                </span>
+                              </h3>
+                              <p className="text-[10px] text-gray-500 mt-0.5">Customize basic details, socials, and positioning crop settings below.</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Tab Buttons Selection */}
+                        <div className="flex border border-gray-800 bg-gray-950/40 p-1 rounded-lg">
+                          {[
+                            { id: "basic", label: "Basic Info", icon: "fa-user-circle" },
+                            { id: "photo", label: "Photo & Crop", icon: "fa-image" },
+                            { id: "socials", label: "Socials & Button", icon: "fa-share-alt" },
+                          ].map((tab) => (
+                            <button
+                              key={tab.id}
+                              type="button"
+                              onClick={() => setTeamEditorTab(tab.id)}
+                              className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 text-xs font-semibold rounded-md transition cursor-pointer ${
+                                teamEditorTab === tab.id
+                                  ? "bg-gray-800 text-blue-400 shadow-sm border border-gray-700/60"
+                                  : "text-gray-400 hover:text-gray-200"
+                              }`}
+                            >
+                              <i className={`fas ${tab.icon} text-[11px]`}></i>
+                              <span>{tab.label}</span>
+                            </button>
+                          ))}
+                        </div>
+
+                        {/* TAB CONTENT: Basic Info */}
+                        {teamEditorTab === "basic" && (
+                          <div className="space-y-4 animate-fade-in text-left">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                              <div>
+                                <label className="text-[10px] text-gray-400 uppercase font-semibold">Name</label>
+                                <input
+                                  type="text"
+                                  value={founder.name}
+                                  onChange={(e) => handleFounderChange(index, "name", e.target.value)}
+                                  className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
+                                  placeholder="Member Full Name"
+                                  required
+                                />
+                              </div>
+                              <div>
+                                <label className="text-[10px] text-gray-400 uppercase font-semibold">Role / Job Title</label>
+                                <input
+                                  type="text"
+                                  value={founder.role}
+                                  onChange={(e) => handleFounderChange(index, "role", e.target.value)}
+                                  className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
+                                  placeholder="e.g., Co-founder & CTO"
+                                  required
+                                />
+                              </div>
+                            </div>
+                            <div>
+                              <label className="text-[10px] text-gray-400 uppercase font-semibold">Tagline / Mission Statement</label>
+                              <input
+                                type="text"
+                                value={founder.tagline || ""}
+                                onChange={(e) => handleFounderChange(index, "tagline", e.target.value)}
+                                className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
+                                placeholder="Visionary tagline shown on hover (e.g. Engineering scalable systems...)"
+                              />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <label className="text-[10px] text-gray-400 uppercase font-semibold">Order Index Weight</label>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  value={founder.order || index + 1}
+                                  onChange={(e) => handleFounderChange(index, "order", e.target.value)}
+                                  className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-855 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none"
+                                />
+                              </div>
+                              <div className="flex items-end pb-1.5">
+                                <p className="text-[10px] text-gray-500 leading-normal">
+                                  Weights control list ordering on landing. Use list Chevrons to adjust automatically.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* TAB CONTENT: Photo & Crop */}
+                        {teamEditorTab === "photo" && (
+                          <div className="space-y-6 animate-fade-in text-left">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                              <div>
+                                <label className="text-[10px] text-gray-400 uppercase font-semibold">Image Asset Path / URL</label>
+                                <input
+                                  type="text"
+                                  value={founder.image}
+                                  onChange={(e) => handleFounderChange(index, "image", e.target.value)}
+                                  className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
+                                  placeholder="e.g., /founder_dhruvil.jpg"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-[10px] text-gray-400 uppercase font-semibold block">Upload Local Image File</label>
+                                <DragDropZone index={index} onUploadSuccess={(url) => handleFounderChange(index, "image", url)} notify={notify} />
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-gray-800 pt-5">
+                              {/* Left side: interactive position tagger */}
+                              <div className="space-y-3">
+                                <div>
+                                  <label className="text-[10px] text-gray-400 uppercase font-semibold block">Interactive Focal Center Alignment</label>
+                                  <span className="text-[9px] text-gray-500 block leading-normal mt-0.5">Click directly on the subject's face/center inside the photo below.</span>
+                                </div>
+                                
+                                <div 
+                                  onClick={(e) => handleImageClick(e, index)}
+                                  className="relative w-44 h-44 mx-auto bg-gray-950 border border-gray-800 rounded-2xl overflow-hidden cursor-crosshair group/crop select-none shadow-xl shadow-black/40 flex items-center justify-center active:scale-[0.98] transition-transform duration-100"
+                                >
+                                  {founder.image ? (
+                                    <>
+                                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                                      <img 
+                                        src={founder.image} 
+                                        alt="Focal target aligner canvas"
+                                        className="w-full h-full object-cover pointer-events-none select-none"
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          e.target.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+                                        }}
+                                      />
+                                      {/* Visual grid overlay helpers (Rule of thirds) */}
+                                      <div className="absolute inset-0 bg-black/10 group-hover/crop:bg-transparent transition duration-300 pointer-events-none" />
+                                      <div className="absolute left-1/3 top-0 bottom-0 w-[1px] bg-white/15 pointer-events-none border-dashed border-white/5" />
+                                      <div className="absolute left-2/3 top-0 bottom-0 w-[1px] bg-white/15 pointer-events-none border-dashed border-white/5" />
+                                      <div className="absolute top-1/3 left-0 right-0 h-[1px] bg-white/15 pointer-events-none border-dashed border-white/5" />
+                                      <div className="absolute top-2/3 left-0 right-0 h-[1px] bg-white/15 pointer-events-none border-dashed border-white/5" />
+                                      
+                                      {/* Targeting crosshair circle */}
+                                      <div 
+                                        className="absolute w-6 h-6 -ml-3 -mt-3 rounded-full border-2 border-blue-400 bg-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.6)] flex items-center justify-center pointer-events-none transition-all duration-200"
+                                        style={{ left: `${imageX}%`, top: `${imageY}%` }}
+                                      >
+                                        <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <div className="p-4 flex flex-col items-center justify-center text-center space-y-1.5 pointer-events-none w-full h-full bg-gray-950">
+                                      <i className="fas fa-image text-gray-600 text-lg"></i>
+                                      <span className="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">No Image Loaded</span>
+                                      <span className="text-[9px] text-gray-600 leading-normal">
+                                        Configure an image path or upload one to position it.
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Right side: Sliders and live Crop Preview */}
+                              <div className="flex flex-col justify-between space-y-4">
+                                <div className="space-y-3.5">
+                                  <div className="space-y-1.5">
+                                    <div className="flex justify-between text-[9px] font-bold font-mono text-gray-400">
+                                      <span>Horizontal Shift (X Offset)</span>
+                                      <span className="text-blue-400">{imageX}%</span>
+                                    </div>
+                                    <input 
+                                      type="range" 
+                                      min="0" 
+                                      max="100" 
+                                      value={imageX} 
+                                      onChange={(e) => handleFounderChange(index, "imageX", e.target.value)}
+                                      className="w-full h-1 bg-gray-950 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                                    />
+                                  </div>
+                                  <div className="space-y-1.5">
+                                    <div className="flex justify-between text-[9px] font-bold font-mono text-gray-400">
+                                      <span>Vertical Shift (Y Offset)</span>
+                                      <span className="text-blue-400">{imageY}%</span>
+                                    </div>
+                                    <input 
+                                      type="range" 
+                                      min="0" 
+                                      max="100" 
+                                      value={imageY} 
+                                      onChange={(e) => handleFounderChange(index, "imageY", e.target.value)}
+                                      className="w-full h-1 bg-gray-950 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                                    />
+                                  </div>
+                                </div>
+
+                                {/* Live Circular preview matching Team card avatar styles */}
+                                <div className="bg-gray-950/50 p-3.5 border border-gray-850 rounded-xl flex items-center gap-3">
+                                  <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-blue-500/20 shrink-0 bg-gray-950 shadow-inner">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img 
+                                      src={previewImg} 
+                                      alt="Circular preview avatar cropped" 
+                                      className="w-full h-full object-cover transition-all duration-150"
+                                      style={{ objectPosition: `${imageX}% ${imageY}%` }}
+                                      onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="min-w-0">
+                                    <span className="text-[10px] text-gray-300 uppercase font-bold tracking-wider block text-left">Clipped Avatar Preview</span>
+                                    <span className="text-[9px] text-gray-500 block leading-normal mt-0.5 text-left">This matches the exact size and crop position that will render on the home page.</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* TAB CONTENT: Socials & Custom Button */}
+                        {teamEditorTab === "socials" && (
+                          <div className="space-y-5 animate-fade-in text-left">
+                            <div className="bg-gray-950/20 p-4 border border-gray-850 rounded-xl space-y-4">
+                              <div className="flex items-center gap-2 pb-2 border-b border-gray-850 text-[10px] font-bold text-purple-400 uppercase tracking-wider">
+                                <i className="fas fa-share-alt"></i>
+                                <span>Social Accounts</span>
+                              </div>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                  <label className="text-[10px] text-gray-400 uppercase font-semibold">LinkedIn Profile URL</label>
+                                  <input
+                                    type="url"
+                                    value={founder.linkedin || ""}
+                                    onChange={(e) => handleFounderChange(index, "linkedin", e.target.value)}
+                                    className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
+                                    placeholder="https://linkedin.com/in/username"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="text-[10px] text-gray-400 uppercase font-semibold">Instagram Profile URL</label>
+                                  <input
+                                    type="url"
+                                    value={founder.instagram || ""}
+                                    onChange={(e) => handleFounderChange(index, "instagram", e.target.value)}
+                                    className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
+                                    placeholder="https://instagram.com/username"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="bg-gray-950/20 p-4 border border-gray-850 rounded-xl space-y-4">
+                              <div className="flex items-center gap-2 pb-2 border-b border-gray-850 text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
+                                <i className="fas fa-link"></i>
+                                <span>Custom Action Button (Optional)</span>
+                              </div>
+                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div>
+                                  <label className="text-[10px] text-gray-400 uppercase font-semibold">Button Redirect URL</label>
+                                  <input
+                                    type="url"
+                                    value={founder.customLinkUrl || ""}
+                                    onChange={(e) => handleFounderChange(index, "customLinkUrl", e.target.value)}
+                                    className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
+                                    placeholder="https://github.com/username"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="text-[10px] text-gray-400 uppercase font-semibold">Button Label Name</label>
+                                  <input
+                                    type="text"
+                                    value={founder.customLinkName || ""}
+                                    onChange={(e) => handleFounderChange(index, "customLinkName", e.target.value)}
+                                    className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
+                                    placeholder="e.g. GitHub, Website"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="text-[10px] text-gray-400 uppercase font-semibold">FontAwesome Icon Class</label>
+                                  <input
+                                    type="text"
+                                    value={founder.customLinkIcon || ""}
+                                    onChange={(e) => handleFounderChange(index, "customLinkIcon", e.target.value)}
+                                    className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
+                                    placeholder="e.g. fab fa-github"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()
+                ) : (
+                  <div className="bg-gray-900/40 border border-gray-800 rounded-2xl p-10 md:p-16 backdrop-blur-sm flex flex-col items-center justify-center text-center space-y-4">
+                    <div className="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-2xl shadow-inner">
+                      <i className="fas fa-users"></i>
+                    </div>
+                    <div className="max-w-xs space-y-1">
+                      <h3 className="text-sm font-bold text-white uppercase tracking-wider">No Member Selected</h3>
+                      <p className="text-xs text-gray-500 leading-relaxed">
+                        Select an existing team member card from the list on the left to begin editing their information, or add a new card.
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleAddFounder}
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-lg transition-all shadow-md shadow-blue-500/10 cursor-pointer active:scale-95"
+                    >
+                      <i className="fas fa-plus mr-1.5"></i>
+                      Add New Member
+                    </button>
+                  </div>
+                )}
+              </div>
+
             </div>
           </div>
         )}
@@ -849,7 +1440,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Custom Link Text (e.g., "See How It Works")</label>
+                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Custom Link Text (e.g., &quot;See How It Works&quot;)</label>
                         <input
                           type="text"
                           value={proj.featureText || ""}
@@ -858,6 +1449,114 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                           placeholder="e.g., See How It Works"
                         />
                       </div>
+                    </div>
+
+                    {/* Featured Toggle + Tagline */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="flex items-center gap-3 pt-3">
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={proj.isFeatured || false}
+                            onChange={(e) => handleProjectChange(index, "isFeatured", e.target.checked)}
+                            className="sr-only peer"
+                          />
+                          <div className="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
+                        <span className="text-[10px] text-gray-400 uppercase font-semibold">★ Featured Project (Full-width card)</span>
+                      </div>
+                      <div className="sm:col-span-2">
+                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Card Tagline Footer</label>
+                        <input
+                          type="text"
+                          value={proj.tagline || ""}
+                          onChange={(e) => handleProjectChange(index, "tagline", e.target.value)}
+                          className="w-full mt-1 p-2.5 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                          placeholder="e.g., // DIGITAL HEALTHCARE"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Tech Tags (comma-separated) */}
+                    <div>
+                      <label className="text-[10px] text-gray-400 uppercase font-semibold">Tech Stack Tags (comma-separated)</label>
+                      <input
+                        type="text"
+                        value={(proj.techTags || []).join(", ")}
+                        onChange={(e) => handleProjectChange(index, "techTags", e.target.value.split(",").map(t => t.trim()).filter(Boolean))}
+                        className="w-full mt-1 p-2.5 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                        placeholder="e.g., Next.js, Node.js, WebSockets, WhatsApp API"
+                      />
+                      {(proj.techTags || []).length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mt-2">
+                          {proj.techTags.map((tag, ti) => (
+                            <span key={ti} className="text-[9px] font-mono px-2 py-0.5 rounded bg-gray-800 text-blue-400 border border-gray-700">{tag}</span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Feature Highlights */}
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Feature Highlights (shown on featured card)</label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = [...projects];
+                            if (!updated[index].features) updated[index].features = [];
+                            updated[index].features.push({ icon: "fa-star", label: "" });
+                            setProjects(updated);
+                          }}
+                          className="text-[10px] px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-green-400 rounded-lg border border-gray-700 cursor-pointer transition"
+                        >
+                          <i className="fas fa-plus mr-1"></i>Add Feature
+                        </button>
+                      </div>
+                      {(proj.features || []).length > 0 && (
+                        <div className="space-y-2">
+                          {proj.features.map((feat, fi) => (
+                            <div key={fi} className="flex items-center gap-2">
+                              <input
+                                type="text"
+                                value={feat.icon}
+                                onChange={(e) => {
+                                  const updated = [...projects];
+                                  updated[index].features[fi].icon = e.target.value;
+                                  setProjects(updated);
+                                }}
+                                className="w-28 p-2 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                                placeholder="fa-bolt"
+                              />
+                              <input
+                                type="text"
+                                value={feat.label}
+                                onChange={(e) => {
+                                  const updated = [...projects];
+                                  updated[index].features[fi].label = e.target.value;
+                                  setProjects(updated);
+                                }}
+                                className="flex-1 p-2 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                                placeholder="e.g., Automated Queues"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updated = [...projects];
+                                  updated[index].features = updated[index].features.filter((_, ffi) => ffi !== fi);
+                                  setProjects(updated);
+                                }}
+                                className="p-2 text-red-500 hover:text-red-400 cursor-pointer"
+                              >
+                                <i className="fas fa-times"></i>
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {(proj.features || []).length === 0 && (
+                        <p className="text-[10px] text-gray-600 italic">No feature highlights added. Add them to show on the featured card layout.</p>
+                      )}
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
@@ -1553,4 +2252,100 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
 
         </div>
       );
+}
+
+function DragDropZone({ index, onUploadSuccess, notify }) {
+  const [dragActive, setDragActive] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      await uploadFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  const handleChange = async (e) => {
+    e.preventDefault();
+    if (e.target.files && e.target.files[0]) {
+      await uploadFile(e.target.files[0]);
+    }
+  };
+
+  const uploadFile = async (file) => {
+    if (!file.type.startsWith("image/")) {
+      notify("Please upload an image file only.", "error");
+      return;
+    }
+    setUploading(true);
+    notify("Uploading dropped image to server...", "info");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const json = await response.json();
+      if (response.ok && json.url) {
+        onUploadSuccess(json.url);
+        notify("Image uploaded successfully!", "success");
+      } else {
+        notify(json.error || "Failed to upload image.", "error");
+      }
+    } catch (err) {
+      console.error("Failed to upload image:", err);
+      notify("Network error. Image upload failed.", "error");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div
+      onDragEnter={handleDrag}
+      onDragOver={handleDrag}
+      onDragLeave={handleDrag}
+      onDrop={handleDrop}
+      className={`relative rounded-lg border border-dashed p-3 flex flex-col items-center justify-center text-center transition cursor-pointer select-none h-[42px] min-h-[42px] mt-1.5 ${
+        dragActive
+          ? "border-blue-500 bg-blue-600/10"
+          : "border-gray-850 bg-gray-950 hover:bg-gray-950/80 hover:border-gray-800"
+      }`}
+    >
+      <input
+        type="file"
+        accept="image/*"
+        id={`drag-upload-file-${index}`}
+        onChange={handleChange}
+        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 font-bold"
+        disabled={uploading}
+      />
+      <div className="flex flex-row items-center justify-center gap-2 pointer-events-none w-full">
+        <i className={`fas ${uploading ? "fa-circle-notch animate-spin text-blue-400" : dragActive ? "fa-arrow-circle-down text-blue-400 animate-bounce" : "fa-cloud-upload-alt text-gray-500"} text-sm shrink-0`}></i>
+        <div className="text-left leading-tight">
+          <span className="text-[10px] font-bold text-gray-300 block">
+            {uploading ? "Uploading file..." : dragActive ? "Drop file now!" : "Drag & drop image file"}
+          </span>
+          <span className="text-[9px] text-gray-500 block">or click to browse local files</span>
+        </div>
+      </div>
+    </div>
+  );
 }
