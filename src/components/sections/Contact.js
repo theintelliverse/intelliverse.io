@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import audioManager from "@/lib/audioManager";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 
 export default function Contact() {
   const [contactForm, setContactForm] = useState({ name: "", email: "", message: "" });
@@ -8,6 +10,7 @@ export default function Contact() {
 
   const handleContactSubmit = async (e) => {
     e.preventDefault();
+    audioManager.playClick();
     setFormMessage({ text: "Sending...", type: "sending" });
 
     const payload = {
@@ -28,6 +31,7 @@ export default function Contact() {
 
       const json = await response.json();
       if (response.status === 200) {
+        audioManager.playTransition(); // play nice transition sound on success
         setFormMessage({ text: "Message sent successfully!", type: "success" });
         setContactForm({ name: "", email: "", message: "" });
       } else {
@@ -42,24 +46,42 @@ export default function Contact() {
     }, 5000);
   };
 
+  const playHover = () => {
+    audioManager.playHover();
+  };
+
+  const playClick = () => {
+    audioManager.playClick();
+  };
+
   return (
-    <section id="contact" className="py-20 reveal-on-scroll">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-2">Contact Us</h2>
-          <div className="w-24 h-1 bg-blue-500 mx-auto"></div>
-        </div>
-        <div className="flex flex-col md:flex-row gap-12">
-          <div className="md:w-1/2">
-            <form id="contact-form" onSubmit={handleContactSubmit}>
-              <div className="space-y-6">
+    <section id="contact" className="py-24 relative overflow-hidden">
+      <div className="container mx-auto px-6 max-w-5xl">
+        {/* Section Heading */}
+        <ScrollReveal variant="lens-focus" playSound={true}>
+          <div className="text-center mb-16">
+            <div className="glassmorphic-text-bg">
+              <h2 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tighter uppercase text-white font-sans">
+                Contact Us
+              </h2>
+            </div>
+            <div className="w-16 h-[2px] bg-blue-500 mx-auto mt-4"></div>
+          </div>
+        </ScrollReveal>
+
+        <div className="flex flex-col md:flex-row gap-16 items-start">
+          {/* Contact Form */}
+          <ScrollReveal variant="fade-right" className="md:w-1/2 w-full" delay={0.1}>
+            <div>
+              <form id="contact-form" onSubmit={handleContactSubmit} className="space-y-6">
                 <input
                   type="text"
                   name="name"
                   value={contactForm.name}
                   onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
-                  placeholder="Your Name"
-                  className="w-full p-4 bg-gray-800 text-white rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  onMouseEnter={playHover}
+                  placeholder="YOUR NAME"
+                  className="w-full p-4 bg-white/[0.02] text-white rounded-xl border border-white/10 focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/30 transition-all font-mono text-xs placeholder:text-gray-400 backdrop-blur-md"
                   required
                 />
                 <input
@@ -67,88 +89,106 @@ export default function Contact() {
                   name="email"
                   value={contactForm.email}
                   onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
-                  placeholder="Your Email"
-                  className="w-full p-4 bg-gray-800 text-white rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  onMouseEnter={playHover}
+                  placeholder="YOUR EMAIL"
+                  className="w-full p-4 bg-white/[0.02] text-white rounded-xl border border-white/10 focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/30 transition-all font-mono text-xs placeholder:text-gray-400 backdrop-blur-md"
                   required
                 />
                 <textarea
                   name="message"
                   value={contactForm.message}
                   onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                  placeholder="Your Message"
+                  onMouseEnter={playHover}
+                  placeholder="YOUR MESSAGE"
                   rows="5"
-                  className="w-full p-4 bg-gray-800 text-white rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-4 bg-white/[0.02] text-white rounded-xl border border-white/10 focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/30 transition-all font-mono text-xs placeholder:text-gray-400 backdrop-blur-md"
                   required
                 ></textarea>
                 <button
                   type="submit"
-                  className="w-full themed-accent themed-accent-hover text-white font-bold py-3 px-6 rounded-lg transition animated-button cursor-pointer"
+                  onMouseEnter={playHover}
+                  className="w-full group relative py-4 rounded-xl bg-white text-black font-bold uppercase tracking-widest text-xs hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-xl overflow-hidden cursor-pointer"
                 >
+                  {/* Sliding hover fill */}
+                  <span className="absolute inset-0 w-full h-full bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left -z-10" />
                   Send Message
                 </button>
-              </div>
-            </form>
-            {formMessage.text && (
-              <div
-                id="form-message"
-                className={`mt-4 text-center ${
-                  formMessage.type === "success"
-                    ? "text-green-500"
-                    : formMessage.type === "error"
-                    ? "text-red-500"
-                    : "text-gray-400"
-                }`}
-              >
-                {formMessage.text}
-              </div>
-            )}
-          </div>
-          <div className="md:w-1/2">
+              </form>
+              {formMessage.text && (
+                <div
+                  id="form-message"
+                  className={`mt-4 text-center font-mono text-xs uppercase tracking-widest ${
+                    formMessage.type === "success"
+                      ? "text-green-400"
+                      : formMessage.type === "error"
+                      ? "text-rose-400"
+                      : "text-gray-400"
+                  }`}
+                >
+                  {"// "}{formMessage.text}
+                </div>
+              )}
+            </div>
+          </ScrollReveal>
+
+          {/* Details */}
+          <ScrollReveal variant="fade-left" className="md:w-1/2 w-full space-y-8" delay={0.2}>
             <div className="space-y-6">
-              <div className="flex items-start space-x-4">
-                <i className="fas fa-map-marker-alt text-2xl text-blue-500 mt-1" aria-hidden="true"></i>
+              {/* Address */}
+              <div className="flex items-start space-x-4 p-5 rounded-2xl glassmorphic-card">
+                <i className="fas fa-map-marker-alt text-lg text-blue-400 mt-1" aria-hidden="true"></i>
                 <div>
-                  <h3 className="text-lg font-semibold">Our Address</h3>
-                  <p className="text-gray-400">Remote</p>
+                  <h3 className="text-xs uppercase font-mono tracking-widest text-white mb-1">Our Address</h3>
+                  <p className="text-gray-200 text-sm font-normal">Remote</p>
                 </div>
               </div>
-              <div className="flex items-start space-x-4">
-                <i className="fas fa-envelope text-2xl text-blue-500 mt-1" aria-hidden="true"></i>
+
+              {/* Email */}
+              <div className="flex items-start space-x-4 p-5 rounded-2xl glassmorphic-card">
+                <i className="fas fa-envelope text-lg text-blue-400 mt-1" aria-hidden="true"></i>
                 <div>
-                  <h3 className="text-lg font-semibold">Email Us</h3>
-                  <a href="mailto:theintelliverse@gmail.com" className="text-gray-400 hover:underline">
+                  <h3 className="text-xs uppercase font-mono tracking-widest text-white mb-1">Email Us</h3>
+                  <a href="mailto:theintelliverse@gmail.com" onMouseEnter={playHover} onClick={playClick} className="text-gray-200 hover:text-white transition-colors text-sm font-normal">
                     theintelliverse@gmail.com
                   </a>
                 </div>
               </div>
-              <div className="flex items-center space-x-4">
-                <h3 className="text-lg font-semibold">Follow Us:</h3>
-                <a
-                  href="https://www.linkedin.com/company/the-intelliverse/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-blue-500 text-2xl"
-                >
-                  <i className="fab fa-linkedin"></i>
-                </a>
-                <a
-                  href="https://www.instagram.com/the_intelliverse/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-blue-500 text-2xl"
-                >
-                  <i className="fab fa-instagram"></i>
-                </a>
-                <a
-                  href="mailto:theintelliverse@gmail.com"
-                  className="text-gray-400 hover:text-blue-500 text-2xl"
-                  title="Email Us"
-                >
-                  <i className="fas fa-envelope"></i>
-                </a>
-              </div>
             </div>
-          </div>
+
+            {/* Social Links */}
+            <div className="flex items-center space-x-4 p-5 rounded-2xl glassmorphic-card w-max">
+              <span className="text-xs uppercase font-mono tracking-widest text-gray-400">FOLLOW US:</span>
+              <a
+                href="https://www.linkedin.com/company/the-intelliverse/"
+                target="_blank"
+                rel="noopener noreferrer"
+                onMouseEnter={playHover}
+                onClick={playClick}
+                className="text-gray-300 hover:text-blue-400 transition-colors text-xl p-1"
+              >
+                <i className="fab fa-linkedin"></i>
+              </a>
+              <a
+                href="https://www.instagram.com/the_intelliverse/"
+                target="_blank"
+                rel="noopener noreferrer"
+                onMouseEnter={playHover}
+                onClick={playClick}
+                className="text-gray-300 hover:text-blue-400 transition-colors text-xl p-1"
+              >
+                <i className="fab fa-instagram"></i>
+              </a>
+              <a
+                href="mailto:theintelliverse@gmail.com"
+                onMouseEnter={playHover}
+                onClick={playClick}
+                className="text-gray-300 hover:text-blue-400 transition-colors text-xl p-1"
+                title="Email Us"
+              >
+                <i className="fas fa-envelope"></i>
+              </a>
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

@@ -190,6 +190,7 @@ export async function GET() {
       const testimonials = await db.collection("testimonials").find({}).toArray();
       const projects = await db.collection("projects").find({}).toArray();
       const chatbotKnowledge = await db.collection("chatbot_knowledge").find({}).toArray();
+      const founders = await db.collection("founders").find({}).sort({ order: 1 }).toArray();
 
       const responsePayload = {
         hero: { subtitle: content?.hero?.subtitle || localMockDb.hero.subtitle },
@@ -204,11 +205,31 @@ export async function GET() {
           rating: p.rating,
           type: p.type || "",
           featureLink: p.featureLink || "",
-          featureText: p.featureText || ""
+          featureText: p.featureText || "",
+          features: p.features || [],
+          techTags: p.techTags || [],
+          tagline: p.tagline || "",
+          isFeatured: p.isFeatured || false
         })),
         chatbotKnowledge: chatbotKnowledge.length > 0
           ? chatbotKnowledge.map(k => ({ keywords: k.keywords, response: k.response }))
-          : defaultChatbotKnowledge
+          : defaultChatbotKnowledge,
+        founders: founders.length > 0
+          ? founders.map(f => ({
+              name: f.name,
+              role: f.role,
+              tagline: f.tagline || "",
+              image: f.image || "",
+              imageX: f.imageX !== undefined ? Number(f.imageX) : 50,
+              imageY: f.imageY !== undefined ? Number(f.imageY) : 50,
+              linkedin: f.linkedin || "",
+              instagram: f.instagram || "",
+              customLinkUrl: f.customLinkUrl || "",
+              customLinkName: f.customLinkName || "",
+              customLinkIcon: f.customLinkIcon || "",
+              order: f.order !== undefined ? Number(f.order) : 1
+            }))
+          : localMockDb.founders
       };
 
       return NextResponse.json(responsePayload);
@@ -231,7 +252,7 @@ export async function GET() {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { hero, about, stats, testimonials, projects, chatbotKnowledge, passcode } = body;
+    const { hero, about, stats, testimonials, projects, chatbotKnowledge, founders, passcode } = body;
 
     let db = null;
     if (clientPromise) {
@@ -292,6 +313,28 @@ export async function POST(request) {
           await db.collection("chatbot_knowledge").insertMany(chatbotKnowledge);
         }
       }
+
+      // 5. Save Founders
+      if (Array.isArray(founders)) {
+        await db.collection("founders").deleteMany({});
+        if (founders.length > 0) {
+          const formattedFounders = founders.map(f => ({
+            name: f.name,
+            role: f.role,
+            tagline: f.tagline || "",
+            image: f.image || "",
+            imageX: f.imageX !== undefined ? Number(f.imageX) : 50,
+            imageY: f.imageY !== undefined ? Number(f.imageY) : 50,
+            linkedin: f.linkedin || "",
+            instagram: f.instagram || "",
+            customLinkUrl: f.customLinkUrl || "",
+            customLinkName: f.customLinkName || "",
+            customLinkIcon: f.customLinkIcon || "",
+            order: f.order !== undefined ? Number(f.order) : 1
+          }));
+          await db.collection("founders").insertMany(formattedFounders);
+        }
+      }
     } else {
       // Fallback local memory updates
       if (hero) localMockDb.hero = hero;
@@ -300,6 +343,7 @@ export async function POST(request) {
       if (testimonials) localMockDb.testimonials = testimonials;
       if (projects) localMockDb.projects = projects;
       if (chatbotKnowledge) localMockDb.chatbotKnowledge = chatbotKnowledge;
+      if (founders) localMockDb.founders = founders;
     }
 
     return NextResponse.json({ success: true, message: "CMS Content updated successfully!" });

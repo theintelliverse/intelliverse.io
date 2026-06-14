@@ -1,7 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Background from "@/components/ui/Background";
+import { motion, useScroll, useTransform } from "framer-motion";
+import Background3D from "@/components/ui/Background3D";
+import CustomCursor from "@/components/ui/CustomCursor";
+import audioManager from "@/lib/audioManager";
 import Header from "@/components/sections/Header";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
@@ -16,6 +19,9 @@ import ScrollToTop from "@/components/ui/ScrollToTop";
 import Footer from "@/components/sections/Footer";
 
 export default function ClientHome({ initialData }) {
+  const { scrollY } = useScroll();
+  const letterboxHeight = useTransform(scrollY, [0, 200], [0, 20]);
+
   // --- Content Data State (Modifiable by Admin Panel) ---
   const [contentData, setContentData] = useState({
     hero: initialData?.hero || {
@@ -34,6 +40,7 @@ export default function ClientHome({ initialData }) {
   // --- Dynamic Lists States ---
   const [testimonials, setTestimonials] = useState(initialData?.testimonials || []);
   const [projects, setProjects] = useState(initialData?.projects || []);
+  const [founders, setFounders] = useState(initialData?.founders || []);
 
   // --- Preloader Loading States ---
   const [loading, setLoading] = useState(true);
@@ -54,6 +61,7 @@ export default function ClientHome({ initialData }) {
             });
             if (data.testimonials) setTestimonials(data.testimonials);
             if (data.projects) setProjects(data.projects);
+            if (data.founders) setFounders(data.founders);
           }
         }
       } catch (error) {
@@ -66,7 +74,9 @@ export default function ClientHome({ initialData }) {
   useEffect(() => {
     const handleLoad = () => {
       setLoading(false);
-      const timer = setTimeout(() => setShowPreloader(false), 500);
+      // Play cinematic preloader exit swell/chime
+      audioManager.playPreloaderExit();
+      const timer = setTimeout(() => setShowPreloader(false), 900);
       return () => clearTimeout(timer);
     };
 
@@ -82,26 +92,28 @@ export default function ClientHome({ initialData }) {
     }
   }, []);
 
-  // --- Scroll Reveal Animation initialization for component triggers ---
+  // --- Initialize Audio Context on First Interaction ---
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
+    const handleInteraction = () => {
+      audioManager.init();
+      window.removeEventListener("click", handleInteraction);
+      window.removeEventListener("keydown", handleInteraction);
+      window.removeEventListener("touchstart", handleInteraction);
+      window.removeEventListener("wheel", handleInteraction);
+    };
 
-    const elements = document.querySelectorAll(".reveal-on-scroll");
-    elements.forEach((el) => observer.observe(el));
+    window.addEventListener("click", handleInteraction, { passive: true });
+    window.addEventListener("keydown", handleInteraction, { passive: true });
+    window.addEventListener("touchstart", handleInteraction, { passive: true });
+    window.addEventListener("wheel", handleInteraction, { passive: true });
 
     return () => {
-      elements.forEach((el) => observer.unobserve(el));
+      window.removeEventListener("click", handleInteraction);
+      window.removeEventListener("keydown", handleInteraction);
+      window.removeEventListener("touchstart", handleInteraction);
+      window.removeEventListener("wheel", handleInteraction);
     };
-  }, [projects]);
+  }, []);
 
   return (
     <>
@@ -109,6 +121,7 @@ export default function ClientHome({ initialData }) {
       {showPreloader && (
         <div id="preloader" className={loading ? "" : "hidden"}>
           <div className="preloader-content">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/the%20intelliverse%20logo.jpg"
               alt="The Intelliverse Logo Loading"
@@ -123,8 +136,11 @@ export default function ClientHome({ initialData }) {
         </div>
       )}
 
-      {/* Persistent Background (Particles + Images) */}
-      <Background />
+      {/* Persistent 3D WebGL Background (Particles + Wave Shaders) */}
+      <Background3D />
+
+      {/* Cinematic Film Grain Overlay */}
+      <div className="film-grain" />
 
       {/* Navigation Header */}
       <Header />
@@ -136,11 +152,34 @@ export default function ClientHome({ initialData }) {
         {/* About Info Section */}
         <About data={contentData.about} />
 
+        {/* Seamless Running Marquee Banner */}
+        <div className="py-6 border-y border-white/5 bg-[#080415]/30 overflow-hidden whitespace-nowrap flex select-none pointer-events-none relative z-10">
+          <div className="flex gap-12 text-[10px] sm:text-xs font-mono font-extrabold uppercase tracking-widest text-indigo-400/20 animate-marquee">
+            <span>{"// "}Innovation</span>
+            <span>{"// "}Create</span>
+            <span>{"// "}Grow</span>
+            <span>{"// "}Software Engineering</span>
+            <span>{"// "}Web Applications</span>
+            <span>{"// "}IT Infrastructure</span>
+            <span>{"// "}DevOps Pipelines</span>
+            <span>{"// "}Cloud Architectures</span>
+            {/* Repeat for seamless loop */}
+            <span>{"// "}Innovation</span>
+            <span>{"// "}Create</span>
+            <span>{"// "}Grow</span>
+            <span>{"// "}Software Engineering</span>
+            <span>{"// "}Web Applications</span>
+            <span>{"// "}IT Infrastructure</span>
+            <span>{"// "}DevOps Pipelines</span>
+            <span>{"// "}Cloud Architectures</span>
+          </div>
+        </div>
+
         {/* Services Showcase Section */}
         <Services />
 
         {/* Team Founders Section */}
-        <Team />
+        <Team data={founders} />
 
         {/* Dynamic Worked Projects Portfolio (Hides if empty) */}
         <Projects data={projects} />
@@ -176,6 +215,33 @@ export default function ClientHome({ initialData }) {
 
       {/* Scroll to top action bubble */}
       <ScrollToTop />
+
+      {/* Custom Trailing Glow Cursor on Desktop */}
+      <CustomCursor />
+
+      {/* Cinematic Widescreen Letterbox Frames (Movie Frame Transition on Scroll) */}
+      <motion.div
+        style={{ height: letterboxHeight }}
+        className="fixed top-0 left-0 right-0 bg-[#05020c] z-[99] border-b border-white/5 pointer-events-none flex items-center justify-between px-6 overflow-hidden select-none"
+      >
+        <span className="text-[8px] font-mono tracking-widest text-red-500 animate-pulse flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span> REC
+        </span>
+        <span className="text-[8px] font-mono tracking-widest text-gray-500">
+          24 FPS • 1.85:1
+        </span>
+      </motion.div>
+      <motion.div
+        style={{ height: letterboxHeight }}
+        className="fixed bottom-0 left-0 right-0 bg-[#05020c] z-[99] border-t border-white/5 pointer-events-none flex items-center justify-between px-6 overflow-hidden select-none"
+      >
+        <span className="text-[8px] font-mono tracking-widest text-gray-500">
+          SHUTTER 180°
+        </span>
+        <span className="text-[8px] font-mono tracking-widest text-gray-500">
+          INTELLIVERSE_CAM_A
+        </span>
+      </motion.div>
     </>
   );
 }

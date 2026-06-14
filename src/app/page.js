@@ -10,7 +10,8 @@ export default async function Home() {
     about: { ...localMockDb.about },
     stats: { projects: 0, satisfaction: 100, clients: 0 },
     testimonials: [],
-    projects: []
+    projects: [],
+    founders: [...localMockDb.founders]
   };
 
   try {
@@ -21,6 +22,7 @@ export default async function Home() {
       const content = await db.collection("content").findOne({});
       const testimonials = await db.collection("testimonials").find({}).toArray();
       const projects = await db.collection("projects").find({}).toArray();
+      const founders = await db.collection("founders").find({}).sort({ order: 1 }).toArray();
       
       initialData = {
         hero: { subtitle: content?.hero?.subtitle || localMockDb.hero.subtitle },
@@ -42,7 +44,23 @@ export default async function Home() {
           type: p.type || "",
           featureLink: p.featureLink || "",
           featureText: p.featureText || ""
-        }))
+        })),
+        founders: founders.length > 0
+          ? founders.map(f => ({
+              name: f.name,
+              role: f.role,
+              tagline: f.tagline || "",
+              image: f.image || "",
+              imageX: f.imageX !== undefined ? Number(f.imageX) : 50,
+              imageY: f.imageY !== undefined ? Number(f.imageY) : 50,
+              linkedin: f.linkedin || "",
+              instagram: f.instagram || "",
+              customLinkUrl: f.customLinkUrl || "",
+              customLinkName: f.customLinkName || "",
+              customLinkIcon: f.customLinkIcon || "",
+              order: f.order !== undefined ? Number(f.order) : 1
+            }))
+          : localMockDb.founders
       };
     }
   } catch (error) {
