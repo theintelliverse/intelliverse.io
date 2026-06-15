@@ -150,6 +150,8 @@ export default function ScrollReveal({
           ? [-activeDistance, -activeDistance * 0.72, -activeDistance * 0.44, -activeDistance * 0.22, -activeDistance * 0.08, -activeDistance * 0.02, -activeDistance * 0.005, 0]
           : variant === "perspective-3d"
           ? [activeDistance * 1.3, activeDistance * 0.8, activeDistance * 0.4, activeDistance * 0.18, activeDistance * 0.06, -activeDistance * 0.01, 0, 0]
+          : variant === "lens-focus"
+          ? [6, 4.8, 3.6, 2.4, 1.2, 0.4, 0.1, 0]
           : 0,
       x:
         variant === "fade-left"
