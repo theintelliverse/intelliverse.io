@@ -25,6 +25,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
   const [founders, setFounders] = useState(initialFounders || []);
   const [selectedFounderIndex, setSelectedFounderIndex] = useState(initialFounders && initialFounders.length > 0 ? 0 : null);
   const [teamEditorTab, setTeamEditorTab] = useState("basic"); // basic | photo | socials
+  const [isEditingMobile, setIsEditingMobile] = useState(false);
   const [contactLogs, setContactLogs] = useState(initialSubmissions || []);
   const [adminsList, setAdminsList] = useState(initialAdmins || ["admin"]);
   const [chatbotKnowledge, setChatbotKnowledge] = useState(initialChatbotKnowledge || []);
@@ -84,10 +85,11 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
 
   // --- Handlers for Founders ---
   const handleAddFounder = () => {
-    const newFounder = { name: "", role: "", tagline: "", image: "", imageX: 50, imageY: 50, linkedin: "", instagram: "", order: founders.length + 1 };
+    const newFounder = { name: "", role: "", tagline: "", image: "", imageX: 50, imageY: 50, linkedin: "", instagram: "", order: founders.length + 1, customLinks: [] };
     setFounders([...founders, newFounder]);
     setSelectedFounderIndex(founders.length);
     setTeamEditorTab("basic");
+    setIsEditingMobile(true);
   };
 
   const handleFounderChange = (index, field, value) => {
@@ -109,7 +111,11 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
     const updated = founders.filter((_, i) => i !== index);
     setFounders(updated);
     if (selectedFounderIndex === index) {
-      setSelectedFounderIndex(updated.length > 0 ? Math.max(0, index - 1) : null);
+      const nextIndex = updated.length > 0 ? Math.max(0, index - 1) : null;
+      setSelectedFounderIndex(nextIndex);
+      if (nextIndex === null) {
+        setIsEditingMobile(false);
+      }
     } else if (selectedFounderIndex > index) {
       setSelectedFounderIndex(selectedFounderIndex - 1);
     }
@@ -177,6 +183,58 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
     } else if (selectedFounderIndex === targetIndex) {
       setSelectedFounderIndex(index);
     }
+  };
+
+  const handleAddCustomLink = (founderIndex) => {
+    const updated = [...founders];
+    const currentLinks = updated[founderIndex].customLinks || [];
+    updated[founderIndex] = {
+      ...updated[founderIndex],
+      customLinks: [...currentLinks, { name: "", url: "", icon: "fas fa-link" }]
+    };
+    setFounders(updated);
+  };
+
+  const handleCustomLinkChange = (founderIndex, linkIndex, field, value) => {
+    const updated = [...founders];
+    const currentLinks = [...(updated[founderIndex].customLinks || [])];
+    currentLinks[linkIndex] = {
+      ...currentLinks[linkIndex],
+      [field]: value
+    };
+    updated[founderIndex] = {
+      ...updated[founderIndex],
+      customLinks: currentLinks
+    };
+    setFounders(updated);
+  };
+
+  const handleDeleteCustomLink = (founderIndex, linkIndex) => {
+    const updated = [...founders];
+    const currentLinks = (updated[founderIndex].customLinks || []).filter((_, i) => i !== linkIndex);
+    updated[founderIndex] = {
+      ...updated[founderIndex],
+      customLinks: currentLinks
+    };
+    setFounders(updated);
+  };
+
+  const handleMoveCustomLink = (founderIndex, linkIndex, direction) => {
+    const updated = [...founders];
+    const currentLinks = [...(updated[founderIndex].customLinks || [])];
+    if (direction === "up" && linkIndex === 0) return;
+    if (direction === "down" && linkIndex === currentLinks.length - 1) return;
+
+    const targetIndex = direction === "up" ? linkIndex - 1 : linkIndex + 1;
+    const temp = currentLinks[linkIndex];
+    currentLinks[linkIndex] = currentLinks[targetIndex];
+    currentLinks[targetIndex] = temp;
+
+    updated[founderIndex] = {
+      ...updated[founderIndex],
+      customLinks: currentLinks
+    };
+    setFounders(updated);
   };
 
   // --- Handlers for Projects ---
@@ -862,7 +920,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
               <div className="flex gap-3 w-full sm:w-auto">
                 <button
                   onClick={handleAddFounder}
-                  className="flex-1 sm:flex-none px-4 py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-green-500/10 active:scale-95"
+                  className="flex-grow sm:flex-grow-0 px-4 py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-green-500/10 active:scale-95"
                 >
                   <i className="fas fa-plus"></i>
                   <span>Add Member</span>
@@ -870,7 +928,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                 <button
                   onClick={handleSaveCMS}
                   disabled={loading}
-                  className="flex-1 sm:flex-none px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-blue-500/10 disabled:opacity-50 active:scale-95"
+                  className="flex-grow sm:flex-grow-0 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-blue-500/10 disabled:opacity-50 active:scale-95"
                 >
                   <i className="fas fa-save"></i>
                   <span>Save Changes</span>
@@ -882,7 +940,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
               
               {/* LEFT SIDEBAR: Members list */}
-              <div className="lg:col-span-4 bg-gray-900/40 border border-gray-800 rounded-2xl p-4 md:p-5 backdrop-blur-sm space-y-4">
+              <div className={`lg:col-span-4 bg-gray-900/40 border border-gray-800 rounded-2xl p-4 md:p-5 backdrop-blur-sm space-y-4 transition-all duration-300 ${isEditingMobile ? "hidden lg:block animate-fade-out" : "block animate-fade-in"}`}>
                 <div className="flex items-center justify-between pb-3 border-b border-gray-800">
                   <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Member Cards ({founders.length})</h3>
                   {founders.length > 0 && (
@@ -900,21 +958,24 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                     return (
                       <div
                         key={index}
-                        onClick={() => setSelectedFounderIndex(index)}
-                        className={`group/item p-3 rounded-xl border flex items-center justify-between gap-3 cursor-pointer transition-all duration-300 relative select-none ${
+                        onClick={() => {
+                          setSelectedFounderIndex(index);
+                          setIsEditingMobile(true);
+                        }}
+                        className={`group/item p-3.5 rounded-xl border flex items-center justify-between gap-3 cursor-pointer transition-all duration-300 hover:scale-[1.01] relative select-none ${
                           isSelected
-                            ? "bg-blue-600/10 border-blue-500/40 shadow-lg shadow-blue-500/5"
-                            : "bg-gray-950/40 border-gray-800 hover:border-gray-700/60 hover:bg-gray-950/80"
+                            ? "bg-blue-600/10 border-blue-500/35 shadow-lg shadow-blue-500/5"
+                            : "bg-gray-950/30 border-gray-855 hover:border-gray-700/60 hover:bg-gray-950/70"
                         }`}
                       >
                         {/* Selected Indicator Bar */}
                         {isSelected && (
-                          <div className="absolute left-0 top-3 bottom-3 w-1 bg-blue-500 rounded-r-md"></div>
+                          <div className="absolute left-0 top-3.5 bottom-3.5 w-1 bg-blue-500 rounded-r-md"></div>
                         )}
 
-                        <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="flex items-center gap-3 min-w-0">
                           {/* Mini Cropped Avatar */}
-                          <div className="w-9 h-9 rounded-full overflow-hidden border border-white/10 shrink-0 bg-gray-900">
+                          <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10 shrink-0 bg-gray-900 shadow-inner">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={avatarImg}
@@ -947,7 +1008,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                               handleMoveFounder(index, "up");
                             }}
                             disabled={index === 0}
-                            className="w-6 h-6 rounded bg-gray-900/60 hover:bg-gray-850 hover:text-blue-400 disabled:opacity-20 text-gray-400 text-[10px] flex items-center justify-center border border-gray-800 transition"
+                            className="w-6 h-6 rounded bg-gray-900/60 hover:bg-gray-805 hover:text-blue-400 disabled:opacity-10 text-gray-400 text-[10px] flex items-center justify-center border border-gray-850 hover:border-gray-700 transition active:scale-90"
                             title="Move Up"
                           >
                             <i className="fas fa-chevron-up"></i>
@@ -959,7 +1020,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                               handleMoveFounder(index, "down");
                             }}
                             disabled={index === founders.length - 1}
-                            className="w-6 h-6 rounded bg-gray-900/60 hover:bg-gray-850 hover:text-blue-400 disabled:opacity-20 text-gray-400 text-[10px] flex items-center justify-center border border-gray-800 transition"
+                            className="w-6 h-6 rounded bg-gray-900/60 hover:bg-gray-805 hover:text-blue-400 disabled:opacity-10 text-gray-400 text-[10px] flex items-center justify-center border border-gray-855 hover:border-gray-700 transition active:scale-90"
                             title="Move Down"
                           >
                             <i className="fas fa-chevron-down"></i>
@@ -970,7 +1031,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                               e.stopPropagation();
                               handleDeleteFounder(index);
                             }}
-                            className="w-6 h-6 rounded bg-red-950/10 hover:bg-red-950/40 text-red-500 hover:text-red-400 text-[10px] flex items-center justify-center border border-red-900/10 transition ml-1"
+                            className="w-6 h-6 rounded bg-red-950/10 hover:bg-red-950/45 text-red-500 hover:text-red-400 text-[10px] flex items-center justify-center border border-red-900/10 hover:border-red-900/30 transition ml-1 active:scale-90"
                             title="Delete Card"
                           >
                             <i className="fas fa-trash-alt"></i>
@@ -978,7 +1039,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                         </div>
 
                         {/* Order badge */}
-                        <div className="absolute right-2 top-1.5 text-[8px] font-mono text-gray-600">
+                        <div className="absolute right-2.5 top-1.5 text-[8px] font-mono text-gray-600">
                           #{founder.order || index + 1}
                         </div>
                       </div>
@@ -995,7 +1056,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
               </div>
 
               {/* RIGHT DETAIL PANEL */}
-              <div className="lg:col-span-8 space-y-6">
+              <div className={`lg:col-span-8 space-y-6 transition-all duration-300 ${isEditingMobile ? "block animate-fade-in" : "hidden lg:block"}`}>
                 {selectedFounderIndex !== null && founders[selectedFounderIndex] ? (
                   (() => {
                     const index = selectedFounderIndex;
@@ -1006,21 +1067,37 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
 
                     return (
                       <div className="bg-gray-900/40 border border-gray-800 rounded-2xl p-5 md:p-6 backdrop-blur-sm space-y-6 relative transition-all duration-300">
+                        {/* Mobile Back Button */}
+                        <div className="lg:hidden">
+                          <button
+                            type="button"
+                            onClick={() => setIsEditingMobile(false)}
+                            className="flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-white px-3.5 py-2 rounded-xl bg-gray-950 border border-gray-850 active:scale-95 transition"
+                          >
+                            <i className="fas fa-arrow-left"></i>
+                            <span>Back to Members List</span>
+                          </button>
+                        </div>
+
                         {/* Detail Header */}
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-gray-800 gap-3">
                           <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full overflow-hidden border border-blue-500/20 bg-gray-950 shadow-inner">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
-                                src={previewImg}
-                                alt="Active edit thumbnail"
-                                className="w-full h-full object-cover"
-                                style={{ objectPosition: `${imageX}% ${imageY}%` }}
-                                onError={(e) => {
-                                  e.target.onerror = null;
-                                  e.target.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-                                }}
-                              />
+                            <div className="relative w-12 h-12 rounded-full shrink-0">
+                              {/* Outer glowing ring */}
+                              <div className="absolute -inset-0.5 rounded-full bg-gradient-to-tr from-blue-500 to-cyan-400 opacity-60 blur-sm"></div>
+                              <div className="relative w-12 h-12 rounded-full overflow-hidden border border-white/20 bg-gray-950 shadow-inner z-10">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={previewImg}
+                                  alt="Active edit thumbnail"
+                                  className="w-full h-full object-cover"
+                                  style={{ objectPosition: `${imageX}% ${imageY}%` }}
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+                                  }}
+                                />
+                              </div>
                             </div>
                             <div className="text-left">
                               <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -1035,23 +1112,23 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                         </div>
 
                         {/* Tab Buttons Selection */}
-                        <div className="flex border border-gray-800 bg-gray-950/40 p-1 rounded-lg">
+                        <div className="flex border border-gray-800 bg-gray-950/60 p-1 rounded-xl shadow-inner gap-1">
                           {[
                             { id: "basic", label: "Basic Info", icon: "fa-user-circle" },
                             { id: "photo", label: "Photo & Crop", icon: "fa-image" },
-                            { id: "socials", label: "Socials & Button", icon: "fa-share-alt" },
+                            { id: "socials", label: "Socials & Buttons", icon: "fa-share-alt" },
                           ].map((tab) => (
                             <button
                               key={tab.id}
                               type="button"
                               onClick={() => setTeamEditorTab(tab.id)}
-                              className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 text-xs font-semibold rounded-md transition cursor-pointer ${
+                              className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 text-xs font-bold rounded-lg transition-all duration-300 cursor-pointer ${
                                 teamEditorTab === tab.id
-                                  ? "bg-gray-800 text-blue-400 shadow-sm border border-gray-700/60"
-                                  : "text-gray-400 hover:text-gray-200"
+                                  ? "bg-blue-600/10 text-blue-400 shadow-md border border-blue-500/20"
+                                  : "text-gray-500 hover:text-gray-300 hover:bg-gray-900/30 border border-transparent"
                               }`}
                             >
-                              <i className={`fas ${tab.icon} text-[11px]`}></i>
+                              <i className={`fas ${tab.icon} text-xs`}></i>
                               <span>{tab.label}</span>
                             </button>
                           ))}
@@ -1067,7 +1144,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                                   type="text"
                                   value={founder.name}
                                   onChange={(e) => handleFounderChange(index, "name", e.target.value)}
-                                  className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
+                                  className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600"
                                   placeholder="Member Full Name"
                                   required
                                 />
@@ -1078,7 +1155,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                                   type="text"
                                   value={founder.role}
                                   onChange={(e) => handleFounderChange(index, "role", e.target.value)}
-                                  className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
+                                  className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-855 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600"
                                   placeholder="e.g., Co-founder & CTO"
                                   required
                                 />
@@ -1090,7 +1167,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                                 type="text"
                                 value={founder.tagline || ""}
                                 onChange={(e) => handleFounderChange(index, "tagline", e.target.value)}
-                                className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
+                                className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600"
                                 placeholder="Visionary tagline shown on hover (e.g. Engineering scalable systems...)"
                               />
                             </div>
@@ -1102,7 +1179,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                                   min="1"
                                   value={founder.order || index + 1}
                                   onChange={(e) => handleFounderChange(index, "order", e.target.value)}
-                                  className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-855 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none"
+                                  className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition"
                                 />
                               </div>
                               <div className="flex items-end pb-1.5">
@@ -1124,7 +1201,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                                   type="text"
                                   value={founder.image}
                                   onChange={(e) => handleFounderChange(index, "image", e.target.value)}
-                                  className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
+                                  className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-855 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600"
                                   placeholder="e.g., /founder_dhruvil.jpg"
                                 />
                               </div>
@@ -1144,7 +1221,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                                 
                                 <div 
                                   onClick={(e) => handleImageClick(e, index)}
-                                  className="relative w-44 h-44 mx-auto bg-gray-950 border border-gray-800 rounded-2xl overflow-hidden cursor-crosshair group/crop select-none shadow-xl shadow-black/40 flex items-center justify-center active:scale-[0.98] transition-transform duration-100"
+                                  className="relative w-44 h-44 mx-auto bg-gray-950 border border-gray-805 rounded-2xl overflow-hidden cursor-crosshair group/crop select-none shadow-xl shadow-black/40 flex items-center justify-center active:scale-[0.98] transition-transform duration-100"
                                 >
                                   {founder.image ? (
                                     <>
@@ -1167,10 +1244,14 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                                       
                                       {/* Targeting crosshair circle */}
                                       <div 
-                                        className="absolute w-6 h-6 -ml-3 -mt-3 rounded-full border-2 border-blue-400 bg-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.6)] flex items-center justify-center pointer-events-none transition-all duration-200"
+                                        className="absolute w-8 h-8 -ml-4 -mt-4 rounded-full border-2 border-dashed border-blue-400 bg-blue-500/15 shadow-[0_0_20px_rgba(59,130,246,0.85)] flex items-center justify-center pointer-events-none transition-all duration-200"
                                         style={{ left: `${imageX}%`, top: `${imageY}%` }}
                                       >
-                                        <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
+                                        <div className="absolute inset-0 rounded-full border border-blue-400/40 animate-ping opacity-60"></div>
+                                        <div className="w-2 h-2 bg-blue-400 rounded-full shadow-[0_0_8px_rgba(59,130,246,1)]" />
+                                        <div className="absolute bottom-9 bg-gray-900/90 border border-blue-500/30 text-blue-400 px-1.5 py-0.5 rounded text-[8px] font-mono font-bold whitespace-nowrap shadow-md">
+                                          X:{imageX}% Y:{imageY}%
+                                        </div>
                                       </div>
                                     </>
                                   ) : (
@@ -1243,7 +1324,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                           </div>
                         )}
 
-                        {/* TAB CONTENT: Socials & Custom Button */}
+                        {/* TAB CONTENT: Socials & Custom Buttons */}
                         {teamEditorTab === "socials" && (
                           <div className="space-y-5 animate-fade-in text-left">
                             <div className="bg-gray-950/20 p-4 border border-gray-850 rounded-xl space-y-4">
@@ -1258,7 +1339,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                                     type="url"
                                     value={founder.linkedin || ""}
                                     onChange={(e) => handleFounderChange(index, "linkedin", e.target.value)}
-                                    className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
+                                    className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600"
                                     placeholder="https://linkedin.com/in/username"
                                   />
                                 </div>
@@ -1268,7 +1349,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                                     type="url"
                                     value={founder.instagram || ""}
                                     onChange={(e) => handleFounderChange(index, "instagram", e.target.value)}
-                                    className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
+                                    className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600"
                                     placeholder="https://instagram.com/username"
                                   />
                                 </div>
@@ -1276,41 +1357,127 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                             </div>
 
                             <div className="bg-gray-950/20 p-4 border border-gray-850 rounded-xl space-y-4">
-                              <div className="flex items-center gap-2 pb-2 border-b border-gray-850 text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
-                                <i className="fas fa-link"></i>
-                                <span>Custom Action Button (Optional)</span>
+                              <div className="flex items-center justify-between pb-2 border-b border-gray-850">
+                                <div className="flex items-center gap-2 text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
+                                  <i className="fas fa-link"></i>
+                                  <span>Custom Action Buttons (Optional)</span>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => handleAddCustomLink(index)}
+                                  className="px-2.5 py-1 bg-emerald-600/10 hover:bg-emerald-600/20 border border-emerald-500/20 text-emerald-400 rounded text-[9px] font-bold transition flex items-center gap-1 cursor-pointer active:scale-95"
+                                >
+                                  <i className="fas fa-plus"></i>
+                                  <span>Add Button</span>
+                                </button>
                               </div>
-                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div>
-                                  <label className="text-[10px] text-gray-400 uppercase font-semibold">Button Redirect URL</label>
-                                  <input
-                                    type="url"
-                                    value={founder.customLinkUrl || ""}
-                                    onChange={(e) => handleFounderChange(index, "customLinkUrl", e.target.value)}
-                                    className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
-                                    placeholder="https://github.com/username"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="text-[10px] text-gray-400 uppercase font-semibold">Button Label Name</label>
-                                  <input
-                                    type="text"
-                                    value={founder.customLinkName || ""}
-                                    onChange={(e) => handleFounderChange(index, "customLinkName", e.target.value)}
-                                    className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
-                                    placeholder="e.g. GitHub, Website"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="text-[10px] text-gray-400 uppercase font-semibold">FontAwesome Icon Class</label>
-                                  <input
-                                    type="text"
-                                    value={founder.customLinkIcon || ""}
-                                    onChange={(e) => handleFounderChange(index, "customLinkIcon", e.target.value)}
-                                    className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500/50 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500/50 focus:outline-none transition"
-                                    placeholder="e.g. fab fa-github"
-                                  />
-                                </div>
+
+                              <div className="space-y-4 max-h-[300px] overflow-y-auto pr-1 scrollbar-none">
+                                {(founder.customLinks || []).map((link, lIdx) => (
+                                  <div key={lIdx} className="p-3 bg-gray-950/40 border border-gray-855 rounded-xl space-y-3 relative group/link-item animate-fade-in">
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-[9px] font-mono text-gray-500 font-bold">BUTTON #{lIdx + 1}</span>
+                                      <div className="flex items-center gap-1">
+                                        <button
+                                          type="button"
+                                          onClick={() => handleMoveCustomLink(index, lIdx, "up")}
+                                          disabled={lIdx === 0}
+                                          className="w-5 h-5 rounded bg-gray-900/60 hover:bg-gray-850 hover:text-blue-400 disabled:opacity-20 text-gray-400 text-[9px] flex items-center justify-center border border-gray-800 transition active:scale-90"
+                                          title="Move Up"
+                                        >
+                                          <i className="fas fa-chevron-up"></i>
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() => handleMoveCustomLink(index, lIdx, "down")}
+                                          disabled={lIdx === (founder.customLinks || []).length - 1}
+                                          className="w-5 h-5 rounded bg-gray-900/60 hover:bg-gray-850 hover:text-blue-400 disabled:opacity-20 text-gray-400 text-[9px] flex items-center justify-center border border-gray-800 transition active:scale-90"
+                                          title="Move Down"
+                                        >
+                                          <i className="fas fa-chevron-down"></i>
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() => handleDeleteCustomLink(index, lIdx)}
+                                          className="w-5 h-5 rounded bg-red-950/10 hover:bg-red-950/45 text-red-500 hover:text-red-400 text-[9px] flex items-center justify-center border border-red-900/10 hover:border-red-900/30 transition ml-1 active:scale-90"
+                                          title="Delete Button"
+                                        >
+                                          <i className="fas fa-trash-alt"></i>
+                                        </button>
+                                      </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                      <div>
+                                        <label className="text-[9px] text-gray-500 uppercase font-semibold">Button Label Name</label>
+                                        <input
+                                          type="text"
+                                          value={link.name}
+                                          onChange={(e) => handleCustomLinkChange(index, lIdx, "name", e.target.value)}
+                                          className="w-full mt-1 p-2 bg-gray-950 border border-gray-850 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-bold"
+                                          placeholder="e.g., GitHub, Portfolio"
+                                          required
+                                        />
+                                      </div>
+                                      <div className="sm:col-span-2">
+                                        <label className="text-[9px] text-gray-500 uppercase font-semibold">Button Redirect URL</label>
+                                        <input
+                                          type="url"
+                                          value={link.url}
+                                          onChange={(e) => handleCustomLinkChange(index, lIdx, "url", e.target.value)}
+                                          className="w-full mt-1 p-2 bg-gray-950 border border-gray-850 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600"
+                                          placeholder="https://example.com"
+                                          required
+                                        />
+                                      </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+                                      <div className="sm:col-span-2">
+                                        <label className="text-[9px] text-gray-500 uppercase font-semibold">FontAwesome Icon Class</label>
+                                        <input
+                                          type="text"
+                                          value={link.icon}
+                                          onChange={(e) => handleCustomLinkChange(index, lIdx, "icon", e.target.value)}
+                                          className="w-full mt-1 p-2 bg-gray-950 border border-gray-850 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-mono"
+                                          placeholder="e.g., fab fa-github"
+                                        />
+                                      </div>
+                                      <div className="flex items-center gap-3">
+                                        {/* Icon Preview */}
+                                        <div className="w-9 h-9 rounded-lg bg-gray-950 border border-gray-850 flex items-center justify-center text-gray-400 shrink-0 shadow-inner">
+                                          <i className={`${link.icon || "fas fa-link"} text-xs`}></i>
+                                        </div>
+                                        {/* Icon Suggestions Quick-Clicks */}
+                                        <div className="flex flex-wrap gap-1">
+                                          {[
+                                            { icon: "fab fa-github", title: "GitHub" },
+                                            { icon: "fas fa-globe", title: "Website" },
+                                            { icon: "fas fa-file-pdf", title: "Resume" },
+                                            { icon: "fas fa-envelope", title: "Mail" },
+                                          ].map((sug) => (
+                                            <button
+                                              key={sug.icon}
+                                              type="button"
+                                              onClick={() => handleCustomLinkChange(index, lIdx, "icon", sug.icon)}
+                                              className="p-1 text-[10px] text-gray-500 hover:text-white bg-gray-900 border border-gray-850 rounded hover:border-gray-700 transition"
+                                              title={sug.title}
+                                            >
+                                              <i className={sug.icon}></i>
+                                            </button>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+
+                                {(founder.customLinks || []).length === 0 && (
+                                  <div className="text-center py-6 border border-dashed border-gray-850 rounded-xl bg-gray-950/20">
+                                    <i className="fas fa-link text-gray-600 text-base mb-1 block"></i>
+                                    <p className="text-[10px] text-gray-500">No custom buttons added. Click "Add Button" above to create one.</p>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>

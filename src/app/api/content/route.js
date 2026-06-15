@@ -215,20 +215,31 @@ export async function GET() {
           ? chatbotKnowledge.map(k => ({ keywords: k.keywords, response: k.response }))
           : defaultChatbotKnowledge,
         founders: founders.length > 0
-          ? founders.map(f => ({
-              name: f.name,
-              role: f.role,
-              tagline: f.tagline || "",
-              image: f.image || "",
-              imageX: f.imageX !== undefined ? Number(f.imageX) : 50,
-              imageY: f.imageY !== undefined ? Number(f.imageY) : 50,
-              linkedin: f.linkedin || "",
-              instagram: f.instagram || "",
-              customLinkUrl: f.customLinkUrl || "",
-              customLinkName: f.customLinkName || "",
-              customLinkIcon: f.customLinkIcon || "",
-              order: f.order !== undefined ? Number(f.order) : 1
-            }))
+          ? founders.map(f => {
+              let customLinks = f.customLinks || [];
+              if (customLinks.length === 0 && f.customLinkUrl) {
+                customLinks = [{
+                  url: f.customLinkUrl,
+                  name: f.customLinkName || "Link",
+                  icon: f.customLinkIcon || "fas fa-link"
+                }];
+              }
+              return {
+                name: f.name,
+                role: f.role,
+                tagline: f.tagline || "",
+                image: f.image || "",
+                imageX: f.imageX !== undefined ? Number(f.imageX) : 50,
+                imageY: f.imageY !== undefined ? Number(f.imageY) : 50,
+                linkedin: f.linkedin || "",
+                instagram: f.instagram || "",
+                customLinkUrl: f.customLinkUrl || "",
+                customLinkName: f.customLinkName || "",
+                customLinkIcon: f.customLinkIcon || "",
+                customLinks,
+                order: f.order !== undefined ? Number(f.order) : 1
+              };
+            })
           : localMockDb.founders
       };
 
@@ -318,20 +329,29 @@ export async function POST(request) {
       if (Array.isArray(founders)) {
         await db.collection("founders").deleteMany({});
         if (founders.length > 0) {
-          const formattedFounders = founders.map(f => ({
-            name: f.name,
-            role: f.role,
-            tagline: f.tagline || "",
-            image: f.image || "",
-            imageX: f.imageX !== undefined ? Number(f.imageX) : 50,
-            imageY: f.imageY !== undefined ? Number(f.imageY) : 50,
-            linkedin: f.linkedin || "",
-            instagram: f.instagram || "",
-            customLinkUrl: f.customLinkUrl || "",
-            customLinkName: f.customLinkName || "",
-            customLinkIcon: f.customLinkIcon || "",
-            order: f.order !== undefined ? Number(f.order) : 1
-          }));
+          const formattedFounders = founders.map(f => {
+            const links = f.customLinks || [];
+            const firstLink = links[0] || {};
+            return {
+              name: f.name,
+              role: f.role,
+              tagline: f.tagline || "",
+              image: f.image || "",
+              imageX: f.imageX !== undefined ? Number(f.imageX) : 50,
+              imageY: f.imageY !== undefined ? Number(f.imageY) : 50,
+              linkedin: f.linkedin || "",
+              instagram: f.instagram || "",
+              customLinkUrl: firstLink.url || f.customLinkUrl || "",
+              customLinkName: firstLink.name || f.customLinkName || "",
+              customLinkIcon: firstLink.icon || f.customLinkIcon || "",
+              customLinks: links.map(l => ({
+                url: l.url || "",
+                name: l.name || "",
+                icon: l.icon || "fas fa-link"
+              })),
+              order: f.order !== undefined ? Number(f.order) : 1
+            };
+          });
           await db.collection("founders").insertMany(formattedFounders);
         }
       }

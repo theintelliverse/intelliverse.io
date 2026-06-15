@@ -117,20 +117,31 @@ export default async function AdminPage() {
 
       const dbFounders = await db.collection("founders").find({}).sort({ order: 1 }).toArray();
       if (dbFounders.length > 0) {
-        founders = dbFounders.map(f => ({
-          name: f.name,
-          role: f.role,
-          tagline: f.tagline || "",
-          image: f.image || "",
-          imageX: f.imageX !== undefined ? Number(f.imageX) : 50,
-          imageY: f.imageY !== undefined ? Number(f.imageY) : 50,
-          linkedin: f.linkedin || "",
-          instagram: f.instagram || "",
-          customLinkUrl: f.customLinkUrl || "",
-          customLinkName: f.customLinkName || "",
-          customLinkIcon: f.customLinkIcon || "",
-          order: f.order !== undefined ? Number(f.order) : 1
-        }));
+        founders = dbFounders.map(f => {
+          let customLinks = f.customLinks || [];
+          if (customLinks.length === 0 && f.customLinkUrl) {
+            customLinks = [{
+              url: f.customLinkUrl,
+              name: f.customLinkName || "Link",
+              icon: f.customLinkIcon || "fas fa-link"
+            }];
+          }
+          return {
+            name: f.name,
+            role: f.role,
+            tagline: f.tagline || "",
+            image: f.image || "",
+            imageX: f.imageX !== undefined ? Number(f.imageX) : 50,
+            imageY: f.imageY !== undefined ? Number(f.imageY) : 50,
+            linkedin: f.linkedin || "",
+            instagram: f.instagram || "",
+            customLinkUrl: f.customLinkUrl || "",
+            customLinkName: f.customLinkName || "",
+            customLinkIcon: f.customLinkIcon || "",
+            customLinks,
+            order: f.order !== undefined ? Number(f.order) : 1
+          };
+        });
       }
     } catch (err) {
       console.error("Error pre-fetching admin data:", err);
