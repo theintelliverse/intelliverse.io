@@ -19,7 +19,8 @@ import Footer from "@/components/sections/Footer";
 
 export default function ClientHome({ initialData }) {
   const { scrollY } = useScroll();
-  const letterboxHeight = useTransform(scrollY, [0, 200], [0, 20]);
+  const letterboxYTop = useTransform(scrollY, [0, 200], [-20, 0]);
+  const letterboxYBottom = useTransform(scrollY, [0, 200], [20, 0]);
 
   // --- Content Data State (Modifiable by Admin Panel) ---
   const [contentData, setContentData] = useState({
@@ -199,7 +200,7 @@ export default function ClientHome({ initialData }) {
 
       {/* Cinematic Widescreen Letterbox Frames (Movie Frame Transition on Scroll) */}
       <motion.div
-        style={{ height: letterboxHeight }}
+        style={{ height: "20px", y: letterboxYTop }}
         className="fixed top-0 left-0 right-0 bg-[#05020c] z-[99] border-b border-white/5 pointer-events-none flex items-center justify-between px-6 overflow-hidden select-none"
       >
         <span className="text-[8px] font-mono tracking-widest text-red-500 animate-pulse flex items-center gap-1.5">
@@ -210,7 +211,7 @@ export default function ClientHome({ initialData }) {
         </span>
       </motion.div>
       <motion.div
-        style={{ height: letterboxHeight }}
+        style={{ height: "20px", y: letterboxYBottom }}
         className="fixed bottom-0 left-0 right-0 bg-[#05020c] z-[99] border-t border-white/5 pointer-events-none flex items-center justify-between px-6 overflow-hidden select-none"
       >
         <span className="text-[8px] font-mono tracking-widest text-gray-500">
