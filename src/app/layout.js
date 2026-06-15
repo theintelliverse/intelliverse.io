@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Analytics } from '@vercel/analytics/next';
+import SmoothScroll from "@/components/ui/SmoothScroll";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -350,7 +351,9 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={inter.className}>
-        {children}
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
         <Analytics />
       </body>
     </html>
