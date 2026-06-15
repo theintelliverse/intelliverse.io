@@ -170,9 +170,9 @@ export default function TeamTab({
 
         {/* RIGHT DETAIL PANEL: Sub-tabs Forms */}
         <div className={`lg:col-span-8 space-y-6 transition-all duration-300 ${isEditingMobile ? "block animate-fade-in" : "hidden lg:block"}`}>
-          {selectedFounderIndex !== null && founders[selectedFounderIndex] ? (
+          {selectedFounderIndex !== null && (founders[selectedFounderIndex] || founders[founders.length - 1]) ? (
             (() => {
-              const index = selectedFounderIndex;
+              const index = founders[selectedFounderIndex] ? selectedFounderIndex : founders.length - 1;
               const founder = founders[index];
 
               return (
