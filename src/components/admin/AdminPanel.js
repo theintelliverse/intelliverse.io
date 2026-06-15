@@ -623,33 +623,34 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
 
       {/* Sidebar Navigation */}
       <aside
-        className={`fixed inset-y-0 left-0 w-64 bg-gray-900 border-r border-gray-800 flex flex-col z-40 transition-transform duration-300 ease-in-out md:translate-x-0 md:relative md:flex md:flex-col ${mobileMenuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full md:translate-x-0"
-          }`}
+        className={`fixed inset-y-0 left-0 w-64 bg-gray-950/40 backdrop-blur-xl border-r border-white/5 flex flex-col z-40 transition-transform duration-300 ease-in-out md:translate-x-0 md:relative md:flex md:flex-col ${
+          mobileMenuOpen ? "translate-x-0 shadow-2xl shadow-black/80" : "-translate-x-full md:translate-x-0"
+        }`}
       >
         {/* Brand Header */}
-        <div className="p-6 border-b border-gray-800 flex items-center justify-between">
+        <div className="p-6 border-b border-white/5 flex items-center justify-between">
           <div className="flex items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/the%20intelliverse%20logo.jpg"
               alt="Intelliverse Logo"
-              className="w-8 h-8 rounded-lg object-cover shadow-lg shadow-blue-500/10"
+              className="w-8 h-8 rounded-lg object-cover shadow-lg shadow-blue-500/10 hover:scale-105 transition-transform duration-300"
             />
-            <div>
-              <h1 className="text-sm font-bold tracking-wider text-white">Intelliverse</h1>
-              <p className="text-[10px] text-gray-500">Welcome, <strong className="text-blue-400">{currentUser}</strong></p>
+            <div className="min-w-0">
+              <h1 className="text-xs font-bold tracking-widest text-white uppercase font-mono">Intelliverse</h1>
+              <p className="text-[10px] text-gray-500 truncate mt-0.5 font-sans">Welcome, <strong className="text-blue-400 font-semibold">{currentUser}</strong></p>
             </div>
           </div>
           <button
             onClick={() => setMobileMenuOpen(false)}
-            className="md:hidden text-gray-500 hover:text-gray-300 text-sm"
+            className="md:hidden text-gray-400 hover:text-white p-1 text-xs transition cursor-pointer"
           >
             <i className="fas fa-times"></i>
           </button>
         </div>
 
         {/* Navigation Tabs Links */}
-        <nav className="flex-grow p-4 space-y-1 overflow-y-auto scrollbar-none">
+        <nav className="flex-grow p-4 space-y-1.5 overflow-y-auto scrollbar-none">
           {[
             { id: "dashboard", label: "Dashboard", icon: "fa-chart-pie" },
             { id: "cms", label: "Hero & About", icon: "fa-edit" },
@@ -666,21 +667,25 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                 setActiveTab(tab.id);
                 setMobileMenuOpen(false); // Close mobile sidebar on selection
               }}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-xs font-semibold rounded-lg transition-all cursor-pointer ${activeTab === tab.id
-                  ? "bg-blue-600/10 text-blue-400 border border-blue-500/20 shadow-md shadow-blue-500/5"
-                  : "text-gray-400 hover:bg-gray-800/40 hover:text-gray-200 border border-transparent"
-                }`}
+              className={`w-full flex items-center gap-3 px-4 py-3 text-xs font-semibold rounded-xl transition-all duration-300 relative cursor-pointer group ${
+                activeTab === tab.id
+                  ? "bg-blue-600/10 text-blue-400 border border-blue-500/15 shadow-lg shadow-blue-500/5"
+                  : "text-gray-400 hover:bg-white/[0.02] hover:text-gray-200 border border-transparent"
+              }`}
             >
-              <i className={`fas ${tab.icon} text-sm`}></i>
+              {activeTab === tab.id && (
+                <div className="absolute left-0 top-3.5 bottom-3.5 w-1 bg-blue-500 rounded-r-md"></div>
+              )}
+              <i className={`fas ${tab.icon} text-sm group-hover:scale-110 transition-transform duration-300 ${activeTab === tab.id ? "text-blue-400" : "text-gray-500 group-hover:text-gray-300"}`}></i>
               <span>{tab.label}</span>
             </button>
           ))}
         </nav>
 
         {/* Sidebar Footer (Logout/Status) */}
-        <div className="p-4 border-t border-gray-800 bg-gray-900/40 space-y-4">
-          <div className="flex items-center justify-between text-[10px] text-gray-500">
-            <span>DB Status:</span>
+        <div className="p-4 border-t border-white/5 bg-gray-950/20 space-y-4">
+          <div className="flex items-center justify-between text-[10px] text-gray-500 font-mono">
+            <span>DB STATUS:</span>
             <span className={`font-semibold flex items-center gap-1.5 ${dbStatus === "Connected" ? "text-green-400" : "text-amber-500"}`}>
               <span className={`w-1.5 h-1.5 rounded-full ${dbStatus === "Connected" ? "bg-green-500 animate-pulse" : "bg-amber-500"}`}></span>
               {dbStatus === "Connected" ? "Connected" : "Mock Fallback"}
@@ -688,7 +693,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
           </div>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-gray-800 hover:bg-red-950/20 text-gray-400 hover:text-red-400 border border-gray-700/60 hover:border-red-900/40 rounded-lg text-xs font-semibold transition cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-gray-900/30 hover:bg-red-950/15 text-gray-400 hover:text-red-400 border border-white/5 hover:border-red-500/20 rounded-xl text-xs font-bold transition duration-300 cursor-pointer active:scale-[0.98]"
           >
             <i className="fas fa-sign-out-alt"></i>
             <span>Secure Log Out</span>
@@ -722,41 +727,46 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
           <div className="space-y-6 md:space-y-8 animate-fade-in">
             {/* Header Greeting */}
             <div>
-              <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white">Dashboard Overview</h2>
+              <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white font-mono uppercase">Dashboard Overview</h2>
               <p className="text-xs md:text-sm text-gray-400 mt-1">Real-time status metrics and statistics summary.</p>
             </div>
 
             {/* Quick Metrics Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              <div className="bg-gray-900/40 border border-gray-800 p-5 md:p-6 rounded-2xl backdrop-blur-sm">
+              {/* Metric 1 */}
+              <div className="bg-gray-900/30 border border-white/5 hover:border-blue-500/25 p-5 md:p-6 rounded-2xl backdrop-blur-sm hover:shadow-[0_0_30px_rgba(59,102,241,0.05)] hover:bg-gray-900/50 transition-all duration-300 relative overflow-hidden group">
                 <div className="flex justify-between items-start">
                   <div>
-                    <p className="text-[10px] md:text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Submissions (CRM Leads)</p>
-                    <h3 className="text-2xl md:text-3xl font-bold text-white mt-1.5">{contactLogs.length}</h3>
+                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest font-mono">Submissions (CRM Leads)</p>
+                    <h3 className="text-2xl md:text-3xl font-black text-white mt-2 font-mono">{contactLogs.length}</h3>
                   </div>
-                  <div className="p-2.5 bg-blue-500/10 rounded-xl text-blue-400 border border-blue-500/20">
+                  <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400 border border-blue-500/15 group-hover:scale-105 transition-transform duration-300 shadow-inner">
                     <i className="fas fa-address-book text-base md:text-lg"></i>
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-900/40 border border-gray-800 p-5 md:p-6 rounded-2xl backdrop-blur-sm">
+
+              {/* Metric 2 */}
+              <div className="bg-gray-900/30 border border-white/5 hover:border-purple-500/25 p-5 md:p-6 rounded-2xl backdrop-blur-sm hover:shadow-[0_0_30px_rgba(168,85,247,0.05)] hover:bg-gray-900/50 transition-all duration-300 relative overflow-hidden group">
                 <div className="flex justify-between items-start">
                   <div>
-                    <p className="text-[10px] md:text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Worked Projects</p>
-                    <h3 className="text-2xl md:text-3xl font-bold text-white mt-1.5">{projects.length}</h3>
+                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest font-mono">Worked Projects</p>
+                    <h3 className="text-2xl md:text-3xl font-black text-white mt-2 font-mono">{projects.length}</h3>
                   </div>
-                  <div className="p-2.5 bg-purple-500/10 rounded-xl text-purple-400 border border-purple-500/20">
+                  <div className="p-3 bg-purple-500/10 rounded-xl text-purple-400 border border-purple-500/15 group-hover:scale-105 transition-transform duration-300 shadow-inner">
                     <i className="fas fa-briefcase text-base md:text-lg"></i>
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-900/40 border border-gray-800 p-5 md:p-6 rounded-2xl backdrop-blur-sm sm:col-span-2 lg:col-span-1">
+
+              {/* Metric 3 */}
+              <div className="bg-gray-900/30 border border-white/5 hover:border-emerald-500/25 p-5 md:p-6 rounded-2xl backdrop-blur-sm hover:shadow-[0_0_30px_rgba(16,185,129,0.05)] hover:bg-gray-900/50 transition-all duration-300 relative overflow-hidden group sm:col-span-2 lg:col-span-1">
                 <div className="flex justify-between items-start">
                   <div>
-                    <p className="text-[10px] md:text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Testimonials Quotes</p>
-                    <h3 className="text-2xl md:text-3xl font-bold text-white mt-1.5">{testimonials.length}</h3>
+                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest font-mono">Testimonial Quotes</p>
+                    <h3 className="text-2xl md:text-3xl font-black text-white mt-2 font-mono">{testimonials.length}</h3>
                   </div>
-                  <div className="p-2.5 bg-emerald-500/10 rounded-xl text-emerald-400 border border-emerald-500/20">
+                  <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-400 border border-emerald-500/15 group-hover:scale-105 transition-transform duration-300 shadow-inner">
                     <i className="fas fa-comments text-base md:text-lg"></i>
                   </div>
                 </div>
@@ -764,40 +774,44 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
             </div>
 
             {/* Ingestion Trend SVG Graph */}
-            <div className="bg-gray-900/40 border border-gray-800 rounded-2xl p-5 md:p-6 backdrop-blur-sm space-y-4">
+            <div className="bg-gray-900/30 border border-white/5 hover:border-blue-500/15 rounded-2xl p-5 md:p-6 backdrop-blur-sm transition-all duration-500 space-y-4">
               <div>
-                <h4 className="text-xs md:text-sm font-bold text-white flex items-center gap-2">
+                <h4 className="text-xs font-bold text-white flex items-center gap-2 font-mono uppercase tracking-wider">
                   <i className="fas fa-chart-line text-blue-400"></i>
-                  <span>CRM Ingestion Lead Activity (Last 7 Days)</span>
+                  <span>CRM Lead Ingestion Flow (Last 7 Days)</span>
                 </h4>
-                <p className="text-[10px] text-gray-400 mt-1">Counts based on incoming contact submissions timeline.</p>
+                <p className="text-[10px] text-gray-400 mt-1">Timeline activity based on form submissions.</p>
               </div>
 
               <div className="relative pt-2">
                 <svg className="w-full h-[130px] md:h-[150px] overflow-visible" viewBox={`0 0 ${chartWidth} ${chartHeight}`} preserveAspectRatio="none">
                   <defs>
                     <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="rgba(59, 130, 246, 0.45)" />
+                      <stop offset="0%" stopColor="rgba(59, 130, 246, 0.4)" />
                       <stop offset="100%" stopColor="rgba(59, 130, 246, 0)" />
                     </linearGradient>
+                    {/* SVG filter definition for a neon shadow glow */}
+                    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#3b82f6" floodOpacity="0.45" />
+                    </filter>
                   </defs>
                   {/* Grid helper lines */}
                   <line x1="0" y1="10" x2={chartWidth} y2="10" stroke="#1e293b" strokeDasharray="3 3" />
                   <line x1="0" y1={chartHeight / 2} x2={chartWidth} y2={chartHeight / 2} stroke="#1e293b" strokeDasharray="3 3" />
-                  <line x1="0" y1={chartHeight - 1} x2={chartWidth} y2={chartHeight - 1} stroke="#334155" />
+                  <line x1="0" y1={chartHeight - 1} x2={chartWidth} y2={chartHeight - 1} stroke="rgba(255,255,255,0.06)" />
 
                   {/* Glowing Area Fill */}
                   {areaPath && <path d={areaPath} fill="url(#chartGrad)" className="animate-fade-in" />}
 
                   {/* Connection Line */}
-                  {linePath && <path d={linePath} fill="none" stroke="#3b82f6" strokeWidth="2.5" className="animate-fade-in" />}
+                  {linePath && <path d={linePath} fill="none" stroke="#3b82f6" strokeWidth="2.5" filter="url(#neonGlow)" className="animate-fade-in" />}
 
                   {/* Dots / Interactive counts */}
                   {points.map((p, idx) => (
                     <g key={idx}>
-                      <circle cx={p.x} cy={p.y} r="4.5" fill="#1e3a8a" stroke="#60a5fa" strokeWidth="2" />
+                      <circle cx={p.x} cy={p.y} r="4.5" fill="#090514" stroke="#60a5fa" strokeWidth="2" className="cursor-crosshair transition hover:scale-125" />
                       {p.count > 0 && (
-                        <text x={p.x} y={p.y - 10} fill="#93c5fd" fontSize="9" textAnchor="middle" fontWeight="bold">
+                        <text x={p.x} y={p.y - 12} fill="#93c5fd" fontSize="9" textAnchor="middle" fontWeight="bold" fontFamily="monospace">
                           {p.count}
                         </text>
                       )}
@@ -805,7 +819,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                   ))}
                 </svg>
                 {/* Horizontal Labels */}
-                <div className="flex justify-between mt-2.5 px-0.5 text-[9px] md:text-[10px] text-gray-500 font-semibold uppercase">
+                <div className="flex justify-between mt-3 px-0.5 text-[9px] text-gray-500 font-bold font-mono">
                   {trendData.map((p, idx) => (
                     <span key={idx} className="w-12 text-center break-words">{p.label}</span>
                   ))}
@@ -817,10 +831,10 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
 
               {/* Quick Actions Panel */}
-              <div className="bg-gray-900/40 border border-gray-800 rounded-2xl p-5 md:p-6 backdrop-blur-sm space-y-4">
-                <h4 className="text-xs md:text-sm font-bold text-white flex items-center gap-2 pb-3 border-b border-gray-800">
+              <div className="bg-gray-900/30 border border-white/5 rounded-2xl p-5 md:p-6 backdrop-blur-sm space-y-4">
+                <h4 className="text-xs font-bold text-white flex items-center gap-2 pb-3 border-b border-white/5 font-mono uppercase tracking-wider">
                   <i className="fas fa-bolt text-amber-400"></i>
-                  <span>Quick Tasks Shortcuts</span>
+                  <span>Quick Tasks</span>
                 </h4>
                 <div className="space-y-2 text-xs">
                   <button
@@ -828,9 +842,9 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                       setActiveTab("projects");
                       handleAddProject();
                     }}
-                    className="w-full flex items-center justify-between p-3 bg-gray-950/40 hover:bg-blue-600/10 border border-gray-850 hover:border-blue-500/20 text-gray-300 hover:text-blue-400 rounded-xl transition cursor-pointer font-medium"
+                    className="w-full flex items-center justify-between p-3.5 bg-gray-950/40 hover:bg-blue-600/10 border border-white/5 hover:border-blue-500/20 text-gray-300 hover:text-blue-400 rounded-xl transition duration-300 cursor-pointer font-bold active:scale-[0.99]"
                   >
-                    <span>Add Project Portfolio Entry</span>
+                    <span>Add Portfolio Entry</span>
                     <i className="fas fa-plus text-[10px]"></i>
                   </button>
                   <button
@@ -838,14 +852,14 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                       setActiveTab("testimonials");
                       handleAddTestimonial();
                     }}
-                    className="w-full flex items-center justify-between p-3 bg-gray-950/40 hover:bg-purple-600/10 border border-gray-850 hover:border-purple-500/20 text-gray-300 hover:text-purple-400 rounded-xl transition cursor-pointer font-medium"
+                    className="w-full flex items-center justify-between p-3.5 bg-gray-950/40 hover:bg-purple-600/10 border border-white/5 hover:border-purple-500/20 text-gray-300 hover:text-purple-400 rounded-xl transition duration-300 cursor-pointer font-bold active:scale-[0.99]"
                   >
                     <span>Add Testimonial Quote</span>
                     <i className="fas fa-plus text-[10px]"></i>
                   </button>
                   <button
                     onClick={() => setActiveTab("settings")}
-                    className="w-full flex items-center justify-between p-3 bg-gray-950/40 hover:bg-emerald-600/10 border border-gray-850 hover:border-emerald-500/20 text-gray-300 hover:text-emerald-400 rounded-xl transition cursor-pointer font-medium"
+                    className="w-full flex items-center justify-between p-3.5 bg-gray-950/40 hover:bg-emerald-600/10 border border-white/5 hover:border-emerald-500/20 text-gray-300 hover:text-emerald-400 rounded-xl transition duration-300 cursor-pointer font-bold active:scale-[0.99]"
                   >
                     <span>Register Administrator</span>
                     <i className="fas fa-user-plus text-[10px]"></i>
@@ -854,17 +868,17 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
               </div>
 
               {/* Recent Submissions Activity Feed */}
-              <div className="lg:col-span-2 bg-gray-900/40 border border-gray-800 rounded-2xl p-5 md:p-6 backdrop-blur-sm space-y-4">
-                <div className="flex justify-between items-center pb-3 border-b border-gray-800">
-                  <h4 className="text-xs md:text-sm font-bold text-white flex items-center gap-2">
+              <div className="lg:col-span-2 bg-gray-900/30 border border-white/5 rounded-2xl p-5 md:p-6 backdrop-blur-sm space-y-4">
+                <div className="flex justify-between items-center pb-3 border-b border-white/5">
+                  <h4 className="text-xs font-bold text-white flex items-center gap-2 font-mono uppercase tracking-wider">
                     <i className="fas fa-history text-purple-400"></i>
                     <span>Recent Activity Feed</span>
                   </h4>
                   <button
                     onClick={() => setActiveTab("crm")}
-                    className="text-[10px] text-blue-400 hover:underline font-semibold"
+                    className="text-[10px] text-blue-400 hover:text-blue-300 hover:underline font-bold uppercase tracking-wider"
                   >
-                    View All leads
+                    View All Leads
                   </button>
                 </div>
 
@@ -875,18 +889,18 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                       onClick={() => {
                         setSelectedLead(log);
                       }}
-                      className="p-3 bg-gray-950/40 hover:bg-gray-950/80 border border-gray-850 hover:border-gray-750 rounded-xl flex items-center justify-between gap-3 cursor-pointer transition"
+                      className="p-3.5 bg-gray-950/40 hover:bg-gray-950/80 border border-white/5 hover:border-gray-800 rounded-xl flex items-center justify-between gap-3 cursor-pointer transition duration-300 active:scale-[0.99]"
                     >
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-white text-xs truncate max-w-[120px]">{log.name}</span>
-                          <span className="text-[9px] text-gray-500 truncate max-w-[150px]">&lt;{log.email}&gt;</span>
+                          <span className="text-[9px] text-gray-500 truncate max-w-[150px] font-mono">&lt;{log.email}&gt;</span>
                         </div>
-                        <p className="text-[11px] text-gray-400 truncate mt-0.5 max-w-[250px] md:max-w-md">{log.message}</p>
+                        <p className="text-[11px] text-gray-400 truncate mt-1 max-w-[250px] md:max-w-md">{log.message}</p>
                       </div>
                       <div className="text-right shrink-0">
-                        <span className="text-[9px] text-gray-500 block">{new Date(log.createdAt).toLocaleDateString()}</span>
-                        <span className="text-[9px] px-1.5 py-0.5 bg-blue-600/10 border border-blue-500/20 text-blue-400 rounded-full font-semibold mt-1 inline-block">
+                        <span className="text-[9px] text-gray-500 block font-mono">{new Date(log.createdAt).toLocaleDateString()}</span>
+                        <span className="text-[9px] px-2 py-0.5 bg-blue-600/10 border border-blue-500/20 text-blue-400 rounded-full font-bold mt-1 inline-block">
                           New Lead
                         </span>
                       </div>
@@ -894,36 +908,36 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                   ))}
 
                   {contactLogs.length === 0 && (
-                    <p className="text-center text-xs text-gray-500 py-8">No recent activity received.</p>
+                    <p className="text-center text-xs text-gray-500 py-8 italic">No recent activity received.</p>
                   )}
                 </div>
               </div>
             </div>
 
             {/* Quick Diagnostic Detail */}
-            <div className="bg-gray-900/40 border border-gray-800 rounded-2xl p-5 md:p-6 backdrop-blur-sm space-y-4">
-              <h4 className="text-xs md:text-sm font-bold text-white flex items-center gap-2 pb-3 border-b border-gray-800">
+            <div className="bg-gray-900/30 border border-white/5 rounded-2xl p-5 md:p-6 backdrop-blur-sm space-y-4">
+              <h4 className="text-xs font-bold text-white flex items-center gap-2 pb-3 border-b border-white/5 font-mono uppercase tracking-wider">
                 <i className="fas fa-server text-gray-500"></i>
                 <span>Database Connection Diagnostics</span>
               </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                <div className="flex justify-between p-3 bg-gray-950/40 border border-gray-900 rounded-lg gap-2">
-                  <span className="text-gray-400">Database Connection:</span>
-                  <span className="font-semibold text-white text-right">{dbStatus}</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+                <div className="flex justify-between items-center p-3.5 bg-gray-950/40 border border-white/5 rounded-xl gap-2 hover:border-gray-850 transition duration-300">
+                  <span className="text-gray-500 text-[10px] uppercase font-bold">Database:</span>
+                  <span className={`font-bold ${dbStatus === "Connected" ? "text-green-400" : "text-amber-500"}`}>{dbStatus}</span>
                 </div>
-                <div className="flex justify-between p-3 bg-gray-950/40 border border-gray-900 rounded-lg gap-2">
-                  <span className="text-gray-400">Node Environment:</span>
-                  <span className="font-semibold text-white text-right capitalize">{process.env.NODE_ENV}</span>
+                <div className="flex justify-between items-center p-3.5 bg-gray-950/40 border border-white/5 rounded-xl gap-2 hover:border-gray-850 transition duration-300">
+                  <span className="text-gray-500 text-[10px] uppercase font-bold">Node Env:</span>
+                  <span className="font-bold text-white capitalize">{process.env.NODE_ENV}</span>
                 </div>
-                <div className="flex justify-between p-3 bg-gray-950/40 border border-gray-900 rounded-lg gap-2">
-                  <span className="text-gray-400">Database Engine Host:</span>
-                  <span className="font-semibold text-blue-400 overflow-hidden text-ellipsis whitespace-nowrap max-w-[150px] text-right" title="MongoDB Cluster">
-                    {dbStatus === "Connected" ? "cluster0.qq3gxq0.mongodb.net" : "In-Memory Memory Cache"}
+                <div className="flex justify-between items-center p-3.5 bg-gray-950/40 border border-white/5 rounded-xl gap-2 hover:border-gray-850 transition duration-300">
+                  <span className="text-gray-500 text-[10px] uppercase font-bold">Engine Host:</span>
+                  <span className="font-bold text-blue-400 overflow-hidden text-ellipsis whitespace-nowrap max-w-[150px] text-right" title="MongoDB Cluster">
+                    {dbStatus === "Connected" ? "cluster0.qq3gxq0.mongodb.net" : "Memory Cache"}
                   </span>
                 </div>
-                <div className="flex justify-between p-3 bg-gray-950/40 border border-gray-900 rounded-lg gap-2">
-                  <span className="text-gray-400">Logged-in Admin:</span>
-                  <span className="font-semibold text-white text-right">{currentUser}</span>
+                <div className="flex justify-between items-center p-3.5 bg-gray-950/40 border border-white/5 rounded-xl gap-2 hover:border-gray-850 transition duration-300">
+                  <span className="text-gray-500 text-[10px] uppercase font-bold">Active Admin:</span>
+                  <span className="font-bold text-white">{currentUser}</span>
                 </div>
               </div>
             </div>
@@ -2601,42 +2615,41 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
             u.toLowerCase().includes(adminSearch.toLowerCase())
           );
 
-          return (
-            <div className="space-y-8 animate-fade-in">
+          return            <div className="space-y-6 md:space-y-8 animate-fade-in">
               <div>
-                <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white font-heading">
+                <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white font-mono uppercase">
                   Manage Administrator Accounts
                 </h2>
                 <p className="text-xs md:text-sm text-gray-400 mt-1">
-                  Configure administrator login accounts and change passwords securely.
+                  Configure administrator login credentials and update system access settings.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
                 {/* Password Update Form */}
-                <div className="bg-gray-900/40 border border-gray-800 p-5 md:p-8 rounded-2xl backdrop-blur-sm space-y-6">
-                  <h3 className="text-xs md:text-sm font-bold text-white pb-3 border-b border-gray-800 flex items-center gap-2">
-                    <i className="fas fa-lock text-blue-400"></i>
+                <div className="bg-gray-900/30 border border-white/5 p-6 md:p-8 rounded-2xl backdrop-blur-sm space-y-6 shadow-xl shadow-black/20">
+                  <h3 className="text-xs font-bold text-white pb-3 border-b border-white/5 flex items-center gap-2 font-mono uppercase tracking-wider">
+                    <i className="fas fa-lock text-blue-400 font-bold"></i>
                     <span>Change My Password</span>
                   </h3>
 
-                  <form onSubmit={handleChangePassword} className="space-y-4">
+                  <form onSubmit={handleChangePassword} className="space-y-5">
                     {/* Current Password */}
                     <div>
-                      <label className="text-[10px] text-gray-400 uppercase font-semibold">Current Password</label>
-                      <div className="relative mt-1.5">
+                      <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono tracking-wider">Current Password</label>
+                      <div className="relative mt-1.5 flex items-center bg-gray-950/80 border border-gray-850 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 rounded-xl transition-all duration-300 overflow-hidden">
                         <input
                           type={showCurrentPass ? "text" : "password"}
                           value={currentPassword}
                           onChange={(e) => setCurrentPassword(e.target.value)}
-                          className="w-full p-3 pr-10 bg-gray-950 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                          className="w-full bg-transparent border-none py-3 px-4 pr-10 text-white focus:outline-none text-xs transition"
                           placeholder="••••••••"
                           required
                         />
                         <button
                           type="button"
                           onClick={() => setShowCurrentPass(!showCurrentPass)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition cursor-pointer text-xs"
+                          className="absolute right-3.5 text-gray-500 hover:text-white transition cursor-pointer text-xs"
                         >
                           <i className={`fas ${showCurrentPass ? "fa-eye-slash" : "fa-eye"}`} />
                         </button>
@@ -2645,20 +2658,20 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
 
                     {/* New Password */}
                     <div>
-                      <label className="text-[10px] text-gray-400 uppercase font-semibold">New Password</label>
-                      <div className="relative mt-1.5">
+                      <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono tracking-wider">New Password</label>
+                      <div className="relative mt-1.5 flex items-center bg-gray-950/80 border border-gray-850 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 rounded-xl transition-all duration-300 overflow-hidden">
                         <input
                           type={showNewPass ? "text" : "password"}
                           value={newPassword}
                           onChange={(e) => setNewPassword(e.target.value)}
-                          className="w-full p-3 pr-10 bg-gray-950 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                          className="w-full bg-transparent border-none py-3 px-4 pr-10 text-white focus:outline-none text-xs transition"
                           placeholder="••••••••"
                           required
                         />
                         <button
                           type="button"
                           onClick={() => setShowNewPass(!showNewPass)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition cursor-pointer text-xs"
+                          className="absolute right-3.5 text-gray-500 hover:text-white transition cursor-pointer text-xs"
                         >
                           <i className={`fas ${showNewPass ? "fa-eye-slash" : "fa-eye"}`} />
                         </button>
@@ -2666,12 +2679,12 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
 
                       {/* Password Strength Indicator */}
                       {newPassword.length > 0 && (
-                        <div className="mt-2 space-y-1">
+                        <div className="mt-2.5 space-y-1.5">
                           <div className="flex justify-between items-center text-[9px] font-bold">
-                            <span className="text-gray-500">PASSWORD SECURITY:</span>
-                            <span className={newPassStrength.text}>{newPassStrength.label}</span>
+                            <span className="text-gray-500 font-mono">PASSWORD STRENGTH:</span>
+                            <span className={`${newPassStrength.text} font-mono`}>{newPassStrength.label}</span>
                           </div>
-                          <div className="h-1 bg-gray-900 rounded-full overflow-hidden flex">
+                          <div className="h-1 bg-gray-950 border border-white/5 rounded-full overflow-hidden flex">
                             <div
                               className={`h-full transition-all duration-300 ${newPassStrength.color}`}
                               style={{ width: `${newPassStrength.score}%` }}
@@ -2683,26 +2696,26 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
 
                     {/* Confirm Password */}
                     <div>
-                      <label className="text-[10px] text-gray-400 uppercase font-semibold">Confirm New Password</label>
-                      <div className="relative mt-1.5">
+                      <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono tracking-wider">Confirm New Password</label>
+                      <div className="relative mt-1.5 flex items-center bg-gray-950/80 border border-gray-850 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 rounded-xl transition-all duration-300 overflow-hidden">
                         <input
                           type={showConfirmPass ? "text" : "password"}
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
-                          className="w-full p-3 pr-10 bg-gray-950 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                          className="w-full bg-transparent border-none py-3 px-4 pr-10 text-white focus:outline-none text-xs transition"
                           placeholder="••••••••"
                           required
                         />
                         <button
                           type="button"
                           onClick={() => setShowConfirmPass(!showConfirmPass)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition cursor-pointer text-xs"
+                          className="absolute right-3.5 text-gray-500 hover:text-white transition cursor-pointer text-xs"
                         >
                           <i className={`fas ${showConfirmPass ? "fa-eye-slash" : "fa-eye"}`} />
                         </button>
                       </div>
                       {newPassword.length > 0 && confirmPassword.length > 0 && newPassword !== confirmPassword && (
-                        <p className="text-[9px] text-rose-400 font-bold mt-1.5">
+                        <p className="text-[9px] text-rose-400 font-bold mt-1.5 font-mono">
                           ⚠️ Passwords do not match.
                         </p>
                       )}
@@ -2712,7 +2725,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                       <button
                         type="submit"
                         disabled={loading || (newPassword.length > 0 && newPassword !== confirmPassword)}
-                        className="w-full sm:w-auto px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg text-xs font-bold transition cursor-pointer shadow-md shadow-blue-500/10"
+                        className="w-full sm:w-auto px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition cursor-pointer shadow-md shadow-blue-500/10 active:scale-95 duration-200"
                       >
                         Change Password
                       </button>
@@ -2721,26 +2734,28 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                 </div>
 
                 {/* Create New Admin Form */}
-                <div className="bg-gray-900/40 border border-gray-800 p-5 md:p-8 rounded-2xl backdrop-blur-sm space-y-6">
-                  <h3 className="text-xs md:text-sm font-bold text-white pb-3 border-b border-gray-800 flex items-center gap-2">
-                    <i className="fas fa-user-plus text-green-400"></i>
-                    <span>Create New Administrator</span>
+                <div className="bg-gray-900/30 border border-white/5 p-6 md:p-8 rounded-2xl backdrop-blur-sm space-y-6 shadow-xl shadow-black/20">
+                  <h3 className="text-xs font-bold text-white pb-3 border-b border-white/5 flex items-center gap-2 font-mono uppercase tracking-wider">
+                    <i className="fas fa-user-plus text-green-400 font-bold"></i>
+                    <span>Create Administrator</span>
                   </h3>
 
-                  <form onSubmit={handleCreateAdmin} className="space-y-4">
+                  <form onSubmit={handleCreateAdmin} className="space-y-5">
                     {/* Username */}
                     <div>
-                      <label className="text-[10px] text-gray-400 uppercase font-semibold">New Admin Username</label>
-                      <input
-                        type="text"
-                        value={newAdminUsername}
-                        onChange={(e) => setNewAdminUsername(e.target.value)}
-                        className="w-full mt-1.5 p-3 bg-gray-950 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                        placeholder="e.g., john_doe"
-                        required
-                      />
+                      <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono tracking-wider">New Admin Username</label>
+                      <div className="relative mt-1.5 flex items-center bg-gray-950/80 border border-gray-850 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 rounded-xl transition-all duration-300 overflow-hidden">
+                        <input
+                          type="text"
+                          value={newAdminUsername}
+                          onChange={(e) => setNewAdminUsername(e.target.value)}
+                          className="w-full bg-transparent border-none py-3 px-4 text-white focus:outline-none text-xs transition"
+                          placeholder="e.g., john_doe"
+                          required
+                        />
+                      </div>
                       {newAdminUsername.length > 0 && !isCreateUsernameValid && (
-                        <p className="text-[9px] text-rose-400 font-bold mt-1.5">
+                        <p className="text-[9px] text-rose-400 font-bold mt-1.5 font-mono">
                           ⚠️ Usernames can only contain letters, numbers, hyphens, and underscores.
                         </p>
                       )}
@@ -2748,20 +2763,20 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
 
                     {/* Password */}
                     <div>
-                      <label className="text-[10px] text-gray-400 uppercase font-semibold">Password</label>
-                      <div className="relative mt-1.5">
+                      <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono tracking-wider">Password</label>
+                      <div className="relative mt-1.5 flex items-center bg-gray-950/80 border border-gray-850 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 rounded-xl transition-all duration-300 overflow-hidden">
                         <input
                           type={showCreatePass ? "text" : "password"}
                           value={newAdminPassword}
                           onChange={(e) => setNewAdminPassword(e.target.value)}
-                          className="w-full p-3 pr-10 bg-gray-950 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                          className="w-full bg-transparent border-none py-3 px-4 pr-10 text-white focus:outline-none text-xs transition"
                           placeholder="••••••••"
                           required
                         />
                         <button
                           type="button"
                           onClick={() => setShowCreatePass(!showCreatePass)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition cursor-pointer text-xs"
+                          className="absolute right-3.5 text-gray-500 hover:text-white transition cursor-pointer text-xs"
                         >
                           <i className={`fas ${showCreatePass ? "fa-eye-slash" : "fa-eye"}`} />
                         </button>
@@ -2769,12 +2784,12 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
 
                       {/* Password Strength Indicator */}
                       {newAdminPassword.length > 0 && (
-                        <div className="mt-2 space-y-1">
+                        <div className="mt-2.5 space-y-1.5">
                           <div className="flex justify-between items-center text-[9px] font-bold">
-                            <span className="text-gray-500">PASSWORD SECURITY:</span>
-                            <span className={createPassStrength.text}>{createPassStrength.label}</span>
+                            <span className="text-gray-500 font-mono">PASSWORD STRENGTH:</span>
+                            <span className={`${createPassStrength.text} font-mono`}>{createPassStrength.label}</span>
                           </div>
-                          <div className="h-1 bg-gray-900 rounded-full overflow-hidden flex">
+                          <div className="h-1 bg-gray-950 border border-white/5 rounded-full overflow-hidden flex">
                             <div
                               className={`h-full transition-all duration-300 ${createPassStrength.color}`}
                               style={{ width: `${createPassStrength.score}%` }}
@@ -2788,7 +2803,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                       <button
                         type="submit"
                         disabled={loading || !isCreateUsernameValid || newAdminUsername.length === 0}
-                        className="w-full sm:w-auto px-5 py-2.5 bg-green-600 hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg text-xs font-bold transition cursor-pointer shadow-md shadow-green-500/10"
+                        className="w-full sm:w-auto px-5 py-2.5 bg-green-600 hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition cursor-pointer shadow-md shadow-green-500/10 active:scale-95 duration-200"
                       >
                         Register Admin Account
                       </button>
@@ -2798,22 +2813,22 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
               </div>
 
               {/* Active Admin List */}
-              <div className="bg-gray-900/40 border border-gray-800 p-5 md:p-8 rounded-2xl backdrop-blur-sm space-y-4">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-3 border-b border-gray-800">
-                  <h3 className="text-xs md:text-sm font-bold text-white flex items-center gap-2">
-                    <i className="fas fa-users text-purple-400"></i>
+              <div className="bg-gray-900/30 border border-white/5 p-6 md:p-8 rounded-2xl backdrop-blur-sm space-y-4 shadow-xl shadow-black/20 animate-fade-in">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-3 border-b border-white/5">
+                  <h3 className="text-xs font-bold text-white flex items-center gap-2 font-mono uppercase tracking-wider">
+                    <i className="fas fa-users text-purple-400 font-bold"></i>
                     <span>Active Admin Accounts</span>
                   </h3>
 
                   {/* Search filter bar */}
                   <div className="relative w-full sm:w-64">
-                    <i className="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-[10px]"></i>
+                    <i className="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-[10px]"></i>
                     <input
                       type="text"
                       value={adminSearch}
                       onChange={(e) => setAdminSearch(e.target.value)}
                       placeholder="Search accounts..."
-                      className="w-full pl-7.5 pr-2.5 py-1.5 bg-gray-950 border border-gray-850 text-white rounded-lg text-[10px] focus:outline-none focus:border-purple-500 transition font-medium"
+                      className="w-full pl-8.5 pr-3 py-2 bg-gray-950 border border-gray-850 text-white rounded-xl text-[10px] focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition duration-300 font-medium font-mono"
                     />
                   </div>
                 </div>
@@ -2827,18 +2842,18 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                     return (
                       <div
                         key={index}
-                        className="flex justify-between items-center p-3 bg-gray-950/60 border border-gray-850 rounded-xl gap-2 hover:border-gray-800 transition"
+                        className="flex justify-between items-center p-3.5 bg-gray-950/40 border border-white/5 rounded-xl gap-2 hover:border-gray-800 transition duration-300"
                       >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 min-w-0">
                           {/* Initials Avatar badge */}
-                          <div className={`w-8 h-8 rounded-full border flex items-center justify-center font-bold text-xs shrink-0 select-none ${avatar.classes}`}>
+                          <div className={`w-8.5 h-8.5 rounded-full border flex items-center justify-center font-bold font-mono text-[10px] shrink-0 select-none ${avatar.classes}`}>
                             {avatar.initials}
                           </div>
-                          <div>
+                          <div className="min-w-0">
                             <span className="font-semibold text-white break-all">{username}</span>
                             {isSelf && (
-                              <span className="inline-block ml-2 px-2 py-0.5 bg-blue-600/10 border border-blue-500/20 text-blue-400 text-[9px] rounded-full font-bold whitespace-nowrap">
-                                Current User
+                              <span className="inline-block ml-2 px-2.5 py-0.5 bg-blue-600/10 border border-blue-500/20 text-blue-400 text-[8px] rounded-full font-bold whitespace-nowrap uppercase tracking-wider font-mono">
+                                Current
                               </span>
                             )}
                           </div>
@@ -2848,7 +2863,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                           <button
                             onClick={() => setAdminToDelete(username)}
                             disabled={loading}
-                            className="px-3 py-1.5 bg-red-950/20 hover:bg-red-950/60 border border-red-900/10 text-red-500 hover:text-red-400 rounded-lg text-[10px] font-bold transition cursor-pointer shrink-0"
+                            className="px-3.5 py-1.5 bg-red-950/15 hover:bg-red-950/35 border border-red-900/15 text-red-500 hover:text-red-400 rounded-xl text-[10px] font-bold transition cursor-pointer shrink-0 active:scale-95 duration-250"
                           >
                             <i className="fas fa-trash-alt mr-1"></i>
                             Delete
@@ -2865,7 +2880,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                   })}
 
                   {filteredAdmins.length === 0 && (
-                    <p className="text-center text-xs text-gray-500 py-6">No matching administrators found.</p>
+                    <p className="text-center text-xs text-gray-500 py-6 italic">No matching administrators found.</p>
                   )}
                 </div>
               </div>
