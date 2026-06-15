@@ -1,15 +1,13 @@
 "use client";
 
 import { useRef } from "react";
-import audioManager from "@/lib/audioManager";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 
 export default function Testimonials({ data }) {
   const carouselRef = useRef(null);
 
   const scrollCarousel = (direction) => {
-    audioManager.playClick();
-    if (carouselRef.current) {
+        if (carouselRef.current) {
       const scrollAmount = 320;
       carouselRef.current.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
@@ -18,9 +16,7 @@ export default function Testimonials({ data }) {
     }
   };
 
-  const playHover = () => {
-    audioManager.playHover();
-  };
+  const playHover = () => {};
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();

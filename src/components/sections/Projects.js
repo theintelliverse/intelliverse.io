@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { motion, AnimatePresence } from "framer-motion";
-import audioManager from "@/lib/audioManager";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 
 // ─── Card colour themes keyed by project.type ────────────────────────────────
@@ -281,15 +280,13 @@ export default function Projects({ data }) {
   const handleOpenPreview = (e, project) => {
     e.preventDefault();
     e.stopPropagation();
-    audioManager.playTransition();
-    setActiveProject(project);
+        setActiveProject(project);
     setActiveUrl(project.link);
     setIframeLoading(true);
   };
 
   const handleClosePreview = () => {
-    audioManager.playClick();
-    if (modalRef.current && modalContentRef.current) {
+        if (modalRef.current && modalContentRef.current) {
       gsap.to(modalContentRef.current, { scale: 0.9, y: 30, opacity: 0, duration: 0.35, ease: "power2.in", onComplete: () => { setActiveProject(null); setActiveUrl(null); } });
       gsap.to(modalRef.current, { opacity: 0, duration: 0.35, ease: "power2.in" });
     } else {
@@ -302,13 +299,12 @@ export default function Projects({ data }) {
 
   const handleRefresh = (e) => {
     e.stopPropagation();
-    audioManager.playClick();
-    setIframeLoading(true);
+        setIframeLoading(true);
     setRefreshKey((prev) => prev + 1);
   };
 
-  const playHover = () => audioManager.playHover();
-  const playClick = () => audioManager.playClick();
+  const playHover = () => {};
+  const playClick = () => {};
 
 
   const showFilters  = data.length >= 6;

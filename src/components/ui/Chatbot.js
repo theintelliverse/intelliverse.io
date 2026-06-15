@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import audioManager from "@/lib/audioManager";
 
 function getRandomDelay() {
   return 800 + Math.random() * 500;
@@ -336,8 +335,7 @@ export default function Chatbot() {
   // Play synthetic chime
   const playChime = () => {
     if (!soundEnabled) return;
-    audioManager.playChatBubble();
-  };
+      };
 
   const toggleSound = () => {
     const nextVal = !soundEnabled;

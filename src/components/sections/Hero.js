@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { motion, useScroll, useTransform } from "framer-motion";
-import audioManager from "@/lib/audioManager";
 import Magnetic from "@/components/ui/Magnetic";
 
 export default function Hero({ data }) {
@@ -99,16 +98,13 @@ export default function Hero({ data }) {
 
   const handleSmoothScroll = (e, targetId) => {
     e.preventDefault();
-    audioManager.playClick();
-    const element = document.getElementById(targetId);
+        const element = document.getElementById(targetId);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
   };
 
-  const playHoverSound = () => {
-    audioManager.playHover();
-  };
+  const playHoverSound = () => {};
 
   return (
     <section

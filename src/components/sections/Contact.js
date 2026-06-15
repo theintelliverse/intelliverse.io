@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import audioManager from "@/lib/audioManager";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 
 export default function Contact() {
@@ -10,8 +9,7 @@ export default function Contact() {
 
   const handleContactSubmit = async (e) => {
     e.preventDefault();
-    audioManager.playClick();
-    setFormMessage({ text: "Sending...", type: "sending" });
+        setFormMessage({ text: "Sending...", type: "sending" });
 
     const payload = {
       name: contactForm.name,
@@ -31,7 +29,7 @@ export default function Contact() {
 
       const json = await response.json();
       if (response.status === 200) {
-        audioManager.playTransition(); // play nice transition sound on success
+         // play nice transition sound on success
         setFormMessage({ text: "Message sent successfully!", type: "success" });
         setContactForm({ name: "", email: "", message: "" });
       } else {
@@ -46,13 +44,9 @@ export default function Contact() {
     }, 5000);
   };
 
-  const playHover = () => {
-    audioManager.playHover();
-  };
+  const playHover = () => {};
 
-  const playClick = () => {
-    audioManager.playClick();
-  };
+  const playClick = () => {};
 
   return (
     <section id="contact" className="py-24 relative overflow-hidden">

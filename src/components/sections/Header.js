@@ -2,13 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import audioManager from "@/lib/audioManager";
 
 export default function Header() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(true);
-  const [audioActive, setAudioActive] = useState(true);
-  const [hoveredLink, setHoveredLink] = useState(null);
+    const [hoveredLink, setHoveredLink] = useState(null);
 
   useEffect(() => {
     let lastScrollTop = 0;
@@ -27,8 +25,7 @@ export default function Header() {
 
   const handleSmoothScroll = (e, targetId) => {
     setSidebarOpen(false);
-    audioManager.playClick();
-    const element = document.getElementById(targetId);
+        const element = document.getElementById(targetId);
     if (element) {
       e.preventDefault();
       element.scrollIntoView({ behavior: "smooth" });
@@ -38,22 +35,11 @@ export default function Header() {
     }
   };
 
-  const handleToggleAudio = () => {
-    audioManager.init(); // ensure initialized
-    const isMuted = audioManager.toggleMute();
-    setAudioActive(!isMuted);
-    
-    // Play interaction click sound to confirm toggle
-    audioManager.playClick();
-  };
-
-  const playHoverSound = () => {
-    audioManager.playHover();
-  };
+  
+  const playHoverSound = () => {};
 
   const playClickSound = () => {
-    audioManager.playClick();
-  };
+      };
 
   return (
     <>
@@ -196,31 +182,7 @@ export default function Header() {
 
           {/* Right side: Audio Soundwave Indicator, Social Icons & Menu Button */}
           <div className="flex items-center space-x-6 z-10">
-            {/* Ambient Audio Toggle Soundwave */}
-            <button
-              onClick={handleToggleAudio}
-              onMouseEnter={playHoverSound}
-              className="flex items-center justify-center w-9 h-9 rounded-full border border-white/10 bg-white/[0.02] hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300 cursor-pointer"
-              title={audioActive ? "Mute Atmospheric Soundscape" : "Unmute Atmospheric Soundscape"}
-            >
-              {/* Bouncing Bars */}
-              <div className="flex items-end gap-[2px] h-3 w-4">
-                {[1, 2, 3].map((i) => {
-                  const delay = i * 0.15;
-                  return (
-                    <span
-                      key={i}
-                      style={{
-                        animationDelay: `${delay}s`,
-                        height: audioActive ? "100%" : "2px",
-                      }}
-                      className={`w-[2px] bg-blue-400 rounded-full ${audioActive ? "animate-soundwave" : "transition-all duration-500"}`}
-                    />
-                  );
-                })}
-              </div>
-            </button>
-
+            
             {/* Social Links */}
             <div className="hidden sm:flex items-center space-x-4">
               <a
@@ -271,17 +233,7 @@ export default function Header() {
             </button>
           </div>
         </nav>
-        {/* Style Soundwave Animation locally in Tailwind/CSS */}
-        <style jsx global>{`
-          @keyframes soundwave-bounce {
-            0%, 100% { height: 3px; }
-            50% { height: 14px; }
-          }
-          .animate-soundwave {
-            animation: soundwave-bounce 0.8s ease-in-out infinite;
-          }
-        `}</style>
-      </motion.header>
+              </motion.header>
     </>
   );
 }
