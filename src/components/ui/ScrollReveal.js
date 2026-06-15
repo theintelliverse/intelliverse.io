@@ -90,21 +90,6 @@ export default function ScrollReveal({
   const activeDelay = delay * deviceConfig.delayMultiplier;
   const activeThreshold = threshold !== 0.05 ? threshold : deviceConfig.threshold;
 
-  // 8-step keyframes timeline distribution for extreme smoothness (times has 8 values)
-  const stepTimes = [0, 0.12, 0.28, 0.45, 0.62, 0.78, 0.9, 1];
-
-  // Easing function intervals (7 segments between 8 keyframes)
-  // Decelerating cubic-bezier curve to give a premium inertia-scrolling aesthetic
-  const premiumEasings = [
-    "cubic-bezier(0.16, 1, 0.3, 1)", // easeOutExpo
-    "cubic-bezier(0.16, 1, 0.3, 1)",
-    "cubic-bezier(0.16, 1, 0.3, 1)",
-    "cubic-bezier(0.16, 1, 0.3, 1)",
-    "cubic-bezier(0.16, 1, 0.3, 1)",
-    "cubic-bezier(0.16, 1, 0.3, 1)",
-    "cubic-bezier(0.16, 1, 0.3, 1)",
-  ];
-
   const variants = {
     hidden: {
       opacity: 0,
@@ -136,7 +121,7 @@ export default function ScrollReveal({
           : variant === "fade-right" && deviceConfig.enable3D
           ? -2
           : 0,
-      filter: variant === "lens-focus" && deviceConfig.enableBlur ? "blur(12px)" : "none",
+      ...(variant === "lens-focus" && deviceConfig.enableBlur ? { filter: "blur(12px)" } : {}),
     },
     visible: {
       opacity: 1,
@@ -145,7 +130,7 @@ export default function ScrollReveal({
       scale: 1,
       rotate: 0,
       rotateX: 0,
-      filter: variant === "lens-focus" && deviceConfig.enableBlur ? "blur(0px)" : "none",
+      ...(variant === "lens-focus" && deviceConfig.enableBlur ? { filter: "blur(0px)" } : {}),
       transition: {
         duration: activeDuration,
         delay: activeDelay,
@@ -178,10 +163,14 @@ export default function ScrollReveal({
                 damping: 18,
                 mass: 0.8,
               },
-        filter: {
-          duration: activeDuration * 0.9,
-          ease: "easeOut",
-        },
+        ...(variant === "lens-focus" && deviceConfig.enableBlur
+          ? {
+              filter: {
+                duration: activeDuration * 0.9,
+                ease: "easeOut",
+              },
+            }
+          : {}),
         staggerChildren: staggerChildren,
         delayChildren: activeDelay,
       },
