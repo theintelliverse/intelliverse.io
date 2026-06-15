@@ -402,7 +402,7 @@ export default function ProjectsTab({
 
                         {(proj.features || []).length === 0 && (
                           <div className="text-center py-4 border border-dashed border-white/5 rounded-xl bg-gray-950/20">
-                            <p className="text-[10px] text-gray-600 italic font-sans">No feature highlights added. Click "Add Feature" above to list highlights.</p>
+                            <p className="text-[10px] text-gray-600 italic font-sans">No feature highlights added. Click &quot;Add Feature&quot; above to list highlights.</p>
                           </div>
                         )}
                       </div>
