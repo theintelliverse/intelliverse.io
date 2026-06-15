@@ -26,6 +26,12 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
   const [selectedFounderIndex, setSelectedFounderIndex] = useState(initialFounders && initialFounders.length > 0 ? 0 : null);
   const [teamEditorTab, setTeamEditorTab] = useState("basic"); // basic | photo | socials
   const [isEditingMobile, setIsEditingMobile] = useState(false);
+  const [selectedProjectIndex, setSelectedProjectIndex] = useState(initialProjects && initialProjects.length > 0 ? 0 : null);
+  const [isEditingMobileProjects, setIsEditingMobileProjects] = useState(false);
+  const [selectedTestimonialIndex, setSelectedTestimonialIndex] = useState(initialTestimonials && initialTestimonials.length > 0 ? 0 : null);
+  const [isEditingMobileTestimonials, setIsEditingMobileTestimonials] = useState(false);
+  const [selectedQAIndex, setSelectedQAIndex] = useState(initialChatbotKnowledge && initialChatbotKnowledge.length > 0 ? 0 : null);
+  const [isEditingMobileQA, setIsEditingMobileQA] = useState(false);
   const [contactLogs, setContactLogs] = useState(initialSubmissions || []);
   const [adminsList, setAdminsList] = useState(initialAdmins || ["admin"]);
   const [chatbotKnowledge, setChatbotKnowledge] = useState(initialChatbotKnowledge || []);
@@ -70,7 +76,10 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
 
   // --- Handlers for Testimonials ---
   const handleAddTestimonial = () => {
-    setTestimonials([...testimonials, { text: "", author: "" }]);
+    const newTest = { text: "", author: "" };
+    setTestimonials([...testimonials, newTest]);
+    setSelectedTestimonialIndex(testimonials.length);
+    setIsEditingMobileTestimonials(true);
   };
 
   const handleTestimonialChange = (index, field, value) => {
@@ -80,7 +89,33 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
   };
 
   const handleDeleteTestimonial = (index) => {
-    setTestimonials(testimonials.filter((_, i) => i !== index));
+    const updated = testimonials.filter((_, i) => i !== index);
+    setTestimonials(updated);
+    if (selectedTestimonialIndex === index) {
+      const nextIndex = updated.length > 0 ? Math.max(0, index - 1) : null;
+      setSelectedTestimonialIndex(nextIndex);
+      if (nextIndex === null) {
+        setIsEditingMobileTestimonials(false);
+      }
+    } else if (selectedTestimonialIndex > index) {
+      setSelectedTestimonialIndex(selectedTestimonialIndex - 1);
+    }
+  };
+
+  const handleMoveTestimonial = (index, direction) => {
+    if (direction === "up" && index === 0) return;
+    if (direction === "down" && index === testimonials.length - 1) return;
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    const updated = [...testimonials];
+    const temp = updated[index];
+    updated[index] = updated[targetIndex];
+    updated[targetIndex] = temp;
+    setTestimonials(updated);
+    if (selectedTestimonialIndex === index) {
+      setSelectedTestimonialIndex(targetIndex);
+    } else if (selectedTestimonialIndex === targetIndex) {
+      setSelectedTestimonialIndex(index);
+    }
   };
 
   // --- Handlers for Founders ---
@@ -239,7 +274,10 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
 
   // --- Handlers for Projects ---
   const handleAddProject = () => {
-    setProjects([...projects, { name: "", description: "", link: "", review: "", rating: 5, type: "", featureLink: "", featureText: "", features: [], techTags: [], tagline: "", isFeatured: false }]);
+    const newProj = { name: "", description: "", link: "", review: "", rating: 5, type: "", featureLink: "", featureText: "", features: [], techTags: [], tagline: "", isFeatured: false };
+    setProjects([...projects, newProj]);
+    setSelectedProjectIndex(projects.length);
+    setIsEditingMobileProjects(true);
   };
 
   const handleProjectChange = (index, field, value) => {
@@ -255,12 +293,41 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
   };
 
   const handleDeleteProject = (index) => {
-    setProjects(projects.filter((_, i) => i !== index));
+    const updated = projects.filter((_, i) => i !== index);
+    setProjects(updated);
+    if (selectedProjectIndex === index) {
+      const nextIndex = updated.length > 0 ? Math.max(0, index - 1) : null;
+      setSelectedProjectIndex(nextIndex);
+      if (nextIndex === null) {
+        setIsEditingMobileProjects(false);
+      }
+    } else if (selectedProjectIndex > index) {
+      setSelectedProjectIndex(selectedProjectIndex - 1);
+    }
+  };
+
+  const handleMoveProject = (index, direction) => {
+    if (direction === "up" && index === 0) return;
+    if (direction === "down" && index === projects.length - 1) return;
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    const updated = [...projects];
+    const temp = updated[index];
+    updated[index] = updated[targetIndex];
+    updated[targetIndex] = temp;
+    setProjects(updated);
+    if (selectedProjectIndex === index) {
+      setSelectedProjectIndex(targetIndex);
+    } else if (selectedProjectIndex === targetIndex) {
+      setSelectedProjectIndex(index);
+    }
   };
 
   // --- Handlers for Chatbot Q&A ---
   const handleAddQA = () => {
-    setChatbotKnowledge([...chatbotKnowledge, { keywords: "", response: "" }]);
+    const newQA = { keywords: "", response: "" };
+    setChatbotKnowledge([...chatbotKnowledge, newQA]);
+    setSelectedQAIndex(chatbotKnowledge.length);
+    setIsEditingMobileQA(true);
   };
 
   const handleQAChange = (index, field, value) => {
@@ -270,7 +337,33 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
   };
 
   const handleDeleteQA = (index) => {
-    setChatbotKnowledge(chatbotKnowledge.filter((_, i) => i !== index));
+    const updated = chatbotKnowledge.filter((_, i) => i !== index);
+    setChatbotKnowledge(updated);
+    if (selectedQAIndex === index) {
+      const nextIndex = updated.length > 0 ? Math.max(0, index - 1) : null;
+      setSelectedQAIndex(nextIndex);
+      if (nextIndex === null) {
+        setIsEditingMobileQA(false);
+      }
+    } else if (selectedQAIndex > index) {
+      setSelectedQAIndex(selectedQAIndex - 1);
+    }
+  };
+
+  const handleMoveQA = (index, direction) => {
+    if (direction === "up" && index === 0) return;
+    if (direction === "down" && index === chatbotKnowledge.length - 1) return;
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    const updated = [...chatbotKnowledge];
+    const temp = updated[index];
+    updated[index] = updated[targetIndex];
+    updated[targetIndex] = temp;
+    setChatbotKnowledge(updated);
+    if (selectedQAIndex === index) {
+      setSelectedQAIndex(targetIndex);
+    } else if (selectedQAIndex === targetIndex) {
+      setSelectedQAIndex(index);
+    }
   };
 
   // --- Save CMS Content & Lists ---
@@ -1216,7 +1309,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                               <div className="space-y-3">
                                 <div>
                                   <label className="text-[10px] text-gray-400 uppercase font-semibold block">Interactive Focal Center Alignment</label>
-                                  <span className="text-[9px] text-gray-500 block leading-normal mt-0.5">Click directly on the subject's face/center inside the photo below.</span>
+                                  <span className="text-[9px] text-gray-500 block leading-normal mt-0.5">Click directly on the subject&apos;s face/center inside the photo below.</span>
                                 </div>
                                 
                                 <div 
@@ -1475,7 +1568,7 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
                                 {(founder.customLinks || []).length === 0 && (
                                   <div className="text-center py-6 border border-dashed border-gray-850 rounded-xl bg-gray-950/20">
                                     <i className="fas fa-link text-gray-600 text-base mb-1 block"></i>
-                                    <p className="text-[10px] text-gray-500">No custom buttons added. Click "Add Button" above to create one.</p>
+                                    <p className="text-[10px] text-gray-500">No custom buttons added. Click &quot;Add Button&quot; above to create one.</p>
                                   </div>
                                 )}
                               </div>
@@ -1513,413 +1606,879 @@ export default function AdminPanel({ isOpen, data, testimonials: initialTestimon
 
         {/* Projects Portfolio Tab */}
         {activeTab === "projects" && (
-          <div className="space-y-8 animate-fade-in">
+          <div className="space-y-6 md:space-y-8 animate-fade-in">
+            {/* Header Area */}
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
               <div>
                 <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white">Worked Projects Portfolio</h2>
-                <p className="text-xs md:text-sm text-gray-400 mt-1">Add or remove portfolio entries. Shows only if projects are present.</p>
+                <p className="text-xs md:text-sm text-gray-400 mt-1">Manage Worked Projects and their highlights, taglines, ratings, and features.</p>
               </div>
-              <button
-                onClick={handleAddProject}
-                className="w-full sm:w-auto px-4 py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-green-500/10"
-              >
-                <i className="fas fa-plus"></i>
-                <span>Add Project Entry</span>
-              </button>
+              <div className="flex gap-3 w-full sm:w-auto">
+                <button
+                  onClick={handleAddProject}
+                  className="flex-grow sm:flex-grow-0 px-4 py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-green-500/10 active:scale-95"
+                >
+                  <i className="fas fa-plus"></i>
+                  <span>Add Project</span>
+                </button>
+                <button
+                  onClick={handleSaveCMS}
+                  disabled={loading}
+                  className="flex-grow sm:flex-grow-0 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-blue-500/10 disabled:opacity-50 active:scale-95"
+                >
+                  <i className="fas fa-save"></i>
+                  <span>Save Changes</span>
+                </button>
+              </div>
             </div>
 
-            <div className="bg-gray-900/40 border border-gray-800 p-5 md:p-8 rounded-2xl backdrop-blur-sm space-y-6">
-              <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-2 scrollbar-none">
-                {projects.map((proj, index) => (
-                  <div key={index} className="bg-gray-950/60 border border-gray-800 p-4 md:p-5 rounded-xl space-y-4 relative animate-fade-in">
-                    <button
-                      onClick={() => handleDeleteProject(index)}
-                      className="absolute top-4 right-4 p-2 py-1 bg-red-950/20 hover:bg-red-950/60 text-red-500 hover:text-red-400 rounded-lg text-[10px] font-semibold transition cursor-pointer border border-red-900/10"
-                    >
-                      <i className="fas fa-trash-alt mr-1"></i>
-                      Delete
-                    </button>
+            {/* Split Dual-Pane Container */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              
+              {/* LEFT SIDEBAR: Projects list */}
+              <div className={`lg:col-span-4 bg-gray-900/40 border border-gray-800 rounded-2xl p-4 md:p-5 backdrop-blur-sm space-y-4 transition-all duration-300 ${isEditingMobileProjects ? "hidden lg:block animate-fade-out" : "block animate-fade-in"}`}>
+                <div className="flex items-center justify-between pb-3 border-b border-gray-800">
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Project Cards ({projects.length})</h3>
+                  {projects.length > 0 && (
+                    <span className="text-[10px] text-gray-500 font-mono">Select to Edit</span>
+                  )}
+                </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 sm:pt-0">
-                      <div>
-                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Project Name</label>
-                        <input
-                          type="text"
-                          value={proj.name}
-                          onChange={(e) => handleProjectChange(index, "name", e.target.value)}
-                          className="w-full mt-1 p-2.5 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                          placeholder="e.g., Intelliverse CRM Website"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Working Link</label>
-                        <input
-                          type="url"
-                          value={proj.link}
-                          onChange={(e) => handleProjectChange(index, "link", e.target.value)}
-                          className="w-full mt-1 p-2.5 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                          placeholder="https://example.com"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Project Type</label>
-                        <select
-                          value={proj.type || ""}
-                          onChange={(e) => handleProjectChange(index, "type", e.target.value)}
-                          className="w-full mt-1 p-2.5 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none cursor-pointer"
-                        >
-                          <option value="">Select Type...</option>
-                          <option value="SaaS Portal">SaaS Portal</option>
-                          <option value="Web App">Web App</option>
-                          <option value="Mobile App">Mobile App</option>
-                          <option value="E-Commerce">E-Commerce</option>
-                          <option value="Cloud Platform">Cloud Platform</option>
-                          <option value="Landing Page">Landing Page</option>
-                          <option value="Dashboard">Dashboard</option>
-                          <option value="API Service">API Service</option>
-                          <option value="Enterprise">Enterprise</option>
-                          <option value="Other">Other</option>
-                        </select>
-                      </div>
-                    </div>
+                <div className="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1 scrollbar-none">
+                  {projects.map((proj, index) => {
+                    const isSelected = selectedProjectIndex === index;
 
-                    <div>
-                      <label className="text-[10px] text-gray-400 uppercase font-semibold">Description</label>
-                      <textarea
-                        value={proj.description}
-                        onChange={(e) => handleProjectChange(index, "description", e.target.value)}
-                        className="w-full mt-1 p-2.5 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                        placeholder="Brief summary of tech stack, goals, and results..."
-                        rows="2"
-                      ></textarea>
-                    </div>
+                    return (
+                      <div
+                        key={index}
+                        onClick={() => {
+                          setSelectedProjectIndex(index);
+                          setIsEditingMobileProjects(true);
+                        }}
+                        className={`group/item p-3.5 rounded-xl border flex items-center justify-between gap-3 cursor-pointer transition-all duration-300 hover:scale-[1.01] relative select-none ${
+                          isSelected
+                            ? "bg-blue-600/10 border-blue-500/35 shadow-lg shadow-blue-500/5"
+                            : "bg-gray-950/30 border-gray-855 hover:border-gray-700/60 hover:bg-gray-950/70"
+                        }`}
+                      >
+                        {/* Selected Indicator Bar */}
+                        {isSelected && (
+                          <div className="absolute left-0 top-3.5 bottom-3.5 w-1 bg-blue-500 rounded-r-md"></div>
+                        )}
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Custom Walkthrough / Feature Link (Optional)</label>
-                        <input
-                          type="url"
-                          value={proj.featureLink || ""}
-                          onChange={(e) => handleProjectChange(index, "featureLink", e.target.value)}
-                          className="w-full mt-1 p-2.5 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                          placeholder="e.g., https://appointory.in/#features"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Custom Link Text (e.g., &quot;See How It Works&quot;)</label>
-                        <input
-                          type="text"
-                          value={proj.featureText || ""}
-                          onChange={(e) => handleProjectChange(index, "featureText", e.target.value)}
-                          className="w-full mt-1 p-2.5 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                          placeholder="e.g., See How It Works"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Featured Toggle + Tagline */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div className="flex items-center gap-3 pt-3">
-                        <label className="relative inline-flex items-center cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={proj.isFeatured || false}
-                            onChange={(e) => handleProjectChange(index, "isFeatured", e.target.checked)}
-                            className="sr-only peer"
-                          />
-                          <div className="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                        </label>
-                        <span className="text-[10px] text-gray-400 uppercase font-semibold">★ Featured Project (Full-width card)</span>
-                      </div>
-                      <div className="sm:col-span-2">
-                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Card Tagline Footer</label>
-                        <input
-                          type="text"
-                          value={proj.tagline || ""}
-                          onChange={(e) => handleProjectChange(index, "tagline", e.target.value)}
-                          className="w-full mt-1 p-2.5 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                          placeholder="e.g., // DIGITAL HEALTHCARE"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Tech Tags (comma-separated) */}
-                    <div>
-                      <label className="text-[10px] text-gray-400 uppercase font-semibold">Tech Stack Tags (comma-separated)</label>
-                      <input
-                        type="text"
-                        value={(proj.techTags || []).join(", ")}
-                        onChange={(e) => handleProjectChange(index, "techTags", e.target.value.split(",").map(t => t.trim()).filter(Boolean))}
-                        className="w-full mt-1 p-2.5 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                        placeholder="e.g., Next.js, Node.js, WebSockets, WhatsApp API"
-                      />
-                      {(proj.techTags || []).length > 0 && (
-                        <div className="flex flex-wrap gap-1.5 mt-2">
-                          {proj.techTags.map((tag, ti) => (
-                            <span key={ti} className="text-[9px] font-mono px-2 py-0.5 rounded bg-gray-800 text-blue-400 border border-gray-700">{tag}</span>
-                          ))}
+                        <div className="flex items-center gap-3 min-w-0">
+                          {/* Folder/Briefcase Icon */}
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shrink-0 bg-gray-900 shadow-inner ${proj.isFeatured ? "text-amber-400 border-amber-500/20" : "text-blue-400 border-white/10"}`}>
+                            <i className={`fas ${proj.isFeatured ? "fa-star" : "fa-briefcase"} text-sm`}></i>
+                          </div>
+                          
+                          <div className="min-w-0">
+                            <h4 className="text-xs font-bold text-white truncate max-w-[120px] sm:max-w-none">
+                              {proj.name || <span className="text-gray-600 italic">Unnamed Project</span>}
+                            </h4>
+                            <p className="text-[10px] text-gray-500 font-mono truncate mt-0.5 max-w-[120px] sm:max-w-none">
+                              {proj.type || <span className="text-gray-600 italic">No type selected</span>}
+                            </p>
+                          </div>
                         </div>
-                      )}
-                    </div>
 
-                    {/* Feature Highlights */}
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Feature Highlights (shown on featured card)</label>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = [...projects];
-                            if (!updated[index].features) updated[index].features = [];
-                            updated[index].features.push({ icon: "fa-star", label: "" });
-                            setProjects(updated);
-                          }}
-                          className="text-[10px] px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-green-400 rounded-lg border border-gray-700 cursor-pointer transition"
-                        >
-                          <i className="fas fa-plus mr-1"></i>Add Feature
-                        </button>
+                        {/* Controls (Move & Delete) */}
+                        <div className="flex items-center gap-1 shrink-0 opacity-80 group-hover/item:opacity-100 transition-opacity">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleMoveProject(index, "up");
+                            }}
+                            disabled={index === 0}
+                            className="w-6 h-6 rounded bg-gray-900/60 hover:bg-gray-805 hover:text-blue-400 disabled:opacity-10 text-gray-400 text-[10px] flex items-center justify-center border border-gray-850 hover:border-gray-700 transition active:scale-90"
+                            title="Move Up"
+                          >
+                            <i className="fas fa-chevron-up"></i>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleMoveProject(index, "down");
+                            }}
+                            disabled={index === projects.length - 1}
+                            className="w-6 h-6 rounded bg-gray-900/60 hover:bg-gray-805 hover:text-blue-400 disabled:opacity-10 text-gray-400 text-[10px] flex items-center justify-center border border-gray-855 hover:border-gray-700 transition active:scale-90"
+                            title="Move Down"
+                          >
+                            <i className="fas fa-chevron-down"></i>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteProject(index);
+                            }}
+                            className="w-6 h-6 rounded bg-red-950/10 hover:bg-red-950/45 text-red-500 hover:text-red-400 text-[10px] flex items-center justify-center border border-red-900/10 hover:border-red-900/30 transition ml-1 active:scale-90"
+                            title="Delete Card"
+                          >
+                            <i className="fas fa-trash-alt"></i>
+                          </button>
+                        </div>
+
+                        {/* Featured badge */}
+                        {proj.isFeatured && (
+                          <div className="absolute right-2.5 top-1.5 text-[8px] font-mono text-amber-500 font-bold uppercase tracking-wider">
+                            ★ Featured
+                          </div>
+                        )}
                       </div>
-                      {(proj.features || []).length > 0 && (
-                        <div className="space-y-2">
-                          {proj.features.map((feat, fi) => (
-                            <div key={fi} className="flex items-center gap-2">
+                    );
+                  })}
+
+                  {projects.length === 0 && (
+                    <div className="text-center py-10 border border-dashed border-gray-855 rounded-xl bg-gray-950/20">
+                      <i className="fas fa-folder-open text-gray-600 text-lg mb-2 block"></i>
+                      <p className="text-[11px] text-gray-500">No projects configured.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* RIGHT DETAIL PANEL */}
+              <div className={`lg:col-span-8 space-y-6 transition-all duration-300 ${isEditingMobileProjects ? "block animate-fade-in" : "hidden lg:block"}`}>
+                {selectedProjectIndex !== null && projects[selectedProjectIndex] ? (
+                  (() => {
+                    const index = selectedProjectIndex;
+                    const proj = projects[index];
+
+                    return (
+                      <div className="bg-gray-900/40 border border-gray-800 rounded-2xl p-5 md:p-6 backdrop-blur-sm space-y-6 relative transition-all duration-300">
+                        {/* Mobile Back Button */}
+                        <div className="lg:hidden">
+                          <button
+                            type="button"
+                            onClick={() => setIsEditingMobileProjects(false)}
+                            className="flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-white px-3.5 py-2 rounded-xl bg-gray-950 border border-gray-850 active:scale-95 transition"
+                          >
+                            <i className="fas fa-arrow-left"></i>
+                            <span>Back to Projects List</span>
+                          </button>
+                        </div>
+
+                        {/* Detail Header */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-gray-800 gap-3">
+                          <div className="flex items-center gap-3">
+                            <div className={`relative w-12 h-12 rounded-xl shrink-0 flex items-center justify-center border bg-gray-950 shadow-inner z-10 ${proj.isFeatured ? "text-amber-400 border-amber-500/20 animate-pulse" : "text-blue-400 border-blue-500/20"}`}>
+                              <i className={`fas ${proj.isFeatured ? "fa-star animate-pulse" : "fa-folder-open"} text-base`}></i>
+                            </div>
+                            <div className="text-left">
+                              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                                <span>Editing: {proj.name || "New Project Entry"}</span>
+                                <span className="text-[10px] bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2.5 py-0.5 rounded-full font-mono font-bold">
+                                  INDEX #{index + 1}
+                                </span>
+                              </h3>
+                              <p className="text-[10px] text-gray-500 mt-0.5">Customize project tech stack tags, reviews, walkthrough parameters, and metrics.</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Form Inputs Grid */}
+                        <div className="space-y-4 text-left">
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                              <label className="text-[10px] text-gray-400 uppercase font-semibold">Project Name</label>
                               <input
                                 type="text"
-                                value={feat.icon}
-                                onChange={(e) => {
-                                  const updated = [...projects];
-                                  updated[index].features[fi].icon = e.target.value;
-                                  setProjects(updated);
-                                }}
-                                className="w-28 p-2 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                                placeholder="fa-bolt"
+                                value={proj.name}
+                                onChange={(e) => handleProjectChange(index, "name", e.target.value)}
+                                className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600"
+                                placeholder="e.g., Appointory Portal"
+                                required
                               />
+                            </div>
+                            <div>
+                              <label className="text-[10px] text-gray-400 uppercase font-semibold">Working Link URL</label>
+                              <input
+                                type="url"
+                                value={proj.link}
+                                onChange={(e) => handleProjectChange(index, "link", e.target.value)}
+                                className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600"
+                                placeholder="https://appointory.in"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] text-gray-400 uppercase font-semibold">Project Category Type</label>
+                              <select
+                                value={proj.type || ""}
+                                onChange={(e) => handleProjectChange(index, "type", e.target.value)}
+                                className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 cursor-pointer text-gray-300"
+                              >
+                                <option value="">Select Category...</option>
+                                <option value="SaaS Portal">SaaS Portal</option>
+                                <option value="Web App">Web App</option>
+                                <option value="Mobile App">Mobile App</option>
+                                <option value="E-Commerce">E-Commerce</option>
+                                <option value="Cloud Platform">Cloud Platform</option>
+                                <option value="Landing Page">Landing Page</option>
+                                <option value="Dashboard">Dashboard</option>
+                                <option value="API Service">API Service</option>
+                                <option value="Enterprise">Enterprise</option>
+                                <option value="Other">Other</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] text-gray-400 uppercase font-semibold">Project Description</label>
+                            <textarea
+                              value={proj.description}
+                              onChange={(e) => handleProjectChange(index, "description", e.target.value)}
+                              className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600"
+                              placeholder="Describe target user, tech stack, key highlights and development processes..."
+                              rows="3"
+                              required
+                            ></textarea>
+                          </div>
+
+                          {/* Featured Toggle + Tagline */}
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-gray-855 pt-4">
+                            <div className="flex items-center gap-3 pt-4 select-none">
+                              <label className="relative inline-flex items-center cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={proj.isFeatured || false}
+                                  onChange={(e) => handleProjectChange(index, "isFeatured", e.target.checked)}
+                                  className="sr-only peer"
+                                />
+                                <div className="w-9 h-5 bg-gray-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                              </label>
+                              <span className="text-[10px] text-gray-400 uppercase font-semibold">★ Featured Project</span>
+                            </div>
+                            <div className="sm:col-span-2">
+                              <label className="text-[10px] text-gray-400 uppercase font-semibold">Card Tagline Footer</label>
                               <input
                                 type="text"
-                                value={feat.label}
-                                onChange={(e) => {
-                                  const updated = [...projects];
-                                  updated[index].features[fi].label = e.target.value;
-                                  setProjects(updated);
-                                }}
-                                className="flex-1 p-2 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                                placeholder="e.g., Automated Queues"
+                                value={proj.tagline || ""}
+                                onChange={(e) => handleProjectChange(index, "tagline", e.target.value)}
+                                className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-mono text-blue-400"
+                                placeholder="e.g. // DIGITAL HEALTHCARE"
                               />
+                            </div>
+                          </div>
+
+                          {/* Walkthrough/Feature link */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-gray-850 pt-4">
+                            <div>
+                              <label className="text-[10px] text-gray-400 uppercase font-semibold">Custom Walkthrough Link (Optional)</label>
+                              <input
+                                type="url"
+                                value={proj.featureLink || ""}
+                                onChange={(e) => handleProjectChange(index, "featureLink", e.target.value)}
+                                className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600"
+                                placeholder="e.g., https://appointory.in/#features"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] text-gray-400 uppercase font-semibold">Walkthrough Button Label Text</label>
+                              <input
+                                type="text"
+                                value={proj.featureText || ""}
+                                onChange={(e) => handleProjectChange(index, "featureText", e.target.value)}
+                                className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600"
+                                placeholder="e.g., See How It Works"
+                              />
+                            </div>
+                          </div>
+
+                          {/* Tech Tags */}
+                          <div className="border-t border-gray-850 pt-4">
+                            <label className="text-[10px] text-gray-400 uppercase font-semibold">Tech Stack Tags (comma-separated)</label>
+                            <input
+                              type="text"
+                              value={(proj.techTags || []).join(", ")}
+                              onChange={(e) => handleProjectChange(index, "techTags", e.target.value.split(",").map(t => t.trim()).filter(Boolean))}
+                              className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-mono text-gray-300"
+                              placeholder="e.g. Next.js, Node.js, WebSockets, WhatsApp API"
+                            />
+                            {(proj.techTags || []).length > 0 && (
+                              <div className="flex flex-wrap gap-1.5 mt-2">
+                                {proj.techTags.map((tag, ti) => (
+                                  <span key={ti} className="text-[9px] font-mono px-2.5 py-0.5 rounded bg-gray-850 text-blue-400 border border-gray-800">{tag}</span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Client Review quote */}
+                          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 border-t border-gray-850 pt-4">
+                            <div className="sm:col-span-3">
+                              <label className="text-[10px] text-gray-400 uppercase font-semibold">Client Review Quote (Optional)</label>
+                              <input
+                                type="text"
+                                value={proj.review}
+                                onChange={(e) => handleProjectChange(index, "review", e.target.value)}
+                                className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-855 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600"
+                                placeholder="Fabulous solutions provided by this company..."
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] text-gray-400 uppercase font-semibold">Client Rating Stars (1-5)</label>
+                              <input
+                                type="number"
+                                min="1"
+                                max="5"
+                                value={proj.rating || 5}
+                                onChange={(e) => handleProjectChange(index, "rating", e.target.value)}
+                                className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300"
+                              />
+                            </div>
+                          </div>
+
+                          {/* Featured Project Highlights */}
+                          <div className="border-t border-gray-850 pt-4">
+                            <div className="flex items-center justify-between pb-2">
+                              <div>
+                                <label className="text-[10px] text-gray-400 uppercase font-semibold block">Feature Bullet Points Highlights</label>
+                                <span className="text-[9px] text-gray-500 block leading-normal mt-0.5">Configure highlights displayed inside the featured project layout card.</span>
+                              </div>
                               <button
                                 type="button"
                                 onClick={() => {
                                   const updated = [...projects];
-                                  updated[index].features = updated[index].features.filter((_, ffi) => ffi !== fi);
+                                  if (!updated[index].features) updated[index].features = [];
+                                  updated[index].features.push({ icon: "fa-star", label: "" });
                                   setProjects(updated);
                                 }}
-                                className="p-2 text-red-500 hover:text-red-400 cursor-pointer"
+                                className="px-2.5 py-1 bg-green-600/10 hover:bg-green-600/20 border border-green-500/20 text-green-400 rounded text-[9px] font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95"
                               >
-                                <i className="fas fa-times"></i>
+                                <i className="fas fa-plus"></i>Add Feature
                               </button>
                             </div>
-                          ))}
+                            
+                            <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1 scrollbar-none">
+                              {(proj.features || []).map((feat, fi) => (
+                                <div key={fi} className="flex items-center gap-2 animate-fade-in">
+                                  <input
+                                    type="text"
+                                    value={feat.icon}
+                                    onChange={(e) => {
+                                      const updated = [...projects];
+                                      updated[index].features[fi].icon = e.target.value;
+                                      setProjects(updated);
+                                    }}
+                                    className="w-28 p-2 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none font-mono"
+                                    placeholder="fa-star"
+                                  />
+                                  <input
+                                    type="text"
+                                    value={feat.label}
+                                    onChange={(e) => {
+                                      const updated = [...projects];
+                                      updated[index].features[fi].label = e.target.value;
+                                      setProjects(updated);
+                                    }}
+                                    className="flex-1 p-2 bg-gray-950 border border-gray-855 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none"
+                                    placeholder="e.g. Automated Appointment Queues"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const updated = [...projects];
+                                      updated[index].features = updated[index].features.filter((_, ffi) => ffi !== fi);
+                                      setProjects(updated);
+                                    }}
+                                    className="p-1.5 text-red-500 hover:text-red-400 cursor-pointer active:scale-90 transition"
+                                  >
+                                    <i className="fas fa-times"></i>
+                                  </button>
+                                </div>
+                              ))}
+
+                              {(proj.features || []).length === 0 && (
+                                <div className="text-center py-4 border border-dashed border-gray-850 rounded-xl bg-gray-950/20">
+                                  <p className="text-[10px] text-gray-600 italic">No feature highlights added. Click &quot;Add Feature&quot; above to list highlights.</p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
                         </div>
-                      )}
-                      {(proj.features || []).length === 0 && (
-                        <p className="text-[10px] text-gray-600 italic">No feature highlights added. Add them to show on the featured card layout.</p>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                      <div className="sm:col-span-3">
-                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Client Review Quote (Optional)</label>
-                        <input
-                          type="text"
-                          value={proj.review}
-                          onChange={(e) => handleProjectChange(index, "review", e.target.value)}
-                          className="w-full mt-1 p-2.5 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                          placeholder="Excellent work done on this dynamic app!"
-                        />
                       </div>
-                      <div>
-                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Rating Stars (1-5)</label>
-                        <input
-                          type="number"
-                          min="1"
-                          max="5"
-                          value={proj.rating}
-                          onChange={(e) => handleProjectChange(index, "rating", e.target.value)}
-                          className="w-full mt-1 p-2.5 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                        />
-                      </div>
+                    );
+                  })()
+                ) : (
+                  <div className="bg-gray-900/40 border border-gray-800 rounded-2xl p-10 md:p-16 backdrop-blur-sm flex flex-col items-center justify-center text-center space-y-4">
+                    <div className="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-2xl shadow-inner">
+                      <i className="fas fa-folder-open"></i>
                     </div>
+                    <div className="max-w-xs space-y-1">
+                      <h3 className="text-sm font-bold text-white uppercase tracking-wider">No Project Selected</h3>
+                      <p className="text-xs text-gray-500 leading-relaxed">
+                        Select an existing worked project card from the list on the left to begin editing its details, or add a new one.
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleAddProject}
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-lg transition-all shadow-md shadow-blue-500/10 cursor-pointer active:scale-95"
+                    >
+                      <i className="fas fa-plus mr-1.5"></i>
+                      Add New Project
+                    </button>
                   </div>
-                ))}
-
-                {projects.length === 0 && (
-                  <p className="text-center text-xs text-gray-500 py-10">No projects added yet. The Portfolio section is currently hidden on the landing page.</p>
                 )}
               </div>
 
-              {/* Action save CTA */}
-              <div className="border-t border-gray-850 pt-6">
-                <button
-                  onClick={handleSaveCMS}
-                  disabled={loading}
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition-all shadow-md shadow-blue-500/10 cursor-pointer"
-                >
-                  <i className="fas fa-save mr-2"></i>
-                  Save Portfolio List
-                </button>
-              </div>
             </div>
           </div>
         )}
 
         {/* Testimonials Tab */}
         {activeTab === "testimonials" && (
-          <div className="space-y-8 animate-fade-in">
+          <div className="space-y-6 md:space-y-8 animate-fade-in">
+            {/* Header Area */}
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
               <div>
                 <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white">Client Reviews &amp; Testimonials</h2>
-                <p className="text-xs md:text-sm text-gray-400 mt-1">Manage testimonials shown inside the reviews slider.</p>
+                <p className="text-xs md:text-sm text-gray-400 mt-1">Manage client testimonials shown inside the reviews slider.</p>
               </div>
-              <button
-                onClick={handleAddTestimonial}
-                className="w-full sm:w-auto px-4 py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-green-500/10"
-              >
-                <i className="fas fa-plus"></i>
-                <span>Add Testimonial Entry</span>
-              </button>
-            </div>
-
-            <div className="bg-gray-900/40 border border-gray-800 p-5 md:p-8 rounded-2xl backdrop-blur-sm space-y-6">
-              <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-2 scrollbar-none">
-                {testimonials.map((test, index) => (
-                  <div key={index} className="bg-gray-950/60 border border-gray-800 p-4 md:p-5 rounded-xl space-y-4 relative animate-fade-in">
-                    <button
-                      onClick={() => handleDeleteTestimonial(index)}
-                      className="absolute top-4 right-4 p-2 py-1 bg-red-950/20 hover:bg-red-950/60 text-red-500 hover:text-red-400 rounded-lg text-[10px] font-semibold transition cursor-pointer border border-red-900/10"
-                    >
-                      <i className="fas fa-trash-alt mr-1"></i>
-                      Delete
-                    </button>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 pt-6 sm:pt-0">
-                      <div className="sm:col-span-3">
-                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Testimonial Review Quote</label>
-                        <input
-                          type="text"
-                          value={test.text}
-                          onChange={(e) => handleTestimonialChange(index, "text", e.target.value)}
-                          className="w-full mt-1 p-2.5 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                          placeholder="Fabulous custom solutions..."
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Author</label>
-                        <input
-                          type="text"
-                          value={test.author}
-                          onChange={(e) => handleTestimonialChange(index, "author", e.target.value)}
-                          className="w-full mt-1 p-2.5 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                          placeholder="e.g., John Doe"
-                          required
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-                {testimonials.length === 0 && (
-                  <p className="text-center text-xs text-gray-500 py-10">No testimonials. Click Add Testimonial Entry above.</p>
-                )}
-              </div>
-
-              {/* Action save CTA */}
-              <div className="border-t border-gray-850 pt-6">
+              <div className="flex gap-3 w-full sm:w-auto">
+                <button
+                  onClick={handleAddTestimonial}
+                  className="flex-grow sm:flex-grow-0 px-4 py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-green-500/10 active:scale-95"
+                >
+                  <i className="fas fa-plus"></i>
+                  <span>Add Review</span>
+                </button>
                 <button
                   onClick={handleSaveCMS}
                   disabled={loading}
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition-all shadow-md shadow-blue-500/10 cursor-pointer"
+                  className="flex-grow sm:flex-grow-0 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-blue-500/10 disabled:opacity-50 active:scale-95"
                 >
-                  <i className="fas fa-save mr-2"></i>
-                  Save Testimonials List
+                  <i className="fas fa-save"></i>
+                  <span>Save Changes</span>
                 </button>
               </div>
+            </div>
+
+            {/* Split Dual-Pane Container */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              
+              {/* LEFT SIDEBAR: Testimonials list */}
+              <div className={`lg:col-span-4 bg-gray-900/40 border border-gray-800 rounded-2xl p-4 md:p-5 backdrop-blur-sm space-y-4 transition-all duration-300 ${isEditingMobileTestimonials ? "hidden lg:block animate-fade-out" : "block animate-fade-in"}`}>
+                <div className="flex items-center justify-between pb-3 border-b border-gray-800">
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Testimonials ({testimonials.length})</h3>
+                  {testimonials.length > 0 && (
+                    <span className="text-[10px] text-gray-500 font-mono">Select to Edit</span>
+                  )}
+                </div>
+
+                <div className="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1 scrollbar-none">
+                  {testimonials.map((test, index) => {
+                    const isSelected = selectedTestimonialIndex === index;
+
+                    return (
+                      <div
+                        key={index}
+                        onClick={() => {
+                          setSelectedTestimonialIndex(index);
+                          setIsEditingMobileTestimonials(true);
+                        }}
+                        className={`group/item p-3.5 rounded-xl border flex items-center justify-between gap-3 cursor-pointer transition-all duration-300 hover:scale-[1.01] relative select-none ${
+                          isSelected
+                            ? "bg-blue-600/10 border-blue-500/35 shadow-lg shadow-blue-500/5"
+                            : "bg-gray-950/30 border-gray-855 hover:border-gray-700/60 hover:bg-gray-950/70"
+                        }`}
+                      >
+                        {/* Selected Indicator Bar */}
+                        {isSelected && (
+                          <div className="absolute left-0 top-3.5 bottom-3.5 w-1 bg-blue-500 rounded-r-md"></div>
+                        )}
+
+                        <div className="flex items-center gap-3 min-w-0">
+                          {/* Quote Bubble Icon */}
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shrink-0 bg-gray-900 shadow-inner ${isSelected ? "text-purple-400 border-purple-500/20" : "text-gray-400 border-white/10"}`}>
+                            <i className="fas fa-quote-left text-xs"></i>
+                          </div>
+                          
+                          <div className="min-w-0">
+                            <h4 className="text-xs font-bold text-white truncate max-w-[120px] sm:max-w-none">
+                              {test.author || <span className="text-gray-600 italic">Unnamed Client</span>}
+                            </h4>
+                            <p className="text-[10px] text-gray-500 truncate mt-0.5 max-w-[120px] sm:max-w-none">
+                              &quot;{test.text || <span className="text-gray-600 italic">No text review</span>}&quot;
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Controls (Move & Delete) */}
+                        <div className="flex items-center gap-1 shrink-0 opacity-80 group-hover/item:opacity-100 transition-opacity">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleMoveTestimonial(index, "up");
+                            }}
+                            disabled={index === 0}
+                            className="w-6 h-6 rounded bg-gray-900/60 hover:bg-gray-855 hover:text-blue-400 disabled:opacity-10 text-gray-400 text-[10px] flex items-center justify-center border border-gray-850 hover:border-gray-700 transition active:scale-90"
+                            title="Move Up"
+                          >
+                            <i className="fas fa-chevron-up"></i>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleMoveTestimonial(index, "down");
+                            }}
+                            disabled={index === testimonials.length - 1}
+                            className="w-6 h-6 rounded bg-gray-900/60 hover:bg-gray-855 hover:text-blue-400 disabled:opacity-10 text-gray-400 text-[10px] flex items-center justify-center border border-gray-855 hover:border-gray-700 transition active:scale-90"
+                            title="Move Down"
+                          >
+                            <i className="fas fa-chevron-down"></i>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteTestimonial(index);
+                            }}
+                            className="w-6 h-6 rounded bg-red-950/10 hover:bg-red-950/45 text-red-500 hover:text-red-400 text-[10px] flex items-center justify-center border border-red-900/10 hover:border-red-900/30 transition ml-1 active:scale-90"
+                            title="Delete Card"
+                          >
+                            <i className="fas fa-trash-alt"></i>
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {testimonials.length === 0 && (
+                    <div className="text-center py-10 border border-dashed border-gray-855 rounded-xl bg-gray-950/20">
+                      <i className="fas fa-quote-right text-gray-600 text-lg mb-2 block"></i>
+                      <p className="text-[11px] text-gray-500">No testimonials configured.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* RIGHT DETAIL PANEL */}
+              <div className={`lg:col-span-8 space-y-6 transition-all duration-300 ${isEditingMobileTestimonials ? "block animate-fade-in" : "hidden lg:block"}`}>
+                {selectedTestimonialIndex !== null && testimonials[selectedTestimonialIndex] ? (
+                  (() => {
+                    const index = selectedTestimonialIndex;
+                    const test = testimonials[index];
+
+                    return (
+                      <div className="bg-gray-900/40 border border-gray-800 rounded-2xl p-5 md:p-6 backdrop-blur-sm space-y-6 relative transition-all duration-300">
+                        {/* Mobile Back Button */}
+                        <div className="lg:hidden">
+                          <button
+                            type="button"
+                            onClick={() => setIsEditingMobileTestimonials(false)}
+                            className="flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-white px-3.5 py-2 rounded-xl bg-gray-950 border border-gray-850 active:scale-95 transition"
+                          >
+                            <i className="fas fa-arrow-left"></i>
+                            <span>Back to Reviews List</span>
+                          </button>
+                        </div>
+
+                        {/* Detail Header */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-gray-800 gap-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-xl shrink-0 flex items-center justify-center border border-purple-500/20 bg-gray-950 shadow-inner z-10 text-purple-400">
+                              <i className="fas fa-comments text-base"></i>
+                            </div>
+                            <div className="text-left">
+                              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                                <span>Editing: Review from {test.author || "New Client"}</span>
+                                <span className="text-[10px] bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2.5 py-0.5 rounded-full font-mono font-bold">
+                                  INDEX #{index + 1}
+                                </span>
+                              </h3>
+                              <p className="text-[10px] text-gray-500 mt-0.5">Customize client name and their quote review description text below.</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Form Inputs */}
+                        <div className="space-y-4 text-left">
+                          <div>
+                            <label className="text-[10px] text-gray-400 uppercase font-semibold">Author / Client Name</label>
+                            <input
+                              type="text"
+                              value={test.author}
+                              onChange={(e) => handleTestimonialChange(index, "author", e.target.value)}
+                              className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-bold"
+                              placeholder="e.g. John Doe, CEO of Acme Inc."
+                              required
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] text-gray-400 uppercase font-semibold">Client Review Quote Text</label>
+                            <textarea
+                              value={test.text}
+                              onChange={(e) => handleTestimonialChange(index, "text", e.target.value)}
+                              className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-855 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 leading-relaxed"
+                              placeholder="Write client testimonial quote here..."
+                              rows="5"
+                              required
+                            ></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()
+                ) : (
+                  <div className="bg-gray-900/40 border border-gray-800 rounded-2xl p-10 md:p-16 backdrop-blur-sm flex flex-col items-center justify-center text-center space-y-4">
+                    <div className="w-16 h-16 rounded-full bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 text-2xl shadow-inner">
+                      <i className="fas fa-quote-left"></i>
+                    </div>
+                    <div className="max-w-xs space-y-1">
+                      <h3 className="text-sm font-bold text-white uppercase tracking-wider">No Testimonial Selected</h3>
+                      <p className="text-xs text-gray-500 leading-relaxed">
+                        Select an existing testimonial card from the list on the left to begin editing, or add a new entry.
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleAddTestimonial}
+                      className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold rounded-lg transition-all shadow-md shadow-purple-500/10 cursor-pointer active:scale-95"
+                    >
+                      <i className="fas fa-plus mr-1.5"></i>
+                      Add Testimonial
+                    </button>
+                  </div>
+                )}
+              </div>
+
             </div>
           </div>
         )}
 
         {/* Chatbot Q&A Tab */}
         {activeTab === "chatbot" && (
-          <div className="space-y-8 animate-fade-in">
+          <div className="space-y-6 md:space-y-8 animate-fade-in">
+            {/* Header Area */}
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
               <div>
                 <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white">Chatbot Q&A Knowledge Base</h2>
-                <p className="text-xs md:text-sm text-gray-400 mt-1">Configure keywords triggers and responses for the chatbot. The bot scans these keywords in user inquiries.</p>
+                <p className="text-xs md:text-sm text-gray-400 mt-1">Configure keywords triggers and responses for the chatbot assistant.</p>
               </div>
-              <button
-                onClick={handleAddQA}
-                className="w-full sm:w-auto px-4 py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-green-500/10"
-              >
-                <i className="fas fa-plus"></i>
-                <span>Add Q&A Trigger</span>
-              </button>
-            </div>
-
-            <div className="bg-gray-900/40 border border-gray-800 p-5 md:p-8 rounded-2xl backdrop-blur-sm space-y-6">
-              <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-2 scrollbar-none">
-                {chatbotKnowledge.map((qa, index) => (
-                  <div key={index} className="bg-gray-950/60 border border-gray-800 p-4 md:p-5 rounded-xl space-y-4 relative animate-fade-in">
-                    <button
-                      onClick={() => handleDeleteQA(index)}
-                      className="absolute top-4 right-4 p-2 py-1 bg-red-950/20 hover:bg-red-950/60 text-red-500 hover:text-red-400 rounded-lg text-[10px] font-semibold transition cursor-pointer border border-red-900/10"
-                    >
-                      <i className="fas fa-trash-alt mr-1"></i>
-                      Delete
-                    </button>
-
-                    <div className="grid grid-cols-1 gap-4 pt-6 sm:pt-0">
-                      <div>
-                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Keywords (comma-separated)</label>
-                        <input
-                          type="text"
-                          value={qa.keywords}
-                          onChange={(e) => handleQAChange(index, "keywords", e.target.value)}
-                          className="w-full mt-1 p-2.5 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                          placeholder="e.g., pricing, cost, rates"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="text-[10px] text-gray-400 uppercase font-semibold">Bot Response Message</label>
-                        <textarea
-                          value={qa.response}
-                          onChange={(e) => handleQAChange(index, "response", e.target.value)}
-                          className="w-full mt-1 p-2.5 bg-gray-900 border border-gray-800 text-white rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                          placeholder="What the chatbot will answer if these keywords are matched..."
-                          rows="3"
-                          required
-                        ></textarea>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-                {chatbotKnowledge.length === 0 && (
-                  <p className="text-center text-xs text-gray-500 py-10">No custom Q&A triggers configured yet. The chatbot will use default knowledge settings.</p>
-                )}
-              </div>
-
-              {/* Action save CTA */}
-              <div className="border-t border-gray-850 pt-6">
+              <div className="flex gap-3 w-full sm:w-auto">
+                <button
+                  onClick={handleAddQA}
+                  className="flex-grow sm:flex-grow-0 px-4 py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-green-500/10 active:scale-95"
+                >
+                  <i className="fas fa-plus"></i>
+                  <span>Add Trigger</span>
+                </button>
                 <button
                   onClick={handleSaveCMS}
                   disabled={loading}
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition-all shadow-md shadow-blue-500/10 cursor-pointer"
+                  className="flex-grow sm:flex-grow-0 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-blue-500/10 disabled:opacity-50 active:scale-95"
                 >
-                  <i className="fas fa-save mr-2"></i>
-                  Save Chatbot Q&A triggers
+                  <i className="fas fa-save"></i>
+                  <span>Save Changes</span>
                 </button>
               </div>
+            </div>
+
+            {/* Split Dual-Pane Container */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              
+              {/* LEFT SIDEBAR: QA list */}
+              <div className={`lg:col-span-4 bg-gray-900/40 border border-gray-800 rounded-2xl p-4 md:p-5 backdrop-blur-sm space-y-4 transition-all duration-300 ${isEditingMobileQA ? "hidden lg:block animate-fade-out" : "block animate-fade-in"}`}>
+                <div className="flex items-center justify-between pb-3 border-b border-gray-800">
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Triggers ({chatbotKnowledge.length})</h3>
+                  {chatbotKnowledge.length > 0 && (
+                    <span className="text-[10px] text-gray-500 font-mono">Select to Edit</span>
+                  )}
+                </div>
+
+                <div className="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1 scrollbar-none">
+                  {chatbotKnowledge.map((qa, index) => {
+                    const isSelected = selectedQAIndex === index;
+                    const keywordsSnippet = qa.keywords ? qa.keywords.split(",")[0] : "New Trigger";
+
+                    return (
+                      <div
+                        key={index}
+                        onClick={() => {
+                          setSelectedQAIndex(index);
+                          setIsEditingMobileQA(true);
+                        }}
+                        className={`group/item p-3.5 rounded-xl border flex items-center justify-between gap-3 cursor-pointer transition-all duration-300 hover:scale-[1.01] relative select-none ${
+                          isSelected
+                            ? "bg-blue-600/10 border-blue-500/35 shadow-lg shadow-blue-500/5"
+                            : "bg-gray-950/30 border-gray-855 hover:border-gray-700/60 hover:bg-gray-950/70"
+                        }`}
+                      >
+                        {/* Selected Indicator Bar */}
+                        {isSelected && (
+                          <div className="absolute left-0 top-3.5 bottom-3.5 w-1 bg-blue-500 rounded-r-md"></div>
+                        )}
+
+                        <div className="flex items-center gap-3 min-w-0">
+                          {/* Robot Icon */}
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shrink-0 bg-gray-900 shadow-inner ${isSelected ? "text-amber-400 border-amber-500/20 animate-pulse" : "text-gray-400 border-white/10"}`}>
+                            <i className="fas fa-robot text-xs"></i>
+                          </div>
+                          
+                          <div className="min-w-0">
+                            <h4 className="text-xs font-bold text-white truncate max-w-[120px] sm:max-w-none">
+                              {keywordsSnippet || <span className="text-gray-600 italic">No keywords</span>}
+                            </h4>
+                            <p className="text-[10px] text-gray-500 truncate mt-0.5 max-w-[120px] sm:max-w-none">
+                              {qa.keywords || <span className="text-gray-600 italic">No keywords configured</span>}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Controls (Move & Delete) */}
+                        <div className="flex items-center gap-1 shrink-0 opacity-80 group-hover/item:opacity-100 transition-opacity">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleMoveQA(index, "up");
+                            }}
+                            disabled={index === 0}
+                            className="w-6 h-6 rounded bg-gray-900/60 hover:bg-gray-805 hover:text-blue-400 disabled:opacity-10 text-gray-400 text-[10px] flex items-center justify-center border border-gray-850 hover:border-gray-700 transition active:scale-90"
+                            title="Move Up"
+                          >
+                            <i className="fas fa-chevron-up"></i>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleMoveQA(index, "down");
+                            }}
+                            disabled={index === chatbotKnowledge.length - 1}
+                            className="w-6 h-6 rounded bg-gray-900/60 hover:bg-gray-805 hover:text-blue-400 disabled:opacity-10 text-gray-400 text-[10px] flex items-center justify-center border border-gray-855 hover:border-gray-700 transition active:scale-90"
+                            title="Move Down"
+                          >
+                            <i className="fas fa-chevron-down"></i>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteQA(index);
+                            }}
+                            className="w-6 h-6 rounded bg-red-950/10 hover:bg-red-950/45 text-red-500 hover:text-red-400 text-[10px] flex items-center justify-center border border-red-900/10 hover:border-red-900/30 transition ml-1 active:scale-90"
+                            title="Delete Card"
+                          >
+                            <i className="fas fa-trash-alt"></i>
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {chatbotKnowledge.length === 0 && (
+                    <div className="text-center py-10 border border-dashed border-gray-855 rounded-xl bg-gray-950/20">
+                      <i className="fas fa-robot text-gray-600 text-lg mb-2 block"></i>
+                      <p className="text-[11px] text-gray-500">No QA triggers configured.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* RIGHT DETAIL PANEL */}
+              <div className={`lg:col-span-8 space-y-6 transition-all duration-300 ${isEditingMobileQA ? "block animate-fade-in" : "hidden lg:block"}`}>
+                {selectedQAIndex !== null && chatbotKnowledge[selectedQAIndex] ? (
+                  (() => {
+                    const index = selectedQAIndex;
+                    const qa = chatbotKnowledge[index];
+
+                    return (
+                      <div className="bg-gray-900/40 border border-gray-800 rounded-2xl p-5 md:p-6 backdrop-blur-sm space-y-6 relative transition-all duration-300">
+                        {/* Mobile Back Button */}
+                        <div className="lg:hidden">
+                          <button
+                            type="button"
+                            onClick={() => setIsEditingMobileQA(false)}
+                            className="flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-white px-3.5 py-2 rounded-xl bg-gray-950 border border-gray-855 active:scale-95 transition"
+                          >
+                            <i className="fas fa-arrow-left"></i>
+                            <span>Back to Triggers List</span>
+                          </button>
+                        </div>
+
+                        {/* Detail Header */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-gray-800 gap-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-xl shrink-0 flex items-center justify-center border border-amber-500/20 bg-gray-950 shadow-inner z-10 text-amber-500">
+                              <i className="fas fa-robot text-base"></i>
+                            </div>
+                            <div className="text-left">
+                              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                                <span>Editing Trigger: {qa.keywords ? qa.keywords.split(",")[0] : "New Trigger"}</span>
+                                <span className="text-[10px] bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2.5 py-0.5 rounded-full font-mono font-bold">
+                                  INDEX #{index + 1}
+                                </span>
+                              </h3>
+                              <p className="text-[10px] text-gray-500 mt-0.5">Configure comma-separated keywords triggers and responses for the chatbot assistant.</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Form Inputs */}
+                        <div className="space-y-4 text-left">
+                          <div>
+                            <label className="text-[10px] text-gray-400 uppercase font-semibold">Keywords (comma-separated)</label>
+                            <input
+                              type="text"
+                              value={qa.keywords}
+                              onChange={(e) => handleQAChange(index, "keywords", e.target.value)}
+                              className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-mono text-amber-400"
+                              placeholder="e.g. pricing, rates, quote"
+                              required
+                            />
+                            {qa.keywords && (
+                              <div className="flex flex-wrap gap-1.5 mt-2">
+                                {qa.keywords.split(",").map(k => k.trim()).filter(Boolean).map((word, wi) => (
+                                  <span key={wi} className="text-[9px] font-mono px-2.5 py-0.5 rounded bg-gray-850 text-amber-400 border border-gray-800">{word}</span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] text-gray-400 uppercase font-semibold">Bot Response Message (Markdown-supported)</label>
+                            <textarea
+                              value={qa.response}
+                              onChange={(e) => handleQAChange(index, "response", e.target.value)}
+                              className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 leading-relaxed font-sans"
+                              placeholder="Describe what the chatbot will answer if these keywords are matched..."
+                              rows="8"
+                              required
+                            ></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()
+                ) : (
+                  <div className="bg-gray-900/40 border border-gray-800 rounded-2xl p-10 md:p-16 backdrop-blur-sm flex flex-col items-center justify-center text-center space-y-4">
+                    <div className="w-16 h-16 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-2xl shadow-inner">
+                      <i className="fas fa-robot"></i>
+                    </div>
+                    <div className="max-w-xs space-y-1">
+                      <h3 className="text-sm font-bold text-white uppercase tracking-wider">No Trigger Selected</h3>
+                      <p className="text-xs text-gray-500 leading-relaxed">
+                        Select an existing trigger keywords card from the list on the left to begin editing, or add a new Q&A trigger.
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleAddQA}
+                      className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold rounded-lg transition-all shadow-md shadow-amber-500/10 cursor-pointer active:scale-95"
+                    >
+                      <i className="fas fa-plus mr-1.5"></i>
+                      Add Q&A Trigger
+                    </button>
+                  </div>
+                )}
+              </div>
+
             </div>
           </div>
         )}
