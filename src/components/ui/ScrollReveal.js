@@ -10,7 +10,7 @@ export default function ScrollReveal({
   delay = 0,
   duration = 0.8,
   distance = 40,
-  once = false,
+  once = true, // Set to true by default for zero-lag subsequent scrolls
   threshold = 0.05,
   className = "",
   staggerChildren = 0.1,
@@ -22,55 +22,61 @@ export default function ScrollReveal({
     enable3D: false,
     enableBlur: false,
     delayMultiplier: 0.8,
+    threshold: 0.05,
   });
 
   useEffect(() => {
     const handleResize = () => {
       const w = window.innerWidth;
       if (w < 340) {
-        // Fold phone (folded)
+        // Fold phone (folded) - snappiest, lowest-overhead transition
         setDeviceConfig({
-          distance: 10,
-          duration: 0.4,
+          distance: 8,
+          duration: 0.35,
           enable3D: false,
           enableBlur: false,
-          delayMultiplier: 0.6,
+          delayMultiplier: 0.5,
+          threshold: 0.01, // trigger early
         });
       } else if (w < 768) {
         // Standard phone
         setDeviceConfig({
-          distance: 15,
-          duration: 0.45,
+          distance: 12,
+          duration: 0.4,
+          enable3D: false,
+          enableBlur: false,
+          delayMultiplier: 0.6,
+          threshold: 0.02,
+        });
+      } else if (w < 1024) {
+        // Tablet / Unfolded fold phone
+        setDeviceConfig({
+          distance: 18,
+          duration: 0.5,
           enable3D: false,
           enableBlur: false,
           delayMultiplier: 0.7,
-        });
-      } else if (w < 1024) {
-        // Tablet / Unfolded fold
-        setDeviceConfig({
-          distance: 22,
-          duration: 0.55,
-          enable3D: false,
-          enableBlur: false,
-          delayMultiplier: 0.8,
+          threshold: 0.03,
         });
       } else if (w < 1440) {
         // Laptop
         setDeviceConfig({
-          distance: 30,
-          duration: 0.65,
+          distance: 25,
+          duration: 0.6,
           enable3D: true,
           enableBlur: true,
-          delayMultiplier: 0.9,
+          delayMultiplier: 0.85,
+          threshold: 0.04,
         });
       } else {
-        // PC / Desktop
+        // PC / Desktop - fully rich high-framerate animations
         setDeviceConfig({
-          distance: 40,
-          duration: 0.75,
+          distance: 35,
+          duration: 0.7,
           enable3D: true,
           enableBlur: true,
           delayMultiplier: 1.0,
+          threshold: 0.05,
         });
       }
     };
@@ -83,63 +89,65 @@ export default function ScrollReveal({
   const activeDistance = distance !== 40 ? distance : deviceConfig.distance;
   const activeDuration = duration !== 0.8 ? duration : deviceConfig.duration;
   const activeDelay = delay * deviceConfig.delayMultiplier;
+  const activeThreshold = threshold !== 0.05 ? threshold : deviceConfig.threshold;
 
-  // Define optimized GPU-accelerated keyframe presets
+  // Multi-step custom keyframe configurations for rich visuals across all viewports (exactly 5 keys each)
   const variants = {
     hidden: {
       opacity: 0,
       y: variant === "fade-up" || variant === "bounce-up"
-        ? (variant === "bounce-up" ? activeDistance * 1.3 : activeDistance)
+        ? activeDistance
         : variant === "fade-down"
         ? -activeDistance
         : variant === "perspective-3d"
-        ? activeDistance
+        ? activeDistance * 1.2
         : variant === "lens-focus"
-        ? 8
+        ? 6
         : 0,
       x: variant === "fade-left" ? activeDistance : variant === "fade-right" ? -activeDistance : 0,
-      scale: variant === "scale-in" ? 0.95 : variant === "lens-focus" ? 1.03 : 1,
-      rotateX: variant === "perspective-3d" && deviceConfig.enable3D ? 8 : 0,
-      filter: variant === "lens-focus" && deviceConfig.enableBlur ? "blur(8px)" : "none",
+      scale: variant === "scale-in" ? 0.93 : variant === "lens-focus" ? 1.04 : 1,
+      rotateX: variant === "perspective-3d" && deviceConfig.enable3D ? 12 : 0,
+      filter: variant === "lens-focus" && deviceConfig.enableBlur ? "blur(12px)" : "none",
     },
     visible: {
-      opacity: [0, 0.65, 1],
+      opacity: [0, 0.45, 0.8, 0.95, 1],
       y: variant === "fade-up"
-        ? [activeDistance, -Math.round(activeDistance * 0.15), 0]
+        ? [activeDistance, activeDistance * 0.4, -activeDistance * 0.08, -activeDistance * 0.02, 0]
         : variant === "bounce-up"
-        ? [activeDistance * 1.3, -Math.round(activeDistance * 0.25), Math.round(activeDistance * 0.06), 0]
+        ? [activeDistance * 1.4, activeDistance * 0.45, -activeDistance * 0.15, activeDistance * 0.04, 0]
         : variant === "fade-down"
-        ? [-activeDistance, Math.round(activeDistance * 0.15), 0]
+        ? [-activeDistance, -activeDistance * 0.4, activeDistance * 0.08, activeDistance * 0.02, 0]
         : variant === "perspective-3d"
-        ? [activeDistance, -Math.round(activeDistance * 0.12), 0]
+        ? [activeDistance * 1.2, activeDistance * 0.45, -activeDistance * 0.08, -activeDistance * 0.02, 0]
         : 0,
       x: variant === "fade-left"
-        ? [activeDistance, -Math.round(activeDistance * 0.15), 0]
+        ? [activeDistance, activeDistance * 0.4, -activeDistance * 0.08, -activeDistance * 0.02, 0]
         : variant === "fade-right"
-        ? [-activeDistance, Math.round(activeDistance * 0.15), 0]
+        ? [-activeDistance, -activeDistance * 0.4, activeDistance * 0.08, activeDistance * 0.02, 0]
         : 0,
       scale: variant === "scale-in"
-        ? [0.95, 1.01, 1]
+        ? [0.93, 0.97, 1.015, 0.99, 1]
         : variant === "bounce-up"
-        ? [0.94, 1.025, 0.99, 1]
+        ? [0.93, 0.97, 1.025, 0.995, 1]
         : variant === "lens-focus"
-        ? [1.03, 0.992, 1]
+        ? [1.04, 1.01, 0.993, 1.002, 1]
         : 1,
       rotate: variant === "fade-left" && deviceConfig.enable3D
-        ? [1.5, -0.2, 0]
+        ? [2, 0.8, -0.2, 0.05, 0]
         : variant === "fade-right" && deviceConfig.enable3D
-        ? [-1.5, 0.2, 0]
+        ? [-2, -0.8, 0.2, -0.05, 0]
         : 0,
       rotateX: variant === "perspective-3d" && deviceConfig.enable3D
-        ? [8, -1.5, 0]
+        ? [12, 5, -1.8, 0.4, 0]
         : 0,
       filter: variant === "lens-focus" && deviceConfig.enableBlur
-        ? ["blur(8px)", "blur(2px)", "blur(0px)"]
+        ? ["blur(12px)", "blur(5px)", "blur(1.8px)", "blur(0.4px)", "blur(0px)"]
         : "blur(0px)",
       transition: {
         duration: activeDuration,
         delay: activeDelay,
-        ease: [0.25, 0.46, 0.45, 0.94], // Hardware accelerated ease-out curve
+        times: [0, 0.3, 0.6, 0.85, 1], // Fine-grained keyframe timeline distribution
+        ease: ["easeOut", "easeInOut", "easeInOut", "easeOut"], 
         when: "beforeChildren",
         staggerChildren: staggerChildren,
       },
@@ -152,7 +160,6 @@ export default function ScrollReveal({
     }
   };
 
-  // If this is a stagger container
   if (variant === "stagger-container") {
     const containerVariants = {
       hidden: { opacity: 1 },
@@ -169,7 +176,7 @@ export default function ScrollReveal({
       <motion.div
         initial="hidden"
         whileInView="visible"
-        viewport={{ once, amount: threshold }}
+        viewport={{ once, amount: activeThreshold }}
         variants={containerVariants}
         onViewportEnter={handleViewportEnter}
         className={className}
@@ -184,7 +191,7 @@ export default function ScrollReveal({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, amount: threshold }}
+      viewport={{ once, amount: activeThreshold }}
       variants={variants}
       onViewportEnter={handleViewportEnter}
       className={className}
