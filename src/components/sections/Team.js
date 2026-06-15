@@ -178,7 +178,7 @@ export default function Team({ data }) {
                   </p>
 
                   {/* Connect Buttons */}
-                  {(founder.linkedin || founder.instagram || founder.customLinkUrl) && (
+                  {(founder.linkedin || founder.instagram || (founder.customLinks && founder.customLinks.length > 0) || founder.customLinkUrl) && (
                     <div className="flex flex-wrap justify-center gap-2 border-t border-white/[0.06] pt-4 mt-2">
                       {founder.linkedin && (
                         <a
@@ -206,7 +206,22 @@ export default function Team({ data }) {
                           <span className="tracking-wider font-bold">INSTAGRAM</span>
                         </a>
                       )}
-                      {founder.customLinkUrl && (
+                      {founder.customLinks && founder.customLinks.length > 0 ? (
+                        founder.customLinks.map((link, lIdx) => (
+                          <a
+                            key={lIdx}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={playClickSound}
+                            onMouseEnter={playHoverSound}
+                            className="inline-flex items-center gap-1 text-[10px] text-gray-400 hover:text-white transition-all duration-300 font-mono group/link px-2.5 py-1 rounded-full border border-white/5 hover:border-white/10 hover:bg-white/[0.03]"
+                          >
+                            <i className={`${link.icon || "fas fa-link"} text-[10px] group-hover/link:scale-110 transition-transform duration-300`}></i>
+                            <span className="tracking-wider font-bold">{(link.name || "LINK").toUpperCase()}</span>
+                          </a>
+                        ))
+                      ) : founder.customLinkUrl ? (
                         <a
                           href={founder.customLinkUrl}
                           target="_blank"
@@ -218,7 +233,7 @@ export default function Team({ data }) {
                           <i className={`${founder.customLinkIcon || "fas fa-link"} text-[10px] group-hover/link:scale-110 transition-transform duration-300`}></i>
                           <span className="tracking-wider font-bold">{founder.customLinkName ? founder.customLinkName.toUpperCase() : "LINK"}</span>
                         </a>
-                      )}
+                      ) : null}
                     </div>
                   )}
                 </TiltCard>

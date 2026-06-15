@@ -20,7 +20,7 @@ class AudioManager {
   constructor() {
     this.ctx = null;               // This is the "audio engine" provided by the browser (AudioContext)
     this.ambientNodes = [];        // Keeps track of music nodes so we can stop or change them later
-    this.muted = false;            // True if the user wants silence, False if they want sound
+    this.muted = true;            // True if the user wants silence, False if they want sound
     this.initialized = false;      // Keeps track of whether the audio engine has started up yet
     this.masterGain = null;        // The master volume knob (affects all music and sound effects)
     this.ambientGain = null;       // The music volume knob (only affects background music)
@@ -30,7 +30,7 @@ class AudioManager {
     this.delayNode = null;         // An effect that repeats sounds (like an echo in the mountains)
     this.delayGain = null;         // Controls how loud the repeated echoes are
     this.lastScrollSweepTime = 0;  // Keeps track of when we last played the scroll sound so it doesn't play too often
-    
+
     // Background music state
     this.chordInterval = null;     // A timer that switches chords every few seconds
     this.padOscs = [];            // The sound generators (oscillators) playing the background music
@@ -121,7 +121,7 @@ class AudioManager {
       const impulse = this.ctx.createBuffer(2, length, sampleRate);
       const left = impulse.getChannelData(0);
       const right = impulse.getChannelData(1);
-      
+
       // Fill the buffer with random noise that fades out exponentially (very quickly at first, then slower)
       for (let i = 0; i < length; i++) {
         const percent = i / length;
@@ -130,7 +130,7 @@ class AudioManager {
         left[i] = (Math.random() * 2 - 1) * envelope;
         right[i] = (Math.random() * 2 - 1) * envelope;
       }
-      
+
       // The Convolver node takes this noise and blends it with other sounds to create the echo
       const convolver = this.ctx.createConvolver();
       convolver.buffer = impulse;
@@ -149,21 +149,21 @@ class AudioManager {
       // Create the delay node and set how long to wait before repeating (e.g., 0.25 seconds)
       const delay = this.ctx.createDelay(1.0);
       delay.delayTime.setValueAtTime(delayTime, this.ctx.currentTime);
-      
+
       // Create a gain knob to control how much of the sound loops back (feedback)
       const feedbackGain = this.ctx.createGain();
       feedbackGain.gain.setValueAtTime(feedback, this.ctx.currentTime);
-      
+
       // Create a filter to cut off harsh high sounds from the echo repeats
       const filter = this.ctx.createBiquadFilter();
       filter.type = "lowpass";
       filter.frequency.setValueAtTime(lowpassFreq, this.ctx.currentTime);
-      
+
       // Connect them in a circle: Delay -> Filter -> Feedback Gain -> Back to Delay
       delay.connect(filter);
       filter.connect(feedbackGain);
       feedbackGain.connect(delay);
-      
+
       return delay;
     } catch (e) {
       console.warn("Failed to generate delay feedback line:", e);
@@ -222,7 +222,7 @@ class AudioManager {
       const osc = ctx.createOscillator();
       // Alternate between a smooth wave (sine) and a flute-like wave (triangle)
       osc.type = idx % 2 === 0 ? "sine" : "triangle";
-      
+
       // Detune the note slightly (pitch it up or down by a fraction)
       // This makes the sound wider and richer, like multiple instruments playing at once.
       const detune = (Math.random() - 0.5) * 5; // ±2.5 cents
@@ -246,7 +246,7 @@ class AudioManager {
       if (panner) {
         const panValue = [-0.7, 0.7, -0.3, 0.3, -0.1, 0.1][idx]; // -1 is full left, 1 is full right
         panner.pan.setValueAtTime(panValue, now);
-        
+
         osc.connect(voiceGain);
         voiceGain.connect(panner);
         panner.connect(this.ambientGain);
@@ -421,7 +421,7 @@ class AudioManager {
       osc2.start(now);
       osc1.stop(now + 0.12);
       osc2.stop(now + 0.08);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   // ── CLICK: Premium Tactile Button Click ────────────────────────────────
@@ -440,7 +440,7 @@ class AudioManager {
       subOsc.frequency.exponentialRampToValueAtTime(40, now + 0.06); // drops down to sub bass
       subGain.gain.setValueAtTime(0.45, now);
       subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
-      
+
       subOsc.connect(subGain);
       subGain.connect(this.sfxGain);
       subOsc.start(now);
@@ -489,7 +489,7 @@ class AudioManager {
         subGain.connect(revSend);
         revSend.connect(this.reverbNode);
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   // ── TRANSITION: Sweeping Cinematic Filter Swell ────────────────────────
@@ -552,7 +552,7 @@ class AudioManager {
         osc.start(now);
         osc.stop(now + duration);
       });
-    } catch (e) {}
+    } catch (e) { }
   }
 
   // ── SCROLL SWEEP: Quiet Atmospheric Wind Whoosh ────────────────────────
@@ -615,7 +615,7 @@ class AudioManager {
       }
 
       src.start(now);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   // ── PRELOADER EXIT: PlayStation/THX-Style Cinematic Boot Sequence ──────
@@ -738,7 +738,7 @@ class AudioManager {
         chimeOsc.start(triggerTime);
         chimeOsc.stop(triggerTime + 1.8);
       });
-    } catch (e) {}
+    } catch (e) { }
   }
 
   // ── CHAT BUBBLE: Cyber Double-Chirp Notification ──────────────────
@@ -757,7 +757,7 @@ class AudioManager {
       osc1.frequency.exponentialRampToValueAtTime(680, now + 0.08);
       gain1.gain.setValueAtTime(0.25, now);
       gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
-      
+
       osc1.connect(gain1);
       gain1.connect(this.sfxGain);
       osc1.start(now);
@@ -786,7 +786,7 @@ class AudioManager {
         gain2.connect(revSend);
         revSend.connect(this.reverbNode);
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 }
 

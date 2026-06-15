@@ -876,6 +876,16 @@ textarea:focus-visible {
   animation: animate-fade-in 0.35s ease forwards;
 }
 
+/* Animate fade out utility */
+@keyframes animate-fade-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(6px); }
+}
+
+.animate-fade-out {
+  animation: animate-fade-out 0.35s ease forwards;
+}
+
 /* === Chatbot Mobile & Tablet Responsive === */
 
 /* Tablets (max 768px) */
