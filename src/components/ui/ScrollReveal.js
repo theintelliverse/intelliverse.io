@@ -30,7 +30,7 @@ export default function ScrollReveal({
       if (w < 340) {
         // Fold phone (folded) - compact, ultra-snappy scroll animation
         setDeviceConfig({
-          distance: 6,
+          distance: 4,
           duration: 0.35,
           enable3D: false,
           enableBlur: false,
@@ -40,7 +40,7 @@ export default function ScrollReveal({
       } else if (w < 768) {
         // Standard phone - mobile fluid layout, fast and smooth
         setDeviceConfig({
-          distance: 10,
+          distance: 6,
           duration: 0.4,
           enable3D: false,
           enableBlur: false,
@@ -50,8 +50,8 @@ export default function ScrollReveal({
       } else if (w < 1024) {
         // Tablet / Unfolded fold phone - medium scale, smooth
         setDeviceConfig({
-          distance: 15,
-          duration: 0.5,
+          distance: 8,
+          duration: 0.45,
           enable3D: false,
           enableBlur: false,
           delayMultiplier: 0.7,
@@ -60,21 +60,21 @@ export default function ScrollReveal({
       } else if (w < 1440) {
         // Laptop - high quality, light 3D and blur
         setDeviceConfig({
-          distance: 20,
-          duration: 0.65,
+          distance: 12,
+          duration: 0.55,
           enable3D: true,
           enableBlur: true,
-          delayMultiplier: 0.85,
+          delayMultiplier: 0.8,
           threshold: 0.04,
         });
       } else {
         // PC / Desktop / Ultrawide - maximum fidelity, deep perspective & blur
         setDeviceConfig({
-          distance: 28,
-          duration: 0.8,
+          distance: 16,
+          duration: 0.65,
           enable3D: true,
           enableBlur: true,
-          delayMultiplier: 1.0,
+          delayMultiplier: 0.9,
           threshold: 0.05,
         });
       }
@@ -145,7 +145,7 @@ export default function ScrollReveal({
       scale: 1,
       rotate: 0,
       rotateX: 0,
-      filter: "none",
+      filter: variant === "lens-focus" && deviceConfig.enableBlur ? "blur(0px)" : "none",
       transition: {
         duration: activeDuration,
         delay: activeDelay,
@@ -154,28 +154,28 @@ export default function ScrollReveal({
           variant === "bounce-up"
             ? {
                 type: "spring",
-                stiffness: 85,
-                damping: 12,
+                stiffness: 70,
+                damping: 15,
                 mass: 0.8,
               }
             : {
                 type: "spring",
-                stiffness: 55,
-                damping: 15,
-                mass: 0.9,
+                stiffness: 40,
+                damping: 18,
+                mass: 0.8,
               },
         scale:
           variant === "bounce-up"
             ? {
                 type: "spring",
-                stiffness: 90,
-                damping: 12,
+                stiffness: 75,
+                damping: 15,
                 mass: 0.8,
               }
             : {
                 type: "spring",
-                stiffness: 60,
-                damping: 15,
+                stiffness: 45,
+                damping: 18,
                 mass: 0.8,
               },
         filter: {
@@ -214,7 +214,7 @@ export default function ScrollReveal({
       <motion.div
         initial="hidden"
         whileInView="visible"
-        viewport={{ once, amount: activeThreshold }}
+        viewport={{ once, amount: activeThreshold, margin: "0px 0px -8% 0px" }}
         variants={containerVariants}
         onViewportEnter={handleViewportEnter}
         className={className}
@@ -229,7 +229,7 @@ export default function ScrollReveal({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, amount: activeThreshold }}
+      viewport={{ once, amount: activeThreshold, margin: "0px 0px -8% 0px" }}
       variants={variants}
       onViewportEnter={handleViewportEnter}
       className={className}
