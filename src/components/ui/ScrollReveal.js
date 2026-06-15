@@ -113,90 +113,78 @@ export default function ScrollReveal({
         variant === "fade-up"
           ? activeDistance
           : variant === "bounce-up"
-          ? activeDistance * 1.5
+          ? activeDistance * 1.3
           : variant === "fade-down"
           ? -activeDistance
           : variant === "perspective-3d"
-          ? activeDistance * 1.3
+          ? activeDistance * 1.2
           : variant === "lens-focus"
-          ? 6
+          ? 8
           : 0,
       x: variant === "fade-left" ? activeDistance : variant === "fade-right" ? -activeDistance : 0,
       scale:
         variant === "scale-in"
-          ? 0.9
+          ? 0.95
           : variant === "bounce-up"
-          ? 0.9
+          ? 0.94
           : variant === "lens-focus"
-          ? 1.06
+          ? 1.04
           : 1,
-      rotateX: variant === "perspective-3d" && deviceConfig.enable3D ? 15 : 0,
+      rotateX: variant === "perspective-3d" && deviceConfig.enable3D ? 12 : 0,
       rotate:
         variant === "fade-left" && deviceConfig.enable3D
-          ? 3
+          ? 2
           : variant === "fade-right" && deviceConfig.enable3D
-          ? -3
+          ? -2
           : 0,
-      filter: variant === "lens-focus" && deviceConfig.enableBlur ? "blur(16px)" : "none",
+      filter: variant === "lens-focus" && deviceConfig.enableBlur ? "blur(12px)" : "none",
     },
     visible: {
-      opacity: [0, 0.2, 0.45, 0.7, 0.88, 0.96, 0.99, 1],
-      y:
-        variant === "fade-up"
-          ? [activeDistance, activeDistance * 0.72, activeDistance * 0.44, activeDistance * 0.22, activeDistance * 0.08, activeDistance * 0.02, activeDistance * 0.005, 0]
-          : variant === "bounce-up"
-          ? [activeDistance * 1.5, activeDistance * 0.8, activeDistance * 0.25, -activeDistance * 0.08, -activeDistance * 0.12, -activeDistance * 0.04, activeDistance * 0.01, 0]
-          : variant === "fade-down"
-          ? [-activeDistance, -activeDistance * 0.72, -activeDistance * 0.44, -activeDistance * 0.22, -activeDistance * 0.08, -activeDistance * 0.02, -activeDistance * 0.005, 0]
-          : variant === "perspective-3d"
-          ? [activeDistance * 1.3, activeDistance * 0.8, activeDistance * 0.4, activeDistance * 0.18, activeDistance * 0.06, -activeDistance * 0.01, 0, 0]
-          : variant === "lens-focus"
-          ? [6, 4.8, 3.6, 2.4, 1.2, 0.4, 0.1, 0]
-          : 0,
-      x:
-        variant === "fade-left"
-          ? [activeDistance, activeDistance * 0.72, activeDistance * 0.44, activeDistance * 0.22, activeDistance * 0.08, activeDistance * 0.02, activeDistance * 0.005, 0]
-          : variant === "fade-right"
-          ? [-activeDistance, -activeDistance * 0.72, -activeDistance * 0.44, -activeDistance * 0.22, -activeDistance * 0.08, -activeDistance * 0.02, -activeDistance * 0.005, 0]
-          : 0,
-      scale:
-        variant === "scale-in"
-          ? [0.9, 0.93, 0.96, 0.985, 1.005, 1.01, 1.002, 1]
-          : variant === "bounce-up"
-          ? [0.9, 0.94, 0.98, 1.03, 1.04, 1.01, 0.995, 1]
-          : variant === "lens-focus"
-          ? [1.06, 1.04, 1.02, 1.008, 0.995, 0.99, 0.997, 1]
-          : 1,
-      rotate:
-        variant === "fade-left" && deviceConfig.enable3D
-          ? [3, 2.2, 1.3, 0.6, 0.1, -0.2, -0.05, 0]
-          : variant === "fade-right" && deviceConfig.enable3D
-          ? [-3, -2.2, -1.3, -0.6, -0.1, 0.2, 0.05, 0]
-          : 0,
-      rotateX:
-        variant === "perspective-3d" && deviceConfig.enable3D
-          ? [15, 12, 8, 4.5, 2, -0.8, -0.2, 0]
-          : 0,
-      filter:
-        variant === "lens-focus" && deviceConfig.enableBlur
-          ? [
-              "blur(16px)",
-              "blur(12px)",
-              "blur(8px)",
-              "blur(5px)",
-              "blur(2.5px)",
-              "blur(1px)",
-              "blur(0.3px)",
-              "blur(0px)",
-            ]
-          : "none",
+      opacity: 1,
+      y: 0,
+      x: 0,
+      scale: 1,
+      rotate: 0,
+      rotateX: 0,
+      filter: "none",
       transition: {
         duration: activeDuration,
         delay: activeDelay,
-        times: stepTimes,
-        ease: premiumEasings,
-        when: "beforeChildren",
+        ease: [0.16, 1, 0.3, 1], // easeOutExpo for premium fluid deceleration
+        y:
+          variant === "bounce-up"
+            ? {
+                type: "spring",
+                stiffness: 85,
+                damping: 12,
+                mass: 0.8,
+              }
+            : {
+                type: "spring",
+                stiffness: 55,
+                damping: 15,
+                mass: 0.9,
+              },
+        scale:
+          variant === "bounce-up"
+            ? {
+                type: "spring",
+                stiffness: 90,
+                damping: 12,
+                mass: 0.8,
+              }
+            : {
+                type: "spring",
+                stiffness: 60,
+                damping: 15,
+                mass: 0.8,
+              },
+        filter: {
+          duration: activeDuration * 0.9,
+          ease: "easeOut",
+        },
         staggerChildren: staggerChildren,
+        delayChildren: activeDelay,
       },
     },
   };
