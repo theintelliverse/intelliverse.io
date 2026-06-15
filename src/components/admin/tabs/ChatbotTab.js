@@ -44,7 +44,7 @@ export default function ChatbotTab({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
         {/* LEFT SIDEBAR: QA list */}
-        <div className={`lg:col-span-4 bg-gray-900/30 border border-white/5 rounded-2xl p-4 md:p-5 backdrop-blur-sm space-y-4 transition-all duration-300 ${isEditingMobileQA ? "hidden lg:block animate-fade-out" : "block animate-fade-in"}`}>
+        <div className={`lg:col-span-4 bg-gray-900/30 border border-white/5 rounded-2xl p-4 md:p-5 backdrop-blur-sm space-y-4 transition-all duration-300 ${isEditingMobileQA ? "hidden lg:block animate-fade-out lg:animate-none" : "block animate-fade-in lg:animate-none"}`}>
           <div className="flex items-center justify-between pb-3 border-b border-white/5">
             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider font-mono">Triggers ({chatbotKnowledge.length})</h3>
             {chatbotKnowledge.length > 0 && (
