@@ -1,26 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import audioManager from "@/lib/audioManager";
 
 export default function Footer() {
-  const playHover = () => {
-    audioManager.playHover();
-  };
+  const playHover = () => {};
 
-  const playClick = () => {
-    audioManager.playClick();
-  };
+  const playClick = () => {};
 
   const handleSmoothScroll = (e, targetId) => {
     const element = document.getElementById(targetId);
     if (element) {
       e.preventDefault();
-      audioManager.playClick();
-      element.scrollIntoView({ behavior: "smooth" });
+            element.scrollIntoView({ behavior: "smooth" });
     } else {
-      audioManager.playClick();
-    }
+          }
   };
 
   return (

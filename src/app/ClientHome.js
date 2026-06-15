@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Background3D from "@/components/ui/Background3D";
 import CustomCursor from "@/components/ui/CustomCursor";
-import audioManager from "@/lib/audioManager";
 import Header from "@/components/sections/Header";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
@@ -75,8 +74,7 @@ export default function ClientHome({ initialData }) {
     const handleLoad = () => {
       setLoading(false);
       // Play cinematic preloader exit swell/chime
-      audioManager.playPreloaderExit();
-      const timer = setTimeout(() => setShowPreloader(false), 900);
+            const timer = setTimeout(() => setShowPreloader(false), 900);
       return () => clearTimeout(timer);
     };
 
@@ -93,27 +91,7 @@ export default function ClientHome({ initialData }) {
   }, []);
 
   // --- Initialize Audio Context on First Interaction ---
-  useEffect(() => {
-    const handleInteraction = () => {
-      audioManager.init();
-      window.removeEventListener("click", handleInteraction);
-      window.removeEventListener("keydown", handleInteraction);
-      window.removeEventListener("touchstart", handleInteraction);
-      window.removeEventListener("wheel", handleInteraction);
-    };
-
-    window.addEventListener("click", handleInteraction, { passive: true });
-    window.addEventListener("keydown", handleInteraction, { passive: true });
-    window.addEventListener("touchstart", handleInteraction, { passive: true });
-    window.addEventListener("wheel", handleInteraction, { passive: true });
-
-    return () => {
-      window.removeEventListener("click", handleInteraction);
-      window.removeEventListener("keydown", handleInteraction);
-      window.removeEventListener("touchstart", handleInteraction);
-      window.removeEventListener("wheel", handleInteraction);
-    };
-  }, []);
+  
 
   return (
     <>

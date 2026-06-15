@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Background3D from "@/components/ui/Background3D";
 import CustomCursor from "@/components/ui/CustomCursor";
-import audioManager from "@/lib/audioManager";
 import Header from "@/components/sections/Header";
 import Footer from "@/components/sections/Footer";
 import Chatbot from "@/components/ui/Chatbot";
@@ -16,8 +15,7 @@ export default function PrivacyPage() {
 
   useEffect(() => {
     const handleInteraction = () => {
-      audioManager.init();
-      window.removeEventListener("click", handleInteraction);
+            window.removeEventListener("click", handleInteraction);
       window.removeEventListener("keydown", handleInteraction);
     };
     window.addEventListener("click", handleInteraction, { passive: true });
@@ -28,8 +26,8 @@ export default function PrivacyPage() {
     };
   }, []);
 
-  const playHover = () => audioManager.playHover();
-  const playClick = () => audioManager.playClick();
+  const playHover = () => {};
+  const playClick = () => {};
 
   const toggleAccordion = (index) => {
     playClick();

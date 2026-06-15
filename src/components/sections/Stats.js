@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useInView } from "framer-motion";
-import audioManager from "@/lib/audioManager";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import ScrollParallax from "@/components/ui/ScrollParallax";
 
@@ -44,9 +43,7 @@ function Counter({ target, duration = 1.5 }) {
 }
 
 export default function Stats({ data }) {
-  const playHover = () => {
-    audioManager.playHover();
-  };
+  const playHover = () => {};
 
   return (
     <section id="stats" className="py-20 relative overflow-hidden">

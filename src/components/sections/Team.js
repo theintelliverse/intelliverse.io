@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import audioManager from "@/lib/audioManager";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import TiltCard from "@/components/ui/TiltCard";
 import ScrollParallax from "@/components/ui/ScrollParallax";
@@ -9,13 +8,9 @@ import ScrollParallax from "@/components/ui/ScrollParallax";
 export default function Team({ data }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
-  const playHoverSound = () => {
-    audioManager.playHover();
-  };
+  const playHoverSound = () => {};
 
-  const playClickSound = () => {
-    audioManager.playClick();
-  };
+  const playClickSound = () => {};
 
   const defaultFounders = [
     {

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import audioManager from "@/lib/audioManager";
 
 export default function ScrollReveal({
   children,
@@ -189,11 +188,7 @@ export default function ScrollReveal({
     },
   };
 
-  const handleViewportEnter = () => {
-    if (playSound) {
-      audioManager.playScrollSweep();
-    }
-  };
+  const handleViewportEnter = () => {};
 
   // Build high-performance style declaration promoting properties to GPU compositing layers
   const containerStyle = {
