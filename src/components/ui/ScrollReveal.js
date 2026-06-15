@@ -29,19 +29,19 @@ export default function ScrollReveal({
     const handleResize = () => {
       const w = window.innerWidth;
       if (w < 340) {
-        // Fold phone (folded) - snappiest, lowest-overhead transition
+        // Fold phone (folded) - compact, ultra-snappy scroll animation
         setDeviceConfig({
-          distance: 8,
+          distance: 6,
           duration: 0.35,
           enable3D: false,
           enableBlur: false,
           delayMultiplier: 0.5,
-          threshold: 0.01, // trigger early
+          threshold: 0.01, // trigger early for small viewports
         });
       } else if (w < 768) {
-        // Standard phone
+        // Standard phone - mobile fluid layout, fast and smooth
         setDeviceConfig({
-          distance: 12,
+          distance: 10,
           duration: 0.4,
           enable3D: false,
           enableBlur: false,
@@ -49,9 +49,9 @@ export default function ScrollReveal({
           threshold: 0.02,
         });
       } else if (w < 1024) {
-        // Tablet / Unfolded fold phone
+        // Tablet / Unfolded fold phone - medium scale, smooth
         setDeviceConfig({
-          distance: 18,
+          distance: 15,
           duration: 0.5,
           enable3D: false,
           enableBlur: false,
@@ -59,20 +59,20 @@ export default function ScrollReveal({
           threshold: 0.03,
         });
       } else if (w < 1440) {
-        // Laptop
+        // Laptop - high quality, light 3D and blur
         setDeviceConfig({
-          distance: 25,
-          duration: 0.6,
+          distance: 20,
+          duration: 0.65,
           enable3D: true,
           enableBlur: true,
           delayMultiplier: 0.85,
           threshold: 0.04,
         });
       } else {
-        // PC / Desktop - fully rich high-framerate animations
+        // PC / Desktop / Ultrawide - maximum fidelity, deep perspective & blur
         setDeviceConfig({
-          distance: 35,
-          duration: 0.7,
+          distance: 28,
+          duration: 0.8,
           enable3D: true,
           enableBlur: true,
           delayMultiplier: 1.0,
@@ -91,63 +91,108 @@ export default function ScrollReveal({
   const activeDelay = delay * deviceConfig.delayMultiplier;
   const activeThreshold = threshold !== 0.05 ? threshold : deviceConfig.threshold;
 
-  // Multi-step custom keyframe configurations for rich visuals across all viewports (exactly 5 keys each)
+  // 8-step keyframes timeline distribution for extreme smoothness (times has 8 values)
+  const stepTimes = [0, 0.12, 0.28, 0.45, 0.62, 0.78, 0.9, 1];
+
+  // Easing function intervals (7 segments between 8 keyframes)
+  // Decelerating cubic-bezier curve to give a premium inertia-scrolling aesthetic
+  const premiumEasings = [
+    "cubic-bezier(0.16, 1, 0.3, 1)", // easeOutExpo
+    "cubic-bezier(0.16, 1, 0.3, 1)",
+    "cubic-bezier(0.16, 1, 0.3, 1)",
+    "cubic-bezier(0.16, 1, 0.3, 1)",
+    "cubic-bezier(0.16, 1, 0.3, 1)",
+    "cubic-bezier(0.16, 1, 0.3, 1)",
+    "cubic-bezier(0.16, 1, 0.3, 1)",
+  ];
+
   const variants = {
     hidden: {
       opacity: 0,
-      y: variant === "fade-up" || variant === "bounce-up"
-        ? activeDistance
-        : variant === "fade-down"
-        ? -activeDistance
-        : variant === "perspective-3d"
-        ? activeDistance * 1.2
-        : variant === "lens-focus"
-        ? 6
-        : 0,
+      y:
+        variant === "fade-up"
+          ? activeDistance
+          : variant === "bounce-up"
+          ? activeDistance * 1.5
+          : variant === "fade-down"
+          ? -activeDistance
+          : variant === "perspective-3d"
+          ? activeDistance * 1.3
+          : variant === "lens-focus"
+          ? 6
+          : 0,
       x: variant === "fade-left" ? activeDistance : variant === "fade-right" ? -activeDistance : 0,
-      scale: variant === "scale-in" ? 0.93 : variant === "lens-focus" ? 1.04 : 1,
-      rotateX: variant === "perspective-3d" && deviceConfig.enable3D ? 12 : 0,
-      filter: variant === "lens-focus" && deviceConfig.enableBlur ? "blur(12px)" : "none",
+      scale:
+        variant === "scale-in"
+          ? 0.9
+          : variant === "bounce-up"
+          ? 0.9
+          : variant === "lens-focus"
+          ? 1.06
+          : 1,
+      rotateX: variant === "perspective-3d" && deviceConfig.enable3D ? 15 : 0,
+      rotate:
+        variant === "fade-left" && deviceConfig.enable3D
+          ? 3
+          : variant === "fade-right" && deviceConfig.enable3D
+          ? -3
+          : 0,
+      filter: variant === "lens-focus" && deviceConfig.enableBlur ? "blur(16px)" : "none",
     },
     visible: {
-      opacity: [0, 0.45, 0.8, 0.95, 1],
-      y: variant === "fade-up"
-        ? [activeDistance, activeDistance * 0.4, -activeDistance * 0.08, -activeDistance * 0.02, 0]
-        : variant === "bounce-up"
-        ? [activeDistance * 1.4, activeDistance * 0.45, -activeDistance * 0.15, activeDistance * 0.04, 0]
-        : variant === "fade-down"
-        ? [-activeDistance, -activeDistance * 0.4, activeDistance * 0.08, activeDistance * 0.02, 0]
-        : variant === "perspective-3d"
-        ? [activeDistance * 1.2, activeDistance * 0.45, -activeDistance * 0.08, -activeDistance * 0.02, 0]
-        : 0,
-      x: variant === "fade-left"
-        ? [activeDistance, activeDistance * 0.4, -activeDistance * 0.08, -activeDistance * 0.02, 0]
-        : variant === "fade-right"
-        ? [-activeDistance, -activeDistance * 0.4, activeDistance * 0.08, activeDistance * 0.02, 0]
-        : 0,
-      scale: variant === "scale-in"
-        ? [0.93, 0.97, 1.015, 0.99, 1]
-        : variant === "bounce-up"
-        ? [0.93, 0.97, 1.025, 0.995, 1]
-        : variant === "lens-focus"
-        ? [1.04, 1.01, 0.993, 1.002, 1]
-        : 1,
-      rotate: variant === "fade-left" && deviceConfig.enable3D
-        ? [2, 0.8, -0.2, 0.05, 0]
-        : variant === "fade-right" && deviceConfig.enable3D
-        ? [-2, -0.8, 0.2, -0.05, 0]
-        : 0,
-      rotateX: variant === "perspective-3d" && deviceConfig.enable3D
-        ? [12, 5, -1.8, 0.4, 0]
-        : 0,
-      filter: variant === "lens-focus" && deviceConfig.enableBlur
-        ? ["blur(12px)", "blur(5px)", "blur(1.8px)", "blur(0.4px)", "blur(0px)"]
-        : "blur(0px)",
+      opacity: [0, 0.2, 0.45, 0.7, 0.88, 0.96, 0.99, 1],
+      y:
+        variant === "fade-up"
+          ? [activeDistance, activeDistance * 0.72, activeDistance * 0.44, activeDistance * 0.22, activeDistance * 0.08, activeDistance * 0.02, activeDistance * 0.005, 0]
+          : variant === "bounce-up"
+          ? [activeDistance * 1.5, activeDistance * 0.8, activeDistance * 0.25, -activeDistance * 0.08, -activeDistance * 0.12, -activeDistance * 0.04, activeDistance * 0.01, 0]
+          : variant === "fade-down"
+          ? [-activeDistance, -activeDistance * 0.72, -activeDistance * 0.44, -activeDistance * 0.22, -activeDistance * 0.08, -activeDistance * 0.02, -activeDistance * 0.005, 0]
+          : variant === "perspective-3d"
+          ? [activeDistance * 1.3, activeDistance * 0.8, activeDistance * 0.4, activeDistance * 0.18, activeDistance * 0.06, -activeDistance * 0.01, 0, 0]
+          : 0,
+      x:
+        variant === "fade-left"
+          ? [activeDistance, activeDistance * 0.72, activeDistance * 0.44, activeDistance * 0.22, activeDistance * 0.08, activeDistance * 0.02, activeDistance * 0.005, 0]
+          : variant === "fade-right"
+          ? [-activeDistance, -activeDistance * 0.72, -activeDistance * 0.44, -activeDistance * 0.22, -activeDistance * 0.08, -activeDistance * 0.02, -activeDistance * 0.005, 0]
+          : 0,
+      scale:
+        variant === "scale-in"
+          ? [0.9, 0.93, 0.96, 0.985, 1.005, 1.01, 1.002, 1]
+          : variant === "bounce-up"
+          ? [0.9, 0.94, 0.98, 1.03, 1.04, 1.01, 0.995, 1]
+          : variant === "lens-focus"
+          ? [1.06, 1.04, 1.02, 1.008, 0.995, 0.99, 0.997, 1]
+          : 1,
+      rotate:
+        variant === "fade-left" && deviceConfig.enable3D
+          ? [3, 2.2, 1.3, 0.6, 0.1, -0.2, -0.05, 0]
+          : variant === "fade-right" && deviceConfig.enable3D
+          ? [-3, -2.2, -1.3, -0.6, -0.1, 0.2, 0.05, 0]
+          : 0,
+      rotateX:
+        variant === "perspective-3d" && deviceConfig.enable3D
+          ? [15, 12, 8, 4.5, 2, -0.8, -0.2, 0]
+          : 0,
+      filter:
+        variant === "lens-focus" && deviceConfig.enableBlur
+          ? [
+              "blur(16px)",
+              "blur(12px)",
+              "blur(8px)",
+              "blur(5px)",
+              "blur(2.5px)",
+              "blur(1px)",
+              "blur(0.3px)",
+              "blur(0px)",
+            ]
+          : "none",
       transition: {
         duration: activeDuration,
         delay: activeDelay,
-        times: [0, 0.3, 0.6, 0.85, 1], // Fine-grained keyframe timeline distribution
-        ease: ["easeOut", "easeInOut", "easeInOut", "easeOut"], 
+        times: stepTimes,
+        ease: premiumEasings,
         when: "beforeChildren",
         staggerChildren: staggerChildren,
       },
@@ -158,6 +203,14 @@ export default function ScrollReveal({
     if (playSound) {
       audioManager.playScrollSweep();
     }
+  };
+
+  // Build high-performance style declaration promoting properties to GPU compositing layers
+  const containerStyle = {
+    willChange: `transform, opacity${deviceConfig.enableBlur && variant === "lens-focus" ? ", filter" : ""}`,
+    backfaceVisibility: "hidden",
+    WebkitBackfaceVisibility: "hidden",
+    transformStyle: "preserve-3d",
   };
 
   if (variant === "stagger-container") {
@@ -180,7 +233,7 @@ export default function ScrollReveal({
         variants={containerVariants}
         onViewportEnter={handleViewportEnter}
         className={className}
-        style={{ willChange: "transform, opacity" }}
+        style={containerStyle}
       >
         {children}
       </motion.div>
@@ -195,7 +248,7 @@ export default function ScrollReveal({
       variants={variants}
       onViewportEnter={handleViewportEnter}
       className={className}
-      style={{ willChange: "transform, opacity" }}
+      style={containerStyle}
     >
       {children}
     </motion.div>

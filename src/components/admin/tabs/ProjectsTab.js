@@ -151,9 +151,9 @@ export default function ProjectsTab({
 
         {/* RIGHT DETAIL PANEL */}
         <div className={`lg:col-span-8 space-y-6 transition-all duration-300 ${isEditingMobileProjects ? "block animate-fade-in" : "hidden lg:block"}`}>
-          {selectedProjectIndex !== null && projects[selectedProjectIndex] ? (
+          {selectedProjectIndex !== null && (projects[selectedProjectIndex] || projects[projects.length - 1]) ? (
             (() => {
-              const index = selectedProjectIndex;
+              const index = projects[selectedProjectIndex] ? selectedProjectIndex : projects.length - 1;
               const proj = projects[index];
 
               return (
