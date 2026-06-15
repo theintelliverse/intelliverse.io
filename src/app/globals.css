@@ -876,14 +876,16 @@ textarea:focus-visible {
   animation: animate-fade-in 0.35s ease forwards;
 }
 
-/* Animate fade out utility */
+/* Animate fade out utility (mobile/tablet only) */
 @keyframes animate-fade-out {
   from { opacity: 1; transform: translateY(0); }
   to { opacity: 0; transform: translateY(6px); }
 }
 
-.animate-fade-out {
-  animation: animate-fade-out 0.35s ease forwards;
+@media (max-width: 1023px) {
+  .animate-fade-out {
+    animation: animate-fade-out 0.35s ease forwards;
+  }
 }
 
 /* === Chatbot Mobile & Tablet Responsive === */
@@ -1121,6 +1123,13 @@ textarea:focus-visible {
   .custom-cursor-active [role="button"],
   .custom-cursor-active .cursor-pointer {
     cursor: none !important;
+  }
+}
+
+/* Specificity overrides for Tailwind responsive utility classes defined in CSS */
+@media (min-width: 1024px) {
+  .lg\:animate-none {
+    animation: none !important;
   }
 }
 
