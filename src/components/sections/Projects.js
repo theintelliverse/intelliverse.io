@@ -65,10 +65,26 @@ function FeaturedCard({ project, idx, theme, badge, onPreview, onHowItWorks, pla
       <div className="flex flex-col lg:flex-row gap-0">
         {/* Left — Visual hero panel */}
         <div className={`lg:w-5/12 min-h-[220px] lg:min-h-0 relative flex flex-col items-center justify-center p-10 border-b lg:border-b-0 lg:border-r border-white/5 bg-gradient-to-br ${theme.glow} to-transparent`}>
-          {/* Big icon */}
+          {/* Big icon / Logo */}
           <div className="relative mb-6">
-            <div className={`w-20 h-20 rounded-2xl border border-white/10 bg-[#05020c]/80 flex items-center justify-center shadow-2xl`}>
-              <i className={`fas fa-hospital-user text-3xl ${theme.text}`} aria-hidden="true" />
+            <div className={`w-20 h-20 rounded-2xl border border-white/10 bg-[#05020c]/80 flex items-center justify-center shadow-2xl overflow-hidden p-2`}>
+              {project.logo ? (
+                <img
+                  src={project.logo}
+                  alt={project.name || "Project Logo"}
+                  className="w-full h-full object-contain rounded-xl"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                    const iconEl = e.currentTarget.parentElement.querySelector(".fallback-project-icon");
+                    if (iconEl) iconEl.style.display = "block";
+                  }}
+                />
+              ) : null}
+              <i
+                className={`fallback-project-icon fas ${project.icon || "fa-hospital-user"} text-3xl ${theme.text}`}
+                style={{ display: project.logo ? "none" : "block" }}
+                aria-hidden="true"
+              />
             </div>
             {/* Animated ping */}
             <span className={`absolute -top-1 -right-1 w-4 h-4 rounded-full bg-green-500 border-2 border-[#121212] flex items-center justify-center`}>

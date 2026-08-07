@@ -300,7 +300,7 @@ export default function AdminPanel({
 
   // --- Handlers for Projects ---
   const handleAddProject = () => {
-    const newProj = { name: "", description: "", link: "", review: "", rating: 5, type: "", featureLink: "", featureText: "", features: [], techTags: [], tagline: "", isFeatured: false };
+    const newProj = { name: "", description: "", link: "", review: "", rating: 5, type: "", featureLink: "", featureText: "", features: [], techTags: [], tagline: "", isFeatured: false, logo: "", icon: "fa-hospital-user" };
     setProjects([...projects, newProj]);
     setSelectedProjectIndex(projects.length);
     setIsEditingMobileProjects(true);

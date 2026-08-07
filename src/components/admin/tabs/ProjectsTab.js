@@ -234,6 +234,50 @@ export default function ProjectsTab({
                       </div>
                     </div>
 
+                    {/* Logo Image URL & Fallback Icon */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-white/5 pt-4">
+                      <div className="sm:col-span-2">
+                        <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono flex items-center justify-between">
+                          <span>Project Logo Image Link (URL)</span>
+                          <span className="text-[9px] text-blue-400 font-normal">Primary Logo Image</span>
+                        </label>
+                        <input
+                          type="url"
+                          value={proj.logo || ""}
+                          onChange={(e) => handleProjectChange(index, "logo", e.target.value)}
+                          className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-xl text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-sans"
+                          placeholder="https://example.com/logo.png or image URL"
+                        />
+                        <p className="text-[9px] text-gray-500 mt-1">Logo URL from link. If empty, the fallback icon below will be shown.</p>
+                      </div>
+                      <div>
+                        <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono">
+                          Fallback Icon Class
+                        </label>
+                        <div className="flex items-center gap-2 mt-1.5">
+                          <div className="w-9 h-9 rounded-lg border border-white/10 bg-gray-950 flex items-center justify-center text-blue-400 text-base shrink-0 overflow-hidden p-1">
+                            {proj.logo ? (
+                              <img
+                                src={proj.logo}
+                                alt="Logo Preview"
+                                className="w-full h-full object-contain"
+                                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                              />
+                            ) : null}
+                            <i className={`fas ${proj.icon || "fa-hospital-user"} text-base`} style={{ display: proj.logo ? 'none' : 'block' }} />
+                          </div>
+                          <input
+                            type="text"
+                            value={proj.icon || ""}
+                            onChange={(e) => handleProjectChange(index, "icon", e.target.value)}
+                            className="w-full p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-xl text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-mono"
+                            placeholder="fa-hospital-user"
+                          />
+                        </div>
+                        <p className="text-[9px] text-gray-500 mt-1">Icon if no logo is set (e.g. fa-hospital-user)</p>
+                      </div>
+                    </div>
+
                     <div>
                       <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono">Project Description</label>
                       <textarea

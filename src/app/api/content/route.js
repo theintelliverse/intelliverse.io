@@ -209,7 +209,9 @@ export async function GET() {
           features: p.features || [],
           techTags: p.techTags || [],
           tagline: p.tagline || "",
-          isFeatured: p.isFeatured || false
+          isFeatured: p.isFeatured || false,
+          logo: p.logo || p.logoUrl || "",
+          icon: p.icon || ""
         })),
         chatbotKnowledge: chatbotKnowledge.length > 0
           ? chatbotKnowledge.map(k => ({ keywords: k.keywords, response: k.response }))

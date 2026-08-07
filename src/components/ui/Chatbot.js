@@ -909,7 +909,11 @@ export default function Chatbot() {
                             <div key={pIdx} className="project-chat-card glassmorphic-card rounded-xl p-2.5 shadow-lg flex flex-col gap-1 hover:border-gray-700 transition">
                               <div className="flex justify-between items-center">
                                 <h4 className="text-[11px] font-bold text-white flex items-center gap-1.5">
-                                  <i className="fas fa-folder-open text-blue-400 text-[9px]"></i>
+                                   {p.logo ? (
+                                     <img src={p.logo} alt={p.name} className="w-3.5 h-3.5 object-contain rounded shrink-0" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                                   ) : (
+                                     <i className={`fas ${p.icon || "fa-folder-open"} text-blue-400 text-[9px]`}></i>
+                                   )}
                                   {p.name}
                                 </h4>
                                 {p.rating && <span className="text-[9px] text-amber-400 font-bold flex items-center gap-0.5"><i className="fas fa-star text-[7px]"></i> {p.rating}</span>}
