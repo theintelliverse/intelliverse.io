@@ -2,6 +2,37 @@
 
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
+
+// Custom Chromatic Aberration Shader for Cinematic Motion Distortion
+const ChromaticAberrationShader = {
+  uniforms: {
+    tDiffuse: { value: null },
+    amount: { value: 0.002 }
+  },
+  vertexShader: `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  fragmentShader: `
+    uniform sampler2D tDiffuse;
+    uniform float amount;
+    varying vec2 vUv;
+    void main() {
+      vec2 offset = vec2(amount, 0.0);
+      vec4 cr = texture2D(tDiffuse, vUv + offset);
+      vec4 cga = texture2D(tDiffuse, vUv);
+      vec4 cb = texture2D(tDiffuse, vUv - offset);
+      gl_FragColor = vec4(cr.r, cga.g, cb.b, cga.a);
+    }
+  `
+};
 
 export default function Background3D() {
   const containerRef = useRef(null);
@@ -11,7 +42,7 @@ export default function Background3D() {
 
     let isMounted = true;
     let isMobile = false;
-    let scene, camera, renderer;
+    let scene, camera, renderer, composer, bloomPass, chromPass;
     let clock = new THREE.Clock();
     let animationFrameId;
     let cleanupFn = null; // Closure variable to capture the unmount cleanup handler
@@ -115,6 +146,26 @@ export default function Background3D() {
       renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Soft shadows
       if (containerRef.current) {
         containerRef.current.appendChild(renderer.domElement);
+      }
+
+      // ─── 3.5 POST-PROCESSING (UnrealBloom + Chromatic Aberration) ───────────
+      try {
+        composer = new EffectComposer(renderer);
+        const renderPass = new RenderPass(scene, camera);
+        composer.addPass(renderPass);
+
+        bloomPass = new UnrealBloomPass(
+          new THREE.Vector2(width, height),
+          0.75, // bloom strength for circuit trace glow
+          0.35, // bloom radius
+          0.18  // bloom threshold
+        );
+        composer.addPass(bloomPass);
+
+        chromPass = new ShaderPass(ChromaticAberrationShader);
+        composer.addPass(chromPass);
+      } catch (err) {
+        console.warn("Post-processing fallback to standard WebGL renderer", err);
       }
 
       // ─── 4. LIGHTING ─────────────────────────────────────────────────────
@@ -1133,7 +1184,16 @@ export default function Background3D() {
         }
         coordGeo.attributes.position.needsUpdate = true;
 
-        renderer.render(scene, camera);
+        // Modulate chromatic aberration based on scroll velocity
+        if (chromPass) {
+          chromPass.uniforms.amount.value = 0.0015 + Math.min(0.012, Math.abs(scrollVelocity) * 0.01);
+        }
+
+        if (composer) {
+          composer.render();
+        } else {
+          renderer.render(scene, camera);
+        }
       };
 
       animate();
@@ -1155,6 +1215,10 @@ export default function Background3D() {
 
         renderer.setSize(w, h);
         renderer.setPixelRatio(isMobile ? 1.0 : Math.min(window.devicePixelRatio, 1.5));
+        if (composer) {
+          composer.setSize(w, h);
+          if (bloomPass) bloomPass.resolution.set(w, h);
+        }
       };
 
       window.addEventListener("resize", handleResize);

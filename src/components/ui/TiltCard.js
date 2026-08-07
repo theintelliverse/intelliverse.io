@@ -1,42 +1,49 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 
-export default function TiltCard({ children, className = "", onMouseEnter, onClick }) {
+/**
+ * Awwwards-grade 3D Tilt Card Wrapper
+ * Calculates cursor vectors and applies 3D perspective rotation using Framer Motion springs.
+ */
+export default function TiltCard({ children, className = "", maxTilt = 10, onMouseEnter, onClick }) {
   const cardRef = useRef(null);
-  const [rotateX, setRotateX] = useState(0);
-  const [rotateY, setRotateY] = useState(0);
+
+  // Motion values for normalized cursor positions (-0.5 to 0.5)
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // Map mouse delta to 3D rotation angles
+  const targetRotateX = useTransform(mouseY, [-0.5, 0.5], [maxTilt, -maxTilt]);
+  const targetRotateY = useTransform(mouseX, [-0.5, 0.5], [-maxTilt, maxTilt]);
+
+  // Spring physics engine for smooth inertia and tilt release
+  const rotateX = useSpring(targetRotateX, { stiffness: 280, damping: 22 });
+  const rotateY = useSpring(targetRotateY, { stiffness: 280, damping: 22 });
 
   const handleMouseMove = (e) => {
-    const card = cardRef.current;
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
-    
-    // Mouse coords relative to card bounds
+
+    // Relative mouse coordinates inside card
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    
-    // Update CSS variables for Vercel-like hover radial glow
-    card.style.setProperty("--mouse-x", `${x}px`);
-    card.style.setProperty("--mouse-y", `${y}px`);
 
-    // Calculate rotation angles (max 8 degrees tilt)
-    const mouseX = x - width / 2;
-    const mouseY = y - height / 2;
-    
-    const rY = (mouseX / (width / 2)) * 8;
-    const rX = -(mouseY / (height / 2)) * 8;
-    
-    setRotateX(rX);
-    setRotateY(rY);
+    // Update CSS variables for radial mouse spotlight glow
+    cardRef.current.style.setProperty("--mouse-x", `${x}px`);
+    cardRef.current.style.setProperty("--mouse-y", `${y}px`);
+
+    // Set normalized motion values
+    mouseX.set(x / width - 0.5);
+    mouseY.set(y / height - 0.5);
   };
 
   const handleMouseLeave = () => {
-    setRotateX(0);
-    setRotateY(0);
+    mouseX.set(0);
+    mouseY.set(0);
   };
 
   return (
@@ -46,13 +53,16 @@ export default function TiltCard({ children, className = "", onMouseEnter, onCli
       onMouseLeave={handleMouseLeave}
       onMouseEnter={onMouseEnter}
       onClick={onClick}
-      animate={{ rotateX, rotateY }}
-      transition={{ type: "spring", stiffness: 350, damping: 25 }}
-      style={{ transformStyle: "preserve-3d", perspective: 1000 }}
-      className={`interactive-glow-card ${className}`}
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+        perspective: 1000
+      }}
+      className={`interactive-glow-card relative rounded-2xl ${className}`}
     >
-      {/* 3D Depth Layer wrapper for contents to pop out of surface */}
-      <div className="w-full h-full flex flex-col justify-between" style={{ transform: "translateZ(18px)", transformStyle: "preserve-3d" }}>
+      {/* 3D Depth Layer wrapper allowing elements to pop 24px off the card plane */}
+      <div style={{ transform: "translateZ(24px)", transformStyle: "preserve-3d" }} className="w-full h-full">
         {children}
       </div>
     </motion.div>

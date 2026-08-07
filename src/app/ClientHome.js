@@ -14,7 +14,9 @@ import Stats from "@/components/sections/Stats";
 import Testimonials from "@/components/sections/Testimonials";
 import Contact from "@/components/sections/Contact";
 import Chatbot from "@/components/ui/Chatbot";
-import ScrollToTop from "@/components/ui/ScrollToTop";
+import ScrollProgress from "@/components/ui/ScrollProgress";
+import Preloader from "@/components/ui/Preloader";
+import VelocityMarquee from "@/components/ui/VelocityMarquee";
 import Footer from "@/components/sections/Footer";
 
 export default function ClientHome({ initialData }) {
@@ -96,24 +98,8 @@ export default function ClientHome({ initialData }) {
 
   return (
     <>
-      {/* Preloader */}
-      {showPreloader && (
-        <div id="preloader" className={loading ? "" : "hidden"}>
-          <div className="preloader-content">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/the%20intelliverse%20logo.jpg"
-              alt="The Intelliverse Logo Loading"
-              className="preloader-logo"
-            />
-            <div className="loading-dots">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Cinematic 0%-100% Preloader */}
+      <Preloader />
 
       {/* Persistent 3D WebGL Background (Particles + Wave Shaders) */}
       <Background3D />
@@ -131,28 +117,8 @@ export default function ClientHome({ initialData }) {
         {/* About Info Section */}
         <About data={contentData.about} />
 
-        {/* Seamless Running Marquee Banner */}
-        <div className="py-6 border-y border-white/5 bg-[#080415]/30 overflow-hidden whitespace-nowrap flex select-none pointer-events-none relative z-10">
-          <div className="flex gap-12 text-[10px] sm:text-xs font-mono font-extrabold uppercase tracking-widest text-indigo-400/20 animate-marquee">
-            <span>{"// "}Innovation</span>
-            <span>{"// "}Create</span>
-            <span>{"// "}Grow</span>
-            <span>{"// "}Software Engineering</span>
-            <span>{"// "}Web Applications</span>
-            <span>{"// "}IT Infrastructure</span>
-            <span>{"// "}DevOps Pipelines</span>
-            <span>{"// "}Cloud Architectures</span>
-            {/* Repeat for seamless loop */}
-            <span>{"// "}Innovation</span>
-            <span>{"// "}Create</span>
-            <span>{"// "}Grow</span>
-            <span>{"// "}Software Engineering</span>
-            <span>{"// "}Web Applications</span>
-            <span>{"// "}IT Infrastructure</span>
-            <span>{"// "}DevOps Pipelines</span>
-            <span>{"// "}Cloud Architectures</span>
-          </div>
-        </div>
+        {/* Velocity-Skewed Running Marquee Banner */}
+        <VelocityMarquee />
 
         {/* Services Showcase Section */}
         <Services />
@@ -192,8 +158,8 @@ export default function ClientHome({ initialData }) {
       {/* Floating AI Assistant Chatbot */}
       <Chatbot />
 
-      {/* Scroll to top action bubble */}
-      <ScrollToTop />
+      {/* SVG Circular Scroll Progress & Magnetic Back-to-Top Button */}
+      <ScrollProgress />
 
       {/* Custom Trailing Glow Cursor on Desktop */}
       <CustomCursor />

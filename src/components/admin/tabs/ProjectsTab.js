@@ -257,6 +257,7 @@ export default function ProjectsTab({
                         <div className="flex items-center gap-2 mt-1.5">
                           <div className="w-9 h-9 rounded-lg border border-white/10 bg-gray-950 flex items-center justify-center text-blue-400 text-base shrink-0 overflow-hidden p-1">
                             {proj.logo ? (
+                              /* eslint-disable-next-line @next/next/no-img-element */
                               <img
                                 src={proj.logo}
                                 alt="Logo Preview"

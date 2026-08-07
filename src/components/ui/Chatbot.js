@@ -910,6 +910,7 @@ export default function Chatbot() {
                               <div className="flex justify-between items-center">
                                 <h4 className="text-[11px] font-bold text-white flex items-center gap-1.5">
                                    {p.logo ? (
+                                     /* eslint-disable-next-line @next/next/no-img-element */
                                      <img src={p.logo} alt={p.name} className="w-3.5 h-3.5 object-contain rounded shrink-0" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
                                    ) : (
                                      <i className={`fas ${p.icon || "fa-folder-open"} text-blue-400 text-[9px]`}></i>

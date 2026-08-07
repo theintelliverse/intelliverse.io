@@ -4,6 +4,9 @@ import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { motion, AnimatePresence } from "framer-motion";
 import ScrollReveal from "@/components/ui/ScrollReveal";
+import Magnetic from "@/components/ui/Magnetic";
+import TiltCard from "@/components/ui/TiltCard";
+import SplitTextReveal from "@/components/ui/SplitTextReveal";
 
 // ─── Card colour themes keyed by project.type ────────────────────────────────
 const typeThemes = {
@@ -69,6 +72,7 @@ function FeaturedCard({ project, idx, theme, badge, onPreview, onHowItWorks, pla
           <div className="relative mb-6">
             <div className={`w-20 h-20 rounded-2xl border border-white/10 bg-[#05020c]/80 flex items-center justify-center shadow-2xl overflow-hidden p-2`}>
               {project.logo ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={project.logo}
                   alt={project.name || "Project Logo"}
@@ -142,29 +146,33 @@ function FeaturedCard({ project, idx, theme, badge, onPreview, onHowItWorks, pla
           {/* CTA row */}
           <div className="flex flex-wrap items-center gap-3 pt-6 border-t border-white/10">
             {project.link && (
-              <button
-                onClick={(e) => onPreview(e, project)}
-                onMouseEnter={playHover}
-                className={`group/btn flex items-center gap-2 px-5 py-2.5 rounded-xl font-mono text-[11px] uppercase tracking-widest bg-blue-600 hover:bg-blue-500 text-white transition-all duration-300 shadow-lg shadow-blue-900/30`}
-              >
-                <i className="fas fa-eye text-[10px]" />
-                View Preview
-                <i className="fas fa-chevron-right text-[8px] group-hover/btn:translate-x-0.5 transition-transform" />
-              </button>
+              <Magnetic strength={0.3}>
+                <button
+                  onClick={(e) => onPreview(e, project)}
+                  onMouseEnter={playHover}
+                  className={`group/btn flex items-center gap-2 px-5 py-2.5 rounded-xl font-mono text-[11px] uppercase tracking-widest bg-blue-600 hover:bg-blue-500 text-white transition-all duration-300 shadow-lg shadow-blue-900/30`}
+                >
+                  <i className="fas fa-eye text-[10px]" />
+                  View Preview
+                  <i className="fas fa-chevron-right text-[8px] group-hover/btn:translate-x-0.5 transition-transform" />
+                </button>
+              </Magnetic>
             )}
 
             {project.featureLink && (
-              <a
-                href={project.featureLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                onMouseEnter={playHover}
-                onClick={(e) => { e.stopPropagation(); playClick(); }}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-mono text-[11px] uppercase tracking-widest border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] text-gray-300 hover:text-white transition-all duration-300`}
-              >
-                <i className="fas fa-play text-[9px]" />
-                {project.featureText || "How It Works"}
-              </a>
+              <Magnetic strength={0.3}>
+                <a
+                  href={project.featureLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onMouseEnter={playHover}
+                  onClick={(e) => { e.stopPropagation(); playClick(); }}
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-mono text-[11px] uppercase tracking-widest border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] text-gray-300 hover:text-white transition-all duration-300`}
+                >
+                  <i className="fas fa-play text-[9px]" />
+                  {project.featureText || "How It Works"}
+                </a>
+              </Magnetic>
             )}
 
             <span className={`ml-auto text-[9px] font-mono uppercase tracking-widest ${theme.text} opacity-60`}>
@@ -186,12 +194,6 @@ function FeaturedCard({ project, idx, theme, badge, onPreview, onHowItWorks, pla
 
 // ─── Standard project card ────────────────────────────────────────────────────
 function StandardCard({ project, idx, theme, badge, onPreview, playHover, playClick }) {
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    e.currentTarget.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
-    e.currentTarget.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
-  };
-
   return (
     <motion.div
       layout
@@ -200,71 +202,77 @@ function StandardCard({ project, idx, theme, badge, onPreview, playHover, playCl
       exit={{ opacity: 0, scale: 0.92 }}
       transition={{ duration: 0.4 }}
       key={project.name}
-      onMouseEnter={playHover}
-      onMouseMove={handleMouseMove}
-      onClick={(e) => project.link && onPreview(e, project)}
-      className={`group relative p-6 rounded-2xl glassmorphic-card hover:bg-white/[0.04] flex flex-col justify-between cursor-pointer transition-all duration-500 interactive-glow-card ${theme.border}`}
     >
-      <div className={`absolute inset-0 bg-gradient-to-b ${theme.glow} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 rounded-2xl`} />
+      <TiltCard
+        onMouseEnter={playHover}
+        onClick={(e) => project.link && onPreview(e, project)}
+        className={`group p-6 glassmorphic-card hover:bg-white/[0.04] flex flex-col justify-between cursor-pointer transition-all duration-500 ${theme.border}`}
+      >
+        <div className={`absolute inset-0 bg-gradient-to-b ${theme.glow} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 rounded-2xl`} />
 
-      {/* Index watermark */}
-      <div className="absolute top-4 right-5 text-2xl font-mono font-black text-white/[0.02] select-none group-hover:text-indigo-400/[0.08] transition-colors duration-500">
-        {String(idx + 1).padStart(2, "0")}
-      </div>
+        {/* Index watermark */}
+        <div className="absolute top-4 right-5 text-2xl font-mono font-black text-white/[0.02] select-none group-hover:text-indigo-400/[0.08] transition-colors duration-500">
+          {String(idx + 1).padStart(2, "0")}
+        </div>
 
-      <div>
-        <span className={`inline-block text-[10px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-md border border-white/10 bg-black/40 mb-4 ${theme.text}`}>
-          {badge}
-        </span>
+        <div>
+          <span className={`inline-block text-[10px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-md border border-white/10 bg-black/40 mb-4 ${theme.text}`}>
+            {badge}
+          </span>
 
-        <h4 className="text-white font-bold text-lg md:text-xl tracking-tight mb-2 group-hover:text-indigo-400 transition-colors duration-300 font-mono uppercase">
-          {project.name}
-        </h4>
+          <h4 className="text-white font-bold text-lg md:text-xl tracking-tight mb-2 group-hover:text-indigo-400 transition-colors duration-300 font-mono uppercase">
+            {project.name}
+          </h4>
 
-        <p className="text-gray-200 text-xs md:text-sm leading-relaxed mb-6 font-normal">
-          {project.description}
-        </p>
-      </div>
+          <p className="text-gray-200 text-xs md:text-sm leading-relaxed mb-6 font-normal">
+            {project.description}
+          </p>
+        </div>
 
-      <div className="mt-4 pt-4 border-t border-white/10 flex flex-col gap-3">
-        <div className="flex justify-between items-center w-full">
-          {project.rating > 0 ? (
-            <div className={`flex space-x-0.5 text-[10px] ${theme.text}`}>
-              {Array.from({ length: Math.min(5, Math.max(1, project.rating)) }).map((_, i) => (
-                <i key={i} className="fas fa-circle" />
-              ))}
+        <div className="mt-4 pt-4 border-t border-white/10 flex flex-col gap-3">
+          <div className="flex justify-between items-center w-full">
+            {project.rating > 0 ? (
+              <div className={`flex space-x-0.5 text-[10px] ${theme.text}`}>
+                {Array.from({ length: Math.min(5, Math.max(1, project.rating)) }).map((_, i) => (
+                  <i key={i} className="fas fa-circle" />
+                ))}
+              </div>
+            ) : <div />}
+
+            {project.link && (
+              <Magnetic strength={0.2}>
+                <span className={`inline-flex items-center text-[10px] font-mono uppercase tracking-widest ${theme.text} group-hover:text-white transition-colors duration-300`}>
+                  View Preview <i className="fas fa-chevron-right ml-1.5 text-[8px]" />
+                </span>
+              </Magnetic>
+            )}
+          </div>
+
+          {project.featureLink && (
+            <div className="flex justify-end w-full">
+              <Magnetic strength={0.2}>
+                <a
+                  href={project.featureLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onMouseEnter={playHover}
+                  onClick={(e) => { e.stopPropagation(); playClick(); }}
+                  className="text-[9px] font-mono uppercase tracking-widest text-cyan-400 hover:text-white transition-colors flex items-center gap-1"
+                >
+                  <i className="fas fa-play text-[7px]" />
+                  {project.featureText || "How It Works"}
+                </a>
+              </Magnetic>
             </div>
-          ) : <div />}
-
-          {project.link && (
-            <span className={`inline-flex items-center text-[10px] font-mono uppercase tracking-widest ${theme.text} group-hover:text-white transition-colors duration-300`}>
-              View Preview <i className="fas fa-chevron-right ml-1.5 text-[8px]" />
-            </span>
           )}
         </div>
 
-        {project.featureLink && (
-          <div className="flex justify-end w-full">
-            <a
-              href={project.featureLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              onMouseEnter={playHover}
-              onClick={(e) => { e.stopPropagation(); playClick(); }}
-              className="text-[9px] font-mono uppercase tracking-widest text-cyan-400 hover:text-white transition-colors flex items-center gap-1"
-            >
-              <i className="fas fa-play text-[7px]" />
-              {project.featureText || "How It Works"}
-            </a>
+        {project.review && (
+          <div className="border-t border-white/10 pt-3 mt-3 italic text-gray-500 text-[10px] leading-relaxed font-light font-mono">
+            &quot;{project.review}&quot;
           </div>
         )}
-      </div>
-
-      {project.review && (
-        <div className="border-t border-white/10 pt-3 mt-3 italic text-gray-500 text-[10px] leading-relaxed font-light font-mono">
-          &quot;{project.review}&quot;
-        </div>
-      )}
+      </TiltCard>
     </motion.div>
   );
 }
@@ -339,12 +347,12 @@ export default function Projects({ data }) {
         <ScrollReveal variant="lens-focus" playSound={true}>
           <div className="text-center mb-4">
             <div className="glassmorphic-text-bg">
-              <h2
-                style={{ textShadow: "0 2px 10px rgba(0,0,0,0.85)" }}
-                className="text-2xl sm:text-3xl md:text-5xl font-black mb-2 tracking-tighter uppercase text-white"
+              <SplitTextReveal
+                as="h2"
+                className="text-2xl sm:text-3xl md:text-5xl font-black mb-2 tracking-tighter uppercase text-white drop-shadow-md"
               >
                 Our Worked Projects
-              </h2>
+              </SplitTextReveal>
               <p className="text-gray-400 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
                 Real-world digital products built with precision — from SaaS platforms to healthcare solutions.
               </p>
