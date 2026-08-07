@@ -13,6 +13,8 @@ import Projects from "@/components/sections/Projects";
 import Stats from "@/components/sections/Stats";
 import Testimonials from "@/components/sections/Testimonials";
 import Contact from "@/components/sections/Contact";
+import MobileAppShowcase from "@/components/sections/MobileAppShowcase";
+import GEOSection from "@/components/seo/GEOSection";
 import Chatbot from "@/components/ui/Chatbot";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import Preloader from "@/components/ui/Preloader";
@@ -146,6 +148,12 @@ export default function ClientHome({ initialData }) {
         {testimonials.length > 0 && (
           <Testimonials data={testimonials} />
         )}
+
+        {/* App Store Optimization (ASO) Mobile App Showcase */}
+        <MobileAppShowcase />
+
+        {/* Generative Engine Optimization (GEO) Knowledge Base */}
+        <GEOSection />
 
         {/* Contact Submission & Address Section */}
         <Contact />
