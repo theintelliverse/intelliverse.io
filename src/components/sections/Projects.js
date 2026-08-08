@@ -71,10 +71,10 @@ function FeaturedCard({ project, idx, theme, badge, onPreview, onHowItWorks, pla
           {/* Big icon / Logo */}
           <div className="relative mb-6">
             <div className={`w-20 h-20 rounded-2xl border border-white/10 bg-[#05020c]/80 flex items-center justify-center shadow-2xl overflow-hidden p-2`}>
-              {project.logo ? (
+              {(project.logo || project.logoUrl || project.image) ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
-                  src={project.logo}
+                  src={project.logo || project.logoUrl || project.image}
                   alt={project.name || "Project Logo"}
                   className="w-full h-full object-contain rounded-xl"
                   onError={(e) => {
@@ -86,7 +86,7 @@ function FeaturedCard({ project, idx, theme, badge, onPreview, onHowItWorks, pla
               ) : null}
               <i
                 className={`fallback-project-icon fas ${project.icon || "fa-hospital-user"} text-3xl ${theme.text}`}
-                style={{ display: project.logo ? "none" : "block" }}
+                style={{ display: (project.logo || project.logoUrl || project.image) ? "none" : "block" }}
                 aria-hidden="true"
               />
             </div>
@@ -216,9 +216,31 @@ function StandardCard({ project, idx, theme, badge, onPreview, playHover, playCl
         </div>
 
         <div>
-          <span className={`inline-block text-[10px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-md border border-white/10 bg-black/40 mb-4 ${theme.text}`}>
-            {badge}
-          </span>
+          <div className="flex items-center justify-between mb-4">
+            <span className={`inline-block text-[10px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-md border border-white/10 bg-black/40 ${theme.text}`}>
+              {badge}
+            </span>
+            <div className="w-10 h-10 rounded-xl border border-white/10 bg-[#05020c]/80 flex items-center justify-center overflow-hidden p-1.5 shrink-0">
+              {(project.logo || project.logoUrl || project.image) ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={project.logo || project.logoUrl || project.image}
+                  alt={project.name || "Project Logo"}
+                  className="w-full h-full object-contain rounded-lg"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                    const iconEl = e.currentTarget.parentElement.querySelector(".fallback-project-icon");
+                    if (iconEl) iconEl.style.display = "block";
+                  }}
+                />
+              ) : null}
+              <i
+                className={`fallback-project-icon fas ${project.icon || "fa-laptop-code"} text-base ${theme.text}`}
+                style={{ display: (project.logo || project.logoUrl || project.image) ? "none" : "block" }}
+                aria-hidden="true"
+              />
+            </div>
+          </div>
 
           <h4 className="text-white font-bold text-lg md:text-xl tracking-tight mb-2 group-hover:text-indigo-400 transition-colors duration-300 font-mono uppercase">
             {project.name}

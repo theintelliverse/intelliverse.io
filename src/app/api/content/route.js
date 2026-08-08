@@ -210,7 +210,7 @@ export async function GET() {
           techTags: p.techTags || [],
           tagline: p.tagline || "",
           isFeatured: p.isFeatured || false,
-          logo: p.logo || p.logoUrl || "",
+          logo: p.logo || p.logoUrl || p.image || "",
           icon: p.icon || ""
         })),
         chatbotKnowledge: chatbotKnowledge.length > 0

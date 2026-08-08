@@ -91,7 +91,9 @@ export default async function AdminPage() {
           features: p.features || [],
           techTags: p.techTags || [],
           tagline: p.tagline || "",
-          isFeatured: p.isFeatured || false
+          isFeatured: p.isFeatured || false,
+          logo: p.logo || p.logoUrl || p.image || "",
+          icon: p.icon || ""
         }));
       }
 
