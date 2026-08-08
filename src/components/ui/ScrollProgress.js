@@ -32,7 +32,7 @@ export default function ScrollProgress() {
   return (
     <motion.div
       style={{ scale, opacity }}
-      className="fixed bottom-6 right-6 z-[9990] pointer-events-auto"
+      className="fixed bottom-[14px] sm:bottom-[20px] right-[68px] sm:right-[90px] z-[990] pointer-events-auto"
     >
       <Magnetic strength={0.4}>
         <button
