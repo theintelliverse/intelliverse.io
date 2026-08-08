@@ -18,14 +18,30 @@ export const viewport = {
 
 export const metadata = {
   metadataBase: new URL("https://intelliverse.io"),
-  title: "The Intelliverse - Your Innovation Partner in Software & Web Development",
-  description: "The Intelliverse is your innovation partner, offering expert software development, web development, and comprehensive IT services to empower your business in the digital age.",
-  keywords: "The Intelliverse, software development, web development, IT services, custom software, mobile applications, tech solutions, innovation partner, Ahmedabad, Gujarat, software agency, web design, app development, professional software agency, best tech services",
+  title: {
+    default: "The Intelliverse | Engineering the Digital Future",
+    template: "%s | The Intelliverse",
+  },
+  description:
+    "The Intelliverse is an elite digital engineering agency specializing in high-performance Next.js 16 web applications, 3D WebGL experiences, native mobile apps, and custom multi-tenant enterprise software.",
+  keywords: [
+    "The Intelliverse",
+    "software development",
+    "web development agency",
+    "Next.js 16",
+    "React 19",
+    "3D WebGL",
+    "mobile app development",
+    "custom SaaS",
+    "enterprise software",
+    "Ahmedabad tech agency",
+  ],
   authors: [{ name: "The Intelliverse", url: "https://intelliverse.io" }],
-  creator: "The Intelliverse Team",
+  creator: "The Intelliverse",
   publisher: "The Intelliverse",
   applicationName: "The Intelliverse",
   referrer: "origin-when-cross-origin",
+  manifest: "/manifest.json",
   formatDetection: {
     telephone: false,
     date: false,
@@ -34,16 +50,8 @@ export const metadata = {
     url: false,
   },
   alternates: {
-    canonical: "/",
-    languages: {
-      "en-US": "/en-US",
-      "en-IN": "/en-IN",
-    },
-    types: {
-      "application/rss+xml": "https://intelliverse.io/feed.xml",
-    },
+    canonical: "https://intelliverse.io",
   },
-  manifest: "/manifest.json",
   robots: {
     index: true,
     follow: true,
@@ -57,96 +65,46 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
-  icons: {
-    icon: [
-      { url: "/the intelliverse logo.jpg", type: "image/jpeg" },
-    ],
-    shortcut: "/the intelliverse logo.jpg",
-    apple: [
-      { url: "/the intelliverse logo.jpg", sizes: "180x180", type: "image/jpeg" },
-      { url: "/the intelliverse logo.jpg", sizes: "167x167", type: "image/jpeg" },
-      { url: "/the intelliverse logo.jpg", sizes: "152x152", type: "image/jpeg" },
-      { url: "/the intelliverse logo.jpg", sizes: "144x144", type: "image/jpeg" },
-      { url: "/the intelliverse logo.jpg", sizes: "120x120", type: "image/jpeg" },
-      { url: "/the intelliverse logo.jpg", sizes: "114x114", type: "image/jpeg" },
-      { url: "/the intelliverse logo.jpg", sizes: "76x76", type: "image/jpeg" },
-      { url: "/the intelliverse logo.jpg", sizes: "72x72", type: "image/jpeg" },
-      { url: "/the intelliverse logo.jpg", sizes: "60x60", type: "image/jpeg" },
-      { url: "/the intelliverse logo.jpg", sizes: "57x57", type: "image/jpeg" },
-    ],
-    other: [
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://intelliverse.io",
+    siteName: "The Intelliverse",
+    title: "The Intelliverse | Engineering the Digital Future",
+    description:
+      "Engineering high-performance Next.js web applications, 3D WebGL experiences, native mobile apps, and custom enterprise software portals.",
+    images: [
       {
-        rel: "mask-icon",
-        url: "/the intelliverse logo.jpg",
-        color: "#111827",
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "The Intelliverse - Engineering the Digital Future",
+        type: "image/png",
       },
     ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Intelliverse | Engineering the Digital Future",
+    description:
+      "Engineering high-performance Next.js web applications, 3D WebGL experiences, native mobile apps, and custom enterprise software portals.",
+    images: ["/opengraph-image"],
+    site: "@theintelliverse",
+    creator: "@theintelliverse",
+  },
   verification: {
     google: "V9ShBblTx27Z4kLyDmhiU4PPANzjWD_j1O76UrDD40I",
-    yandex: "yandex_verification_placeholder",
-    yahoo: "yahoo_verification_placeholder",
-    other: {
-      me: ["theintelliverse@gmail.com"],
-    },
   },
   appleWebApp: {
     capable: true,
     title: "The Intelliverse",
     statusBarStyle: "black-translucent",
   },
-  openGraph: {
-    type: "website",
-    siteName: "The Intelliverse",
-    url: "https://intelliverse.io/",
-    title: "The Intelliverse - Your Innovation Partner in Software & Web Development",
-    description: "Expert software development, web development, and IT services to empower your business in the digital age.",
-    images: [
-      {
-        url: "https://raw.githubusercontent.com/DhruvilThummar/The-Intelliverse/06e4998906bcd13f5d1dd0bdf0ff672bddf85832/the%20intelliverse%20logo.jpg",
-        secureUrl: "https://raw.githubusercontent.com/DhruvilThummar/The-Intelliverse/06e4998906bcd13f5d1dd0bdf0ff672bddf85832/the%20intelliverse%20logo.jpg",
-        type: "image/jpeg",
-        width: 1200,
-        height: 630,
-        alt: "The Intelliverse Logo - Your Software & Web Development Partner",
-      }
-    ],
-    locale: "en_IN",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "The Intelliverse | Software & Web Development Partner",
-    description: "Expert software development, web development, and IT services to empower your business.",
-    images: ["https://raw.githubusercontent.com/DhruvilThummar/The-Intelliverse/06e4998906bcd13f5d1dd0bdf0ff672bddf85832/the%20intelliverse%20logo.jpg"],
-    site: "@theintelliverse",
-    creator: "@theintelliverse",
-  },
   other: {
     "geo.region": "IN-GJ",
     "geo.placename": "Ahmedabad",
     "geo.position": "23.0225;72.5714",
     "ICBM": "23.0225, 72.5714",
-    "DC.title": "The Intelliverse - Your Innovation Partner",
-    "DC.creator": "The Intelliverse",
-    "DC.description": "The Intelliverse offers expert software development, web development, and IT services.",
-    "DC.language": "en",
-    "DC.rights": "Copyright 2025 The Intelliverse",
-    "mobile-web-app-capable": "yes",
-    "yandex": "index, follow",
-    "baiduspider": "index, follow",
-    "duckduckbot": "index, follow",
-    "googlebot": "index, follow, max-snippet:-1",
-    "bingbot": "index, follow, max-snippet:-1",
-    "whatsapp:image": "https://raw.githubusercontent.com/DhruvilThummar/The-Intelliverse/06e4998906bcd13f5d1dd0bdf0ff672bddf85832/the%20intelliverse%20logo.jpg",
-    "whatsapp:link_title": "The Intelliverse - Your Innovation Partner in Software & Web Development",
-    "whatsapp:card": "summary_large_image",
-    "pinterest:url": "https://intelliverse.io/",
-    "instagram:author": "the_intelliverse",
-    "linkedin:url": "https://intelliverse.io/",
-    "linkedin:title": "The Intelliverse - Your Innovation Partner",
-    "language": "English",
-    "msapplication-TileColor": "#111827",
-    "msapplication-TileImage": "/the intelliverse logo.jpg",
   },
 };
 
