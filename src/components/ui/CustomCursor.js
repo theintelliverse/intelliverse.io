@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
+
+const emptySubscribe = () => () => {};
 
 /**
  * Awwwards-grade Custom Trailing Cursor with mix-blend-mode difference and magnetic snapping
  */
 export default function CustomCursor() {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const [isHovered, setIsHovered] = useState(false);
   const [isMagnetic, setIsMagnetic] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
@@ -23,8 +25,6 @@ export default function CustomCursor() {
   const trailY = useSpring(cursorY, springConfig);
 
   useEffect(() => {
-    setMounted(true);
-
     const isMobile = window.matchMedia("(pointer: coarse)").matches;
     if (isMobile) return;
 
