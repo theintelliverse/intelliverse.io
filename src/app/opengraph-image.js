@@ -1,7 +1,5 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
-
 export const alt = "The Intelliverse - Engineering the Digital Future";
 export const size = {
   width: 1200,
