@@ -201,11 +201,12 @@ export default async function AdminPage() {
 
   return (
     <div
-      className="min-h-screen font-sans relative"
+      className="h-screen max-h-screen w-full font-sans relative overflow-hidden"
       style={{
         backgroundColor: "var(--night)",
         color: "var(--cream)",
       }}
+      data-lenis-prevent
     >
       {/* Background gradients */}
       <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden">
@@ -213,7 +214,7 @@ export default async function AdminPage() {
         <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-[var(--orange)]/5 rounded-full blur-[160px]"></div>
       </div>
       
-      <div className="relative z-10">
+      <div className="relative z-10 h-full w-full">
         <AdminPanel
           isOpen={true}
           data={initialData}

@@ -17,11 +17,35 @@ html.lenis body {
 }
 
 .lenis.lenis-smooth [data-lenis-prevent] {
-  overflow: clip;
+  overscroll-behavior: contain;
 }
 
 .lenis.lenis-stopped {
   overflow: hidden;
+}
+
+/* ── SCROLLBAR UTILITIES & ADMIN STYLES ──────────────────────────────────── */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+.admin-panel ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.admin-panel ::-webkit-scrollbar-track {
+  background: rgba(11, 21, 48, 0.4);
+}
+.admin-panel ::-webkit-scrollbar-thumb {
+  background: rgba(228, 218, 195, 0.2);
+  border-radius: 4px;
+}
+.admin-panel ::-webkit-scrollbar-thumb:hover {
+  background: rgba(61, 123, 247, 0.6);
 }
 
 html {

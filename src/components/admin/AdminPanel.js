@@ -716,16 +716,17 @@ export default function AdminPanel({
 
   return (
     <div
-      className="min-h-screen flex flex-col md:flex-row font-sans relative admin-panel"
+      className="h-screen w-full flex flex-col md:flex-row font-sans relative admin-panel overflow-hidden"
       style={{
         backgroundColor: "var(--night)",
         color: "var(--cream)",
       }}
+      data-lenis-prevent
     >
 
       {/* Mobile Top Header (Sticky on phone views) */}
       <div
-        className="md:hidden flex items-center justify-between p-4 sticky top-0 z-30"
+        className="md:hidden flex items-center justify-between p-4 sticky top-0 z-30 shrink-0"
         style={{
           backgroundColor: "rgba(11, 21, 48, 0.95)",
           borderBottom: "1px solid rgba(228, 218, 195, 0.12)",
@@ -781,7 +782,10 @@ export default function AdminPanel({
       />
 
       {/* Main Content Area */}
-      <main className="flex-grow p-4 md:p-10 relative overflow-y-auto max-h-[calc(100vh-65px)] md:max-h-screen z-10">
+      <main
+        className="flex-grow p-4 md:p-10 relative overflow-y-auto h-[calc(100dvh-65px)] md:h-screen z-10 overscroll-contain"
+        data-lenis-prevent
+      >
 
         {/* Persistent Global Top Action Bar */}
         <div

@@ -1,10 +1,19 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 
 export default function SmoothScroll({ children }) {
+  const pathname = usePathname();
+
   useEffect(() => {
+    // Disable Lenis smooth scrolling entirely on admin panel routes
+    if (pathname?.startsWith("/admin")) {
+      document.documentElement.classList.remove("lenis", "lenis-smooth", "lenis-stopped");
+      return;
+    }
+
     // Configure Lenis smooth scrolling with premium inertial characteristics
     const lenis = new Lenis({
       duration: 1.2,
@@ -46,8 +55,9 @@ export default function SmoothScroll({ children }) {
       cancelAnimationFrame(rafId);
       document.removeEventListener("click", handleScrollTo);
       lenis.destroy();
+      document.documentElement.classList.remove("lenis", "lenis-smooth", "lenis-stopped");
     };
-  }, []);
+  }, [pathname]);
 
   return <>{children}</>;
 }
