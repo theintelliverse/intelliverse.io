@@ -1,112 +1,112 @@
 "use client";
 
-import { useState, useEffect, useSyncExternalStore } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-
-const emptySubscribe = () => () => {};
+import { useEffect, useRef, useState } from "react";
 
 /**
- * Cinematic 0%-100% Preloader Sequence
- * Uses sessionStorage to run once per session and prevents body scroll while active.
+ * Preloader
+ * - Wordmark draw-in via clip-path
+ * - 000 → 100 counter
+ * - Split-panel exit animation
+ * - Skipped on repeat visits (sessionStorage)
  */
 export default function Preloader() {
-  const [progress, setProgress] = useState(0);
-  const [isLoading, setIsLoading] = useState(() => {
-    if (typeof window !== "undefined") {
-      return !sessionStorage.getItem("intelliverse_preloader_seen");
-    }
-    return true;
-  });
-  const isClient = useSyncExternalStore(emptySubscribe, () => true, () => false);
+  const [visible, setVisible]   = useState(true);
+  const [exiting, setExiting]   = useState(false);
+  const [counter, setCounter]   = useState(0);
+  const [wordmark, setWordmark] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    // Check if user already saw the preloader in this session
-    const hasSeen = sessionStorage.getItem("intelliverse_preloader_seen");
-    if (hasSeen) {
-      queueMicrotask(() => setIsLoading(false));
-      return;
+    let visitedFrame = null;
+    try {
+      if (typeof window !== "undefined" && window.sessionStorage?.getItem("iv-visited")) {
+        visitedFrame = requestAnimationFrame(() => setVisible(false));
+        return () => {
+          if (visitedFrame) cancelAnimationFrame(visitedFrame);
+        };
+      }
+    } catch {
+      // Ignore storage restrictions
     }
 
-    // Lock body scrolling during load
-    document.body.style.overflow = "hidden";
+    // Phase 1: reveal wordmark
+    const t0 = setTimeout(() => setWordmark(true), 60);
 
-    // Simulate smooth asset & 3D WebGL loading counter
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
-            setIsLoading(false);
-            document.body.style.overflow = "";
-            sessionStorage.setItem("intelliverse_preloader_seen", "true");
-          }, 300);
-          return 100;
-        }
-        const increment = Math.floor(Math.random() * 12) + 4;
-        return Math.min(100, prev + increment);
-      });
-    }, 45);
+    // Safety fallback: guaranteed exit after 600ms
+    const safety = setTimeout(() => {
+      setExiting(true);
+      setTimeout(() => {
+        setVisible(false);
+        try {
+          if (typeof window !== "undefined") window.sessionStorage?.setItem("iv-visited", "1");
+        } catch {}
+      }, 300);
+    }, 600);
 
     return () => {
-      clearInterval(interval);
-      document.body.style.overflow = "";
+      clearTimeout(t0);
+      clearTimeout(safety);
     };
   }, []);
 
-  if (!isClient) return null;
+  if (!visible) return null;
 
   return (
-    <AnimatePresence mode="wait">
-      {isLoading && (
-        <motion.div
-          key="preloader"
-          initial={{ y: "0%" }}
-          exit={{
-            y: "-100%",
-            transition: { duration: 0.85, ease: [0.85, 0, 0.15, 1] }
-          }}
-          className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#05020c] text-white select-none pointer-events-auto"
+    <div
+      id="preloader"
+      aria-label="Loading The Intelliverse"
+      role="status"
+      className={exiting ? "preloader-exit" : ""}
+    >
+      {/* Split panels for exit */}
+      <div className="preloader-panel-top"  aria-hidden="true" />
+      <div className="preloader-panel-bottom" aria-hidden="true" />
+
+      {/* Content layer */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 2,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "1.5rem",
+          opacity: exiting ? 0 : 1,
+          transition: "opacity 0.3s ease",
+        }}
+      >
+        {/* Wordmark */}
+        <div
+          className={`preloader-wordmark${wordmark ? " revealed" : ""}`}
+          aria-hidden="true"
         >
-          {/* Brand Logo & Spinner */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.4 }}
-            className="flex flex-col items-center gap-6"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/the%20intelliverse%20logo.jpg"
-              alt="The Intelliverse Logo"
-              className="w-24 h-24 rounded-full border border-blue-500/30 shadow-2xl shadow-blue-500/20 animate-pulse"
-            />
+          The Intelliverse
+        </div>
 
-            {/* Percentage Number */}
-            <div className="flex items-baseline font-mono">
-              <span className="text-5xl sm:text-7xl font-black tracking-tighter text-white">
-                {String(progress).padStart(3, "0")}
-              </span>
-              <span className="text-blue-500 text-xl font-bold ml-1">%</span>
-            </div>
+        {/* Counter */}
+        <div className="preloader-counter" aria-hidden="true">
+          {String(counter).padStart(3, "0")}
+        </div>
 
-            {/* Loading Bar */}
-            <div className="w-48 sm:w-64 h-1 bg-white/10 rounded-full overflow-hidden mt-2">
-              <motion.div
-                className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 rounded-full"
-                style={{ width: `${progress}%` }}
-                transition={{ ease: "easeOut" }}
-              />
-            </div>
+        {/* Mono caption */}
+        <div
+          style={{
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: "0.5625rem",
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            color: "rgba(244,243,240,0.25)",
+          }}
+        >
+          Ahmedabad, India · Engineering your ideas
+        </div>
+      </div>
 
-            <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-gray-500 mt-2">
-              {"// "}INITIALIZING 3D ENGINE
-            </span>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      {/* Progress bar */}
+      <div
+        className="preloader-bar"
+        aria-hidden="true"
+        style={{ transform: `scaleX(${counter / 100})` }}
+      />
+    </div>
   );
 }

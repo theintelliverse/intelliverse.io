@@ -386,6 +386,20 @@ export default function TeamTab({
                     <div className="space-y-6 animate-fade-in text-left">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
+                          <label className="text-[10px] text-gray-400 uppercase font-semibold">Portfolio / Website URL (Optional)</label>
+                          <div className="relative mt-1.5 flex items-center bg-gray-950 border border-gray-850 focus-within:border-purple-500 focus-within:ring-2 focus-within:ring-purple-500/20 rounded-xl transition duration-300">
+                            <span className="pl-3.5 text-gray-500"><i className="fas fa-globe text-xs"></i></span>
+                            <input
+                              type="url"
+                              value={founder.portfolio || ""}
+                              onChange={(e) => handleFounderChange(index, "portfolio", e.target.value)}
+                              className="w-full bg-transparent border-none p-2.5 pl-2.5 text-xs text-white focus:outline-none"
+                              placeholder="https://yourportfolio.com"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
                           <label className="text-[10px] text-gray-400 uppercase font-semibold">LinkedIn Profile URL (Optional)</label>
                           <div className="relative mt-1.5 flex items-center bg-gray-950 border border-gray-850 focus-within:border-purple-500 focus-within:ring-2 focus-within:ring-purple-500/20 rounded-xl transition duration-300">
                             <span className="pl-3.5 text-gray-500"><i className="fab fa-linkedin-in text-xs"></i></span>
@@ -401,7 +415,7 @@ export default function TeamTab({
                         
                         <div>
                           <label className="text-[10px] text-gray-400 uppercase font-semibold">Instagram Profile URL (Optional)</label>
-                          <div className="relative mt-1.5 flex items-center bg-gray-950 border border-gray-855 focus-within:border-purple-500 focus-within:ring-2 focus-within:ring-purple-500/20 rounded-xl transition duration-300">
+                          <div className="relative mt-1.5 flex items-center bg-gray-950 border border-gray-850 focus-within:border-purple-500 focus-within:ring-2 focus-within:ring-purple-500/20 rounded-xl transition duration-300">
                             <span className="pl-3.5 text-gray-500"><i className="fab fa-instagram text-xs"></i></span>
                             <input
                               type="url"
@@ -409,6 +423,62 @@ export default function TeamTab({
                               onChange={(e) => handleFounderChange(index, "instagram", e.target.value)}
                               className="w-full bg-transparent border-none p-2.5 pl-2.5 text-xs text-white focus:outline-none"
                               placeholder="https://instagram.com/username"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] text-gray-400 uppercase font-semibold">GitHub Profile URL (Optional)</label>
+                          <div className="relative mt-1.5 flex items-center bg-gray-950 border border-gray-850 focus-within:border-purple-500 focus-within:ring-2 focus-within:ring-purple-500/20 rounded-xl transition duration-300">
+                            <span className="pl-3.5 text-gray-500"><i className="fab fa-github text-xs"></i></span>
+                            <input
+                              type="url"
+                              value={founder.github || ""}
+                              onChange={(e) => handleFounderChange(index, "github", e.target.value)}
+                              className="w-full bg-transparent border-none p-2.5 pl-2.5 text-xs text-white focus:outline-none"
+                              placeholder="https://github.com/username"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] text-gray-400 uppercase font-semibold">YouTube Channel URL (Optional)</label>
+                          <div className="relative mt-1.5 flex items-center bg-gray-950 border border-gray-850 focus-within:border-purple-500 focus-within:ring-2 focus-within:ring-purple-500/20 rounded-xl transition duration-300">
+                            <span className="pl-3.5 text-gray-500"><i className="fab fa-youtube text-xs"></i></span>
+                            <input
+                              type="url"
+                              value={founder.youtube || ""}
+                              onChange={(e) => handleFounderChange(index, "youtube", e.target.value)}
+                              className="w-full bg-transparent border-none p-2.5 pl-2.5 text-xs text-white focus:outline-none"
+                              placeholder="https://youtube.com/@channel"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] text-gray-400 uppercase font-semibold">Facebook Profile URL (Optional)</label>
+                          <div className="relative mt-1.5 flex items-center bg-gray-950 border border-gray-850 focus-within:border-purple-500 focus-within:ring-2 focus-within:ring-purple-500/20 rounded-xl transition duration-300">
+                            <span className="pl-3.5 text-gray-500"><i className="fab fa-facebook-f text-xs"></i></span>
+                            <input
+                              type="url"
+                              value={founder.facebook || ""}
+                              onChange={(e) => handleFounderChange(index, "facebook", e.target.value)}
+                              className="w-full bg-transparent border-none p-2.5 pl-2.5 text-xs text-white focus:outline-none"
+                              placeholder="https://facebook.com/username"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] text-gray-400 uppercase font-semibold">Twitter / X Profile URL (Optional)</label>
+                          <div className="relative mt-1.5 flex items-center bg-gray-950 border border-gray-850 focus-within:border-purple-500 focus-within:ring-2 focus-within:ring-purple-500/20 rounded-xl transition duration-300">
+                            <span className="pl-3.5 text-gray-500"><i className="fab fa-x-twitter text-xs"></i></span>
+                            <input
+                              type="url"
+                              value={founder.twitter || ""}
+                              onChange={(e) => handleFounderChange(index, "twitter", e.target.value)}
+                              className="w-full bg-transparent border-none p-2.5 pl-2.5 text-xs text-white focus:outline-none"
+                              placeholder="https://x.com/username"
                             />
                           </div>
                         </div>

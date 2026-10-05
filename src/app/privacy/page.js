@@ -128,23 +128,31 @@ export default function PrivacyPage() {
       )
     },
     {
-      title: "6. Your Rights (GDPR / Data Subject Rights)",
+      title: "6. Your Rights (India DPDP Act, 2023 & GDPR / Global Rights)",
       icon: "fa-person-circle-check",
       content: (
-        <div className="space-y-3">
+        <div className="space-y-4">
           <p>
-            Depending on your jurisdiction, you may have the following rights regarding your personal data:
+            As an entity established in India, <strong>The Intelliverse</strong> strictly complies with the <strong>Digital Personal Data Protection (DPDP) Act, 2023</strong> as a Data Fiduciary, as well as global standards (such as GDPR) for international clients:
           </p>
+          
+          <div className="p-3.5 bg-white/[0.03] border border-white/10 rounded-xl space-y-2">
+            <h4 className="text-xs font-mono font-bold uppercase text-amber-400">Statutory Rights of Data Principals (DPDP Act, 2023):</h4>
+            <ul className="list-disc pl-5 space-y-1.5 text-xs text-gray-300">
+              <li><strong>Right to Access (Sec. 11):</strong> Right to obtain a summary of personal data being processed and the processing activities undertaken.</li>
+              <li><strong>Right to Correction &amp; Erasure (Sec. 12):</strong> Right to correction of inaccurate data, completion of incomplete data, updating of data, and erasure of personal data that is no longer necessary.</li>
+              <li><strong>Right to Withdraw Consent (Sec. 6(4)):</strong> Right to withdraw consent previously given at any time with the same ease with which consent was given.</li>
+              <li><strong>Right of Grievance Redressal (Sec. 13):</strong> Right to have readily available means of grievance redressal provided by The Intelliverse in respect of any act or omission regarding personal data obligations.</li>
+              <li><strong>Right to Nominate (Sec. 14):</strong> Right to nominate another individual who, in the event of death or incapacity, shall exercise rights on your behalf.</li>
+            </ul>
+          </div>
+
           <ul className="list-disc pl-5 space-y-2 text-gray-300">
-            <li><strong>Right to Access:</strong> Request a copy of the personal data we hold about you.</li>
-            <li><strong>Right to Rectification:</strong> Request correction of inaccurate or incomplete information.</li>
-            <li><strong>Right to Erasure:</strong> Request deletion of your data (&quot;Right to be Forgotten&quot;), subject to legal retention obligations.</li>
-            <li><strong>Right to Restriction:</strong> Request that we restrict how we process your data in certain circumstances.</li>
-            <li><strong>Right to Portability:</strong> Receive your data in a structured, machine-readable format to transfer to another provider.</li>
-            <li><strong>Right to Object:</strong> Object to processing based on legitimate interests, including direct marketing.</li>
+            <li><strong>Right to Portability &amp; Restriction (GDPR):</strong> Receive your data in a structured, machine-readable format or restrict processing under applicable global regulations.</li>
+            <li><strong>Right to Object:</strong> Object to processing based on legitimate interests, including any direct business outreach.</li>
           </ul>
-          <p className="text-gray-400">
-            To exercise any of these rights, contact us at <span className="text-indigo-400">theintelliverse@gmail.com</span>. We will respond within 30 days.
+          <p className="text-gray-400 text-xs">
+            To exercise your DPDP rights or submit a data inquiry, write directly to our <strong>Grievance &amp; Data Protection Officer</strong> at <span className="text-amber-400 font-mono">theintelliverse@gmail.com</span>. We acknowledge requests within 48 hours and resolve them within 30 days as prescribed under the DPDP Act.
           </p>
         </div>
       )
@@ -242,7 +250,7 @@ export default function PrivacyPage() {
       {/* Header Navigation */}
       <Header />
 
-      <main className="min-h-screen relative z-10 pt-32 pb-20 px-6">
+      <main className="min-h-screen relative z-10 pt-32 pb-20 px-6" data-theme="night">
         <div className="container mx-auto max-w-4xl">
 
           {/* Hero Banner */}

@@ -1,50 +1,54 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 /**
- * Awwwards-grade Magnetic Button Wrapper
- * Uses Framer Motion useMotionValue & useSpring physics for 60 FPS GPU performance.
+ * Magnetic button wrapper.
+ * Wraps any child and applies a gentle magnetic pull on hover.
+ * Strength: 0.35 = subtle, not jittery.
  */
-export default function Magnetic({ children, className = "", onClick, onMouseEnter, strength = 0.35 }) {
+export default function Magnetic({ children, strength = 0.35, className = "" }) {
   const ref = useRef(null);
 
-  const rawX = useMotionValue(0);
-  const rawY = useMotionValue(0);
+  useEffect(() => {
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
 
-  // High-precision spring physics for fluid magnetic pull and elastic release
-  const x = useSpring(rawX, { stiffness: 180, damping: 14, mass: 0.1 });
-  const y = useSpring(rawY, { stiffness: 180, damping: 14, mass: 0.1 });
+    const el = ref.current;
+    if (!el) return;
 
-  const handleMouseMove = (e) => {
-    if (!ref.current) return;
-    const { clientX, clientY } = e;
-    const { left, top, width, height } = ref.current.getBoundingClientRect();
-    const centerX = left + width / 2;
-    const centerY = top + height / 2;
+    let raf;
 
-    // Pull element towards cursor offset
-    rawX.set((clientX - centerX) * strength);
-    rawY.set((clientY - centerY) * strength);
-  };
+    const onMove = (e) => {
+      const rect = el.getBoundingClientRect();
+      const cx = rect.left + rect.width  / 2;
+      const cy = rect.top  + rect.height / 2;
+      const dx = (e.clientX - cx) * strength;
+      const dy = (e.clientY - cy) * strength;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        el.style.transform = `translate(${dx}px, ${dy}px)`;
+      });
+    };
 
-  const handleMouseLeave = () => {
-    rawX.set(0);
-    rawY.set(0);
-  };
+    const onLeave = () => {
+      cancelAnimationFrame(raf);
+      el.style.transition = "transform 0.5s cubic-bezier(0.16,1,0.3,1)";
+      el.style.transform  = "translate(0, 0)";
+      setTimeout(() => { el.style.transition = ""; }, 500);
+    };
+
+    el.addEventListener("mousemove", onMove, { passive: true });
+    el.addEventListener("mouseleave", onLeave);
+
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, [strength]);
 
   return (
-    <motion.div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onMouseEnter={onMouseEnter}
-      onClick={onClick}
-      style={{ x, y }}
-      className={`inline-block cursor-pointer ${className}`}
-    >
+    <div ref={ref} className={`inline-block ${className}`}>
       {children}
-    </motion.div>
+    </div>
   );
 }

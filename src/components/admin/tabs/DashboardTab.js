@@ -3,6 +3,7 @@
 export default function DashboardTab({
   contactLogs,
   projects,
+  caseStudies = [],
   testimonials,
   setActiveTab,
   handleAddProject,
@@ -62,41 +63,82 @@ export default function DashboardTab({
       </div>
 
       {/* Quick Metrics Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
         {/* Metric 1 */}
-        <div className="bg-gray-900/30 border border-white/5 hover:border-blue-500/25 p-5 md:p-6 rounded-2xl backdrop-blur-sm hover:shadow-[0_0_30px_rgba(59,102,241,0.05)] hover:bg-gray-900/50 transition-all duration-300 relative overflow-hidden group">
+        <div
+          onClick={() => setActiveTab("crm")}
+          className="p-5 md:p-6 rounded-2xl transition-all duration-300 relative overflow-hidden group cursor-pointer"
+          style={{
+            backgroundColor: "rgba(18, 30, 68, 0.7)",
+            border: "1px solid rgba(228, 218, 195, 0.14)",
+          }}
+        >
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest font-mono">Submissions (CRM Leads)</p>
-              <h3 className="text-2xl md:text-3xl font-black text-white mt-2 font-mono">{contactLogs.length}</h3>
+              <p className="text-[10px] font-bold uppercase tracking-widest font-mono" style={{ color: "var(--orange)" }}>CRM Leads</p>
+              <h3 className="text-2xl md:text-3xl font-black mt-2 font-mono" style={{ color: "var(--cream)" }}>{contactLogs.length}</h3>
             </div>
-            <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400 border border-blue-500/15 group-hover:scale-105 transition-transform duration-300 shadow-inner">
+            <div className="p-3 rounded-xl border group-hover:scale-105 transition-transform duration-300" style={{ backgroundColor: "rgba(47, 99, 224, 0.15)", color: "var(--blue)", borderColor: "rgba(61, 123, 247, 0.25)" }}>
               <i className="fas fa-address-book text-base md:text-lg"></i>
             </div>
           </div>
         </div>
 
         {/* Metric 2 */}
-        <div className="bg-gray-900/30 border border-white/5 hover:border-purple-500/25 p-5 md:p-6 rounded-2xl backdrop-blur-sm hover:shadow-[0_0_30px_rgba(168,85,247,0.05)] hover:bg-gray-900/50 transition-all duration-300 relative overflow-hidden group">
+        <div
+          onClick={() => setActiveTab("projects")}
+          className="p-5 md:p-6 rounded-2xl transition-all duration-300 relative overflow-hidden group cursor-pointer"
+          style={{
+            backgroundColor: "rgba(18, 30, 68, 0.7)",
+            border: "1px solid rgba(228, 218, 195, 0.14)",
+          }}
+        >
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest font-mono">Worked Projects</p>
-              <h3 className="text-2xl md:text-3xl font-black text-white mt-2 font-mono">{projects.length}</h3>
+              <p className="text-[10px] font-bold uppercase tracking-widest font-mono" style={{ color: "var(--orange)" }}>Portfolio Projects</p>
+              <h3 className="text-2xl md:text-3xl font-black mt-2 font-mono" style={{ color: "var(--cream)" }}>{projects.length}</h3>
             </div>
-            <div className="p-3 bg-purple-500/10 rounded-xl text-purple-400 border border-purple-500/15 group-hover:scale-105 transition-transform duration-300 shadow-inner">
+            <div className="p-3 rounded-xl border group-hover:scale-105 transition-transform duration-300" style={{ backgroundColor: "rgba(155, 114, 216, 0.15)", color: "var(--purple)", borderColor: "rgba(155, 114, 216, 0.25)" }}>
               <i className="fas fa-briefcase text-base md:text-lg"></i>
             </div>
           </div>
         </div>
 
-        {/* Metric 3 */}
-        <div className="bg-gray-900/30 border border-white/5 hover:border-emerald-500/25 p-5 md:p-6 rounded-2xl backdrop-blur-sm hover:shadow-[0_0_30px_rgba(16,185,129,0.05)] hover:bg-gray-900/50 transition-all duration-300 relative overflow-hidden group sm:col-span-2 lg:col-span-1">
+        {/* Metric 3: Case Studies & Specs */}
+        <div
+          onClick={() => setActiveTab("casestudies")}
+          className="p-5 md:p-6 rounded-2xl transition-all duration-300 relative overflow-hidden group cursor-pointer"
+          style={{
+            backgroundColor: "rgba(18, 30, 68, 0.7)",
+            border: "1px solid rgba(228, 218, 195, 0.14)",
+          }}
+        >
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest font-mono">Testimonial Quotes</p>
-              <h3 className="text-2xl md:text-3xl font-black text-white mt-2 font-mono">{testimonials.length}</h3>
+              <p className="text-[10px] font-bold uppercase tracking-widest font-mono" style={{ color: "var(--orange)" }}>Case Studies &amp; Specs</p>
+              <h3 className="text-2xl md:text-3xl font-black mt-2 font-mono" style={{ color: "var(--cream)" }}>{caseStudies.length}</h3>
             </div>
-            <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-400 border border-emerald-500/15 group-hover:scale-105 transition-transform duration-300 shadow-inner">
+            <div className="p-3 rounded-xl border group-hover:scale-105 transition-transform duration-300" style={{ backgroundColor: "rgba(253, 179, 71, 0.15)", color: "var(--orange)", borderColor: "rgba(253, 179, 71, 0.25)" }}>
+              <i className="fas fa-microchip text-base md:text-lg"></i>
+            </div>
+          </div>
+        </div>
+
+        {/* Metric 4 */}
+        <div
+          onClick={() => setActiveTab("testimonials")}
+          className="p-5 md:p-6 rounded-2xl transition-all duration-300 relative overflow-hidden group cursor-pointer"
+          style={{
+            backgroundColor: "rgba(18, 30, 68, 0.7)",
+            border: "1px solid rgba(228, 218, 195, 0.14)",
+          }}
+        >
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest font-mono" style={{ color: "var(--orange)" }}>Client Reviews</p>
+              <h3 className="text-2xl md:text-3xl font-black mt-2 font-mono" style={{ color: "var(--cream)" }}>{testimonials.length}</h3>
+            </div>
+            <div className="p-3 rounded-xl border group-hover:scale-105 transition-transform duration-300" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#10b981", borderColor: "rgba(16, 185, 129, 0.25)" }}>
               <i className="fas fa-comments text-base md:text-lg"></i>
             </div>
           </div>
@@ -104,44 +146,53 @@ export default function DashboardTab({
       </div>
 
       {/* Ingestion Trend SVG Graph */}
-      <div className="bg-gray-900/30 border border-white/5 hover:border-blue-500/15 rounded-2xl p-5 md:p-6 backdrop-blur-sm transition-all duration-500 space-y-4">
+      <div
+        className="rounded-2xl p-5 md:p-6 transition-all duration-500 space-y-4"
+        style={{
+          backgroundColor: "rgba(18, 30, 68, 0.7)",
+          border: "1px solid rgba(228, 218, 195, 0.14)",
+        }}
+      >
         <div>
-          <h4 className="text-xs font-bold text-white flex items-center gap-2 font-mono uppercase tracking-wider">
-            <i className="fas fa-chart-line text-blue-400"></i>
+          <h4
+            className="text-xs font-bold flex items-center gap-2 font-mono uppercase tracking-wider"
+            style={{ color: "var(--cream)" }}
+          >
+            <i className="fas fa-chart-line" style={{ color: "var(--blue)" }}></i>
             <span>CRM Lead Ingestion Flow (Last 7 Days)</span>
           </h4>
-          <p className="text-[10px] text-gray-400 mt-1">Timeline activity based on form submissions.</p>
+          <p className="text-[10px] mt-1 font-mono" style={{ color: "rgba(248, 242, 228, 0.6)" }}>Timeline activity based on form submissions.</p>
         </div>
 
         <div className="relative pt-2">
           <svg className="w-full h-[130px] md:h-[150px] overflow-visible" viewBox={`0 0 ${chartWidth} ${chartHeight}`} preserveAspectRatio="none">
             <defs>
               <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="rgba(59, 130, 246, 0.4)" />
-                <stop offset="100%" stopColor="rgba(59, 130, 246, 0)" />
+                <stop offset="0%" stopColor="rgba(47, 99, 224, 0.4)" />
+                <stop offset="100%" stopColor="rgba(47, 99, 224, 0)" />
               </linearGradient>
               {/* SVG filter definition for a neon shadow glow */}
               <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#3b82f6" floodOpacity="0.45" />
+                <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#2f63e0" floodOpacity="0.5" />
               </filter>
             </defs>
             {/* Grid helper lines */}
-            <line x1="0" y1="10" x2={chartWidth} y2="10" stroke="#1e293b" strokeDasharray="3 3" />
-            <line x1="0" y1={chartHeight / 2} x2={chartWidth} y2={chartHeight / 2} stroke="#1e293b" strokeDasharray="3 3" />
-            <line x1="0" y1={chartHeight - 1} x2={chartWidth} y2={chartHeight - 1} stroke="rgba(255,255,255,0.06)" />
+            <line x1="0" y1="10" x2={chartWidth} y2="10" stroke="rgba(228, 218, 195, 0.08)" strokeDasharray="3 3" />
+            <line x1="0" y1={chartHeight / 2} x2={chartWidth} y2={chartHeight / 2} stroke="rgba(228, 218, 195, 0.08)" strokeDasharray="3 3" />
+            <line x1="0" y1={chartHeight - 1} x2={chartWidth} y2={chartHeight - 1} stroke="rgba(228, 218, 195, 0.12)" />
 
             {/* Glowing Area Fill */}
             {areaPath && <path d={areaPath} fill="url(#chartGrad)" className="animate-fade-in" />}
 
             {/* Connection Line */}
-            {linePath && <path d={linePath} fill="none" stroke="#3b82f6" strokeWidth="2.5" filter="url(#neonGlow)" className="animate-fade-in" />}
+            {linePath && <path d={linePath} fill="none" stroke="var(--blue-deep)" strokeWidth="2.5" filter="url(#neonGlow)" className="animate-fade-in" />}
 
             {/* Dots / Interactive counts */}
             {points.map((p, idx) => (
               <g key={idx}>
-                <circle cx={p.x} cy={p.y} r="4.5" fill="#090514" stroke="#60a5fa" strokeWidth="2" className="cursor-crosshair transition hover:scale-125" />
+                <circle cx={p.x} cy={p.y} r="4.5" fill="var(--night)" stroke="var(--orange)" strokeWidth="2" className="cursor-crosshair transition hover:scale-125" />
                 {p.count > 0 && (
-                  <text x={p.x} y={p.y - 12} fill="#93c5fd" fontSize="9" textAnchor="middle" fontWeight="bold" fontFamily="monospace">
+                  <text x={p.x} y={p.y - 12} fill="var(--orange)" fontSize="9" textAnchor="middle" fontWeight="bold" fontFamily="monospace">
                     {p.count}
                   </text>
                 )}
@@ -149,7 +200,7 @@ export default function DashboardTab({
             ))}
           </svg>
           {/* Horizontal Labels */}
-          <div className="flex justify-between mt-3 px-0.5 text-[9px] text-gray-500 font-bold font-mono">
+          <div className="flex justify-between mt-3 px-0.5 text-[9px] font-bold font-mono" style={{ color: "rgba(248, 242, 228, 0.55)" }}>
             {trendData.map((p, idx) => (
               <span key={idx} className="w-12 text-center break-words">{p.label}</span>
             ))}
@@ -160,9 +211,21 @@ export default function DashboardTab({
       {/* Dashboard Quick Actions & Recent Activity split */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         {/* Quick Actions Panel */}
-        <div className="bg-gray-900/30 border border-white/5 rounded-2xl p-5 md:p-6 backdrop-blur-sm space-y-4">
-          <h4 className="text-xs font-bold text-white flex items-center gap-2 pb-3 border-b border-white/5 font-mono uppercase tracking-wider">
-            <i className="fas fa-bolt text-amber-400"></i>
+        <div
+          className="rounded-2xl p-5 md:p-6 space-y-4"
+          style={{
+            backgroundColor: "rgba(18, 30, 68, 0.7)",
+            border: "1px solid rgba(228, 218, 195, 0.14)",
+          }}
+        >
+          <h4
+            className="text-xs font-bold flex items-center gap-2 pb-3 font-mono uppercase tracking-wider"
+            style={{
+              color: "var(--cream)",
+              borderBottom: "1px solid rgba(228, 218, 195, 0.1)",
+            }}
+          >
+            <i className="fas fa-bolt" style={{ color: "var(--orange)" }}></i>
             <span>Quick Tasks</span>
           </h4>
           <div className="space-y-2 text-xs">
@@ -171,43 +234,95 @@ export default function DashboardTab({
                 setActiveTab("projects");
                 handleAddProject();
               }}
-              className="w-full flex items-center justify-between p-3.5 bg-gray-950/40 hover:bg-blue-600/10 border border-white/5 hover:border-blue-500/20 text-gray-300 hover:text-blue-400 rounded-xl transition duration-300 cursor-pointer font-bold active:scale-[0.99]"
+              className="w-full flex items-center justify-between p-3.5 rounded-xl transition duration-300 cursor-pointer font-bold active:scale-[0.99] font-mono"
+              style={{
+                backgroundColor: "rgba(248, 242, 228, 0.04)",
+                border: "1px solid rgba(228, 218, 195, 0.12)",
+                color: "var(--cream)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "rgba(47, 99, 224, 0.15)";
+                e.currentTarget.style.color = "var(--blue)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "rgba(248, 242, 228, 0.04)";
+                e.currentTarget.style.color = "var(--cream)";
+              }}
             >
               <span>Add Portfolio Entry</span>
-              <i className="fas fa-plus text-[10px]"></i>
+              <i className="fas fa-plus text-[10px]" style={{ color: "var(--orange)" }}></i>
             </button>
             <button
               onClick={() => {
                 setActiveTab("testimonials");
                 handleAddTestimonial();
               }}
-              className="w-full flex items-center justify-between p-3.5 bg-gray-950/40 hover:bg-purple-600/10 border border-white/5 hover:border-purple-500/20 text-gray-300 hover:text-purple-400 rounded-xl transition duration-300 cursor-pointer font-bold active:scale-[0.99]"
+              className="w-full flex items-center justify-between p-3.5 rounded-xl transition duration-300 cursor-pointer font-bold active:scale-[0.99] font-mono"
+              style={{
+                backgroundColor: "rgba(248, 242, 228, 0.04)",
+                border: "1px solid rgba(228, 218, 195, 0.12)",
+                color: "var(--cream)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "rgba(155, 114, 216, 0.15)";
+                e.currentTarget.style.color = "var(--purple)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "rgba(248, 242, 228, 0.04)";
+                e.currentTarget.style.color = "var(--cream)";
+              }}
             >
               <span>Add Testimonial Quote</span>
-              <i className="fas fa-plus text-[10px]"></i>
+              <i className="fas fa-plus text-[10px]" style={{ color: "var(--orange)" }}></i>
             </button>
             <button
               onClick={() => setActiveTab("settings")}
-              className="w-full flex items-center justify-between p-3.5 bg-gray-950/40 hover:bg-emerald-600/10 border border-white/5 hover:border-emerald-500/20 text-gray-300 hover:text-emerald-400 rounded-xl transition duration-300 cursor-pointer font-bold active:scale-[0.99]"
+              className="w-full flex items-center justify-between p-3.5 rounded-xl transition duration-300 cursor-pointer font-bold active:scale-[0.99] font-mono"
+              style={{
+                backgroundColor: "rgba(248, 242, 228, 0.04)",
+                border: "1px solid rgba(228, 218, 195, 0.12)",
+                color: "var(--cream)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "rgba(16, 185, 129, 0.15)";
+                e.currentTarget.style.color = "#10b981";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "rgba(248, 242, 228, 0.04)";
+                e.currentTarget.style.color = "var(--cream)";
+              }}
             >
               <span>Register Administrator</span>
-              <i className="fas fa-user-plus text-[10px]"></i>
+              <i className="fas fa-user-plus text-[10px]" style={{ color: "var(--orange)" }}></i>
             </button>
           </div>
         </div>
 
         {/* Recent Submissions Activity Feed */}
-        <div className="lg:col-span-2 bg-gray-900/30 border border-white/5 rounded-2xl p-5 md:p-6 backdrop-blur-sm space-y-4">
-          <div className="flex justify-between items-center pb-3 border-b border-white/5">
-            <h4 className="text-xs font-bold text-white flex items-center gap-2 font-mono uppercase tracking-wider">
-              <i className="fas fa-history text-purple-400"></i>
+        <div
+          className="lg:col-span-2 rounded-2xl p-5 md:p-6 space-y-4"
+          style={{
+            backgroundColor: "rgba(18, 30, 68, 0.7)",
+            border: "1px solid rgba(228, 218, 195, 0.14)",
+          }}
+        >
+          <div
+            className="flex justify-between items-center pb-3"
+            style={{ borderBottom: "1px solid rgba(228, 218, 195, 0.1)" }}
+          >
+            <h4
+              className="text-xs font-bold flex items-center gap-2 font-mono uppercase tracking-wider"
+              style={{ color: "var(--cream)" }}
+            >
+              <i className="fas fa-history" style={{ color: "var(--orange)" }}></i>
               <span>Recent Activity Feed</span>
             </h4>
             <button
               onClick={() => setActiveTab("crm")}
-              className="text-[10px] text-blue-400 hover:text-blue-300 hover:underline font-bold uppercase tracking-wider"
+              className="text-[10px] font-bold uppercase tracking-wider font-mono"
+              style={{ color: "var(--blue)" }}
             >
-              View All Leads
+              View All Leads →
             </button>
           </div>
 
@@ -218,18 +333,29 @@ export default function DashboardTab({
                 onClick={() => {
                   setSelectedLead(log);
                 }}
-                className="p-3.5 bg-gray-950/40 hover:bg-gray-950/80 border border-white/5 hover:border-gray-800 rounded-xl flex items-center justify-between gap-3 cursor-pointer transition duration-300 active:scale-[0.99]"
+                className="p-3.5 rounded-xl flex items-center justify-between gap-3 cursor-pointer transition duration-300 active:scale-[0.99]"
+                style={{
+                  backgroundColor: "rgba(248, 242, 228, 0.04)",
+                  border: "1px solid rgba(228, 218, 195, 0.12)",
+                }}
               >
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-white text-xs truncate max-w-[120px]">{log.name}</span>
-                    <span className="text-[9px] text-gray-500 truncate max-w-[150px] font-mono">&lt;{log.email}&gt;</span>
+                    <span className="font-bold text-xs truncate max-w-[120px]" style={{ color: "var(--cream)" }}>{log.name}</span>
+                    <span className="text-[9px] truncate max-w-[150px] font-mono" style={{ color: "rgba(248, 242, 228, 0.55)" }}>&lt;{log.email}&gt;</span>
                   </div>
-                  <p className="text-[11px] text-gray-400 truncate mt-1 max-w-[250px] md:max-w-md">{log.message}</p>
+                  <p className="text-[11px] truncate mt-1 max-w-[250px] md:max-w-md" style={{ color: "rgba(248, 242, 228, 0.75)" }}>{log.message}</p>
                 </div>
                 <div className="text-right shrink-0">
-                  <span className="text-[9px] text-gray-500 block font-mono">{new Date(log.createdAt).toLocaleDateString()}</span>
-                  <span className="text-[9px] px-2 py-0.5 bg-blue-600/10 border border-blue-500/20 text-blue-400 rounded-full font-bold mt-1 inline-block">
+                  <span className="text-[9px] block font-mono" style={{ color: "rgba(248, 242, 228, 0.5)" }}>{new Date(log.createdAt).toLocaleDateString()}</span>
+                  <span
+                    className="text-[9px] px-2 py-0.5 rounded-full font-bold mt-1 inline-block font-mono"
+                    style={{
+                      backgroundColor: "rgba(47, 99, 224, 0.15)",
+                      color: "var(--blue)",
+                      border: "1px solid rgba(61, 123, 247, 0.25)",
+                    }}
+                  >
                     New Lead
                   </span>
                 </div>
@@ -237,7 +363,7 @@ export default function DashboardTab({
             ))}
 
             {contactLogs.length === 0 && (
-              <p className="text-center text-xs text-gray-500 py-8 italic">No recent activity received.</p>
+              <p className="text-center text-xs py-8 italic font-mono" style={{ color: "rgba(248, 242, 228, 0.5)" }}>No recent activity received.</p>
             )}
           </div>
         </div>

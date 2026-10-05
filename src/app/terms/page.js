@@ -179,7 +179,7 @@ export default function TermsPage() {
       {/* Header Navigation */}
       <Header />
 
-      <main className="min-h-screen relative z-10 pt-32 pb-20 px-6">
+      <main className="min-h-screen relative z-10 pt-32 pb-20 px-6" data-theme="night">
         <div className="container mx-auto max-w-4xl">
           {/* Main Card */}
           <div className="bg-[#0c061d]/75 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-12 shadow-2xl space-y-8">

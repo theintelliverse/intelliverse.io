@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { clientPromise } from "@/lib/db";
+import { getDb } from "@/lib/db";
 import { verifySession } from "@/lib/auth";
 
 export async function GET() {
@@ -8,25 +8,18 @@ export async function GET() {
     const cookieStore = await cookies();
     const sessionToken = cookieStore.get("admin_session")?.value;
 
-    let db = null;
-    let isDbConnected = false;
     let counts = {
       testimonials: 0,
       projects: 0,
       contacts: 0,
+      caseStudies: 0,
+      founders: 0
     };
     let admins = ["admin"]; // Default fallback list
     let currentUser = null;
 
-    if (clientPromise) {
-      try {
-        const client = await clientPromise;
-        db = client.db("intelliverse");
-        isDbConnected = true;
-      } catch (err) {
-        console.error("DB connection error in status API:", err);
-      }
-    }
+    const db = await getDb();
+    const isDbConnected = Boolean(db);
 
     currentUser = await verifySession(sessionToken, db);
 
@@ -38,6 +31,8 @@ export async function GET() {
       counts.testimonials = await db.collection("testimonials").countDocuments({});
       counts.projects = await db.collection("projects").countDocuments({});
       counts.contacts = await db.collection("contacts").countDocuments({});
+      counts.caseStudies = await db.collection("case_studies").countDocuments({});
+      counts.founders = await db.collection("founders").countDocuments({});
       
       const dbAdmins = await db.collection("admins").find({}).project({ username: 1, _id: 0 }).toArray();
       if (dbAdmins.length > 0) {

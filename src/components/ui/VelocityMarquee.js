@@ -1,74 +1,76 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
-  motion,
   useScroll,
   useVelocity,
   useTransform,
   useSpring,
   useAnimationFrame,
-  useMotionValue
+  useMotionValue,
+  motion,
 } from "framer-motion";
 
 /**
- * Velocity-Skewed Infinite Running Marquee
- * Dynamically skews text on high scroll velocity and uses spring physics to smoothly return to 0deg when stopped.
+ * Dual-strip velocity marquee.
+ * Strip 1 moves left, Strip 2 moves right.
+ * Speed reacts to scroll velocity with spring physics.
  */
 export default function VelocityMarquee({
-  textItems = [
-    "// Innovation",
-    "// Create",
-    "// Grow",
-    "// Software Engineering",
-    "// Web Applications",
-    "// IT Infrastructure",
-    "// DevOps Pipelines",
-    "// Cloud Architectures"
+  items1 = [
+    "Software Engineering",
+    "Web Applications",
+    "Mobile Apps",
+    "IT Infrastructure",
+    "DevOps",
+    "Cloud",
+    "AI Solutions",
   ],
-  baseVelocity = -2,
-  className = ""
+  items2 = [
+    "Next.js",
+    "React",
+    "Node.js",
+    "AWS",
+    "GCP",
+    "Figma",
+    "TypeScript",
+    "Python",
+  ],
 }) {
+  return (
+    <div className="marquee-section overflow-hidden">
+      <MarqueeStrip items={items1} baseVelocity={-1.8} />
+      <div style={{ marginTop: "0.625rem" }}>
+        <MarqueeStrip items={items2} baseVelocity={1.8} dimmed />
+      </div>
+    </div>
+  );
+}
+
+function MarqueeStrip({ items, baseVelocity, dimmed = false }) {
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
-
-  // Smooth scroll velocity value
-  const smoothVelocity = useSpring(scrollVelocity, {
-    damping: 50,
-    stiffness: 400
-  });
-
-  // Map scroll velocity (-3000 to 3000) to skewX (-12deg to 12deg)
-  const skewXRaw = useTransform(smoothVelocity, [-3000, 0, 3000], [-12, 0, 12]);
-  const skewX = useSpring(skewXRaw, { stiffness: 300, damping: 30 });
-
+  const smoothVelocity = useSpring(scrollVelocity, { damping: 50, stiffness: 400 });
+  const skewX = useTransform(smoothVelocity, [-3000, 0, 3000], [baseVelocity > 0 ? 6 : -6, 0, baseVelocity > 0 ? -6 : 6]);
+  const skewSpring = useSpring(skewX, { stiffness: 300, damping: 30 });
   const baseX = useMotionValue(0);
 
-  // Animation frame loop for continuous marquee wrap (-20% to 0%)
-  useAnimationFrame((t, delta) => {
-    let moveBy = baseVelocity * (delta / 1000) * 20;
-
-    // Accelerate marquee movement slightly with scroll speed
-    const velocityFactor = smoothVelocity.get();
-    if (velocityFactor !== 0) {
-      moveBy += (velocityFactor / 1000) * moveBy;
-    }
-
-    baseX.set(baseX.get() + moveBy);
+  useAnimationFrame((_, delta) => {
+    let move = baseVelocity * (delta / 1000) * 24;
+    const v = smoothVelocity.get();
+    if (Math.abs(v) > 10) move += (v / 800) * move;
+    baseX.set(baseX.get() + move);
   });
 
-  // Wrap percentage logic
-  const x = useTransform(baseX, (v) => `${(v % 50)}%`);
+  const x = useTransform(baseX, (v) => `${v % 50}%`);
+  const allItems = [...items, ...items, ...items, ...items];
 
   return (
-    <div className={`py-6 border-y border-white/5 bg-[#080415]/30 overflow-hidden whitespace-nowrap flex select-none pointer-events-none relative z-10 ${className}`}>
-      <motion.div
-        style={{ x, skewX }}
-        className="flex gap-12 text-[10px] sm:text-xs font-mono font-extrabold uppercase tracking-widest text-indigo-400/30 will-change-transform"
-      >
-        {/* Render duplicate arrays for seamless looping */}
-        {[...textItems, ...textItems, ...textItems, ...textItems].map((item, idx) => (
-          <span key={idx} className="inline-block shrink-0">
+    <div className="overflow-hidden whitespace-nowrap flex select-none pointer-events-none">
+      <motion.div style={{ x, skewX: skewSpring }} className="marquee-inner">
+        {allItems.map((item, i) => (
+          <span key={i} className={`marquee-item ${dimmed ? "opacity-50" : ""}`}>
+            <span className="marquee-diamond" aria-hidden="true" />
             {item}
           </span>
         ))}

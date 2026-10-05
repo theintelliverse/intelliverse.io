@@ -1,270 +1,310 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { motion, useScroll, useTransform } from "framer-motion";
-import Magnetic from "@/components/ui/Magnetic";
+import Link from "next/link";
 
-export default function Hero({ data }) {
-  const containerRef = useRef(null);
-  const titleRef = useRef(null);
-  const subtitleRef = useRef(null);
-  const btnRef = useRef(null);
+/**
+ * Hero section — Clean Brand Blue & Cream Palette
+ * ─ 5 flat drifting circles (bright blue big, indigo medium, orange, coral, small purple/pink dots) with multiply blend
+ * ─ Headline "Innovation. Create. Grow." with clamp(56px, 12vw, 190px), tight tracking, mixed roman + italic accent word
+ * ─ Tiny mono status line: "Ahmedabad, India / Taking new projects"
+ * ─ Primary CTA: blue-deep button | Secondary: outlined ink
+ */
+export default function Hero({ data = null } = {}) {
+  const headline = data?.headline || "Innovation. Create. Grow.";
+  const subtitle = data?.subtitle || "Your one-stop solution for software development, web development, and IT services.";
+  const status = data?.status || "Ahmedabad, India / Taking new projects";
+  const pillarsText = data?.pillarsText || "Web Architecture · Cloud Infrastructure · SaaS · AI Workflows";
+  const caseStudiesHighlight = data?.caseStudiesHighlight || "Appointory (Healthcare) & Vrix (Headless E-Commerce)";
+  const studioLocation = data?.studioLocation || "Ahmedabad, Gujarat · Collaborating Worldwide";
 
-  // Parallax scroll for the giant background text
-  const { scrollY } = useScroll();
-  const yParallax = useTransform(scrollY, [0, 800], [0, 180]);
-  const scaleParallax = useTransform(scrollY, [0, 800], [1, 1.15]);
+  const headlineWords = headline.split(" ");
+  const lastWord = headlineWords.length > 1 ? headlineWords.pop() : "";
+  const mainWords = headlineWords.join(" ");
 
-  useEffect(() => {
-    if (!titleRef.current) return;
-
-    // Detect mobile viewport (width < 768px)
-    const isMobile = window.innerWidth < 768;
-
-    if (!isMobile) {
-      // Split title into characters
-      const text = titleRef.current.innerText;
-      titleRef.current.innerHTML = "";
-
-      // Create spans for characters
-      text.split("").forEach((char) => {
-        const span = document.createElement("span");
-        span.innerText = char === " " ? "\u00A0" : char;
-        span.className = "inline-block char-span opacity-0 translate-y-12 select-none";
-        titleRef.current.appendChild(span);
-      });
-      // Ensure the parent container is visible for span animations
-      gsap.set(titleRef.current, { opacity: 1 });
-    }
-
-    // Staggered GSAP Entry Timeline
-    const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
-
-    if (!isMobile) {
-      tl.to(".char-span", {
-        opacity: 1,
-        y: 0,
-        duration: 1.2,
-        stagger: 0.04,
-      });
-    } else {
-      // On mobile, fade in and slide up the entire h1 smoothly
-      tl.fromTo(
-        titleRef.current,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 1.2 }
-      );
-    }
-
-    tl.fromTo(
-      subtitleRef.current,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 1.0 },
-      "-=0.6"
-    )
-      .fromTo(
-        btnRef.current,
-        { opacity: 0, scale: 0.9 },
-        { opacity: 1, scale: 1, duration: 0.8 },
-        "-=0.8"
-      )
-      .fromTo(
-        ".hero-line",
-        { scaleY: 0, opacity: 0 },
-        { scaleY: 1, opacity: 1, duration: 1.5, transformOrigin: "top", stagger: 0.2 },
-        "-=1.0"
-      );
-
-    // Subtle floating animation for background elements
-    gsap.to(".hero-big-bg-text", {
-      y: -20,
-      duration: 6,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut"
-    });
-
-    // Subtle float loop for CTA Button
-    gsap.to(btnRef.current, {
-      y: -6,
-      duration: 2.2,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-      delay: 2.2
-    });
-  }, []);
-
-  const handleSmoothScroll = (e, targetId) => {
+  const scrollTo = (e, id) => {
     e.preventDefault();
-        const element = document.getElementById(targetId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   };
-
-  const playHoverSound = () => {};
 
   return (
     <section
-      ref={containerRef}
       id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-transparent py-20"
+      data-theme="cream"
+      className="hero-section"
+      aria-labelledby="hero-heading"
+      style={{
+        minHeight: "92vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        position: "relative",
+        paddingTop: "clamp(5rem, 12vh, 8.5rem)",
+        paddingBottom: "clamp(4rem, 8vh, 6.5rem)",
+        overflow: "hidden",
+        backgroundColor: "var(--cream)",
+        color: "var(--ink)",
+      }}
     >
-      {/* Massive Background Decorative Text */}
-      <motion.h2
-        style={{ y: yParallax, scale: scaleParallax }}
-        className="hero-big-bg-text absolute select-none text-[12vw] font-black tracking-widest text-white/[0.015] pointer-events-none uppercase font-sans text-center leading-none"
+      {/* ── 5 Flat Drifting Circles with Multiply Blend ────────────── */}
+      <div
         aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          overflow: "hidden",
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
       >
-        INTELLIVERSE
-      </motion.h2>
-
-      <div className="container mx-auto px-6 relative z-10 max-w-6xl flex flex-col lg:flex-row items-center justify-between gap-12 min-h-[80vh]">
-        {/* Floating Holographic/Glassmorphic Panel (Left side) */}
-        <div 
-          className="w-full lg:w-6/12 text-left p-8 md:p-12 rounded-3xl glassmorphic-card glassmorphic-glow-blue relative overflow-hidden group"
+        {/* 1. Largest Circle: Bright Blue (#3D7BF7) */}
+        <div
           style={{
-            borderLeft: "4px solid var(--accent-primary)" // Left electric blue accent bar
+            position: "absolute",
+            top: "8%",
+            right: "2%",
+            width: "clamp(340px, 44vw, 680px)",
+            height: "clamp(340px, 44vw, 680px)",
+            borderRadius: "50%",
+            backgroundColor: "var(--blue)",
+            opacity: 0.18,
+            mixBlendMode: "multiply",
+            transition: "transform 0.8s ease-out",
+          }}
+        />
+
+        {/* 2. Medium Circle: Indigo (#5B3FD9) */}
+        <div
+          style={{
+            position: "absolute",
+            top: "42%",
+            right: "24%",
+            width: "clamp(180px, 25vw, 380px)",
+            height: "clamp(180px, 25vw, 380px)",
+            borderRadius: "50%",
+            backgroundColor: "var(--indigo)",
+            opacity: 0.14,
+            mixBlendMode: "multiply",
+          }}
+        />
+
+        {/* 3. Orange Circle: Warm Highlight (#FDB347) */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: "12%",
+            left: "8%",
+            width: "clamp(160px, 22vw, 320px)",
+            height: "clamp(160px, 22vw, 320px)",
+            borderRadius: "50%",
+            backgroundColor: "var(--orange)",
+            opacity: 0.22,
+            mixBlendMode: "multiply",
+          }}
+        />
+
+        {/* 4. Coral Circle: Accent (#FF6B7B) */}
+        <div
+          style={{
+            position: "absolute",
+            top: "16%",
+            left: "28%",
+            width: "clamp(120px, 16vw, 240px)",
+            height: "clamp(120px, 16vw, 240px)",
+            borderRadius: "50%",
+            backgroundColor: "var(--coral)",
+            opacity: 0.16,
+            mixBlendMode: "multiply",
+          }}
+        />
+
+        {/* 5. Small Purple / Pink Decorative Dot (#9B72D8 / #FF8FA0) */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: "28%",
+            right: "12%",
+            width: "clamp(48px, 6vw, 84px)",
+            height: "clamp(48px, 6vw, 84px)",
+            borderRadius: "50%",
+            backgroundColor: "var(--pink)",
+            opacity: 0.28,
+            mixBlendMode: "multiply",
+          }}
+        />
+      </div>
+
+      <div className="container-site relative z-10" style={{ maxWidth: "1440px", margin: "0 auto" }}>
+        
+        {/* Tiny Mono Status Line */}
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.6rem",
+            marginBottom: "clamp(1.5rem, 3.5vh, 2.5rem)",
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: "0.6875rem",
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            color: "var(--muted)",
           }}
         >
-          {/* Subtle inner grid design */}
-          <div className="absolute inset-0 bg-grid-white/[0.01] pointer-events-none" />
-
-          {/* Holographic Systems Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-[9px] font-mono tracking-widest uppercase text-blue-400 mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
-            SYSTEMS // OPERATIONAL
-          </div>
-
-          {/* Title Stagger */}
-          <h1
-            ref={titleRef}
-            id="hero-title"
-            style={{ opacity: 0 }} // Pre-set invisible to prevent FOUC, GSAP will fade in
-            className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 tracking-tight uppercase font-sans leading-none text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-blue-200"
-          >
-            innovation create & grow
-          </h1>
-
-          {/* Subtitle */}
-          <p
-            ref={subtitleRef}
-            id="hero-subtitle"
-            className="text-xs sm:text-sm md:text-base text-gray-300 font-medium mb-10 tracking-wider uppercase leading-relaxed max-w-xl font-mono"
-          >
-            {data?.subtitle || "YOUR ONE-STOP SOLUTION FOR SOFTWARE DEVELOPMENT, WEB DEVELOPMENT, AND IT SERVICES."}
-          </p>
-
-          {/* Action Button */}
-          <div ref={btnRef} className="flex justify-start">
-            <Magnetic>
-              <a
-                href="#contact"
-                onClick={(e) => handleSmoothScroll(e, "contact")}
-                onMouseEnter={playHoverSound}
-                className="group relative px-8 py-3.5 rounded-full bg-white text-black font-bold uppercase tracking-widest text-xs hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-xl overflow-hidden cursor-pointer"
-              >
-                {/* Hover sliding bg */}
-                <span className="absolute inset-0 w-full h-full bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left -z-10" />
-                Get in Touch
-              </a>
-            </Magnetic>
-          </div>
+          <span
+            style={{
+              width: "6px",
+              height: "6px",
+              borderRadius: "50%",
+              backgroundColor: "#10b981",
+              boxShadow: "0 0 6px #10b981",
+            }}
+            aria-hidden="true"
+          />
+          <span style={{ fontWeight: 600, color: "var(--ink)" }}>Ahmedabad, India</span>
+          <span style={{ color: "var(--hairline)" }}>/</span>
+          <span>Taking new projects</span>
         </div>
 
-        {/* Holographic Diagnostic Panel (Right side) - Visible on Desktop only to balance layout */}
-        <div 
-          className="w-full lg:w-5/12 p-8 rounded-3xl relative overflow-hidden hidden lg:flex flex-col h-[460px] font-mono text-xs text-gray-300 border border-white/5"
+        {/* Main Display Headline: Innovation. Create. Grow. */}
+        <div style={{ overflow: "hidden", marginBottom: "clamp(1.25rem, 3vh, 2rem)" }}>
+          <h1
+            id="hero-heading"
+            style={{
+              fontFamily: "'Instrument Serif', Georgia, serif",
+              fontSize: "clamp(56px, 12vw, 190px)",
+              lineHeight: 0.94,
+              letterSpacing: "-0.035em",
+              color: "var(--ink)",
+              margin: 0,
+              fontWeight: 400,
+            }}
+          >
+            Innovation. Create.{" "}
+            <em
+              style={{
+                fontStyle: "italic",
+                color: "var(--blue-deep)",
+                fontWeight: 400,
+              }}
+            >
+              Grow.
+            </em>
+          </h1>
+        </div>
+
+        {/* Subtitle & Value Proposition */}
+        <p
           style={{
-            borderRight: "4px solid var(--accent-secondary)", // Right cyan accent bar
-            backgroundColor: "rgba(10, 10, 15, 0.12)",
-            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 123, 255, 0.05)"
+            fontSize: "clamp(1.05rem, 1.6vw, 1.35rem)",
+            color: "var(--muted)",
+            maxWidth: "44rem",
+            lineHeight: 1.65,
+            marginBottom: "clamp(2rem, 4.5vh, 3.25rem)",
+            fontFamily: "'Satoshi', 'Inter', system-ui, sans-serif",
           }}
         >
-          {/* Diagnostic Header */}
-          <div className="flex justify-between items-center border-b border-white/10 pb-4 mb-6">
-            <span className="font-bold uppercase tracking-widest text-[10px] text-blue-400">SYS DIAGNOSTICS</span>
-            <span className="text-[9px] text-green-400 bg-green-500/10 px-2 py-0.5 rounded border border-green-500/20 animate-pulse">LIVE</span>
+          <strong style={{ color: "var(--ink)", fontWeight: 600 }}>
+            The Intelliverse is a software, web and IT services company based in Ahmedabad, India.
+          </strong>{" "}
+          We engineer resilient custom SaaS platforms, high-speed Next.js web applications, and enterprise cloud infrastructure for startups and modern businesses that refuse to settle for templates.
+        </p>
+
+        {/* Primary CTA (blue-deep fill, cream text) & Secondary (outlined ink) */}
+        <div
+          style={{
+            display: "flex",
+            gap: "1rem",
+            flexWrap: "wrap",
+            alignItems: "center",
+            marginBottom: "clamp(3rem, 6vh, 4.5rem)",
+          }}
+        >
+          <a
+            href="#contact"
+            onClick={(e) => scrollTo(e, "contact")}
+            data-cursor="link"
+            data-cursor-magnetic
+            className="btn-primary"
+          >
+            <span>Start a Project →</span>
+          </a>
+
+          <a
+            href="#projects"
+            onClick={(e) => scrollTo(e, "projects")}
+            data-cursor="link"
+            data-cursor-magnetic
+            className="btn-outline"
+          >
+            <span>Explore Sketchbook ↓</span>
+          </a>
+        </div>
+
+        {/* Real Production Pillars Strip (No fake metrics) */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+            gap: "1.25rem",
+            paddingTop: "2rem",
+            borderTop: "1px solid var(--hairline)",
+          }}
+        >
+          <div>
+            <span
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "0.6875rem",
+                color: "var(--blue-deep)",
+                fontWeight: 700,
+                display: "block",
+                marginBottom: "0.25rem",
+              }}
+            >
+              Core Pillars
+            </span>
+            <p style={{ fontSize: "0.875rem", color: "var(--muted)", margin: 0 }}>
+              Web Architecture · Cloud Infrastructure · SaaS · AI Workflows
+            </p>
           </div>
 
-          {/* Real-time System Load Bars */}
-          <div className="space-y-4 mb-8">
-            <div>
-              <div className="flex justify-between mb-1.5 uppercase text-[9px] tracking-wider text-gray-400">
-                <span>CPU Load</span>
-                <span className="text-blue-400">42.8%</span>
-              </div>
-              <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                <motion.div 
-                  initial={{ width: 0 }}
-                  animate={{ width: "42.8%" }}
-                  transition={{ duration: 1.5, ease: "easeOut" }}
-                  className="h-full bg-blue-500"
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex justify-between mb-1.5 uppercase text-[9px] tracking-wider text-gray-400">
-                <span>Robotic Kinematics</span>
-                <span className="text-cyan-400">Operational</span>
-              </div>
-              <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                <motion.div 
-                  initial={{ width: 0 }}
-                  animate={{ width: "75%" }}
-                  transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
-                  className="h-full bg-cyan-400"
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex justify-between mb-1.5 uppercase text-[9px] tracking-wider text-gray-400">
-                <span>Memory Allocation</span>
-                <span className="text-white">1.24 GB / 4.0 GB</span>
-              </div>
-              <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                <motion.div 
-                  initial={{ width: 0 }}
-                  animate={{ width: "31%" }}
-                  transition={{ duration: 1.5, ease: "easeOut", delay: 0.4 }}
-                  className="h-full bg-white/40"
-                />
-              </div>
-            </div>
+          <div>
+            <span
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "0.6875rem",
+                color: "var(--blue-deep)",
+                fontWeight: 700,
+                display: "block",
+                marginBottom: "0.25rem",
+              }}
+            >
+              Real Case Studies
+            </span>
+            <p style={{ fontSize: "0.875rem", color: "var(--muted)", margin: 0 }}>
+              Appointory (Healthcare) &amp; Vrix (Headless E-Commerce)
+            </p>
           </div>
 
-          {/* Dynamic Scrolling Diagnostic Logs */}
-          <div className="flex-1 flex flex-col justify-end">
-            <span className="text-[9px] font-bold text-blue-400 uppercase tracking-widest mb-3">Core logs //</span>
-            <div className="space-y-2.5 max-h-[160px] overflow-hidden">
-              <div className="flex gap-2 text-gray-400 border-l border-blue-500/20 pl-2 text-[10px]">
-                <span className="text-blue-500">[00:01]</span>
-                <span>SYSTEM INIT: SUCCESS</span>
-              </div>
-              <div className="flex gap-2 text-gray-400 border-l border-blue-500/20 pl-2 text-[10px]">
-                <span className="text-blue-500">[00:02]</span>
-                <span>PINS CONNECTED: OK</span>
-              </div>
-              <div className="flex gap-2 text-gray-400 border-l border-blue-500/20 pl-2 text-[10px]">
-                <span className="text-blue-500">[00:03]</span>
-                <span>ACTUATORS CALIBRATED</span>
-              </div>
-              <div className="flex gap-2 text-white border-l border-cyan-500/30 pl-2 text-[10px]">
-                <span className="text-cyan-400">[LIVE]</span>
-                <span className="animate-pulse">LASER SCANNING ACTIVE...</span>
-              </div>
-            </div>
+          <div>
+            <span
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "0.6875rem",
+                color: "var(--blue-deep)",
+                fontWeight: 700,
+                display: "block",
+                marginBottom: "0.25rem",
+              }}
+            >
+              Studio Base
+            </span>
+            <p style={{ fontSize: "0.875rem", color: "var(--muted)", margin: 0 }}>
+              Ahmedabad, Gujarat · Collaborating Worldwide
+            </p>
           </div>
         </div>
       </div>
-
-      {/* Decorative vertical lines */}
-      <div className="hero-line absolute left-10 top-0 bottom-0 w-[1px] bg-white/[0.02] hidden lg:block" />
-      <div className="hero-line absolute right-10 top-0 bottom-0 w-[1px] bg-white/[0.02] hidden lg:block" />
     </section>
   );
 }

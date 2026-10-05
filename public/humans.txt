@@ -1,0 +1,24 @@
+/* TEAM */
+CTO & Co-founder: Dhruvil Thummar
+Site: https://www.linkedin.com/in/dhruvilthummar
+Location: Ahmedabad, Gujarat, India
+
+CMO & Co-founder: Rudra Kankotiya
+Site: https://www.linkedin.com/in/rudra-kankotiya-2173ab31a
+Location: Ahmedabad, Gujarat, India
+
+Director & Founder: Jal Anghan
+Site: https://www.linkedin.com/in/jal-anghan-534628309
+Location: Ahmedabad, Gujarat, India
+
+/* THANKS */
+To our clients, engineers, and contributors worldwide.
+
+/* SITE */
+Standards: HTML5, CSS3, ES2024, WebGL, Schema.org, WCAG 2.1 AA
+Framework: Next.js 16 (App Router), React 19, Turbopack
+Typography: Instrument Serif, JetBrains Mono, Satoshi
+Components: Custom Vanilla CSS & ThreeUI Shader Runtime
+Studio Base: Ahmedabad, Gujarat, India (23.0225° N, 72.5714° E)
+URL: https://intelliverse.io
+Contact: theintelliverse@gmail.com

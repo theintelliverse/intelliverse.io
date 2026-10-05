@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "The Intelliverse - Engineering the Digital Future";
+export const alt = "The Intelliverse — Software, Web & IT Services in Ahmedabad";
 export const size = {
   width: 1200,
   height: 630,
@@ -16,139 +16,183 @@ export default async function Image() {
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#05020c",
-          backgroundImage:
-            "radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.2), transparent 45%), radial-gradient(circle at 75% 75%, rgba(6, 182, 212, 0.2), transparent 45%)",
+          alignItems: "flex-start",
+          justifyContent: "space-between",
+          backgroundColor: "#0B1530", // brand --night
+          padding: "60px 80px",
           position: "relative",
-          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          fontFamily: "system-ui, -apple-system, sans-serif",
           overflow: "hidden",
         }}
       >
-        {/* Subtle Tech Grid Pattern */}
+        {/* Subtle Brand Background Blobs */}
         <div
           style={{
             position: "absolute",
-            inset: 0,
-            backgroundImage:
-              "linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-            opacity: 0.35,
+            top: "-150px",
+            right: "-100px",
+            width: "550px",
+            height: "550px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(61, 123, 247, 0.35) 0%, transparent 70%)",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: "-100px",
+            left: "20%",
+            width: "450px",
+            height: "450px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(253, 179, 71, 0.20) 0%, transparent 70%)",
           }}
         />
 
-        {/* Central Glassmorphic Card */}
+        {/* Top Header Row */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+            zIndex: 10,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+            <div
+              style={{
+                width: "48px",
+                height: "48px",
+                borderRadius: "12px",
+                backgroundColor: "#2F63E0",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#F8F2E4",
+                fontSize: "24px",
+                fontWeight: 800,
+                border: "1px solid rgba(228, 218, 195, 0.3)",
+              }}
+            >
+              i
+            </div>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span
+                style={{
+                  fontSize: "22px",
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "#F8F2E4",
+                }}
+              >
+                The Intelliverse
+              </span>
+              <span
+                style={{
+                  fontSize: "12px",
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "#FDB347",
+                }}
+              >
+                Ahmedabad, Gujarat · India
+              </span>
+            </div>
+          </div>
+
+          <div
+            style={{
+              padding: "8px 18px",
+              borderRadius: "999px",
+              border: "1px solid rgba(228, 218, 195, 0.2)",
+              backgroundColor: "rgba(18, 30, 68, 0.6)",
+              color: "#F8F2E4",
+              fontSize: "13px",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+            }}
+          >
+            Engineering Studio
+          </div>
+        </div>
+
+        {/* Central Content */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "50px 70px",
-            borderRadius: "32px",
-            background: "rgba(15, 23, 42, 0.75)",
-            border: "1px solid rgba(56, 189, 248, 0.35)",
-            boxShadow:
-              "0 20px 60px rgba(0, 0, 0, 0.7), inset 0 0 40px rgba(56, 189, 248, 0.12)",
-            textAlign: "center",
-            maxWidth: "88%",
+            gap: "20px",
+            zIndex: 10,
+            maxWidth: "960px",
           }}
         >
-          {/* Brand Monogram Badge */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "8px 24px",
-              borderRadius: "9999px",
-              background: "rgba(56, 189, 248, 0.12)",
-              border: "1px solid rgba(56, 189, 248, 0.35)",
-              marginBottom: "24px",
-            }}
-          >
-            <div
-              style={{
-                width: "12px",
-                height: "12px",
-                borderRadius: "50%",
-                background: "#38bdf8",
-                boxShadow: "0 0 12px #38bdf8",
-              }}
-            />
-            <span
-              style={{
-                color: "#38bdf8",
-                fontSize: "18px",
-                fontWeight: 700,
-                letterSpacing: "2.5px",
-                textTransform: "uppercase",
-              }}
-            >
-              The Intelliverse
-            </span>
-          </div>
-
-          {/* Title */}
           <h1
             style={{
-              fontSize: "68px",
-              fontWeight: 900,
-              color: "#ffffff",
-              margin: 0,
-              letterSpacing: "-1.5px",
+              fontSize: "56px",
+              fontWeight: 800,
               lineHeight: 1.1,
-              background: "linear-gradient(135deg, #ffffff 0%, #93c5fd 50%, #38bdf8 100%)",
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              textFillColor: "transparent",
+              letterSpacing: "-0.03em",
+              color: "#F8F2E4",
+              margin: 0,
             }}
           >
-            Intelliverse.io
+            Software, Web &amp; IT Services, Built Like a Craft.
           </h1>
-
-          {/* Bold Tagline */}
           <p
             style={{
-              fontSize: "32px",
-              fontWeight: 600,
-              color: "#cbd5e1",
-              marginTop: "18px",
-              marginBottom: 0,
-              letterSpacing: "-0.5px",
+              fontSize: "22px",
+              lineHeight: 1.5,
+              color: "rgba(248, 242, 228, 0.8)",
+              margin: 0,
             }}
           >
-            Engineering the Digital Future
+            Full-Stack Next.js 15 Web Systems · Custom SaaS Engineering · Cloud Infrastructure &amp; DevOps
           </p>
+        </div>
 
-          {/* Subtext Capability Pills */}
-          <div
-            style={{
-              display: "flex",
-              gap: "14px",
-              marginTop: "36px",
-            }}
-          >
-            {["Next.js 16", "3D WebGL", "Native Mobile Apps", "Enterprise SaaS"].map(
-              (pill, idx) => (
-                <div
+        {/* Bottom Footer Tags */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+            paddingTop: "24px",
+            borderTop: "1px solid rgba(228, 218, 195, 0.16)",
+            zIndex: 10,
+          }}
+        >
+          <div style={{ display: "flex", gap: "16px" }}>
+            {["Next.js 15", "TypeScript", "SaaS Architecture", "AWS & Cloudflare", "Ahmedabad"].map(
+              (tag, idx) => (
+                <span
                   key={idx}
                   style={{
-                    padding: "8px 18px",
-                    borderRadius: "10px",
-                    background: "rgba(255, 255, 255, 0.06)",
-                    border: "1px solid rgba(255, 255, 255, 0.12)",
-                    color: "#94a3b8",
-                    fontSize: "15px",
-                    fontWeight: 600,
+                    fontSize: "13px",
+                    letterSpacing: "0.06em",
+                    padding: "6px 14px",
+                    borderRadius: "8px",
+                    backgroundColor: "rgba(18, 30, 68, 0.8)",
+                    border: "1px solid rgba(228, 218, 195, 0.14)",
+                    color: "rgba(248, 242, 228, 0.85)",
                   }}
                 >
-                  {pill}
-                </div>
+                  {tag}
+                </span>
               )
             )}
           </div>
+          <span
+            style={{
+              fontSize: "15px",
+              color: "#3D7BF7",
+              fontWeight: 600,
+            }}
+          >
+            intelliverse.io
+          </span>
         </div>
       </div>
     ),

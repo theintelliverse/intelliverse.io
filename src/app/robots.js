@@ -1,20 +1,21 @@
-/**
- * Next.js 16 App Router Robots.txt Generator
- */
+import { siteConfig } from "@/content/site";
+
 export default function robots() {
+  const baseUrl = siteConfig.url;
+
   return {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
-        disallow: ["/api/", "/admin/private/"],
+        allow: ["/", "/_next/static/", "/_next/image/"],
+        disallow: ["/admin", "/admin/", "/api/admin", "/api/content"],
       },
-      {
-        userAgent: ["GPTBot", "ChatGPT-User", "PerplexityBot", "ClaudeBot", "Google-Extended"],
-        allow: "/",
-      },
+      ...siteConfig.allowedBots.map((bot) => ({
+        userAgent: bot,
+        allow: ["/", "/_next/static/", "/_next/image/", "/llms.txt", "/llms-full.txt"],
+        disallow: ["/admin", "/admin/", "/api/admin", "/api/content"],
+      })),
     ],
-    sitemap: "https://intelliverse.io/sitemap.xml",
-    host: "https://intelliverse.io",
+    sitemap: `${baseUrl}/sitemap.xml`,
   };
 }

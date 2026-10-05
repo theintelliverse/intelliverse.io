@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <defs>
+    <style>
+      .bg { fill: #0B1530; }
+      .c-blue { fill: #3D7BF7; opacity: 0.9; }
+      .c-purple { fill: #8B5CF6; opacity: 0.85; }
+      .c-amber { fill: #FDB347; opacity: 0.9; }
+      .c-coral { fill: #F43F5E; opacity: 0.85; }
+      .dot { fill: #FFFFFF; }
+    </style>
+  </defs>
+  <!-- Background Rounded Base -->
+  <rect class="bg" width="48" height="48" rx="10" />
+  
+  <!-- The Intelliverse Circle-Cluster Mark -->
+  <g transform="translate(4, 4) scale(0.833)">
+    <!-- Central Overlapping Color Discs -->
+    <circle class="c-purple" cx="21" cy="22" r="12" />
+    <circle class="c-blue" cx="23" cy="26" r="11" />
+    <circle class="c-amber" cx="29" cy="20" r="10" />
+    <circle class="c-coral" cx="28" cy="27" r="9" />
+    
+    <!-- Floating Orbit Dots -->
+    <circle cx="24" cy="9" r="2.5" fill="#F43F5E" />
+    <circle cx="37" cy="21" r="2.5" fill="#3D7BF7" />
+    <circle cx="35" cy="25" r="1.5" fill="#F43F5E" opacity="0.8" />
+    <circle cx="11" cy="22" r="1.5" fill="#8B5CF6" />
+    <circle cx="13" cy="32" r="2" fill="#FDB347" />
+    
+    <!-- Stylized Central Focus -->
+    <circle class="dot" cx="24" cy="23" r="2" />
+  </g>
+</svg>

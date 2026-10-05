@@ -1,11 +1,15 @@
 import { ImageResponse } from "next/og";
 
 export const size = {
-  width: 32,
-  height: 32,
+  width: 48,
+  height: 48,
 };
 export const contentType = "image/png";
 
+/**
+ * Standard Google Search Favicon (48x48)
+ * Renders The Intelliverse circle-cluster mark
+ */
 export default function Icon() {
   return new ImageResponse(
     (
@@ -16,26 +20,107 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#05020c",
-          borderRadius: "8px",
-          border: "1px solid rgba(56, 189, 248, 0.6)",
-          boxShadow: "0 0 12px rgba(56, 189, 248, 0.4)",
+          background: "#0B1530",
+          borderRadius: "10px",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        <span
+        {/* Circle Cluster Discs */}
+        <div
           style={{
-            fontSize: "18px",
-            fontWeight: 900,
-            background: "linear-gradient(135deg, #ffffff 0%, #38bdf8 100%)",
-            backgroundClip: "text",
-            WebkitBackgroundClip: "text",
-            color: "transparent",
-            fontFamily: "system-ui, sans-serif",
-            letterSpacing: "-1px",
+            position: "absolute",
+            width: "24px",
+            height: "24px",
+            borderRadius: "50%",
+            background: "#8B5CF6",
+            top: "10px",
+            left: "8px",
+            opacity: 0.85,
           }}
-        >
-          IV
-        </span>
+        />
+        <div
+          style={{
+            position: "absolute",
+            width: "22px",
+            height: "22px",
+            borderRadius: "50%",
+            background: "#3D7BF7",
+            top: "16px",
+            left: "12px",
+            opacity: 0.9,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            width: "20px",
+            height: "20px",
+            borderRadius: "50%",
+            background: "#FDB347",
+            top: "9px",
+            left: "20px",
+            opacity: 0.85,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            width: "18px",
+            height: "18px",
+            borderRadius: "50%",
+            background: "#F43F5E",
+            top: "18px",
+            left: "18px",
+            opacity: 0.85,
+          }}
+        />
+
+        {/* Orbit Dots */}
+        <div
+          style={{
+            position: "absolute",
+            width: "5px",
+            height: "5px",
+            borderRadius: "50%",
+            background: "#F43F5E",
+            top: "5px",
+            left: "21px",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            width: "5px",
+            height: "5px",
+            borderRadius: "50%",
+            background: "#3D7BF7",
+            top: "22px",
+            right: "4px",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            width: "4px",
+            height: "4px",
+            borderRadius: "50%",
+            background: "#FDB347",
+            bottom: "6px",
+            left: "8px",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            width: "4px",
+            height: "4px",
+            borderRadius: "50%",
+            background: "#FFFFFF",
+            top: "21px",
+            left: "21px",
+          }}
+        />
       </div>
     ),
     {

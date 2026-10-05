@@ -8,10 +8,17 @@ import nodemailer from "nodemailer";
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { name, email, message } = body;
+    const { name, email, message, dpdpConsent, consentTimestamp } = body;
 
     if (!name || !email || !message) {
       return NextResponse.json({ error: "Please fill out all contact fields." }, { status: 400 });
+    }
+
+    if (!dpdpConsent) {
+      return NextResponse.json(
+        { error: "Consent under the Digital Personal Data Protection (DPDP) Act, 2023 is required to process this inquiry." },
+        { status: 400 }
+      );
     }
 
     // Resolve client IP address from request headers
@@ -28,6 +35,9 @@ export async function POST(request) {
       email,
       message,
       ip,
+      dpdpConsent: Boolean(dpdpConsent),
+      consentTimestamp: consentTimestamp ? new Date(consentTimestamp) : new Date(),
+      dpdpNoticeVersion: "2023-v1",
       createdAt: new Date()
     };
 

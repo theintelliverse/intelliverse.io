@@ -1,0 +1,78 @@
+# The Intelliverse
+
+> The Intelliverse is an engineering-first software development, web architecture, and IT services company based in Ahmedabad, Gujarat, India. We build resilient digital platforms, custom SaaS architectures, and high-performance applications from first principles with tactile craft, bespoke interaction design, and uncompromising technical reliability.
+
+## Core Identity & Facts
+- **Organization Name:** The Intelliverse
+- **Legal Name:** The Intelliverse
+- **Entity Type:** Software Engineering, Web Development & IT Services Studio
+- **Headquarters:** Ahmedabad, Gujarat, India (Coordinates: 23.0225° N, 72.5714° E)
+- **Time Zone:** Asia/Kolkata (IST, UTC+05:30)
+- **Website:** https://intelliverse.io
+- **Primary Contact:** theintelliverse@gmail.com
+- **Social Profiles:**
+  - LinkedIn: https://www.linkedin.com/company/the-intelliverse/
+  - Instagram: https://www.instagram.com/the_intelliverse/
+
+## Leadership & Founders
+- **Dhruvil Thummar** — Co-founder & Chief Technology Officer (CTO). Leads system architecture, distributed engineering, performance optimization, and technical vision. (LinkedIn: https://www.linkedin.com/in/dhruvilthummar)
+- **Rudra Kankotiya** — Co-founder & Chief Marketing Officer (CMO). Leads brand positioning, market research, client growth, and product strategy. (LinkedIn: https://www.linkedin.com/in/rudra-kankotiya-2173ab31a)
+- **Jal Anghan** — Founder & Director. Leads business governance, international client partnerships, and corporate strategic direction. (LinkedIn: https://www.linkedin.com/in/jal-anghan-534628309)
+
+## Core Capabilities & Services
+
+### 1. Web Architecture & Frontend Engineering
+- Canonical URL: https://intelliverse.io/services/web-development
+- Next.js 15, React 19, TypeScript, Vanilla CSS, Tailwind CSS.
+- Sub-second Core Web Vitals (<2.5s LCP, 0 CLS, <200ms INP).
+- Headless e-commerce (Shopify Storefront API, custom checkouts).
+
+### 2. Custom Software & SaaS Engineering
+- Canonical URL: https://intelliverse.io/services/software-engineering
+- Multi-tenant cloud SaaS systems with role-based access control (RBAC).
+- REST & GraphQL API engineering using Node.js, FastAPI (Python), and Go.
+- Distributed database modeling with PostgreSQL, MongoDB, Redis.
+
+### 3. Cloud Infrastructure & DevOps IT Services
+- Canonical URL: https://intelliverse.io/services/it-architecture-support
+- Amazon Web Services (AWS), Google Cloud Platform (GCP), Vercel, Cloudflare Edge.
+- Docker containerization, Kubernetes orchestration, Infrastructure as Code (Terraform).
+- Point-in-time recovery database backups and zero-downtime CI/CD deployment pipelines.
+
+### 4. Applied AI, Data & Automation Workflows
+- Canonical URL: https://intelliverse.io/services/ai-data-robotics-iot
+- Enterprise Agentic RAG workflows and neural pipeline automations.
+- Vector search (pgvector, Pinecone) for semantic document intelligence.
+
+## Verified Production Case Studies
+
+### 1. Appointory (Healthcare SaaS Platform)
+- Canonical URL: https://intelliverse.io/work/appointory
+- Live Production URL: https://appointory.in
+- Role: Full-Stack Product Architecture & Real-Time Cloud Integration.
+- Stack: Next.js 15, Node.js, MongoDB, Redis Pub/Sub, Cloud Messaging API, Tailwind CSS.
+- Impact: 40% clinic queue reduction with real-time consultation dispatch and encrypted health records locker.
+
+### 2. Vrix Jewellery (Luxury Headless E-Commerce)
+- Canonical URL: https://intelliverse.io/work/vrix
+- Live Production URL: https://vrix.in
+- Role: Headless E-Commerce Architecture & Multi-Currency Storefront.
+- Stack: Next.js App Router, Shopify Storefront GraphQL API, Tailwind CSS, Cloudflare Edge Caching.
+- Impact: Sub-second global page transitions, dynamic geolocation currency calculation, and instant catalog search.
+
+## Location & Regional Hub
+- **Ahmedabad Studio Hub:** https://intelliverse.io/software-development-company-ahmedabad
+- In-person technical scoping and software development in Ahmedabad, Gujarat, India.
+
+## Key Informational Resources
+- **Company Manifesto & About:** https://intelliverse.io/about
+- **Knowledge FAQ (11+ Questions):** https://intelliverse.io/faq
+- **Engineering Blog & Guides:** https://intelliverse.io/blog
+  - Software Cost in India Guide: https://intelliverse.io/blog/how-much-does-custom-software-cost-in-india
+  - Web App vs Mobile App Decision Matrix: https://intelliverse.io/blog/web-app-vs-mobile-app-how-to-choose
+  - Clinic Queue Digitisation Blueprint: https://intelliverse.io/blog/how-to-digitise-a-clinic-appointment-queue
+
+## Standard Engagement Model
+- **Pricing:** Transparent sprint-based pricing starting from ₹15,000 for focused landing architectures, ₹45,000 to ₹1.5L for web apps, and ₹1.5L to ₹8L+ for full-scale SaaS platforms.
+- **Code Ownership:** Clients retain 100% intellectual property ownership of all custom code, schemas, and assets.
+- **Direct Inquiries:** Submit project details via the live estimator at https://intelliverse.io/#estimator or email the founders directly at theintelliverse@gmail.com.

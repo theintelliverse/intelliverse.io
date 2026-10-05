@@ -44,15 +44,34 @@ export default function AdminLoginForm() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-gray-950 font-sans px-4 select-none">
+    <div
+      className="min-h-screen w-full flex items-center justify-center relative overflow-hidden font-sans px-4 select-none"
+      style={{
+        backgroundColor: "var(--night)",
+        color: "var(--cream)",
+      }}
+    >
       {/* Dynamic Background Glowing Blobs */}
-      <div className="absolute top-[-10%] left-[-10%] w-[55%] h-[55%] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none animate-pulse duration-[6s]"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[55%] h-[55%] bg-purple-600/10 rounded-full blur-[140px] pointer-events-none animate-pulse duration-[8s]"></div>
+      <div className="absolute top-[-10%] left-[-10%] w-[55%] h-[55%] bg-[var(--blue)]/15 rounded-full blur-[140px] pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[55%] h-[55%] bg-[var(--orange)]/10 rounded-full blur-[140px] pointer-events-none"></div>
 
       {/* Glassmorphic Login Container */}
-      <div className="w-full max-w-md bg-gray-900/30 backdrop-blur-xl border border-white/5 hover:border-blue-500/25 p-8 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] hover:shadow-[0_0_50px_rgba(59,130,246,0.1)] relative z-10 animate-fade-in transition-all duration-500">
+      <div
+        className="w-full max-w-md p-8 md:p-10 rounded-2xl relative z-10 animate-fade-in transition-all duration-500"
+        style={{
+          backgroundColor: "rgba(18, 30, 68, 0.85)",
+          border: "1px solid rgba(228, 218, 195, 0.16)",
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.6)",
+        }}
+      >
         <div className="text-center mb-8">
-          <div className="inline-block p-1 bg-gray-950 border border-gray-850 rounded-2xl mb-4 shadow-lg hover:shadow-blue-500/25 hover:border-blue-500/35 transition-all duration-500 group">
+          <div
+            className="inline-block p-1 rounded-2xl mb-4 transition-all duration-500 group"
+            style={{
+              backgroundColor: "rgba(11, 21, 48, 0.8)",
+              border: "1px solid rgba(228, 218, 195, 0.2)",
+            }}
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/the%20intelliverse%20logo.jpg"
@@ -60,18 +79,56 @@ export default function AdminLoginForm() {
               className="w-16 h-16 rounded-xl object-cover group-hover:scale-105 transition-transform duration-500"
             />
           </div>
-          <h1 className="text-2xl font-black text-white tracking-wide uppercase font-mono">The Intelliverse</h1>
-          <p className="text-xs text-gray-500 uppercase tracking-widest mt-1.5 font-semibold">Admin Panel Authentication</p>
+          <h1
+            style={{
+              fontFamily: "'Instrument Serif', Georgia, serif",
+              fontSize: "2.25rem",
+              letterSpacing: "-0.02em",
+              color: "var(--cream)",
+              lineHeight: 1.1,
+              marginBottom: "0.4rem",
+            }}
+          >
+            The Intelliverse
+          </h1>
+          <p
+            style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "0.6875rem",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "var(--orange)",
+              fontWeight: 700,
+            }}
+          >
+            Studio Admin Console
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Username Input */}
           <div className="space-y-2">
-            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+            <label
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "0.6875rem",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "rgba(248, 242, 228, 0.75)",
+                display: "block",
+                fontWeight: 600,
+              }}
+            >
               Username
             </label>
-            <div className="relative flex items-center bg-gray-950/80 border border-gray-850 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 rounded-xl transition-all duration-300 overflow-hidden group">
-              <span className="pl-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-blue-400 transition-colors">
+            <div
+              className="relative flex items-center rounded-xl transition-all duration-300 overflow-hidden"
+              style={{
+                backgroundColor: "rgba(248, 242, 228, 0.05)",
+                border: "1px solid rgba(228, 218, 195, 0.18)",
+              }}
+            >
+              <span className="pl-4 flex items-center pointer-events-none text-[var(--orange)]">
                 <i className="fas fa-user text-xs"></i>
               </span>
               <input
@@ -82,7 +139,16 @@ export default function AdminLoginForm() {
                   setUsername(e.target.value);
                   if (error) setError("");
                 }}
-                className="w-full bg-transparent border-none py-3.5 pl-3.5 pr-4 text-white focus:outline-none text-xs transition"
+                style={{
+                  width: "100%",
+                  backgroundColor: "transparent",
+                  border: "none",
+                  padding: "0.85rem 1rem 0.85rem 0.75rem",
+                  color: "var(--cream)",
+                  outline: "none",
+                  fontSize: "0.875rem",
+                  fontFamily: "'Satoshi', sans-serif",
+                }}
                 disabled={loading}
                 required
               />
@@ -91,11 +157,27 @@ export default function AdminLoginForm() {
 
           {/* Password Input */}
           <div className="space-y-2">
-            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+            <label
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "0.6875rem",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "rgba(248, 242, 228, 0.75)",
+                display: "block",
+                fontWeight: 600,
+              }}
+            >
               Password
             </label>
-            <div className="relative flex items-center bg-gray-950/80 border border-gray-850 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 rounded-xl transition-all duration-300 overflow-hidden group">
-              <span className="pl-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-blue-400 transition-colors">
+            <div
+              className="relative flex items-center rounded-xl transition-all duration-300 overflow-hidden"
+              style={{
+                backgroundColor: "rgba(248, 242, 228, 0.05)",
+                border: "1px solid rgba(228, 218, 195, 0.18)",
+              }}
+            >
+              <span className="pl-4 flex items-center pointer-events-none text-[var(--orange)]">
                 <i className="fas fa-key text-xs"></i>
               </span>
               <input
@@ -106,7 +188,16 @@ export default function AdminLoginForm() {
                   setPassword(e.target.value);
                   if (error) setError("");
                 }}
-                className="w-full bg-transparent border-none py-3.5 pl-3.5 pr-4 text-white focus:outline-none text-xs transition"
+                style={{
+                  width: "100%",
+                  backgroundColor: "transparent",
+                  border: "none",
+                  padding: "0.85rem 1rem 0.85rem 0.75rem",
+                  color: "var(--cream)",
+                  outline: "none",
+                  fontSize: "0.875rem",
+                  fontFamily: "'Satoshi', sans-serif",
+                }}
                 disabled={loading}
                 required
               />
@@ -115,7 +206,14 @@ export default function AdminLoginForm() {
 
           {/* Error Message banner */}
           {error && (
-            <div className="bg-red-950/20 border border-red-900/30 text-red-400 text-xs py-3 px-4 rounded-xl flex items-center gap-2.5 animate-fade-in select-none">
+            <div
+              className="py-3 px-4 rounded-xl flex items-center gap-2.5 animate-fade-in select-none text-xs"
+              style={{
+                backgroundColor: "rgba(255, 107, 123, 0.15)",
+                border: "1px solid rgba(255, 107, 123, 0.3)",
+                color: "var(--coral)",
+              }}
+            >
               <i className="fas fa-exclamation-circle text-xs shrink-0"></i>
               <span className="font-semibold text-[11px] leading-snug">{error}</span>
             </div>
@@ -125,7 +223,16 @@ export default function AdminLoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:from-gray-800 disabled:to-gray-800 disabled:opacity-50 text-white font-bold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 cursor-pointer disabled:cursor-not-allowed hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 text-xs uppercase tracking-wider"
+            className="w-full py-3.5 px-4 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-pointer disabled:opacity-50"
+            style={{
+              backgroundColor: "var(--blue-deep)",
+              color: "var(--cream)",
+              border: "none",
+              boxShadow: "0 4px 14px rgba(47, 99, 224, 0.35)",
+              fontFamily: "'JetBrains Mono', monospace",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "var(--blue-press)")}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "var(--blue-deep)")}
           >
             {loading ? (
               <>
@@ -134,7 +241,7 @@ export default function AdminLoginForm() {
               </>
             ) : (
               <>
-                <span>Access Dashboard</span>
+                <span>Access Console</span>
                 <i className="fas fa-arrow-right text-[10px]"></i>
               </>
             )}
@@ -144,7 +251,20 @@ export default function AdminLoginForm() {
         <div className="text-center mt-7">
           <Link
             href="/"
-            className="text-[10px] uppercase font-bold tracking-widest text-gray-500 hover:text-gray-300 transition-colors inline-flex items-center gap-2"
+            style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "0.6875rem",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "rgba(248, 242, 228, 0.6)",
+              textDecoration: "none",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--cream)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(248, 242, 228, 0.6)")}
           >
             <i className="fas fa-home text-[9px]"></i>
             Return to Homepage

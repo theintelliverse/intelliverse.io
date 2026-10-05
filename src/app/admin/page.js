@@ -55,9 +55,12 @@ export default async function AdminPage() {
   // Pre-fetch all data on the server
   let hero = { ...localMockDb.hero };
   let about = { ...localMockDb.about };
+  let contact = { ...localMockDb.contact };
   let stats = { ...defaultStats };
+  let estimator = localMockDb.estimator ? { ...localMockDb.estimator } : null;
   let testimonials = [...defaultTestimonials];
   let projects = [];
+  let caseStudies = [];
   let submissions = [];
   let admins = ["admin"];
   let chatbotKnowledge = localMockDb.chatbotKnowledge || [];
@@ -67,9 +70,11 @@ export default async function AdminPage() {
     try {
       const content = await db.collection("content").findOne({});
       if (content) {
-        if (content.hero) hero = content.hero;
-        if (content.about) about = content.about;
+        if (content.hero) hero = { ...hero, ...content.hero };
+        if (content.about) about = { ...about, ...content.about };
+        if (content.contact) contact = { ...contact, ...content.contact };
         if (content.stats) stats = content.stats;
+        if (content.estimator) estimator = content.estimator;
       }
       
       const dbTestimonials = await db.collection("testimonials").find({}).toArray();
@@ -81,20 +86,48 @@ export default async function AdminPage() {
       if (dbProjects.length > 0) {
         projects = dbProjects.map(p => ({
           name: p.name,
-          description: p.description,
-          link: p.link,
-          review: p.review,
-          rating: p.rating,
-          type: p.type || "",
+          description: p.description || p.summary || "",
+          summary: p.summary || p.description || "",
+          role: p.role || "",
+          impact: p.impact || "",
+          link: p.link || "",
+          review: p.review || "",
+          rating: p.rating || 5,
+          type: p.type || p.category || "",
+          category: p.category || p.type || "",
           featureLink: p.featureLink || "",
           featureText: p.featureText || "",
           features: p.features || [],
-          techTags: p.techTags || [],
+          techTags: p.techTags || p.stack || [],
+          stack: p.stack || p.techTags || [],
           tagline: p.tagline || "",
           isFeatured: p.isFeatured || false,
           logo: p.logo || p.logoUrl || p.image || "",
           icon: p.icon || ""
         }));
+      } else {
+        projects = localMockDb.projects || [];
+      }
+
+      const dbCaseStudies = await db.collection("case_studies").find({}).toArray();
+      if (dbCaseStudies.length > 0) {
+        caseStudies = dbCaseStudies.map((cs, idx) => ({
+          id: cs.id || cs._id?.toString() || `cs-${idx + 1}`,
+          num: cs.num || `0${idx + 1}`,
+          name: cs.name || "",
+          category: cs.category || cs.type || "",
+          role: cs.role || "",
+          impact: cs.impact || "",
+          summary: cs.summary || cs.description || "",
+          description: cs.description || cs.summary || "",
+          stack: Array.isArray(cs.stack) ? cs.stack : (Array.isArray(cs.techTags) ? cs.techTags : []),
+          techTags: Array.isArray(cs.techTags) ? cs.techTags : (Array.isArray(cs.stack) ? cs.stack : []),
+          link: cs.link || "",
+          review: cs.review || "",
+          rating: cs.rating !== undefined ? Number(cs.rating) : 5
+        }));
+      } else {
+        caseStudies = localMockDb.caseStudies || [];
       }
 
       const dbSubmissions = await db.collection("contacts").find({}).sort({ createdAt: -1 }).toArray();
@@ -153,6 +186,7 @@ export default async function AdminPage() {
     if (localMockDb.stats) stats = localMockDb.stats;
     if (localMockDb.testimonials) testimonials = localMockDb.testimonials;
     if (localMockDb.projects) projects = localMockDb.projects;
+    if (localMockDb.caseStudies) caseStudies = localMockDb.caseStudies;
     if (localMockDb.founders) founders = localMockDb.founders;
     submissions = dummySubmissions;
   }
@@ -160,15 +194,23 @@ export default async function AdminPage() {
   const initialData = {
     hero,
     about,
-    stats
+    contact,
+    stats,
+    estimator
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white font-sans relative">
+    <div
+      className="min-h-screen font-sans relative"
+      style={{
+        backgroundColor: "var(--night)",
+        color: "var(--cream)",
+      }}
+    >
       {/* Background gradients */}
       <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden">
-        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-900/10 rounded-full blur-[140px]"></div>
-        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-purple-900/10 rounded-full blur-[140px]"></div>
+        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-[var(--blue-deep)]/10 rounded-full blur-[160px]"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-[var(--orange)]/5 rounded-full blur-[160px]"></div>
       </div>
       
       <div className="relative z-10">
@@ -177,6 +219,7 @@ export default async function AdminPage() {
           data={initialData}
           testimonials={testimonials}
           projects={projects}
+          caseStudies={caseStudies}
           submissions={submissions}
           admins={admins}
           chatbotKnowledge={chatbotKnowledge}

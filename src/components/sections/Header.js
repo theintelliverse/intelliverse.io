@@ -1,239 +1,209 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Magnetic from "@/components/ui/Magnetic";
+
+const NAV_LINKS = [
+  { label: "Services",  href: "/#services" },
+  { label: "Work",      href: "/#projects" },
+  { label: "Process",   href: "/#process" },
+  { label: "Estimator", href: "/#estimator" },
+  { label: "About",     href: "/#about" },
+  { label: "Contact",   href: "/#contact" },
+];
 
 export default function Header() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [headerVisible, setHeaderVisible] = useState(true);
-    const [hoveredLink, setHoveredLink] = useState(null);
+  const router = useRouter();
+  const [scrolled,  setScrolled]  = useState(false);
+  const [hidden,    setHidden]    = useState(false);
+  const [menuOpen,  setMenuOpen]  = useState(false);
+  const lastY = useRef(0);
 
   useEffect(() => {
-    let lastScrollTop = 0;
-    const handleScroll = () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      if (scrollTop > lastScrollTop && scrollTop > 100) {
-        setHeaderVisible(false);
-      } else {
-        setHeaderVisible(true);
-      }
-      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 40);
+      setHidden(y > 120 && y > lastY.current);
+      lastY.current = y;
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const handleSmoothScroll = (e, targetId) => {
-    setSidebarOpen(false);
-        const element = document.getElementById(targetId);
-    if (element) {
-      e.preventDefault();
-      element.scrollIntoView({ behavior: "smooth" });
+  // Lock body scroll when menu open
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
+
+  const scrollTo = (e, id) => {
+    e.preventDefault();
+    setMenuOpen(false);
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
     } else {
-      e.preventDefault();
-      window.location.assign(`/#${targetId}`);
+      router.push(`/#${id}`);
     }
   };
 
-  
-  const playHoverSound = () => {};
-
-  const playClickSound = () => {
-      };
-
   return (
     <>
+      {/* ── Full-screen nav overlay (mobile) ──────────────────────── */}
       <AnimatePresence>
-        {sidebarOpen && (
-          <>
-            {/* Sidebar Overlay */}
-            <motion.div
-              id="sidebar-overlay"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => {
-                setSidebarOpen(false);
-                playClickSound();
-              }}
-              className="fixed inset-0 bg-black/75 z-40"
-            />
-
-            {/* Sidebar Menu */}
-            <motion.aside
-              id="sidebar-menu"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 h-full w-80 bg-[#121212]/95 backdrop-blur-2xl border-l border-white/10 z-50 shadow-2xl"
+        {menuOpen && (
+          <motion.div
+            key="nav-overlay"
+            initial={{ clipPath: "inset(0 0 100% 0)" }}
+            animate={{ clipPath: "inset(0 0 0% 0)" }}
+            exit={{ clipPath: "inset(0 0 100% 0)" }}
+            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+            className="nav-overlay"
+            aria-modal="true"
+            role="dialog"
+            aria-label="Navigation menu"
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setMenuOpen(false)}
+              className="absolute top-6 right-6 text-text-muted hover:text-text-light transition-colors"
+              style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase" }}
+              aria-label="Close navigation"
             >
-              <div className="p-6 flex justify-between items-center border-b border-white/5">
-                <h2 className="text-xl font-bold tracking-wider uppercase text-white font-mono">Menu</h2>
-                <button
-                  id="sidebar-close-btn"
-                  onClick={() => {
-                    setSidebarOpen(false);
-                    playClickSound();
-                  }}
-                  className="text-gray-400 hover:text-white transition-colors duration-300 text-3xl"
-                  onMouseEnter={playHoverSound}
-                >
-                  &times;
-                </button>
-              </div>
-              <motion.nav
-                initial="hidden"
-                animate="visible"
-                variants={{
-                  hidden: { opacity: 0 },
-                  visible: {
-                    opacity: 1,
-                    transition: { staggerChildren: 0.05 }
-                  }
-                }}
-                className="flex flex-col p-6 space-y-4 font-mono uppercase text-sm"
+              Close ✕
+            </button>
+
+            {/* Links */}
+            <nav className="flex flex-col mt-auto">
+              {NAV_LINKS.map((link, i) => {
+                const id = link.href.replace("/#", "");
+                return (
+                  <motion.a
+                    key={link.label}
+                    href={link.href}
+                    onClick={(e) => scrollTo(e, id)}
+                    initial={{ x: -40, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.08 * i + 0.15, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="nav-overlay-link"
+                    data-cursor="link"
+                  >
+                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.5625rem", color: "var(--blue)", letterSpacing: "0.2em", marginRight: "1rem", verticalAlign: "middle" }}>
+                      0{i + 1}
+                    </span>
+                    {link.label}
+                  </motion.a>
+                );
+              })}
+              <motion.a
+                href="/contact"
+                onClick={(e) => scrollTo(e, "contact")}
+                initial={{ x: -40, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.08 * NAV_LINKS.length + 0.15, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="nav-overlay-link"
+                style={{ color: "var(--blue-deep)" }}
+                data-cursor="link"
+                data-cursor-magnetic
               >
-                {["home", "about", "services", "team", "projects", "terms", "privacy", "contact"].map((link) => {
-                  const isExternal = link === "terms" || link === "privacy";
-                  const targetHref = isExternal ? `/${link}` : `/#${link}`;
-                  return (
-                    <motion.a
-                      key={link}
-                      href={targetHref}
-                      variants={{
-                        hidden: { x: 20, opacity: 0 },
-                        visible: { x: 0, opacity: 1 }
-                      }}
-                      onClick={(e) => !isExternal && handleSmoothScroll(e, link)}
-                      onMouseEnter={playHoverSound}
-                      className="group flex items-center justify-between text-gray-400 hover:text-white p-3 rounded-xl border border-transparent hover:border-white/5 hover:bg-white/[0.02] transition-all duration-300"
-                    >
-                      <span>{link}</span>
-                      <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-[10px] text-blue-400">
-                        {"// "}0{["home", "about", "services", "team", "projects", "terms", "privacy", "contact"].indexOf(link) + 1}
-                      </span>
-                    </motion.a>
-                  );
-                })}
-              </motion.nav>
-            </motion.aside>
-          </>
+                Let&apos;s Talk →
+              </motion.a>
+            </nav>
+
+            {/* Footer of overlay */}
+            <div style={{ position: "absolute", bottom: "2rem", left: "clamp(1.5rem,8vw,6rem)", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.5625rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(244,243,240,0.2)" }}>
+              Ahmedabad, India · theintelliverse@gmail.com
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Header Container */}
+      {/* ── Header bar ──────────────────────────────────────────────── */}
       <motion.header
-        id="header"
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: headerVisible ? 0 : -100, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed left-0 w-full z-30 bg-[#121212]/40 backdrop-blur-lg border-b border-white/5"
+        className={`site-header${scrolled ? " scrolled" : ""}${hidden ? " hidden" : ""}`}
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
-        <nav className="container mx-auto px-6 py-4 flex justify-between items-center relative">
-          {/* Left side: Logo */}
-          <div className="flex items-center gap-6">
-            <a
-              href="#home"
-              onClick={(e) => handleSmoothScroll(e, "home")}
-              onMouseEnter={playHoverSound}
-              className="flex items-center gap-3 text-lg font-extrabold z-10 font-mono tracking-wider uppercase"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/the%20intelliverse%20logo.jpg"
-                alt="The Intelliverse Logo"
-                className="h-10 w-10 logo-glow border border-white/10"
-              />
-            </a>
-          </div>
-
-          {/* Desktop Navigation Links (Glow Pill Slide) */}
-          <div 
-            className="absolute left-1/2 -translate-x-1/2 hidden lg:flex items-center gap-1 px-2 py-1 rounded-full glassmorphic-card"
-            onMouseLeave={() => setHoveredLink(null)}
+        {/* Logo */}
+        <Link
+          href="/"
+          className="flex items-center gap-3"
+          style={{ textDecoration: "none" }}
+          aria-label="The Intelliverse — home"
+          data-cursor="link"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/the-intelliverse-logo.jpg"
+            alt="The Intelliverse"
+            width={32}
+            height={32}
+            style={{ borderRadius: "4px", border: "1px solid rgba(255,255,255,0.1)" }}
+          />
+          <span
+            style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "0.625rem",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "rgba(244,243,240,0.7)",
+              display: "none",
+            }}
+            className="sm:inline"
           >
-            {["home", "about", "services", "team", "projects", "terms", "privacy", "contact"].map((link) => {
-              const isExternal = link === "terms" || link === "privacy";
-              const targetHref = isExternal ? `/${link}` : `/#${link}`;
-              return (
-                <a
-                  key={link}
-                  href={targetHref}
-                  onClick={(e) => !isExternal && handleSmoothScroll(e, link)}
-                  onMouseEnter={() => {
-                    playHoverSound();
-                    setHoveredLink(link);
-                  }}
-                  className="relative px-3.5 py-1.5 text-[10px] font-mono tracking-widest uppercase text-gray-400 hover:text-white transition-colors select-none z-10"
-                >
-                  {link}
-                  {hoveredLink === link && (
-                    <motion.span
-                      layoutId="header-nav-pill"
-                      className="absolute inset-0 bg-white/[0.06] rounded-full border border-white/10 -z-10"
-                      transition={{ type: "spring", stiffness: 350, damping: 28 }}
-                    />
-                  )}
-                </a>
-              );
-            })}
-          </div>
+            The Intelliverse
+          </span>
+        </Link>
 
-          {/* Right side: Audio Soundwave Indicator, Social Icons & Menu Button */}
-          <div className="flex items-center space-x-6 z-10">
-            
-            {/* Social Links */}
-            <div className="hidden sm:flex items-center space-x-4">
-              <a
-                href="https://www.linkedin.com/company/the-intelliverse/"
-                target="_blank"
-                rel="noopener noreferrer"
-                onMouseEnter={playHoverSound}
-                onClick={playClickSound}
-                className="text-gray-400 hover:text-white transition-colors duration-300 text-lg p-1.5"
+        {/* Desktop nav */}
+        <nav className="hidden md:flex items-center gap-8" aria-label="Primary navigation">
+          {NAV_LINKS.map((link) => {
+            const id = link.href.replace("/#", "");
+            return (
+              <Link
+                key={link.label}
+                href={link.href}
+                onClick={(e) => scrollTo(e, id)}
+                className="nav-link"
+                data-cursor="link"
               >
-                <i className="fab fa-linkedin"></i>
-              </a>
-              <a
-                href="https://www.instagram.com/the_intelliverse/"
-                target="_blank"
-                rel="noopener noreferrer"
-                onMouseEnter={playHoverSound}
-                onClick={playClickSound}
-                className="text-gray-400 hover:text-white transition-colors duration-300 text-lg p-1.5"
-              >
-                <i className="fab fa-instagram"></i>
-              </a>
-              <a
-                href="mailto:theintelliverse@gmail.com"
-                onMouseEnter={playHoverSound}
-                onClick={playClickSound}
-                className="text-gray-400 hover:text-white transition-colors duration-300 text-lg p-1.5"
-                title="Email Us"
-              >
-                <i className="fas fa-envelope"></i>
-              </a>
-            </div>
-
-            {/* Menu Toggle Button */}
-            <button
-              id="menu-toggle-btn"
-              onClick={() => {
-                setSidebarOpen(true);
-                playClickSound();
-              }}
-              className="text-white hover:text-blue-400 focus:outline-none p-2 relative h-8 w-8 transition-colors duration-300 cursor-pointer"
-              aria-controls="sidebar-menu"
-              aria-expanded={sidebarOpen}
-              onMouseEnter={playHoverSound}
-            >
-              <i className="fas fa-bars text-xl"></i>
-              <span className="sr-only">Open navigation menu</span>
-            </button>
-          </div>
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
-              </motion.header>
+
+        {/* Right side */}
+        <div className="flex items-center gap-4">
+          <Magnetic strength={0.4}>
+            <Link
+              href="/#contact"
+              onClick={(e) => scrollTo(e, "contact")}
+              className="btn-primary hidden sm:inline-flex"
+              data-cursor="link"
+              data-cursor-magnetic
+            >
+              <span>Let&apos;s Talk</span>
+            </Link>
+          </Magnetic>
+
+          {/* Hamburger */}
+          <button
+            onClick={() => setMenuOpen(true)}
+            className="md:hidden flex flex-col gap-1.5 p-2"
+            aria-label="Open navigation"
+            aria-expanded={menuOpen}
+            data-cursor="link"
+          >
+            <span style={{ display: "block", width: "22px", height: "1px", background: "var(--ink)" }} />
+            <span style={{ display: "block", width: "14px", height: "1px", background: "var(--blue)" }} />
+          </button>
+        </div>
+      </motion.header>
     </>
   );
 }

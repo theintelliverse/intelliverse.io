@@ -9,6 +9,7 @@ import DashboardTab from "./tabs/DashboardTab";
 import CMSTab from "./tabs/CMSTab";
 import TeamTab from "./tabs/TeamTab";
 import ProjectsTab from "./tabs/ProjectsTab";
+import CaseStudiesTab from "./tabs/CaseStudiesTab";
 import TestimonialsTab from "./tabs/TestimonialsTab";
 import ChatbotTab from "./tabs/ChatbotTab";
 import CRMTab from "./tabs/CRMTab";
@@ -23,6 +24,7 @@ export default function AdminPanel({
   data,
   testimonials: initialTestimonials,
   projects: initialProjects,
+  caseStudies: initialCaseStudies,
   submissions: initialSubmissions,
   admins: initialAdmins,
   chatbotKnowledge: initialChatbotKnowledge,
@@ -39,15 +41,44 @@ export default function AdminPanel({
   const [activeTab, setActiveTab] = useState("dashboard"); // dashboard | cms | team | projects | testimonials | chatbot | crm | settings
 
   // --- CMS Content States ---
-  const [heroSubtitle, setHeroSubtitle] = useState(data.hero.subtitle);
-  const [aboutP1, setAboutP1] = useState(data.about.p1);
-  const [statsProjects, setStatsProjects] = useState(data.stats?.projects || 50);
-  const [statsSatisfaction, setStatsSatisfaction] = useState(data.stats?.satisfaction || 100);
-  const [statsClients, setStatsClients] = useState(data.stats?.clients || 30);
+  const [heroHeadline, setHeroHeadline] = useState(data.hero?.headline || "Innovation. Create. Grow.");
+  const [heroSubtitle, setHeroSubtitle] = useState(data.hero?.subtitle || "Your one-stop solution for software development, web development, and IT services.");
+  const [heroStatus, setHeroStatus] = useState(data.hero?.status || "Ahmedabad, India / Taking new projects");
+  const [pillarsText, setPillarsText] = useState(data.hero?.pillarsText || "Web Architecture · Cloud Infrastructure · SaaS · AI Workflows");
+  const [caseStudiesHighlight, setCaseStudiesHighlight] = useState(data.hero?.caseStudiesHighlight || "Appointory (Healthcare) & Vrix (Headless E-Commerce)");
+  const [studioLocation, setStudioLocation] = useState(data.hero?.studioLocation || "Ahmedabad, Gujarat · Collaborating Worldwide");
+
+  const [aboutP1, setAboutP1] = useState(data.about?.p1 || "The Intelliverse is an engineering-first software and web architecture company based in Ahmedabad, Gujarat. We build resilient digital platforms, custom SaaS architectures, and high-performance applications.");
+  const [aboutMission, setAboutMission] = useState(data.about?.mission || "To solve problems worth solving with teams who care about excellence — building the kind of software that remains fast, secure, and maintainable long after deployment.");
+  const [aboutPullQuote, setAboutPullQuote] = useState(data.about?.pullQuote || "We don't engineer to check boxes. We build the architecture that lets your team scale without rewriting the core every eighteen months.");
+  const [aboutModelsText, setAboutModelsText] = useState(data.about?.modelsText || "Maybe you need an ultra-fast Next.js web application or a headless storefront right now. That's a completely valid place to start. We focus strictly on what creates measurable impact, without bloated scopes or unwanted upsells.");
+
+  const [contactEmail, setContactEmail] = useState(data.contact?.email || "theintelliverse@gmail.com");
+  const [contactLinkedin, setContactLinkedin] = useState(data.contact?.linkedin || "https://www.linkedin.com/company/the-intelliverse/");
+  const [contactInstagram, setContactInstagram] = useState(data.contact?.instagram || "https://www.instagram.com/the_intelliverse/");
+
+  const [statsProjects, setStatsProjects] = useState(data.stats?.projects !== undefined ? data.stats.projects : 2);
+  const [statsSatisfaction, setStatsSatisfaction] = useState(data.stats?.satisfaction !== undefined ? data.stats.satisfaction : 100);
+  const [statsClients, setStatsClients] = useState(data.stats?.clients !== undefined ? data.stats.clients : 15);
+
+  const [estimatorStartingPrice, setEstimatorStartingPrice] = useState(data.estimator?.startingPrice || "₹15,000");
+  const [estimatorTypes, setEstimatorTypes] = useState(
+    data.estimator?.types || [
+      { id: "starter", label: "Starter Web / Landing Page", baseRange: "₹15,000 – ₹45,000" },
+      { id: "web", label: "Web Architecture / Next.js", baseRange: "₹45,000 – ₹1.5L" },
+      { id: "mobile", label: "Mobile App (Android / iOS)", baseRange: "₹80,000 – ₹3.5L" },
+      { id: "saas", label: "Custom SaaS Platform", baseRange: "₹1.5L – ₹8L+" },
+      { id: "it", label: "Cloud & DevOps Architecture", baseRange: "₹25,000 – ₹1.2L" },
+      { id: "ai", label: "Applied AI / Agentic Automation", baseRange: "₹40,000 – ₹2.5L+" },
+    ]
+  );
 
   // --- Dynamic Lists States ---
   const [testimonials, setTestimonials] = useState(initialTestimonials || []);
   const [projects, setProjects] = useState(initialProjects || []);
+  const [caseStudies, setCaseStudies] = useState(initialCaseStudies || []);
+  const [selectedCaseStudyIndex, setSelectedCaseStudyIndex] = useState(initialCaseStudies && initialCaseStudies.length > 0 ? 0 : null);
+  const [isEditingMobileCaseStudies, setIsEditingMobileCaseStudies] = useState(false);
   const [founders, setFounders] = useState(initialFounders || []);
   const [selectedFounderIndex, setSelectedFounderIndex] = useState(initialFounders && initialFounders.length > 0 ? 0 : null);
   const [teamEditorTab, setTeamEditorTab] = useState("basic"); // basic | photo | socials
@@ -300,7 +331,27 @@ export default function AdminPanel({
 
   // --- Handlers for Projects ---
   const handleAddProject = () => {
-    const newProj = { name: "", description: "", link: "", review: "", rating: 5, type: "", featureLink: "", featureText: "", features: [], techTags: [], tagline: "", isFeatured: false, logo: "", icon: "fa-hospital-user" };
+    const newProj = {
+      name: "",
+      category: "SaaS Portal",
+      type: "SaaS Portal",
+      role: "",
+      impact: "",
+      summary: "",
+      description: "",
+      link: "",
+      review: "",
+      rating: 5,
+      featureLink: "",
+      featureText: "",
+      features: [],
+      techTags: [],
+      stack: [],
+      tagline: "",
+      isFeatured: false,
+      logo: "",
+      icon: "fa-folder-open"
+    };
     setProjects([...projects, newProj]);
     setSelectedProjectIndex(projects.length);
     setIsEditingMobileProjects(true);
@@ -312,10 +363,82 @@ export default function AdminPanel({
       updated[index][field] = parseInt(value) || 5;
     } else if (field === "isFeatured") {
       updated[index][field] = !!value;
+    } else if (field === "techTags" || field === "stack") {
+      updated[index]["techTags"] = value;
+      updated[index]["stack"] = value;
+    } else if (field === "summary" || field === "description") {
+      updated[index]["summary"] = value;
+      updated[index]["description"] = value;
+    } else if (field === "type" || field === "category") {
+      updated[index]["type"] = value;
+      updated[index]["category"] = value;
     } else {
       updated[index][field] = value;
     }
     setProjects(updated);
+  };
+
+  // --- Handlers for Case Studies & Specifications ---
+  const handleAddCaseStudy = () => {
+    const newCS = {
+      id: `cs-${Date.now()}`,
+      name: "",
+      category: "Healthcare SaaS Platform",
+      role: "",
+      impact: "",
+      summary: "",
+      description: "",
+      stack: [],
+      link: "",
+      review: "",
+      rating: 5
+    };
+    setCaseStudies([...caseStudies, newCS]);
+    setSelectedCaseStudyIndex(caseStudies.length);
+    setIsEditingMobileCaseStudies(true);
+  };
+
+  const handleCaseStudyChange = (index, field, value) => {
+    const updated = [...caseStudies];
+    if (field === "rating") {
+      updated[index][field] = parseInt(value) || 5;
+    } else if (field === "summary" || field === "description") {
+      updated[index]["summary"] = value;
+      updated[index]["description"] = value;
+    } else {
+      updated[index][field] = value;
+    }
+    setCaseStudies(updated);
+  };
+
+  const handleDeleteCaseStudy = (index) => {
+    const updated = caseStudies.filter((_, i) => i !== index);
+    setCaseStudies(updated);
+    if (selectedCaseStudyIndex === index) {
+      const nextIndex = updated.length > 0 ? Math.max(0, index - 1) : null;
+      setSelectedCaseStudyIndex(nextIndex);
+      if (nextIndex === null) {
+        setIsEditingMobileCaseStudies(false);
+      }
+    } else if (selectedCaseStudyIndex > index) {
+      setSelectedCaseStudyIndex(selectedCaseStudyIndex - 1);
+    }
+  };
+
+  const handleMoveCaseStudy = (index, direction) => {
+    if (direction === "up" && index === 0) return;
+    if (direction === "down" && index === caseStudies.length - 1) return;
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    const updated = [...caseStudies];
+    const temp = updated[index];
+    updated[index] = updated[targetIndex];
+    updated[targetIndex] = temp;
+    setCaseStudies(updated);
+    if (selectedCaseStudyIndex === index) {
+      setSelectedCaseStudyIndex(targetIndex);
+    } else if (selectedCaseStudyIndex === targetIndex) {
+      setSelectedCaseStudyIndex(index);
+    }
   };
 
   const handleDeleteProject = (index) => {
@@ -398,15 +521,37 @@ export default function AdminPanel({
     notify("Saving all changes to the database...", "info");
 
     const payload = {
-      hero: { subtitle: heroSubtitle },
-      about: { p1: aboutP1 },
+      hero: {
+        headline: heroHeadline,
+        subtitle: heroSubtitle,
+        status: heroStatus,
+        pillarsText: pillarsText,
+        caseStudiesHighlight: caseStudiesHighlight,
+        studioLocation: studioLocation
+      },
+      about: {
+        p1: aboutP1,
+        mission: aboutMission,
+        pullQuote: aboutPullQuote,
+        modelsText: aboutModelsText
+      },
+      contact: {
+        email: contactEmail,
+        linkedin: contactLinkedin,
+        instagram: contactInstagram
+      },
       stats: {
         projects: parseInt(statsProjects) || 0,
         satisfaction: parseInt(statsSatisfaction) || 0,
         clients: parseInt(statsClients) || 0
       },
+      estimator: {
+        startingPrice: estimatorStartingPrice,
+        types: estimatorTypes
+      },
       testimonials,
       projects,
+      caseStudies,
       chatbotKnowledge,
       founders
     };
@@ -570,26 +715,46 @@ export default function AdminPanel({
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gray-950 font-sans text-white relative">
+    <div
+      className="min-h-screen flex flex-col md:flex-row font-sans relative admin-panel"
+      style={{
+        backgroundColor: "var(--night)",
+        color: "var(--cream)",
+      }}
+    >
 
       {/* Mobile Top Header (Sticky on phone views) */}
-      <div className="md:hidden flex items-center justify-between bg-gray-900 border-b border-gray-800 p-4 sticky top-0 z-30 backdrop-blur-md bg-gray-900/80">
+      <div
+        className="md:hidden flex items-center justify-between p-4 sticky top-0 z-30"
+        style={{
+          backgroundColor: "rgba(11, 21, 48, 0.95)",
+          borderBottom: "1px solid rgba(228, 218, 195, 0.12)",
+          backdropFilter: "blur(16px)",
+        }}
+      >
         <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/the%20intelliverse%20logo.jpg"
             alt="Intelliverse Logo"
             className="w-7 h-7 rounded-lg object-cover"
+            style={{ border: "1px solid rgba(228, 218, 195, 0.2)" }}
           />
           <div>
-            <h1 className="text-xs font-bold tracking-wider text-white">Intelliverse Admin</h1>
+            <h1
+              className="text-xs font-bold tracking-wider uppercase font-mono"
+              style={{ color: "var(--cream)" }}
+            >
+              The Intelliverse
+            </h1>
           </div>
         </div>
 
         {/* Hamburger Toggle Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="text-gray-400 hover:text-white p-1 text-lg focus:outline-none transition cursor-pointer"
+          className="p-1 text-lg focus:outline-none transition cursor-pointer"
+          style={{ color: "rgba(248, 242, 228, 0.8)" }}
           aria-label="Toggle navigation menu"
         >
           <i className={`fas ${mobileMenuOpen ? "fa-times" : "fa-bars"}`}></i>
@@ -618,6 +783,80 @@ export default function AdminPanel({
       {/* Main Content Area */}
       <main className="flex-grow p-4 md:p-10 relative overflow-y-auto max-h-[calc(100vh-65px)] md:max-h-screen z-10">
 
+        {/* Persistent Global Top Action Bar */}
+        <div
+          className="sticky top-0 -mt-4 md:-mt-10 mb-6 md:mb-8 pt-4 md:pt-6 pb-4 z-30 flex flex-wrap items-center justify-between gap-3"
+          style={{
+            backgroundColor: "rgba(11, 21, 48, 0.9)",
+            borderBottom: "1px solid rgba(228, 218, 195, 0.12)",
+            backdropFilter: "blur(16px)",
+          }}
+        >
+          <div className="flex items-center gap-2">
+            <span
+              className="text-[10px] uppercase tracking-wider"
+              style={{ fontFamily: "'JetBrains Mono', monospace", color: "var(--orange)" }}
+            >
+              Studio Console /
+            </span>
+            <span
+              className="text-xs font-bold uppercase tracking-wider"
+              style={{ fontFamily: "'JetBrains Mono', monospace", color: "var(--cream)" }}
+            >
+              {activeTab === "casestudies" ? "Case Studies & Specs" : activeTab === "cms" ? "Hero & About CMS" : activeTab}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <a
+              href="/"
+              target="_blank"
+              rel="noreferrer"
+              className="px-3.5 py-2 rounded-xl text-xs font-medium transition flex items-center gap-1.5"
+              style={{
+                backgroundColor: "rgba(18, 30, 68, 0.6)",
+                border: "1px solid rgba(228, 218, 195, 0.18)",
+                color: "var(--cream)",
+                fontFamily: "'JetBrains Mono', monospace",
+                textDecoration: "none",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "rgba(18, 30, 68, 0.95)";
+                e.currentTarget.style.borderColor = "var(--blue)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "rgba(18, 30, 68, 0.6)";
+                e.currentTarget.style.borderColor = "rgba(228, 218, 195, 0.18)";
+              }}
+            >
+              <span>View Live Site</span>
+              <i className="fas fa-external-link-alt text-[10px]" style={{ color: "var(--orange)" }}></i>
+            </a>
+
+            <button
+              onClick={handleSaveCMS}
+              disabled={loading}
+              className="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer disabled:opacity-50 active:scale-95"
+              style={{
+                backgroundColor: "var(--blue-deep)",
+                color: "var(--cream)",
+                border: "none",
+                boxShadow: "0 4px 14px rgba(47, 99, 224, 0.35)",
+                fontFamily: "'JetBrains Mono', monospace",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "var(--blue-press)")}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "var(--blue-deep)")}
+            >
+              {loading ? (
+                <i className="fas fa-spinner fa-spin"></i>
+              ) : (
+                <i className="fas fa-save"></i>
+              )}
+              <span>Save All Changes</span>
+            </button>
+          </div>
+        </div>
+
         {/* Floating Notification */}
         {statusMessage.text && (
           <div className="fixed top-6 right-6 z-50 animate-slide-in shadow-2xl max-w-sm">
@@ -641,6 +880,7 @@ export default function AdminPanel({
           <DashboardTab
             contactLogs={contactLogs}
             projects={projects}
+            caseStudies={caseStudies}
             testimonials={testimonials}
             setActiveTab={setActiveTab}
             handleAddProject={handleAddProject}
@@ -654,14 +894,42 @@ export default function AdminPanel({
         {/* CMS Text Tab */}
         {activeTab === "cms" && (
           <CMSTab
+            heroHeadline={heroHeadline}
+            setHeroHeadline={setHeroHeadline}
             heroSubtitle={heroSubtitle}
             setHeroSubtitle={setHeroSubtitle}
+            heroStatus={heroStatus}
+            setHeroStatus={setHeroStatus}
+            pillarsText={pillarsText}
+            setPillarsText={setPillarsText}
+            caseStudiesHighlight={caseStudiesHighlight}
+            setCaseStudiesHighlight={setCaseStudiesHighlight}
+            studioLocation={studioLocation}
+            setStudioLocation={setStudioLocation}
             aboutP1={aboutP1}
             setAboutP1={setAboutP1}
+            aboutMission={aboutMission}
+            setAboutMission={setAboutMission}
+            aboutPullQuote={aboutPullQuote}
+            setAboutPullQuote={setAboutPullQuote}
+            aboutModelsText={aboutModelsText}
+            setAboutModelsText={setAboutModelsText}
+            contactEmail={contactEmail}
+            setContactEmail={setContactEmail}
+            contactLinkedin={contactLinkedin}
+            setContactLinkedin={setContactLinkedin}
+            contactInstagram={contactInstagram}
+            setContactInstagram={setContactInstagram}
             statsProjects={statsProjects}
             setStatsProjects={setStatsProjects}
+            statsSatisfaction={statsSatisfaction}
+            setStatsSatisfaction={setStatsSatisfaction}
             statsClients={statsClients}
             setStatsClients={setStatsClients}
+            estimatorStartingPrice={estimatorStartingPrice}
+            setEstimatorStartingPrice={setEstimatorStartingPrice}
+            estimatorTypes={estimatorTypes}
+            setEstimatorTypes={setEstimatorTypes}
             handleSaveCMS={handleSaveCMS}
             loading={loading}
           />
@@ -705,6 +973,24 @@ export default function AdminPanel({
             handleProjectChange={handleProjectChange}
             handleDeleteProject={handleDeleteProject}
             handleMoveProject={handleMoveProject}
+            handleSaveCMS={handleSaveCMS}
+            loading={loading}
+          />
+        )}
+
+        {/* Case Studies & Engineering Specifications Tab */}
+        {activeTab === "casestudies" && (
+          <CaseStudiesTab
+            caseStudies={caseStudies}
+            setCaseStudies={setCaseStudies}
+            selectedCaseStudyIndex={selectedCaseStudyIndex}
+            setSelectedCaseStudyIndex={setSelectedCaseStudyIndex}
+            isEditingMobileCaseStudies={isEditingMobileCaseStudies}
+            setIsEditingMobileCaseStudies={setIsEditingMobileCaseStudies}
+            handleAddCaseStudy={handleAddCaseStudy}
+            handleCaseStudyChange={handleCaseStudyChange}
+            handleDeleteCaseStudy={handleDeleteCaseStudy}
+            handleMoveCaseStudy={handleMoveCaseStudy}
             handleSaveCMS={handleSaveCMS}
             loading={loading}
           />

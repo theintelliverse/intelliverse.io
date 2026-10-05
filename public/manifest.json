@@ -1,21 +1,22 @@
 {
   "name": "The Intelliverse",
   "short_name": "Intelliverse",
-  "description": "Your Innovation Partner in Software & Web Development",
+  "description": "Software development, web development and IT services built like a craft.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#111827",
-  "theme_color": "#111827",
-  "orientation": "portrait",
+  "background_color": "#08090A",
+  "theme_color": "#08090A",
+  "orientation": "portrait-primary",
+  "categories": ["business", "productivity", "utilities"],
   "icons": [
     {
-      "src": "/the intelliverse logo.jpg",
+      "src": "/the%20intelliverse%20logo.jpg",
       "sizes": "192x192",
       "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "/the intelliverse logo.jpg",
+      "src": "/the%20intelliverse%20logo.jpg",
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "any maskable"

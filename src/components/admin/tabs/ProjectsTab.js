@@ -19,8 +19,8 @@ export default function ProjectsTab({
       {/* Header Area */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white font-mono uppercase">Worked Projects Portfolio</h2>
-          <p className="text-xs md:text-sm text-gray-400 mt-1">Manage Worked Projects and their highlights, taglines, ratings, and features.</p>
+          <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white font-mono uppercase">Projects, Case Studies &amp; Engineering Specifications</h2>
+          <p className="text-xs md:text-sm text-gray-400 mt-1">Manage active software projects, architectural case studies, technical engineering specifications, impact metrics, and live demo URLs.</p>
         </div>
         <div className="flex gap-3 w-full sm:w-auto">
           <button
@@ -279,14 +279,43 @@ export default function ProjectsTab({
                       </div>
                     </div>
 
+                    {/* Architectural Role & Impact Metric */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-white/5 pt-4">
+                      <div>
+                        <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono">Architectural / Engineering Role</label>
+                        <input
+                          type="text"
+                          value={proj.role || ""}
+                          onChange={(e) => handleProjectChange(index, "role", e.target.value)}
+                          className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-xl text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-sans"
+                          placeholder="e.g., Full-Stack Product Architecture & Cloud Integration"
+                        />
+                        <p className="text-[9px] text-gray-500 mt-1">Displayed as the primary engineering role for this case study.</p>
+                      </div>
+                      <div>
+                        <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono">Quantifiable Impact &amp; Performance Metric</label>
+                        <input
+                          type="text"
+                          value={proj.impact || ""}
+                          onChange={(e) => handleProjectChange(index, "impact", e.target.value)}
+                          className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-xl text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-mono text-emerald-400"
+                          placeholder="e.g., 40% clinic queue reduction · 15k+ active consultations"
+                        />
+                        <p className="text-[9px] text-gray-500 mt-1">Shown in the green performance and impact banner.</p>
+                      </div>
+                    </div>
+
                     <div>
-                      <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono">Project Description</label>
+                      <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono">Engineering Brief &amp; Architecture Specification</label>
                       <textarea
-                        value={proj.description}
-                        onChange={(e) => handleProjectChange(index, "description", e.target.value)}
+                        value={proj.summary || proj.description || ""}
+                        onChange={(e) => {
+                          handleProjectChange(index, "summary", e.target.value);
+                          handleProjectChange(index, "description", e.target.value);
+                        }}
                         className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-xl text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-sans leading-relaxed"
-                        placeholder="Describe target user, tech stack, key highlights and development processes..."
-                        rows="3"
+                        placeholder="Comprehensive brief: architecture breakdown, key engineering problems solved, distributed caching, database design, and business impact..."
+                        rows="4"
                         required
                       ></textarea>
                     </div>
@@ -349,7 +378,7 @@ export default function ProjectsTab({
                         value={(proj.techTags || []).join(", ")}
                         onChange={(e) => handleProjectChange(index, "techTags", e.target.value.split(",").map(t => t.trim()).filter(Boolean))}
                         className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-xl text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-mono text-gray-300"
-                        placeholder="e.g. Next.js, Node.js, WebSockets, WhatsApp API"
+                        placeholder="e.g. Next.js, Node.js, WebSockets, Redis"
                       />
                       {(proj.techTags || []).length > 0 && (
                         <div className="flex flex-wrap gap-1.5 mt-2">

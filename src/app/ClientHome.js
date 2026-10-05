@@ -1,54 +1,43 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import Background3D from "@/components/ui/Background3D";
-import CustomCursor from "@/components/ui/CustomCursor";
 import Header from "@/components/sections/Header";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
+import Philosophy from "@/components/sections/Philosophy";
 import Services from "@/components/sections/Services";
-import Team from "@/components/sections/Team";
 import Projects from "@/components/sections/Projects";
+import Process from "@/components/sections/Process";
+import Estimator from "@/components/sections/Estimator";
+import Team from "@/components/sections/Team";
 import Stats from "@/components/sections/Stats";
 import Testimonials from "@/components/sections/Testimonials";
 import Contact from "@/components/sections/Contact";
 import Chatbot from "@/components/ui/Chatbot";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import Preloader from "@/components/ui/Preloader";
-import VelocityMarquee from "@/components/ui/VelocityMarquee";
 import Footer from "@/components/sections/Footer";
 
 export default function ClientHome({ initialData }) {
-  const { scrollY } = useScroll();
-  const letterboxYTop = useTransform(scrollY, [0, 200], [-20, 0]);
-  const letterboxYBottom = useTransform(scrollY, [0, 200], [20, 0]);
-
-  // --- Content Data State (Modifiable by Admin Panel) ---
+  // Content Data State
   const [contentData, setContentData] = useState({
-    hero: initialData?.hero || {
-      subtitle: "Your one-stop solution for software development, web development, and IT services."
-    },
-    about: initialData?.about || {
-      p1: "The Intelliverse is a dynamic software development company dedicated to providing innovative solutions. We specialize in web development, mobile applications, and comprehensive IT services that empower businesses to thrive in the digital age."
-    },
+    hero: initialData?.hero || null,
+    about: initialData?.about || null,
+    contact: initialData?.contact || null,
     stats: initialData?.stats || {
-      projects: 50,
+      projects: 2,
       satisfaction: 100,
-      clients: 30
-    }
+      clients: 15,
+    },
+    estimator: initialData?.estimator || null,
   });
 
-  // --- Dynamic Lists States ---
   const [testimonials, setTestimonials] = useState(initialData?.testimonials || []);
   const [projects, setProjects] = useState(initialData?.projects || []);
+  const [caseStudies, setCaseStudies] = useState(initialData?.caseStudies || []);
   const [founders, setFounders] = useState(initialData?.founders || []);
 
-  // --- Preloader Loading States ---
-  const [loading, setLoading] = useState(true);
-  const [showPreloader, setShowPreloader] = useState(true);
-
-  // --- Fetch Content from DB (in background to keep sync) ---
+  // Fetch updated content if API is available
   useEffect(() => {
     const fetchContent = async () => {
       try {
@@ -59,134 +48,79 @@ export default function ClientHome({ initialData }) {
             setContentData({
               hero: data.hero,
               about: data.about,
-              stats: data.stats || { projects: 50, satisfaction: 100, clients: 30 }
+              contact: data.contact || null,
+              stats: data.stats || { projects: 2, satisfaction: 100, clients: 15 },
+              estimator: data.estimator || null,
             });
             if (data.testimonials) setTestimonials(data.testimonials);
             if (data.projects) setProjects(data.projects);
+            if (data.caseStudies) setCaseStudies(data.caseStudies);
             if (data.founders) setFounders(data.founders);
           }
         }
-      } catch (error) {
-        console.error("Failed to load initial page content:", error);
+      } catch {
+        // Silently fallback to static defaults
       }
     };
     fetchContent();
   }, []);
 
-  useEffect(() => {
-    const handleLoad = () => {
-      setLoading(false);
-      // Play cinematic preloader exit swell/chime
-            const timer = setTimeout(() => setShowPreloader(false), 900);
-      return () => clearTimeout(timer);
-    };
-
-    if (document.readyState === "complete") {
-      handleLoad();
-    } else {
-      window.addEventListener("load", handleLoad);
-      const fallback = setTimeout(handleLoad, 1500);
-      return () => {
-        window.removeEventListener("load", handleLoad);
-        clearTimeout(fallback);
-      };
-    }
-  }, []);
-
-  // --- Initialize Audio Context on First Interaction ---
-  
-
   return (
     <>
-      {/* Cinematic 0%-100% Preloader */}
+      {/* Editorial Preloader */}
       <Preloader />
 
-      {/* Persistent 3D WebGL Background (Particles + Wave Shaders) */}
-      <Background3D />
-
-      {/* Cinematic Film Grain Overlay */}
+      {/* Subtle Analog Film Grain */}
       <div className="film-grain" />
 
       {/* Navigation Header */}
       <Header />
 
-      <main>
-        {/* Hero Banner Section */}
+      <main id="main-content">
+        {/* 01 / Hero */}
         <Hero data={contentData.hero} />
 
-        {/* About Info Section */}
+        {/* 01 / Manifesto & Context */}
         <About data={contentData.about} />
 
-        {/* Velocity-Skewed Running Marquee Banner */}
-        <VelocityMarquee />
+        {/* 02 / Philosophy: Single Service · Multi-Service · Complete Partner */}
+        <Philosophy />
 
-        {/* Services Showcase Section */}
+        {/* 03 / Services: 4 Core Pillars */}
         <Services />
 
-        {/* Team Founders Section */}
-        <Team data={founders} />
+        {/* 04 / Works & Sketchbook (ThreeUI exact MengToSketchbookLandingPage + Case Studies) */}
+        <Projects data={projects} caseStudies={caseStudies} />
 
-        {/* Dynamic Worked Projects Portfolio (Hides if empty) */}
-        <Projects data={projects} />
+        {/* 05 / Process: The Build Flywheel */}
+        <Process />
 
-        {/* Statistics Numbers Section (Hides if no projects) */}
-        {projects.length > 0 && (
-          <Stats
-            data={{
-              projects: projects.length,
-              satisfaction: Math.round(
-                (projects.reduce((sum, p) => sum + (Number(p.rating) || 5), 0) / (projects.length * 5)) * 100
-              ),
-              clients: testimonials.length
-            }}
-          />
+        {/* 06 / Project Scope & Budget Estimator */}
+        <Estimator data={contentData.estimator} />
+
+        {/* 07 / Team & Leadership (Hidden if no team data provided) */}
+        {founders && founders.length > 0 && <Team data={founders} />}
+
+        {/* 08 / Metrics (Render numbers from database/content) */}
+        {contentData?.stats && (
+          <Stats data={contentData.stats} />
         )}
 
-        {/* Client Reviews Section (Hides if empty) */}
-        {testimonials.length > 0 && (
-          <Testimonials data={testimonials} />
-        )}
+        {/* 09 / Client Endorsements */}
+        <Testimonials data={testimonials} />
 
-        {/* Contact Submission & Address Section */}
-        <Contact />
-
+        {/* 10 / Direct Inquiries (Contact Form & Direct Channels) */}
+        <Contact data={contentData.contact} />
       </main>
 
-      {/* Footer copyright */}
-      <Footer />
+      {/* Editorial Colophon & Footer */}
+      <Footer data={contentData.contact} />
 
-      {/* Floating AI Assistant Chatbot */}
+      {/* Interactive Floating Chatbot */}
       <Chatbot />
 
-      {/* SVG Circular Scroll Progress & Magnetic Back-to-Top Button */}
+      {/* Scroll Progress & Back to Top */}
       <ScrollProgress />
-
-      {/* Custom Trailing Glow Cursor on Desktop */}
-      <CustomCursor />
-
-      {/* Cinematic Widescreen Letterbox Frames (Movie Frame Transition on Scroll) */}
-      <motion.div
-        style={{ height: "20px", y: letterboxYTop }}
-        className="fixed top-0 left-0 right-0 bg-[#05020c] z-[99] border-b border-white/5 pointer-events-none flex items-center justify-between px-6 overflow-hidden select-none"
-      >
-        <span className="text-[8px] font-mono tracking-widest text-red-500 animate-pulse flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span> REC
-        </span>
-        <span className="text-[8px] font-mono tracking-widest text-gray-500">
-          24 FPS • 1.85:1
-        </span>
-      </motion.div>
-      <motion.div
-        style={{ height: "20px", y: letterboxYBottom }}
-        className="fixed bottom-0 left-0 right-0 bg-[#05020c] z-[99] border-t border-white/5 pointer-events-none flex items-center justify-between px-6 overflow-hidden select-none"
-      >
-        <span className="text-[8px] font-mono tracking-widest text-gray-500">
-          SHUTTER 180°
-        </span>
-        <span className="text-[8px] font-mono tracking-widest text-gray-500">
-          INTELLIVERSE_CAM_A
-        </span>
-      </motion.div>
     </>
   );
 }
