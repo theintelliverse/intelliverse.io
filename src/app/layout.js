@@ -287,7 +287,6 @@ export default function RootLayout({ children }) {
           `}
         </Script>
 
-<<<<<<< HEAD
         {/* Microsoft Clarity Tracking */}
         <Script id="microsoft-clarity" strategy="afterInteractive">
           {`
@@ -308,88 +307,6 @@ export default function RootLayout({ children }) {
         <link
           href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap"
           rel="stylesheet"
-=======
-    {/* Google tag (gtag.js) */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-S2ZW1XMDW8" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-S2ZW1XMDW8');
-            `,
-          }}
-        />
-
-        {/* Organization Schema */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "The Intelliverse",
-              "url": "https://intelliverse.io/",
-              "logo": {
-                "@type": "ImageObject",
-                "url": "https://raw.githubusercontent.com/DhruvilThummar/The-Intelliverse/06e4998906bcd13f5d1dd0bdf0ff672bddf85832/the%20intelliverse%20logo.jpg",
-                "width": 800,
-                "height": 800
-              },
-              "image": "https://raw.githubusercontent.com/DhruvilThummar/The-Intelliverse/06e4998906bcd13f5d1dd0bdf0ff672bddf85832/the%20intelliverse%20logo.jpg",
-              "contactPoint": [
-                {
-                  "@type": "ContactPoint",
-                  "email": "theintelliverse@gmail.com",
-                  "contactType": "Customer Service",
-                  "availableLanguage": "en-IN"
-                },
-                {
-                  "@type": "ContactPoint",
-                  "email": "theintelliverse@gmail.com",
-                  "contactType": "Technical Support",
-                  "availableLanguage": "en-IN"
-                }
-              ],
-              "sameAs": [
-                "https://www.linkedin.com/company/the-intelliverse/",
-                "https://www.instagram.com/the_intelliverse/",
-                "https://twitter.com/theintelliverse",
-                "https://www.facebook.com/theintelliverse"
-              ],
-              "description": "A dynamic software development company dedicated to providing innovative solutions in web development, mobile applications, and comprehensive IT services.",
-              "address": {
-                "@type": "PostalAddress",
-                "addressLocality": "Ahmedabad",
-                "addressRegion": "Gujarat",
-                "addressCountry": "IN",
-                "postalCode": "380009"
-              },
-              "founder": [
-                {
-                  "@type": "Person",
-                  "name": "Dhruvil Thummar",
-                  "jobTitle": "Co-founder & CTO",
-                  "sameAs": "https://www.linkedin.com/in/dhruvilthummar"
-                },
-                {
-                  "@type": "Person",
-                  "name": "Rudra Kankotiya",
-                  "jobTitle": "Co-founder & CMO",
-                  "sameAs": "https://www.linkedin.com/in/rudra-kankotiya-2173ab31a"
-                },
-                {
-                  "@type": "Person",
-                  "name": "Jal Anghan",
-                  "jobTitle": "Founder & Director",
-                  "sameAs": "https://www.linkedin.com/in/jal-anghan-534628309"
-                }
-              ],
-              "knowsAbout": ["Software Development", "Web Development", "IT Services", "Mobile Applications", "AI Solutions", "SaaS Portals"]
-            })
-          }}
->>>>>>> 904708b290cb714b9f1b041c4de1906e03d3037c
         />
 
         {/* AI & LLM Machine-Readable Link */}

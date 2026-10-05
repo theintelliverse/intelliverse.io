@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Background3D from "@/components/ui/Background3D";
-import CustomCursor from "@/components/ui/CustomCursor";
 import Header from "@/components/sections/Header";
 import Footer from "@/components/sections/Footer";
 import Chatbot from "@/components/ui/Chatbot";
@@ -277,9 +276,6 @@ export default function TermsPage() {
 
       {/* Scroll to Top */}
       <ScrollToTop />
-
-      {/* Custom Cursor */}
-      <CustomCursor />
     </>
   );
 }
