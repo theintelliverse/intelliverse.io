@@ -139,9 +139,10 @@ export default function Hero({ data = null } = {}) {
         {/* Tiny Mono Status Line */}
         <div
           style={{
-            display: "inline-flex",
+            display: "flex",
+            flexWrap: "wrap",
             alignItems: "center",
-            gap: "0.6rem",
+            gap: "0.4rem 0.6rem",
             marginBottom: "clamp(1.5rem, 3.5vh, 2.5rem)",
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: "0.6875rem",
@@ -157,12 +158,13 @@ export default function Hero({ data = null } = {}) {
               borderRadius: "50%",
               backgroundColor: "#10b981",
               boxShadow: "0 0 6px #10b981",
+              flexShrink: 0,
             }}
             aria-hidden="true"
           />
-          <span style={{ fontWeight: 600, color: "var(--ink)" }}>Ahmedabad, India</span>
-          <span style={{ color: "var(--hairline)" }}>/</span>
-          <span>Taking new projects</span>
+          <span style={{ fontWeight: 600, color: "var(--ink)", whiteSpace: "nowrap" }}>Ahmedabad, India</span>
+          <span style={{ color: "var(--hairline)", flexShrink: 0 }}>/</span>
+          <span style={{ whiteSpace: "nowrap" }}>Taking new projects</span>
         </div>
 
         {/* Main Display Headline: Innovation. Create. Grow. */}
@@ -244,7 +246,7 @@ export default function Hero({ data = null } = {}) {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))",
             gap: "1.25rem",
             paddingTop: "2rem",
             borderTop: "1px solid var(--hairline)",

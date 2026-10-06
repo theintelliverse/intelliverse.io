@@ -82,6 +82,7 @@ export default function Philosophy() {
             </h2>
           </div>
           <p
+            className="philosophy-flex-hint"
             style={{
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: "0.75rem",
@@ -215,7 +216,7 @@ function PhilosophyRow({ row, isOpen, onToggle }) {
             <div
               style={{
                 padding: "0 clamp(1.5rem, 3vw, 2.5rem) clamp(1.75rem, 3vh, 2.5rem)",
-                paddingLeft: "calc(44px + clamp(1rem, 2.5vw, 2rem) + clamp(1.5rem, 3vw, 2.5rem))",
+                paddingLeft: "clamp(1.5rem, 3vw, 2.5rem)",
                 borderTop: "1px solid var(--hairline)",
                 paddingTop: "1.5rem",
               }}

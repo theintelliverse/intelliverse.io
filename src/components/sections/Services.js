@@ -140,6 +140,7 @@ export default function Services() {
               lineHeight: 1.05,
               color: "var(--ink)",
               margin: 0,
+              maxWidth: "100%",
             }}
           >
             What we engineer,{" "}
@@ -148,6 +149,7 @@ export default function Services() {
             </em>
           </h2>
           <p
+            className="services-hover-hint"
             style={{
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: "0.75rem",
@@ -313,7 +315,7 @@ function ServiceRow({ svc, isActive, onEnter, onLeave }) {
 
       {/* Sub-items */}
       {expanded && (
-        <div style={{ paddingBottom: "2rem", paddingLeft: "clamp(2.5rem, 5vw, 4.5rem)" }}>
+        <div style={{ paddingBottom: "2rem", paddingLeft: "clamp(1.75rem, 5vw, 4.5rem)" }}>
           <ul style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", listStyle: "none", padding: 0, margin: 0 }}>
             {svc.sub.map((item) => (
               <li key={item}>

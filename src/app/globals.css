@@ -1831,3 +1831,12 @@ select:focus-visible,
     opacity: 0;
   }
 }
+
+/* ── SERVICES SECTION — MOBILE ALIGNMENT ─────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Hide hover/flex hints — irrelevant on touch devices */
+  .services-hover-hint,
+  .philosophy-flex-hint {
+    display: none;
+  }
+}

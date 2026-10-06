@@ -272,7 +272,7 @@ export default function Projects({ data, caseStudies }) {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fit, minmax(min(340px, 100%), 1fr))",
                 gap: "1.75rem",
               }}
             >
@@ -325,20 +325,25 @@ export default function Projects({ data, caseStudies }) {
                           PLATE 0{idx + 1}
                         </span>
                         {category && (
-                          <span
-                            style={{
-                              fontSize: "0.6875rem",
-                              fontFamily: "'JetBrains Mono', monospace",
-                              padding: "0.25rem 0.6rem",
-                              backgroundColor: "var(--cream)",
-                              border: "1px solid var(--hairline)",
-                              borderRadius: "999px",
-                              color: "var(--muted)",
-                            }}
-                          >
-                            {category}
-                          </span>
-                        )}
+                           <span
+                             style={{
+                               fontSize: "0.6875rem",
+                               fontFamily: "'JetBrains Mono', monospace",
+                               padding: "0.25rem 0.6rem",
+                               backgroundColor: "var(--cream)",
+                               border: "1px solid var(--hairline)",
+                               borderRadius: "999px",
+                               color: "var(--muted)",
+                               maxWidth: "160px",
+                               overflow: "hidden",
+                               textOverflow: "ellipsis",
+                               whiteSpace: "nowrap",
+                               display: "inline-block",
+                             }}
+                           >
+                             {category}
+                           </span>
+                         )}
                       </div>
 
                       {/* Project Title */}
@@ -421,22 +426,21 @@ export default function Projects({ data, caseStudies }) {
                       )}
 
                       {p.link && (
-                        <a
-                          href={p.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          data-cursor="link"
-                          data-cursor-magnetic
-                          className="btn-primary"
-                          style={{
-                            fontSize: "0.6875rem",
-                            padding: "0.45rem 1rem",
-                            marginLeft: "auto",
-                          }}
-                        >
-                          <span>Visit Live Project ↗</span>
-                        </a>
-                      )}
+                         <a
+                           href={p.link}
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           data-cursor="link"
+                           data-cursor-magnetic
+                           className="btn-primary"
+                           style={{
+                             fontSize: "0.6875rem",
+                             padding: "0.45rem 1rem",
+                           }}
+                         >
+                           <span>Visit Live Project ↗</span>
+                         </a>
+                       )}
                     </div>
                   </div>
                 );
