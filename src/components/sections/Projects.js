@@ -175,7 +175,7 @@ export default function Projects({ data, caseStudies }) {
                 Active Production Plates: Appointory &amp; Vrix
               </span>
             </div>
-            <div style={{ display: "flex", gap: "1.25rem", color: "var(--muted)" }}>
+            <div className="sketchbook-meta-pills" style={{ display: "flex", gap: "1.25rem", color: "var(--muted)" }}>
               <span data-cursor="drag" data-cursor-label="Turn" style={{ cursor: "pointer" }}>Curled Page Turn Physics</span>
               <span data-cursor="loupe" data-cursor-label="Inspect" style={{ cursor: "pointer" }}>Blue-Deep Magnifier</span>
               <span data-cursor="pencil" data-cursor-label="Draft" style={{ cursor: "pointer" }}>Corner Tape Frames</span>
@@ -188,7 +188,7 @@ export default function Projects({ data, caseStudies }) {
             title="The Intelliverse — Project Sketchbook"
             style={{
               width: "100%",
-              height: "760px",
+              height: "clamp(520px, 75vh, 760px)",
               border: "none",
               display: "block",
               backgroundColor: "transparent",
@@ -198,14 +198,14 @@ export default function Projects({ data, caseStudies }) {
           {/* Interaction hints */}
           <div
             style={{
-              padding: "0.85rem 1.5rem",
+              padding: "0.85rem 1.25rem",
               borderTop: "1px solid var(--hairline)",
               backgroundColor: "rgba(14,27,61,0.02)",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               flexWrap: "wrap",
-              gap: "1rem",
+              gap: "0.75rem",
               fontSize: "0.75rem",
               color: "var(--muted)",
               fontFamily: "'JetBrains Mono', monospace",

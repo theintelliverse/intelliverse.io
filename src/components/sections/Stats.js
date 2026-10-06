@@ -41,7 +41,7 @@ export default function Stats({ data }) {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))",
             border: "1px solid var(--hairline)",
             background: "var(--surface)",
           }}
