@@ -327,10 +327,10 @@ export default function Contact({ data = null } = {}) {
                       <button
                         type="button"
                         onClick={() => setStep(1)}
-                        className="btn-outline"
+                        className="btn-outline btn-outline-light"
                         style={{ color: "var(--cream)", borderColor: "rgba(228, 218, 195, 0.3)" }}
                       >
-                        ← Back
+                        <span>← Back</span>
                       </button>
                       <button
                         type="button"
@@ -531,10 +531,10 @@ export default function Contact({ data = null } = {}) {
                       <button
                         type="button"
                         onClick={() => setStep(2)}
-                        className="btn-outline"
+                        className="btn-outline btn-outline-light"
                         style={{ color: "var(--cream)", borderColor: "rgba(228, 218, 195, 0.3)" }}
                       >
-                        ← Back
+                        <span>← Back</span>
                       </button>
                       <button
                         type="submit"

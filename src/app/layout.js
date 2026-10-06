@@ -309,6 +309,15 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
 
+        {/* Font Awesome 6 Icons for Admin Console and UI */}
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
+        />
+
         {/* AI & LLM Machine-Readable Link */}
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM Knowledge Dossier" />
         <link rel="sitemap" type="application/xml" href="/sitemap.xml" title="Sitemap" />

@@ -66,7 +66,7 @@ export default function About({ data }) {
               color: "var(--muted)",
             }}
           >
-            FIG. 01 · EST. 2024 · AHMEDABAD
+            EST. 2024 · AHMEDABAD
           </span>
         </div>
 
