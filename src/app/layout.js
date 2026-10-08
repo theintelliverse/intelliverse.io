@@ -1,7 +1,8 @@
-import { Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
+import { MotionConfig } from "framer-motion";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import JsonLd from "@/components/seo/JsonLd";
 import { CursorProvider } from "@/components/cursor/CursorProvider";
@@ -9,22 +10,45 @@ import CursorWrapper from "@/components/cursor/CursorWrapper";
 import { siteConfig } from "@/content/site";
 import { seoConfig } from "@/content/seo";
 
-/* ── Fonts ────────────────────────────────────────────────────────────── */
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
+/* ── Fonts (Local woff2 — zero CDN latency) ───────────────────────────── */
+const instrumentSerif = localFont({
+  src: [
+    { path: "../../fonts/instrument-serif-latin-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "../../fonts/instrument-serif-latin-400-italic.woff2",  weight: "400", style: "italic" },
+  ],
   variable: "--font-serif",
   display: "swap",
   preload: true,
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
+const jetbrainsMono = localFont({
+  src: [
+    { path: "../../fonts/jetbrains-mono-latin-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "../../fonts/jetbrains-mono-latin-600-normal.woff2", weight: "600", style: "normal" },
+  ],
   variable: "--font-mono",
   display: "swap",
   preload: true,
+});
+
+const plusJakartaSans = localFont({
+  src: [
+    { path: "../../fonts/plus-jakarta-sans-latin-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "../../fonts/plus-jakarta-sans-latin-500-normal.woff2", weight: "500", style: "normal" },
+    { path: "../../fonts/plus-jakarta-sans-latin-600-normal.woff2", weight: "600", style: "normal" },
+    { path: "../../fonts/plus-jakarta-sans-latin-700-normal.woff2", weight: "700", style: "normal" },
+  ],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const caveat = localFont({
+  src: [
+    { path: "../../fonts/caveat-latin-500-normal.woff2", weight: "500", style: "normal" },
+    { path: "../../fonts/caveat-latin-700-normal.woff2", weight: "700", style: "normal" },
+  ],
+  variable: "--font-hand",
+  display: "swap",
 });
 
 /* ── Viewport ─────────────────────────────────────────────────────────── */
@@ -56,7 +80,8 @@ export const metadata = {
     "custom software development India",
     "SaaS development Ahmedabad",
     "Next.js agency Ahmedabad",
-    "cloud architecture Gujarat",
+    "AI automation studio Ahmedabad",
+    "cloud DevOps Gujarat",
     "Dhruvil Thummar",
     "Rudra Kankotiya",
     "Jal Anghan",
@@ -68,6 +93,19 @@ export const metadata = {
   category: "technology",
   referrer: "origin-when-cross-origin",
   manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "48x48" },
+      { url: "/favicon-48x48.png", type: "image/png", sizes: "48x48" },
+    ],
+    shortcut: ["/favicon.ico"],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   alternates: {
     canonical: siteConfig.url,
     languages: {
@@ -95,13 +133,30 @@ export const metadata = {
     siteName: siteConfig.name,
     title: "The Intelliverse | Software, Web & IT Services in Ahmedabad, India",
     description:
-      "The Intelliverse is an engineering-first software development, web architecture, and IT services company based in Ahmedabad, Gujarat, India.",
+      "The Intelliverse is an engineering-first software development, web architecture, and IT services company based in Ahmedabad, Gujarat, India. Custom SaaS, Next.js web applications, and cloud systems.",
     images: [
       {
-        url: "/opengraph-image",
+        url: `${siteConfig.url}/og-image.png`,
+        secureUrl: `${siteConfig.url}/og-image.png`,
         width: 1200,
         height: 630,
+        type: "image/png",
         alt: "The Intelliverse — Software, Web & IT Services in Ahmedabad, India",
+      },
+      {
+        url: `${siteConfig.url}/the-intelliverse-logo.jpg`,
+        secureUrl: `${siteConfig.url}/the-intelliverse-logo.jpg`,
+        width: 500,
+        height: 500,
+        type: "image/jpeg",
+        alt: "The Intelliverse Brand Identity",
+      },
+      {
+        url: `${siteConfig.url}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        type: "image/png",
+        alt: "The Intelliverse — Engineering Studio",
       },
     ],
   },
@@ -110,7 +165,7 @@ export const metadata = {
     title: "The Intelliverse | Software, Web & IT Services in Ahmedabad, India",
     description:
       "The Intelliverse is an engineering-first software development, web architecture, and IT services company based in Ahmedabad, Gujarat, India.",
-    images: ["/opengraph-image"],
+    images: [`${siteConfig.url}/og-image.png`],
     site: "@theintelliverse",
     creator: "@theintelliverse",
   },
@@ -247,6 +302,54 @@ const localBizSchema = {
     closes: "19:00",
   },
   areaServed: ["Ahmedabad", "Gujarat", "India", "Worldwide"],
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Software & Web Development Services",
+    itemListElement: [
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Starter Web Architecture & Landing Pages",
+          description: "High-conversion, sub-second landing systems and brand storefronts.",
+        },
+        priceSpecification: {
+          "@type": "PriceSpecification",
+          priceCurrency: "INR",
+          minPrice: "15000",
+          maxPrice: "45000",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Custom Web Application & Next.js Systems",
+          description: "Full-stack web applications with authentication, databases, and CI/CD.",
+        },
+        priceSpecification: {
+          "@type": "PriceSpecification",
+          priceCurrency: "INR",
+          minPrice: "45000",
+          maxPrice: "150000",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Enterprise Multi-Tenant SaaS Platform",
+          description: "Scalable cloud SaaS architectures with role-based access control and microservices.",
+        },
+        priceSpecification: {
+          "@type": "PriceSpecification",
+          priceCurrency: "INR",
+          minPrice: "150000",
+          maxPrice: "800000",
+        },
+      },
+    ],
+  },
 };
 
 const homeFaqSchema = {
@@ -267,9 +370,25 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en-IN"
-      className={`${instrumentSerif.variable} ${jetbrainsMono.variable}`}
+      className={`${instrumentSerif.variable} ${jetbrainsMono.variable} ${plusJakartaSans.variable} ${caveat.variable}`}
     >
       <head>
+        {/* Favicons (SVG, ICO, PNG) for All Browsers, Google Search & Mobile Devices */}
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/icon.png" type="image/png" sizes="48x48" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+        {/* WhatsApp & Social Media Preview Tags (Strict Crawler Fallback) */}
+        <meta property="og:image" content={`${siteConfig.url}/og-image.png`} />
+        <meta property="og:image:secure_url" content={`${siteConfig.url}/og-image.png`} />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="The Intelliverse — Software, Web & IT Services in Ahmedabad, India" />
+        <link rel="image_src" href={`${siteConfig.url}/og-image.png`} />
+
         {/* Google Analytics 4 (gtag.js) */}
         <Script
           strategy="afterInteractive"
@@ -298,16 +417,7 @@ export default function RootLayout({ children }) {
           `}
         </Script>
 
-        {/* Preconnect to external font origins */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://api.fontshare.com" />
-
-        {/* Satoshi font */}
-        <link
-          href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap"
-          rel="stylesheet"
-        />
+        {/* Fonts served locally — no CDN round-trip */}
 
         {/* Font Awesome 6 Icons for Admin Console and UI */}
         <link
@@ -331,14 +441,19 @@ export default function RootLayout({ children }) {
           Skip to content
         </a>
 
-        <CursorProvider>
-          <SmoothScroll>
-            <div className="flex flex-col min-h-screen">
-              {children}
-            </div>
-          </SmoothScroll>
-          <CursorWrapper />
-        </CursorProvider>
+        <MotionConfig
+          reducedMotion="user"
+          transition={{ ease: [0.16, 1, 0.3, 1] }}
+        >
+          <CursorProvider>
+            <SmoothScroll>
+              <div className="flex flex-col min-h-screen">
+                {children}
+              </div>
+            </SmoothScroll>
+            <CursorWrapper />
+          </CursorProvider>
+        </MotionConfig>
 
         <Analytics />
       </body>

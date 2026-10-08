@@ -1,13 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { springs, ease, fadeUp, staggerContainer } from "@/lib/motion";
+import SplitTextReveal from "@/components/ui/SplitTextReveal";
 
-/**
- * Services section — Full-Width Large Type Directory
- * ─ Coloured dot per service (blue, indigo, orange, coral)
- * ─ Hover = blue-deep text + floating preview
- * ─ Large type list across the full width
- */
 const SERVICES = [
   {
     id: "web",
@@ -67,10 +64,10 @@ const SERVICES = [
   },
 ];
 
-export default function Services() {
-  const [activeIndex, setActiveIndex] = useState(null);
+export default function Services({ data }) {
+  const servicesList = Array.isArray(data) && data.length > 0 ? data : SERVICES;
+  const [hoveredIndex, setHoveredIndex] = useState(null);
   const [trailPos, setTrailPos] = useState({ x: 0, y: 0 });
-  const trailRef = useRef(null);
   const sectionRef = useRef(null);
   const targetPos = useRef({ x: 0, y: 0 });
 
@@ -82,8 +79,8 @@ export default function Services() {
     let raf = null;
     const animate = () => {
       setTrailPos((prev) => ({
-        x: prev.x + (targetPos.current.x - prev.x) * 0.12,
-        y: prev.y + (targetPos.current.y - prev.y) * 0.12,
+        x: prev.x + (targetPos.current.x - prev.x) * 0.14,
+        y: prev.y + (targetPos.current.y - prev.y) * 0.14,
       }));
       raf = requestAnimationFrame(animate);
     };
@@ -103,241 +100,249 @@ export default function Services() {
       id="services"
       data-theme="cream"
       ref={sectionRef}
-      className="section-gap"
+      className="section-gap relative border-t border-[var(--line)]"
       style={{
-        borderTop: "1px solid var(--hairline)",
         backgroundColor: "var(--cream)",
         color: "var(--ink)",
-        position: "relative",
+        paddingTop: "clamp(5rem, 9vh, 7.5rem)",
+        paddingBottom: "clamp(5rem, 9vh, 7.5rem)",
       }}
     >
       <div className="container-site" style={{ maxWidth: "1440px", margin: "0 auto" }}>
-        {/* Label */}
-        <div style={{ marginBottom: "3rem" }}>
-          <span className="section-label" style={{ color: "var(--muted)" }}>
-            Service Catalog
+        
+        {/* Eyebrow Label */}
+        <div className="mb-4">
+          <span
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: "0.6875rem",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "var(--blue-deep)",
+              fontWeight: 700,
+            }}
+          >
+            SERVICE DIRECTORY &amp; ARCHITECTURE
           </span>
         </div>
 
-        {/* Heading */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            flexWrap: "wrap",
-            gap: "1.5rem",
-            marginBottom: "4rem",
-          }}
-        >
-          <h2
-            data-cursor="bulb"
-            data-cursor-label="Ideas"
-            style={{
-              fontFamily: "'Instrument Serif', Georgia, serif",
-              fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)",
-              letterSpacing: "-0.03em",
-              lineHeight: 1.05,
-              color: "var(--ink)",
-              margin: 0,
-              maxWidth: "100%",
-            }}
+        {/* Section Heading */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+          <SplitTextReveal
+            as="h2"
+            className="text-4xl md:text-5xl lg:text-6xl font-serif text-[var(--ink)] tracking-tight leading-none"
           >
-            What we engineer,{" "}
-            <em style={{ fontStyle: "italic", color: "var(--blue-deep)" }}>
-              built like a craft.
-            </em>
-          </h2>
+            What we engineer, built like a craft.
+          </SplitTextReveal>
+
           <p
-            className="services-hover-hint"
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: "var(--mono)",
               fontSize: "0.75rem",
-              color: "var(--muted)",
+              color: "var(--ink-2)",
               letterSpacing: "0.08em",
               textTransform: "uppercase",
               margin: 0,
             }}
           >
-            Hover service to preview architecture
+            Hover service row to inspect architecture
           </p>
         </div>
 
-        {/* Directory list across full width */}
-        <div style={{ borderTop: "1px solid var(--hairline)" }}>
-          {SERVICES.map((svc, i) => (
-            <ServiceRow
-              key={svc.id}
-              svc={svc}
-              isActive={activeIndex === i}
-              onEnter={() => setActiveIndex(i)}
-              onLeave={() => setActiveIndex(null)}
-            />
-          ))}
-        </div>
+        {/* Full-Width Interactive Directory List */}
+        <ul className="list-none p-0 m-0 border-t border-[var(--line)]">
+          {servicesList.map((svc, i) => {
+            const isHovered = hoveredIndex === i;
+
+            return (
+              <motion.li
+                key={svc.id}
+                onHoverStart={() => setHoveredIndex(i)}
+                onHoverEnd={() => setHoveredIndex(null)}
+                style={{
+                  position: "relative",
+                  borderBottom: "1px solid var(--line)",
+                  overflow: "hidden",
+                  borderRadius: "16px",
+                  margin: "0.5rem 0",
+                  padding: "clamp(1.75rem, 3.2vh, 2.5rem) 1.5rem",
+                  cursor: "pointer",
+                }}
+              >
+                {/* Night Background Slide-Up Overlay */}
+                <motion.div
+                  aria-hidden="true"
+                  initial={{ scaleY: 0 }}
+                  animate={{ scaleY: isHovered ? 1 : 0 }}
+                  transition={{ duration: 0.45, ease: ease.expo }}
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    backgroundColor: "var(--night)",
+                    borderRadius: "16px",
+                    transformOrigin: "bottom",
+                    zIndex: 0,
+                  }}
+                />
+
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4 md:gap-8 flex-1">
+                      
+                      {/* Coloured Dot */}
+                      <span
+                        style={{
+                          width: "12px",
+                          height: "12px",
+                          borderRadius: "50%",
+                          backgroundColor: svc.dotColor,
+                          flexShrink: 0,
+                          boxShadow: isHovered ? `0 0 12px ${svc.dotColor}` : "none",
+                          transition: "box-shadow 0.3s ease",
+                        }}
+                      />
+
+                      {/* Mono Index Number */}
+                      <span
+                        style={{
+                          fontFamily: "var(--mono)",
+                          fontSize: "0.8125rem",
+                          fontWeight: 700,
+                          letterSpacing: "0.1em",
+                          color: isHovered ? "var(--orange)" : "var(--ink-3)",
+                          transition: "color 0.25s ease",
+                        }}
+                      >
+                        {svc.index}
+                      </span>
+
+                      {/* Display Serif Title (Slides right + turns white on hover) */}
+                      <motion.h3
+                        animate={{
+                          x: isHovered ? 12 : 0,
+                          color: isHovered ? "#F6F7FC" : "var(--ink)",
+                        }}
+                        transition={springs.snappy}
+                        style={{
+                          fontFamily: "var(--serif)",
+                          fontSize: "clamp(1.85rem, 3.5vw, 3rem)",
+                          letterSpacing: "-0.02em",
+                          lineHeight: 1.1,
+                          margin: 0,
+                        }}
+                      >
+                        {svc.title}
+                      </motion.h3>
+                    </div>
+
+                    {/* Arrow reveal on right */}
+                    <motion.span
+                      animate={{
+                        x: isHovered ? 0 : -20,
+                        opacity: isHovered ? 1 : 0,
+                        color: "var(--orange)",
+                      }}
+                      transition={springs.snappy}
+                      style={{
+                        fontFamily: "var(--serif)",
+                        fontSize: "2rem",
+                        paddingRight: "1rem",
+                      }}
+                      aria-hidden="true"
+                    >
+                      →
+                    </motion.span>
+                  </div>
+
+                  {/* Sub-item capabilities pills */}
+                  <div className="mt-4 pl-7 md:pl-16">
+                    <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
+                      {svc.sub.map((item) => (
+                        <li key={item}>
+                          <span
+                            style={{
+                              fontFamily: "var(--mono)",
+                              fontSize: "0.6875rem",
+                              padding: "0.35rem 0.75rem",
+                              borderRadius: "999px",
+                              backgroundColor: isHovered
+                                ? "rgba(255,255,255,0.08)"
+                                : "rgba(14,27,61,0.04)",
+                              border: `1px solid ${
+                                isHovered ? "rgba(255,255,255,0.15)" : "var(--line)"
+                              }`,
+                              color: isHovered ? "rgba(246,247,252,0.85)" : "var(--ink-2)",
+                              display: "inline-block",
+                              transition: "all 0.25s ease",
+                            }}
+                          >
+                            {item}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </motion.li>
+            );
+          })}
+        </ul>
       </div>
 
-      {/* Floating preview badge following cursor */}
-      {activeIndex !== null && (
+      {/* Floating Cursor-Following Architecture Preview Tooltip */}
+      {hoveredIndex !== null && (
         <div
-          ref={trailRef}
           aria-hidden="true"
           style={{
             position: "fixed",
             left: trailPos.x + 28,
-            top: trailPos.y - 60,
-            width: "300px",
+            top: trailPos.y - 70,
+            width: "320px",
             pointerEvents: "none",
             zIndex: 7000,
-            opacity: activeIndex !== null ? 1 : 0,
-            transition: "opacity 0.25s ease",
-            backgroundColor: "var(--surface)",
-            border: "1px solid var(--hairline)",
-            borderRadius: "12px",
+            backgroundColor: "rgba(11, 21, 48, 0.95)",
+            border: "1px solid rgba(253, 179, 71, 0.35)",
+            borderRadius: "14px",
             padding: "1.25rem",
-            boxShadow: "0 12px 32px rgba(14,27,61,0.12)",
+            boxShadow: "0 20px 45px rgba(0,0,0,0.35)",
+            backdropFilter: "blur(12px)",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
+          <div className="flex items-center gap-2 mb-2">
             <span
               style={{
                 width: "8px",
                 height: "8px",
                 borderRadius: "50%",
-                backgroundColor: SERVICES[activeIndex]?.dotColor,
+                backgroundColor: servicesList[hoveredIndex]?.dotColor,
               }}
             />
             <span
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--mono)",
                 fontSize: "0.6875rem",
                 fontWeight: 700,
-                color: "var(--blue-deep)",
+                color: "var(--orange)",
                 textTransform: "uppercase",
+                letterSpacing: "0.08em",
               }}
             >
-              {SERVICES[activeIndex]?.index} / Overview
+              {servicesList[hoveredIndex]?.index} / SYSTEM ARCHITECTURE
             </span>
           </div>
-          <p style={{ fontSize: "0.8125rem", lineHeight: 1.55, color: "var(--muted)", margin: 0 }}>
-            {SERVICES[activeIndex]?.previewText}
+          <p
+            style={{
+              fontFamily: "var(--sans)",
+              fontSize: "0.8125rem",
+              lineHeight: 1.55,
+              color: "rgba(246,247,252,0.9)",
+              margin: 0,
+            }}
+          >
+            {servicesList[hoveredIndex]?.previewText}
           </p>
         </div>
       )}
     </section>
-  );
-}
-
-function ServiceRow({ svc, isActive, onEnter, onLeave }) {
-  const [expanded, setExpanded] = useState(true);
-
-  return (
-    <div
-      style={{
-        borderBottom: "1px solid var(--hairline)",
-        transition: "background-color 0.25s ease",
-        backgroundColor: isActive ? "rgba(47, 99, 224, 0.03)" : "transparent",
-      }}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-    >
-      <button
-        onClick={() => setExpanded(!expanded)}
-        data-cursor="bulb"
-        data-cursor-label="Explore"
-        style={{
-          display: "flex",
-          width: "100%",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "clamp(1.75rem, 3.5vh, 2.5rem) 0",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          textAlign: "left",
-        }}
-        aria-expanded={expanded}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "clamp(1rem, 2.5vw, 2rem)", flex: 1 }}>
-          {/* Coloured Dot per Service */}
-          <span
-            style={{
-              width: "12px",
-              height: "12px",
-              borderRadius: "50%",
-              backgroundColor: svc.dotColor,
-              flexShrink: 0,
-            }}
-          />
-
-          {/* Number */}
-          <span
-            style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: "0.8125rem",
-              fontWeight: 700,
-              color: "var(--muted)",
-              letterSpacing: "0.1em",
-            }}
-          >
-            {svc.index}
-          </span>
-
-          {/* Title */}
-          <span
-            style={{
-              fontFamily: "'Instrument Serif', Georgia, serif",
-              fontSize: "clamp(1.85rem, 3.6vw, 3rem)",
-              letterSpacing: "-0.02em",
-              color: isActive ? "var(--blue-deep)" : "var(--ink)",
-              transition: "color 0.2s ease",
-              lineHeight: 1.1,
-            }}
-          >
-            {svc.title}
-          </span>
-        </div>
-
-        <span
-          style={{
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize: "1rem",
-            color: isActive ? "var(--blue-deep)" : "var(--muted)",
-            transform: expanded ? "rotate(45deg)" : "none",
-            transition: "all 0.3s ease",
-            padding: "0.5rem",
-          }}
-          aria-hidden="true"
-        >
-          +
-        </span>
-      </button>
-
-      {/* Sub-items */}
-      {expanded && (
-        <div style={{ paddingBottom: "2rem", paddingLeft: "clamp(1.75rem, 5vw, 4.5rem)" }}>
-          <ul style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", listStyle: "none", padding: 0, margin: 0 }}>
-            {svc.sub.map((item) => (
-              <li key={item}>
-                <span
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: "0.6875rem",
-                    padding: "0.35rem 0.85rem",
-                    borderRadius: "999px",
-                    backgroundColor: "var(--surface)",
-                    border: "1px solid var(--hairline)",
-                    color: "var(--ink)",
-                    display: "inline-block",
-                  }}
-                >
-                  {item}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
   );
 }

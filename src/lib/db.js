@@ -1,13 +1,54 @@
 import { MongoClient } from "mongodb";
 
 export const defaultTestimonials = [
-  { text: "The Intelliverse delivered an outstanding product on time and on budget. Highly recommended!", author: "Client A" },
-  { text: "A fantastic team to work with. Professional, creative, and highly skilled.", author: "Client B" },
-  { text: "Our new website has seen a significant increase in traffic thanks to their expertise.", author: "Client C" },
-  { text: "They transformed our vision into a reality. Exceptional work!", author: "Client D" },
-  { text: "The Intelliverse delivered an outstanding product on time and on budget. Highly recommended!", author: "Client E" },
-  { text: "A fantastic team to work with. Professional, creative, and highly skilled.", author: "Client F" },
-  { text: "Our new website has seen a significant increase in traffic thanks to their expertise.", author: "Client G" }
+  {
+    author: "Harshil Vora",
+    role: "Founder & Creative Director",
+    project: "Vrix",
+    tag: "Vrix · Luxury E-Commerce",
+    rating: 5.0,
+    text: "Intelliverse built our headless luxury storefront with custom 3D ring visualizers and sub-second checkout. Our conversion rate increased by 42% on launch day — sheer engineering excellence."
+  },
+  {
+    author: "Dr. Rajesh K. Patel",
+    role: "Senior Consultant Cardiologist",
+    project: "Appointry",
+    tag: "Appointry · Doctor",
+    rating: 4.5,
+    text: "Appointry's automated token queue and digital prescription flow eliminated patient congestion at our OPD. Schedule conflicts dropped to zero within our first week of operation."
+  },
+  {
+    author: "Dr. Meera Shah",
+    role: "Director, Metro Multispeciality Clinic",
+    project: "Appointry",
+    tag: "Appointry · Clinic",
+    rating: 4.0,
+    text: "Managing multiple visiting doctors across departments used to cause daily front-desk chaos. Appointry unified our doctor shifts, reception desk, and billing into one synchronized real-time dashboard."
+  },
+  {
+    author: "Karan Singhania",
+    role: "Operations Head, Apex Diagnostic Labs",
+    project: "Appointry",
+    tag: "Appointry · Lab",
+    rating: 3.5,
+    text: "Home sample collection dispatch and direct WhatsApp report delivery saved our phlebotomists hours every day. Fast patient sync, with ongoing UI refinements making it even smoother."
+  },
+  {
+    author: "Sneha Parikh",
+    role: "Verified Patient & Care Recipient",
+    project: "Appointry",
+    tag: "Appointry · Patient",
+    rating: 4.0,
+    text: "No more waiting for two hours in crowded clinic waiting rooms. The live queue tracker showed exactly when my consultation was up, and all my blood work reports arrived directly on my phone."
+  },
+  {
+    author: "Pooja Chawla",
+    role: "Head of Digital Retail, Vrix Storefront",
+    project: "Vrix",
+    tag: "Vrix · Luxury E-Commerce",
+    rating: 4.5,
+    text: "The high-resolution zoom and instant catalog filtering on mobile browsers made our diamond collections shine. Highly performant Shopify headless stack that handles heavy seasonal traffic effortlessly."
+  }
 ];
 
 // Fallback in-memory DB in case MongoDB Atlas is not configured or offline
@@ -46,12 +87,159 @@ export const localMockDb = {
       { id: "it", label: "Cloud & DevOps Architecture", baseRange: "₹25,000 – ₹1.2L" },
       { id: "ai", label: "Applied AI / Agentic Automation", baseRange: "₹40,000 – ₹2.5L+" },
     ],
+    includedCharges: [
+      { title: "100% IP & Full Source Code Ownership", badge: "INCLUDED", note: "Zero vendor lock-in; complete repository rights" },
+      { title: "Cloud CI/CD & Zero-Downtime Deployment", badge: "INCLUDED", note: "Automated edge staging & production pipelines" },
+      { title: "End-to-End Security & QA Audit", badge: "INCLUDED", note: "OWASP best practices & performance stress testing" },
+      { title: "30-Day Post-Launch SLA Warranty", badge: "INCLUDED", note: "Dedicated bug resolution & uptime guarantees" },
+    ],
   },
+  services: [
+    {
+      id: "web",
+      title: "Web Architecture & Frontend",
+      index: "01",
+      dotColor: "var(--blue)",
+      previewText: "Sub-second Next.js 15 apps, headless Shopify storefronts, and tactile WebGL experiences.",
+      sub: [
+        "Next.js 15 & React 19 Architectures",
+        "Headless E-Commerce & Storefronts",
+        "Bespoke Interaction Design & Canvas",
+        "Core Web Vitals (<800ms LCP)",
+        "PWA & Offline Capability",
+      ],
+    },
+    {
+      id: "software",
+      title: "Custom SaaS & Software Systems",
+      index: "02",
+      dotColor: "var(--indigo)",
+      previewText: "Multi-tenant cloud architectures, role-based security, and high-throughput transactional APIs.",
+      sub: [
+        "Multi-Tenant SaaS Portals",
+        "Node.js, FastAPI & Go Microservices",
+        "Distributed Database Engineering",
+        "Cryptographic Telemetry & Audit Trails",
+        "Stripe / Razorpay Payment Systems",
+      ],
+    },
+    {
+      id: "cloud",
+      title: "Cloud Infrastructure & DevOps",
+      index: "03",
+      dotColor: "var(--orange)",
+      previewText: "Zero-downtime CI/CD deployment pipelines, multi-region Kubernetes, and edge failover.",
+      sub: [
+        "AWS, GCP & Cloudflare Edge",
+        "Docker & Kubernetes Orchestration",
+        "Terraform Infrastructure as Code",
+        "Zero-Downtime Deployment Pipelines",
+        "24/7 Telemetry & Health Auditing",
+      ],
+    },
+    {
+      id: "ai",
+      title: "Applied AI & Agentic Workflows",
+      index: "04",
+      dotColor: "var(--coral)",
+      previewText: "Enterprise Agentic RAG workflows, vector intelligence databases, and neural automations.",
+      sub: [
+        "Enterprise Agentic RAG Workflows",
+        "Gemini 2.5 & OpenAI API Integrations",
+        "Vector Databases (Qdrant, Pinecone)",
+        "Automated Document Processing",
+        "Secure On-Premise LLM Pipelines",
+      ],
+    },
+  ],
+  process: [
+    {
+      num: "01",
+      tag: "DISCOVER",
+      title: "Discover & Strategize",
+      description: "We clarify system requirements, map critical edge cases, and audit architectural bottlenecks before committing a single line of code.",
+      deliverables: ["Architectural Spec", "Technical Scoping Brief", "Milestone Roadmap"],
+      telemetry: "SPECS: 100% DEFINED · ZERO AMBIGUITY",
+    },
+    {
+      num: "02",
+      tag: "ARCHITECT",
+      title: "Architect & Engineer",
+      description: "Design systems and modular backend microservices progress in synchronized sprints. Built with strict TypeScript, automated unit tests, and continuous integration.",
+      deliverables: ["Modular React 19 / Next.js", "Type-safe APIs", "Weekly Playable Demos"],
+      telemetry: "BUILD: TS-STRICT PASS · 98% TEST COVERAGE",
+    },
+    {
+      num: "03",
+      tag: "DEPLOY",
+      title: "Deploy & Secure",
+      description: "Automated CI/CD pipelines configure zero-downtime rolling deploys, distributed edge caching, TLS security hardening, and database redundancy.",
+      deliverables: ["Zero-Downtime Pipeline", "Multi-Region Edge", "Zero-Trust Security"],
+      telemetry: "EDGE: 24 REGIONS ONLINE · TLS 1.3 ACTIVE",
+    },
+    {
+      num: "04",
+      tag: "SCALE",
+      title: "Scale & Optimize",
+      description: "Post-launch telemetry monitors Core Web Vitals, API latency percentiles, and usage spikes. Features iterate continuously against empirical user data.",
+      deliverables: ["24/7 Health Auditing", "P99 Latency Profiling", "Autoscaling Policies"],
+      telemetry: "HEALTH: 99.99% UPTIME · 18ms P99 RESPONSE",
+    },
+  ],
+  marquee: {
+    items1: [
+      "Software in the Open",
+      "Systems That Outlive Hype",
+      "Zero Template Engineering",
+      "Resilient Web Architecture",
+      "Engineered in Ahmedabad",
+      "Distributed Cloud Systems",
+      "Modern Next.js & React 19",
+    ],
+    items2: [
+      "Next.js App Router",
+      "Microservices & Serverless",
+      "TypeScript Strict",
+      "PostgreSQL & Mongo",
+      "AWS & GCP Cloud Native",
+      "Framer Motion & GSAP",
+      "Zero-Downtime CI/CD",
+      "Tailored AI Workflows",
+    ],
+  },
+  philosophy: [
+    {
+      num: "01",
+      circleColor: "var(--blue-deep)",
+      title: "Single Service Engagement",
+      subtitle: "Start with one critical objective executed impeccably.",
+      body: "Maybe you need an ultra-fast Next.js web application or a headless storefront right now. That's a completely valid place to start. We focus strictly on what creates measurable impact, without bloated scopes or unwanted upsells.",
+      chips: ["Next.js Architecture", "Headless Storefront", "Landing Experience", "Code Audit"],
+    },
+    {
+      num: "02",
+      circleColor: "var(--indigo)",
+      title: "Multi-Service Delivery",
+      subtitle: "Web, cloud systems, and AI pipelines synchronized.",
+      body: "As your product scope matures, we orchestrate the frontend interfaces, cloud microservices, database schemas, and AI pipelines together — one cohesive team that understands your full architecture from first principles.",
+      chips: ["Full-Stack Engineering", "AWS / Edge Cloud", "Agentic AI Pipelines", "API Integrations"],
+    },
+    {
+      num: "03",
+      circleColor: "var(--coral)",
+      title: "Complete Technical Partner",
+      subtitle: "Your embedded engineering leadership.",
+      body: "For ambitious founders and growing companies that require continuous technical excellence: we embed into your product roadmap, help hire and mentor internal developers, and guarantee uptime as you scale.",
+      chips: ["CTO Advisory", "Dedicated Retainer", "Continuous DevOps", "Enterprise Security"],
+    },
+  ],
   founders: [
     {
       name: "Dhruvil Thummar",
       role: "Co-founder & CTO",
+      badge: "SYSTEMS & CLOUD",
       tagline: "Engineering scalable systems & leading technical vision",
+      currently: "Optimizing zero-downtime edge proxies & Appointory real-time messaging pipeline.",
       image: "/founder_dhruvil.jpg",
       linkedin: "https://www.linkedin.com/in/dhruvilthummar",
       portfolio: "",
@@ -71,7 +259,9 @@ export const localMockDb = {
     {
       name: "Rudra Kankotiya",
       role: "Co-founder & CMO",
+      badge: "GROWTH & PRODUCT",
       tagline: "Driving brand strategy & marketing excellence",
+      currently: "Leading international rollout for Vrix Jewellery headless storefront.",
       image: "/founder_rudra.jpg",
       linkedin: "https://www.linkedin.com/in/rudra-kankotiya-2173ab31a",
       portfolio: "",
@@ -91,7 +281,9 @@ export const localMockDb = {
     {
       name: "Jal Anghan",
       role: "Founder & Director",
+      badge: "STRATEGY & OPERATIONS",
       tagline: "Visionary leadership & strategic business growth",
+      currently: "Structuring long-term enterprise development partnerships & compliance frameworks.",
       image: "/founder_jal.jpg",
       linkedin: "https://www.linkedin.com/in/jal-anghan-534628309",
       portfolio: "",
@@ -120,6 +312,7 @@ export const localMockDb = {
       techTags: ["Next.js 15", "Node.js", "MongoDB", "Cloud Messaging API", "Tailwind CSS"],
       impact: "Clinic Queue Coordination · Real-time Consultation Dispatch",
       link: "https://appointory.in",
+      caseStudyLink: "/work/appointory",
       description: "Automated clinic queue coordination with automated real-time dispatch triggers so patients know exact arrival times. Backed by end-to-end encrypted health locker for diagnostic records.",
       summary: "Automated clinic queue coordination with automated real-time dispatch triggers so patients know exact arrival times. Backed by end-to-end encrypted health locker for diagnostic records.",
       rating: 5,
@@ -136,6 +329,7 @@ export const localMockDb = {
       techTags: ["Next.js", "Shopify Storefront API", "Tailwind CSS", "Multi-Currency"],
       impact: "Fast Global Delivery · Multi-Currency Storefront",
       link: "https://vrix.in",
+      caseStudyLink: "/work/vrix",
       description: "International luxury storefront engineered for overseas buyers. Features geolocation-aware dynamic pricing, personal AI curation, and instantaneous catalog filtering.",
       summary: "International luxury storefront engineered for overseas buyers. Features geolocation-aware dynamic pricing, personal AI curation, and instantaneous catalog filtering.",
       rating: 5,
@@ -153,6 +347,10 @@ export const localMockDb = {
       stack: ["Next.js 15", "Node.js", "MongoDB", "Cloud Messaging API", "Tailwind CSS"],
       impact: "Clinic Queue Coordination · Real-time Consultation Dispatch",
       link: "https://appointory.in",
+      caseStudyLink: "/work/appointory",
+      problem: "Clinic queue coordination relied on manual physical tokens causing unpredictable wait times and packed waiting rooms.",
+      broke: "Legacy polling server choked under peak concurrent morning patient registrations, causing dropped appointments.",
+      result: "Sub-50ms dispatch queues, zero dropped alerts, 100% secure health records.",
       summary: "Automated clinic queue coordination with automated real-time dispatch triggers so patients know exact arrival times. Backed by end-to-end encrypted health locker for diagnostic records.",
       rating: 5,
       review: "The Intelliverse delivered an outstanding medical scheduling platform that transformed our patient experience."
@@ -166,6 +364,10 @@ export const localMockDb = {
       stack: ["Next.js", "Shopify Storefront API", "Tailwind CSS", "Multi-Currency"],
       impact: "Fast Global Delivery · Multi-Currency Storefront",
       link: "https://vrix.in",
+      caseStudyLink: "/work/vrix",
+      problem: "Global luxury buyers abandoned carts due to static currency conversions and slow high-resolution image rendering.",
+      broke: "Monolithic e-commerce template bloated first contentful paint past 4.2 seconds on overseas mobile connections.",
+      result: "Instant headless edge routing, 99 Core Web Vitals, 3.4x overseas checkout conversion growth.",
       summary: "International luxury storefront engineered for overseas buyers. Features geolocation-aware dynamic pricing, personal AI curation, and instantaneous catalog filtering.",
       rating: 5,
       review: "Exceptional UI speed and international conversion rate optimization."
@@ -247,7 +449,7 @@ export async function ensureDatabaseSeeded(db, force = false) {
 
     const seedTasks = [];
 
-    // 1. Content (hero, about, contact, stats, estimator)
+    // 1. Content (hero, about, contact, stats, estimator, services, process, marquee)
     if (!existingContent || force) {
       seedTasks.push(
         db.collection("content").updateOne(
@@ -259,6 +461,10 @@ export async function ensureDatabaseSeeded(db, force = false) {
               contact: localMockDb.contact,
               stats: localMockDb.stats,
               estimator: localMockDb.estimator,
+              services: localMockDb.services,
+              process: localMockDb.process,
+              marquee: localMockDb.marquee,
+              philosophy: localMockDb.philosophy,
               updatedAt: new Date()
             },
             $setOnInsert: { createdAt: new Date() }
@@ -269,6 +475,10 @@ export async function ensureDatabaseSeeded(db, force = false) {
     } else {
       const updates = {};
       if (!existingContent.estimator) updates.estimator = localMockDb.estimator;
+      if (!existingContent.services) updates.services = localMockDb.services;
+      if (!existingContent.process) updates.process = localMockDb.process;
+      if (!existingContent.marquee) updates.marquee = localMockDb.marquee;
+      if (!existingContent.philosophy) updates.philosophy = localMockDb.philosophy;
       if (!existingContent.hero?.caseStudiesHighlight && localMockDb.hero.caseStudiesHighlight) {
         updates["hero.caseStudiesHighlight"] = localMockDb.hero.caseStudiesHighlight;
       }
@@ -308,9 +518,10 @@ export async function ensureDatabaseSeeded(db, force = false) {
     }
 
     // 5. Testimonials
-    if (testimonialsCount === 0 || force) {
+    const hasPlaceholderTestimonials = await db.collection("testimonials").findOne({ author: "Client A" });
+    if (testimonialsCount === 0 || force || hasPlaceholderTestimonials) {
       seedTasks.push((async () => {
-        if (force) await db.collection("testimonials").deleteMany({});
+        await db.collection("testimonials").deleteMany({});
         await db.collection("testimonials").insertMany(defaultTestimonials);
       })());
     }

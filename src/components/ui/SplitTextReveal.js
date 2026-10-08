@@ -16,6 +16,7 @@ export default function SplitTextReveal({
   children,
   as: Component = "h2",
   className = "",
+  style = {},
   stagger = 0.03,
   duration = 0.8,
   yOffset = 45,
@@ -65,11 +66,17 @@ export default function SplitTextReveal({
   return (
     <Component
       ref={containerRef}
-      className={`inline-block overflow-hidden ${className}`}
-      style={{ perspective: "600px" }}
+      className={`block ${className}`}
+      style={{ perspective: "600px", ...style }}
     >
       {words.map((word, wIdx) => (
-        <span key={wIdx} className="inline-block whitespace-nowrap mr-[0.25em]">
+        <span
+          key={wIdx}
+          style={{
+            display: "inline-block",
+            whiteSpace: "nowrap",
+          }}
+        >
           {word.split("").map((char, cIdx) => (
             <span
               key={cIdx}
@@ -79,6 +86,17 @@ export default function SplitTextReveal({
               {char}
             </span>
           ))}
+          {wIdx < words.length - 1 && (
+            <span
+              style={{
+                display: "inline-block",
+                width: "0.28em",
+              }}
+              aria-hidden="true"
+            >
+              &nbsp;
+            </span>
+          )}
         </span>
       ))}
     </Component>

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   clientPromise,
   localMockDb,
@@ -9,6 +10,9 @@ import {
 } from "@/lib/db";
 import { verifySession } from "@/lib/auth";
 import { cookies } from "next/headers";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const defaultStats = { projects: 2, satisfaction: 100, clients: 15 };
 
@@ -58,7 +62,18 @@ export async function GET(request) {
         },
         stats: content?.stats || localMockDb.stats || defaultStats,
         estimator: content?.estimator || localMockDb.estimator,
-        testimonials: testimonials.map(t => ({ text: t.text, author: t.author })),
+        services: content?.services || localMockDb.services,
+        process: content?.process || localMockDb.process,
+        marquee: content?.marquee || localMockDb.marquee,
+        philosophy: content?.philosophy || localMockDb.philosophy,
+        testimonials: (testimonials.length > 0 ? testimonials : defaultTestimonials).map(t => ({
+          text: t.text || t.quote || "",
+          author: t.author || "",
+          role: t.role || "",
+          project: t.project || "",
+          tag: t.tag || "",
+          rating: t.rating !== undefined ? Number(t.rating) : 5,
+        })),
         projects: (projects.length > 0 ? projects : (localMockDb.projects || [])).map(p => ({
           name: p.name,
           description: p.description || p.summary || "",
@@ -87,11 +102,15 @@ export async function GET(request) {
           category: cs.category || cs.type || "",
           role: cs.role || "",
           impact: cs.impact || "",
+          problem: cs.problem || cs.summary || "",
+          broke: cs.broke || "",
+          result: cs.result || "",
           summary: cs.summary || cs.description || "",
           description: cs.description || cs.summary || "",
           stack: Array.isArray(cs.stack) ? cs.stack : (Array.isArray(cs.techTags) ? cs.techTags : []),
           techTags: Array.isArray(cs.techTags) ? cs.techTags : (Array.isArray(cs.stack) ? cs.stack : []),
           link: cs.link || "",
+          caseStudyLink: cs.caseStudyLink || (cs.name?.toLowerCase().includes("appointory") ? "/work/appointory" : cs.name?.toLowerCase().includes("vrix") ? "/work/vrix" : ""),
           review: cs.review || "",
           rating: cs.rating !== undefined ? Number(cs.rating) : 5
         })),
@@ -111,7 +130,9 @@ export async function GET(request) {
             return {
               name: f.name,
               role: f.role,
+              badge: f.badge || "",
               tagline: f.tagline || "",
+              currently: f.currently || "",
               image: f.image || "",
               imageX: f.imageX !== undefined ? Number(f.imageX) : 50,
               imageY: f.imageY !== undefined ? Number(f.imageY) : 50,
@@ -136,11 +157,19 @@ export async function GET(request) {
           : localMockDb.founders
       };
 
-      return NextResponse.json(responsePayload);
+      return NextResponse.json(responsePayload, {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        },
+      });
     }
 
     // Fallback to local mock if DB connection is unavailable
-    return NextResponse.json(localMockDb);
+    return NextResponse.json(localMockDb, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+      },
+    });
   } catch (error) {
     console.error("[MongoDB] GET content error:", error);
     return NextResponse.json({
@@ -156,7 +185,23 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { hero, about, contact, stats, estimator, testimonials, projects, caseStudies, chatbotKnowledge, founders, passcode } = body;
+    const {
+      hero,
+      about,
+      contact,
+      stats,
+      estimator,
+      services,
+      process: processStages,
+      marquee,
+      philosophy,
+      testimonials,
+      projects,
+      caseStudies,
+      chatbotKnowledge,
+      founders,
+      passcode
+    } = body;
 
     const db = await getDb();
 
@@ -175,7 +220,7 @@ export async function POST(request) {
     }
 
     if (db) {
-      // 1. Save Content (hero, about, contact, stats, estimator)
+      // 1. Save Content (hero, about, contact, stats, estimator, services, process, marquee, philosophy)
       await db.collection("content").updateOne(
         {},
         {
@@ -185,6 +230,10 @@ export async function POST(request) {
             contact: contact || localMockDb.contact,
             stats: stats || defaultStats,
             estimator: estimator || localMockDb.estimator,
+            services: services || localMockDb.services,
+            process: processStages || localMockDb.process,
+            marquee: marquee || localMockDb.marquee,
+            philosophy: philosophy || localMockDb.philosophy,
             updatedAt: new Date()
           }
         },
@@ -211,7 +260,26 @@ export async function POST(request) {
       if (Array.isArray(caseStudies)) {
         await db.collection("case_studies").deleteMany({});
         if (caseStudies.length > 0) {
-          await db.collection("case_studies").insertMany(caseStudies);
+          const formattedCaseStudies = caseStudies.map((cs, i) => ({
+            id: cs.id || `cs-${i + 1}`,
+            num: cs.num || `0${i + 1}`,
+            name: cs.name || "",
+            category: cs.category || cs.type || "",
+            role: cs.role || "",
+            impact: cs.impact || "",
+            problem: cs.problem || "",
+            broke: cs.broke || "",
+            result: cs.result || "",
+            summary: cs.summary || cs.description || "",
+            description: cs.description || cs.summary || "",
+            stack: Array.isArray(cs.stack) ? cs.stack : (Array.isArray(cs.techTags) ? cs.techTags : []),
+            techTags: Array.isArray(cs.techTags) ? cs.techTags : (Array.isArray(cs.stack) ? cs.stack : []),
+            link: cs.link || "",
+            caseStudyLink: cs.caseStudyLink || (cs.name?.toLowerCase().includes("appointory") ? "/work/appointory" : cs.name?.toLowerCase().includes("vrix") ? "/work/vrix" : ""),
+            review: cs.review || "",
+            rating: cs.rating !== undefined ? Number(cs.rating) : 5
+          }));
+          await db.collection("case_studies").insertMany(formattedCaseStudies);
         }
       }
 
@@ -223,7 +291,7 @@ export async function POST(request) {
         }
       }
 
-      // 5. Save Founders (with all multi-links and positioning)
+      // 5. Save Founders (with badge, currently, all multi-links and positioning)
       if (Array.isArray(founders)) {
         await db.collection("founders").deleteMany({});
         if (founders.length > 0) {
@@ -233,7 +301,9 @@ export async function POST(request) {
             return {
               name: f.name || `Founder ${i + 1}`,
               role: f.role || "Co-Founder",
+              badge: f.badge || "",
               tagline: f.tagline || "",
+              currently: f.currently || "",
               image: f.image || "",
               imageX: f.imageX !== undefined ? Number(f.imageX) : 50,
               imageY: f.imageY !== undefined ? Number(f.imageY) : 50,
@@ -266,16 +336,34 @@ export async function POST(request) {
     if (contact) localMockDb.contact = contact;
     if (stats) localMockDb.stats = stats;
     if (estimator) localMockDb.estimator = estimator;
+    if (services) localMockDb.services = services;
+    if (processStages) localMockDb.process = processStages;
+    if (marquee) localMockDb.marquee = marquee;
     if (testimonials) localMockDb.testimonials = testimonials;
     if (projects) localMockDb.projects = projects;
     if (caseStudies) localMockDb.caseStudies = caseStudies;
     if (chatbotKnowledge) localMockDb.chatbotKnowledge = chatbotKnowledge;
     if (founders) localMockDb.founders = founders;
 
-    return NextResponse.json({
-      success: true,
-      message: "All CMS content successfully saved and synchronized into MongoDB Atlas database ('intelliverse')!"
-    });
+    // Purge cached paths immediately so changes appear on the live site without delay
+    try {
+      revalidatePath("/");
+      revalidatePath("/admin");
+    } catch (e) {
+      // ignore in environments where revalidatePath is unavailable
+    }
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "All CMS content successfully saved and synchronized into MongoDB Atlas database ('intelliverse')!"
+      },
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        },
+      }
+    );
   } catch (error) {
     console.error("[MongoDB] POST content error:", error);
     return NextResponse.json({ error: "Failed to save CMS changes to database." }, { status: 500 });

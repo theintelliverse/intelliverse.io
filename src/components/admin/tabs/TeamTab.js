@@ -103,9 +103,16 @@ export default function TeamTab({
                     </div>
                     
                     <div className="min-w-0">
-                      <h4 className="text-xs font-bold text-white truncate max-w-[120px] sm:max-w-none">
-                        {founder.name || <span className="text-gray-600 italic">Unnamed Member</span>}
-                      </h4>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <h4 className="text-xs font-bold text-white truncate max-w-[120px] sm:max-w-none">
+                          {founder.name || <span className="text-gray-600 italic">Unnamed Member</span>}
+                        </h4>
+                        {founder.badge && (
+                          <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/25 font-mono font-bold tracking-wider uppercase shrink-0">
+                            {founder.badge}
+                          </span>
+                        )}
+                      </div>
                       <p className="text-[10px] text-gray-500 font-mono truncate mt-0.5 max-w-[120px] sm:max-w-none">
                         {founder.role || <span className="text-gray-600 italic">No role specified</span>}
                       </p>
@@ -247,7 +254,7 @@ export default function TeamTab({
                           <label className="text-[10px] text-gray-400 uppercase font-semibold block">Full Name</label>
                           <input
                             type="text"
-                            value={founder.name}
+                            value={founder.name || ""}
                             onChange={(e) => handleFounderChange(index, "name", e.target.value)}
                             className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-bold"
                             placeholder="e.g. Dhruvil Patel"
@@ -258,7 +265,7 @@ export default function TeamTab({
                           <label className="text-[10px] text-gray-400 uppercase font-semibold block">Company Role</label>
                           <input
                             type="text"
-                            value={founder.role}
+                            value={founder.role || ""}
                             onChange={(e) => handleFounderChange(index, "role", e.target.value)}
                             className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600"
                             placeholder="e.g. Founder & CEO"
@@ -267,11 +274,60 @@ export default function TeamTab({
                         </div>
                       </div>
 
+                      {/* Founder / Team Member Badge Pill */}
+                      <div className="p-3 bg-gray-950/60 border border-blue-500/20 rounded-xl space-y-2">
+                        <div className="flex items-center justify-between">
+                          <label className="text-[10px] text-blue-400 uppercase font-semibold block font-mono">
+                            <i className="fas fa-tag mr-1.5"></i>
+                            Founder / Status Badge Pill
+                          </label>
+                          {founder.badge && (
+                            <span className="text-[9px] bg-blue-500/20 text-blue-300 border border-blue-400/30 px-2 py-0.5 rounded-full font-mono font-bold tracking-wider uppercase">
+                              PREVIEW: {founder.badge}
+                            </span>
+                          )}
+                        </div>
+                        <input
+                          type="text"
+                          value={founder.badge || ""}
+                          onChange={(e) => handleFounderChange(index, "badge", e.target.value)}
+                          className="w-full p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-mono uppercase"
+                          placeholder="e.g. FOUNDER, CO-FOUNDER, CO-FOUNDER & CTO, SYSTEMS & CLOUD"
+                        />
+                        <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                          <span className="text-[9px] text-gray-500 font-mono mr-1">Quick Presets:</span>
+                          {[
+                            "FOUNDER",
+                            "CO-FOUNDER",
+                            "CO-FOUNDER & CTO",
+                            "CO-FOUNDER & CMO",
+                            "FOUNDER & DIRECTOR",
+                            "SYSTEMS & CLOUD",
+                            "GROWTH & PRODUCT",
+                            "STRATEGY & OPERATIONS",
+                            "LEAD ARCHITECT",
+                          ].map((preset) => (
+                            <button
+                              key={preset}
+                              type="button"
+                              onClick={() => handleFounderChange(index, "badge", preset)}
+                              className={`text-[9px] font-mono px-2 py-0.5 rounded-md border transition active:scale-95 ${
+                                founder.badge === preset
+                                  ? "bg-blue-600 text-white border-blue-500 shadow-sm"
+                                  : "bg-gray-900 text-gray-400 border-white/5 hover:text-white hover:border-white/20"
+                              }`}
+                            >
+                              {preset}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
                       <div>
                         <label className="text-[10px] text-gray-400 uppercase font-semibold block">Tagline / Motto</label>
                         <input
                           type="text"
-                          value={founder.tagline}
+                          value={founder.tagline || ""}
                           onChange={(e) => handleFounderChange(index, "tagline", e.target.value)}
                           className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600"
                           placeholder="e.g. Building the future of AI engineering."
@@ -280,10 +336,21 @@ export default function TeamTab({
                       </div>
 
                       <div>
+                        <label className="text-[10px] text-gray-400 uppercase font-semibold block">Currently Working On (Studio Focus)</label>
+                        <input
+                          type="text"
+                          value={founder.currently || ""}
+                          onChange={(e) => handleFounderChange(index, "currently", e.target.value)}
+                          className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600"
+                          placeholder="e.g. Optimizing zero-downtime edge proxies & Appointory real-time messaging pipeline."
+                        />
+                      </div>
+
+                      <div>
                         <label className="text-[10px] text-gray-400 uppercase font-semibold block">Display Order Weight</label>
                         <input
                           type="number"
-                          value={founder.order}
+                          value={founder.order || 1}
                           onChange={(e) => handleFounderChange(index, "order", e.target.value)}
                           className="w-32 mt-1.5 p-2.5 bg-gray-950 border border-gray-850 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white rounded-lg text-xs focus:outline-none transition-all duration-300 font-mono"
                           placeholder="e.g. 1"

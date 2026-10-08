@@ -1,9 +1,9 @@
 /* ─────────────────────────────────────────────────────────────────────────── */
-/*  THE INTELLIVERSE — Design System v3.0 "The Engineering Sketchbook"        */
-/*  Accent: Amber #F5A524 | Dark base: #08090A | Paper tone: #EDE8DD          */
+/*  THE INTELLIVERSE — Design System v3.1 "Open Workshop"                     */
+/*  Fonts: Local woff2 (zero CDN) | Motion: Framer Motion + GSAP              */
 /* ─────────────────────────────────────────────────────────────────────────── */
 
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap');
+/* Font Awesome retained for admin icons */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
 @import "tailwindcss";
 
@@ -55,10 +55,26 @@ html {
   max-width: 100vw;
 }
 
+.font-serif {
+  font-family: var(--serif);
+}
+
+.font-sans {
+  font-family: var(--sans);
+}
+
+.font-mono {
+  font-family: var(--mono);
+}
+
 /* ── DESIGN TOKENS ──────────────────────────────────────────────────────── */
 :root {
-  /* Fonts */
-  --font-handwritten: 'Caveat', cursive;
+  /* ── Font families (resolved from next/font/local CSS vars) ── */
+  --font-handwritten: var(--font-hand, 'Caveat', cursive);
+  --serif: var(--font-serif, 'Instrument Serif', Georgia, serif);
+  --mono:  var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  --sans:  var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+  --hand:  var(--font-hand, 'Caveat', cursive);
 
   /* Surfaces */
   --cream: #FFFFFF;
@@ -69,10 +85,24 @@ html {
   /* borders, dividers */
   --ink: #0E1B3D;
   /* main text */
+  --ink-2: #4A5575;
+  /* secondary text (alias) */
+  --ink-3: #8A93AD;
+  /* tertiary / mono labels */
   --muted: #4A5575;
   /* secondary text */
   --night: #0B1530;
   /* dark sections (deep navy, never pure black) */
+
+  /* Open Workshop extra surfaces */
+  --bg-2: #F6F7FC;
+  /* alternate light surface */
+  --line: rgba(14, 27, 61, 0.10);
+  /* subtle grid line */
+  --line-2: rgba(14, 27, 61, 0.22);
+  /* visible border */
+  --live: #22A55B;
+  /* live / active status green */
 
   /* Cursor Specific Tokens */
   --cursor-cream: #F8F2E4;
@@ -102,8 +132,8 @@ html {
   /* decorative circles only */
 
   /* Semantic UI Aliases */
-  --paper: #F3EAD6;
-  /* warmer cream for sketchbook */
+  --paper: #FBF7EE;
+  /* warm sketchbook cream (Open Workshop) */
   --paper-2: var(--surface);
   --amber: var(--orange);
   --rule-dark: rgba(228, 218, 195, 0.15);
@@ -177,7 +207,7 @@ html {
 }
 
 body {
-  font-family: 'Satoshi', 'Inter', system-ui, sans-serif;
+  font-family: var(--sans);
   background-color: var(--cream);
   color: var(--ink);
   overflow-x: hidden;
@@ -198,7 +228,7 @@ body {
   padding: 0.75rem 1.5rem;
   background: var(--amber);
   color: var(--ink);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--mono);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -214,16 +244,81 @@ body {
 
 /* ── TYPOGRAPHY ─────────────────────────────────────────────────────────── */
 .font-serif {
-  font-family: 'Instrument Serif', Georgia, serif;
+  font-family: var(--serif);
 }
 
 .font-mono {
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-family: var(--mono);
 }
 
 .font-sans {
-  font-family: 'Satoshi', 'Inter', system-ui, sans-serif;
+  font-family: var(--sans);
 }
+
+/* ── MOTION & DECORATION UTILITIES ───────────────────────────────────────── */
+/* GPU compositing hint */
+[data-motion] {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Dot-grid / technical grid decorative background */
+.grid-bg {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulseDot {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(34, 165, 91, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(34, 165, 91, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(34, 165, 91, 0);
+  }
+}
+
+@keyframes drawStroke {
+  0% {
+    stroke-dashoffset: 320;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+
 
 /* Display headline sizing */
 .text-display {
@@ -1842,4 +1937,369 @@ select:focus-visible,
   .sketchbook-meta-pills {
     display: none !important;
   }
+}
+
+/* ── HOW WE WORK & EXECUTION FLYWHEEL ARCHITECTURE ───────────────────────── */
+.process-pinsec {
+  position: relative;
+}
+.process-pinsec .process-pin {
+  height: 100vh;
+  padding-top: 86px;
+  padding-bottom: 36px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.process-sys {
+  display: grid;
+  grid-template-columns: 390px 1fr;
+  gap: 48px;
+  height: calc(100vh - 140px);
+  align-items: stretch;
+}
+.process-sys-l {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 0 16px;
+}
+.process-sys-l h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2.75rem, 4.2vw, 3.8rem);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  margin-top: 6px;
+  color: var(--ink);
+}
+.process-steps {
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.process-steps li {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-3);
+  opacity: 0.45;
+  transform: translateX(0);
+  transition: opacity 0.35s ease, transform 0.35s ease, color 0.35s ease;
+  cursor: pointer;
+  user-select: none;
+}
+.process-steps li .no {
+  font-family: var(--mono);
+  font-size: 12px;
+  padding-top: 4px;
+}
+.process-steps li h4 {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.3;
+}
+.process-steps li p {
+  font-size: 14.5px;
+  line-height: 1.45;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+.process-steps li.on {
+  opacity: 1;
+  transform: translateX(6px);
+  color: var(--ink);
+}
+.process-steps li.on .no {
+  color: var(--blue-deep);
+  font-weight: 700;
+}
+.process-steps li.on p {
+  max-height: 90px;
+  opacity: 1;
+  margin-top: 6px;
+  color: var(--ink-2);
+}
+.process-prog {
+  height: 3px;
+  background: var(--line);
+  margin-top: 20px;
+  position: relative;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.process-prog i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 10%;
+  background: linear-gradient(90deg, var(--indigo), var(--blue), var(--coral), var(--amber));
+  border-radius: 3px;
+}
+.process-stage {
+  position: relative;
+  border: 1px solid var(--line-2);
+  border-radius: 20px;
+  background: var(--card, #FFFFFF);
+  overflow: hidden;
+  box-shadow: 0 30px 60px -30px rgba(14, 27, 61, 0.12);
+  display: flex;
+  flex-direction: column;
+}
+.process-stage-h {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--line);
+  z-index: 10;
+  color: var(--ink-2);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+}
+.process-tab-pill {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  border-radius: 9999px;
+  background-color: var(--ink);
+  pointer-events: none;
+}
+.pulse-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--live);
+  box-shadow: 0 0 8px rgba(34, 165, 91, 0.6);
+  animation: pulseDot 2s infinite ease-in-out;
+}
+@keyframes pulseDot {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.7;
+  }
+}
+.process-dg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+}
+.process-dg .edge {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.6;
+}
+.process-dg .edge.dash {
+  stroke-dasharray: 6 6;
+}
+.process-dg .node {
+  transform-box: fill-box;
+  transform-origin: center center;
+  cursor: pointer;
+}
+.process-dg .node rect {
+  fill: #fff;
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  transition: stroke 0.25s ease, fill 0.25s ease, filter 0.25s ease;
+}
+.process-dg .node:hover rect {
+  stroke: var(--blue-deep);
+  fill: #F6F7FC;
+  filter: drop-shadow(0 8px 16px rgba(14, 27, 61, 0.1));
+}
+.process-dg .node .lab {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  fill: var(--ink-3);
+}
+.process-dg .node .nm {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 17px;
+  fill: var(--ink);
+}
+.process-dg .dec {
+  pointer-events: none;
+}
+.process-dg .dec .txt {
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: 21px;
+}
+.process-dg .dec path {
+  fill: none;
+  stroke-width: 1.6;
+}
+.process-dg .elab {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  fill: var(--ink-2);
+  letter-spacing: 0.04em;
+}
+.process-shipv {
+  position: absolute;
+  inset: 58px 24px 22px 24px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.process-telemetry-view {
+  position: absolute;
+  inset: 58px 24px 22px 24px;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.process-shipv .hd {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 14px;
+}
+.process-shipv .hd h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2rem, 2.5vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.process-prods {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.78fr;
+  gap: 16px;
+  height: calc(100% - 50px);
+}
+.process-prod {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line-2);
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  box-shadow: 0 30px 60px -36px rgba(14, 27, 61, 0.35);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.process-prod:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 35px 70px -30px rgba(14, 27, 61, 0.25);
+}
+.process-prod .top {
+  flex: 1;
+  padding: 22px;
+  position: relative;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.process-prod .top .gl {
+  position: absolute;
+  right: -6px;
+  top: 15px;
+  font-family: var(--serif);
+  font-size: 220px;
+  line-height: 1;
+  opacity: 0.1;
+  pointer-events: none;
+  user-select: none;
+}
+.process-prod .mk {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-size: 30px;
+}
+.process-prod .top h4 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2rem, 2.5vw, 2.5rem);
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.process-prod .top p {
+  font-size: 14.5px;
+  opacity: 0.9;
+  margin-top: 6px;
+}
+.process-prod .bt {
+  white-space: nowrap;
+  display: flex;
+  justify-content: space-between;
+  padding: 13px 20px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  background: #fff;
+}
+.process-prod .bt b {
+  color: var(--blue-deep);
+}
+.process-prod.you {
+  border: 1.5px dashed var(--line-2);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: none;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+}
+.process-prod.you:hover {
+  border-color: var(--blue-deep);
+  background: #fff;
+}
+.process-prod.you .hand {
+  font-size: 32px;
+  line-height: 1.05;
+  color: var(--ink);
+  font-family: var(--hand);
+}
+.process-prod.you .mono {
+  color: var(--blue-deep);
+  margin-top: 14px;
+}
+.process-ap {
+  background: linear-gradient(160deg, #0F7A57, #0B5A40);
+}
+.process-ap .mk {
+  background: #fff;
+  color: #0F7A57;
+}
+.process-vx {
+  background: linear-gradient(160deg, #25211C, #14120F);
+}
+.process-vx .mk {
+  background: #C8A46A;
+  color: #14120F;
+}
+.process-vx h4 em {
+  color: #E4C892;
+  font-style: italic;
 }

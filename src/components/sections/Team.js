@@ -1,12 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { springs, ease, scaleIn, staggerContainer } from "@/lib/motion";
+import Magnetic from "@/components/ui/Magnetic";
 
 const DEFAULT_TEAM = [
   {
     name: "Dhruvil Thummar",
     role: "Co-founder & CTO",
+    badge: "SYSTEMS & CLOUD",
     tagline: "Systems architect & performance engineering lead",
+    currently: "Optimizing zero-downtime edge proxies & Appointory real-time messaging pipeline.",
     image: "/founder_dhruvil.jpg",
     linkedin: "https://www.linkedin.com/in/dhruvilthummar",
     circleColor: "var(--blue)",
@@ -15,7 +21,9 @@ const DEFAULT_TEAM = [
   {
     name: "Rudra Kankotiya",
     role: "Co-founder & CMO",
+    badge: "GROWTH & PRODUCT",
     tagline: "Growth director, brand strategist & client partnerships",
+    currently: "Leading international rollout for Vrix Jewellery headless storefront.",
     image: "/founder_rudra.jpg",
     linkedin: "https://www.linkedin.com/in/rudra-kankotiya-2173ab31a",
     circleColor: "var(--coral)",
@@ -24,7 +32,9 @@ const DEFAULT_TEAM = [
   {
     name: "Jal Anghan",
     role: "Founder & Director",
+    badge: "STRATEGY & OPERATIONS",
     tagline: "Corporate governance & strategic business development",
+    currently: "Structuring long-term enterprise development partnerships & compliance frameworks.",
     image: "/founder_jal.jpg",
     linkedin: "https://www.linkedin.com/in/jal-anghan-534628309",
     circleColor: "var(--orange)",
@@ -37,6 +47,17 @@ export default function Team({ data }) {
     data && data.length > 0
       ? data.map((m, idx) => ({
           ...m,
+          badge:
+            m.badge ||
+            (idx === 0
+              ? "SYSTEMS & CLOUD"
+              : idx === 1
+              ? "GROWTH & PRODUCT"
+              : "STRATEGY & OPERATIONS"),
+          currently:
+            m.currently ||
+            DEFAULT_TEAM[idx]?.currently ||
+            "Spearheading high-performance client architectures.",
           circleColor:
             idx === 0 ? "var(--blue)" : idx === 1 ? "var(--coral)" : "var(--orange)",
         }))
@@ -46,524 +67,441 @@ export default function Team({ data }) {
     <section
       id="team"
       data-theme="cream"
-      className="section-gap"
+      className="section-gap relative border-t border-[var(--line)]"
       style={{
-        borderTop: "1px solid var(--hairline)",
         backgroundColor: "var(--cream)",
         color: "var(--ink)",
+        paddingTop: "clamp(5rem, 9vh, 7.5rem)",
+        paddingBottom: "clamp(5rem, 9vh, 7.5rem)",
       }}
     >
       <div className="container-site" style={{ maxWidth: "1440px", margin: "0 auto" }}>
-        {/* Section Label and Heading */}
-        <div
-          style={{
-            marginBottom: "3.5rem",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            flexWrap: "wrap",
-            gap: "1.5rem",
-          }}
-        >
-          <div>
-            <span className="section-label" style={{ color: "var(--muted)", marginBottom: "0.5rem" }}>
-              Team &amp; Leadership
-            </span>
+        
+        {/* Eyebrow & Header with Entrance Motion */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.8, ease: ease.expo }}
+            className="max-w-3xl"
+          >
+            <div className="inline-flex items-center gap-2 mb-3">
+              <span
+                style={{
+                  width: "7px",
+                  height: "7px",
+                  borderRadius: "50%",
+                  backgroundColor: "var(--blue-deep)",
+                  display: "inline-block",
+                  boxShadow: "0 0 10px rgba(47, 99, 224, 0.7)",
+                }}
+                className="animate-pulse"
+              />
+              <span
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: "0.6875rem",
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "var(--blue-deep)",
+                  fontWeight: 700,
+                  display: "inline-block",
+                }}
+              >
+                Direct Founder Access
+              </span>
+              <span
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: "0.5625rem",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  padding: "0.15rem 0.5rem",
+                  borderRadius: "999px",
+                  backgroundColor: "rgba(47, 99, 224, 0.08)",
+                  color: "var(--blue-deep)",
+                  fontWeight: 600,
+                }}
+              >
+                Live Engineering
+              </span>
+            </div>
+
             <h2
               style={{
-                fontFamily: "'Instrument Serif', Georgia, serif",
-                fontSize: "clamp(2.25rem, 5vw, 4rem)",
+                fontFamily: "var(--serif)",
+                fontSize: "clamp(2.5rem, 5.5vw, 4.25rem)",
+                lineHeight: 1.08,
                 letterSpacing: "-0.025em",
-                lineHeight: 1.05,
                 color: "var(--ink)",
-                margin: 0,
+                margin: "0 0 0.85rem 0",
+                fontWeight: 400,
               }}
             >
               The founders who build it.
             </h2>
-          </div>
-          <p
-            style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: "0.75rem",
-              color: "var(--muted)",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              margin: 0,
-            }}
+
+            <p
+              style={{
+                fontFamily: "var(--sans)",
+                fontSize: "1.0625rem",
+                lineHeight: 1.65,
+                color: "var(--ink-2)",
+                maxWidth: "40rem",
+                margin: 0,
+              }}
+            >
+              No account managers or delegated tiers. You architect and engineer directly alongside the leaders who write the code and shape the product.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.8, ease: ease.expo, delay: 0.1 }}
+            className="flex items-center gap-2"
           >
-            Direct Access · No Middlemen
-          </p>
+            <span
+              style={{
+                width: "6px",
+                height: "6px",
+                borderRadius: "50%",
+                backgroundColor: "var(--live)",
+                display: "inline-block",
+                boxShadow: "0 0 8px rgba(34, 165, 91, 0.7)",
+              }}
+              className="animate-pulse"
+            />
+            <span
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: "0.75rem",
+                color: "var(--ink-3)",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+              }}
+            >
+              Ahmedabad, India · Worldwide Sprints
+            </span>
+          </motion.div>
         </div>
 
-        {/* Full-width 3-Column Grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))",
-            gap: "2.5rem",
-          }}
+        {/* 3-Column Team Cards Grid with Staggered Entrance */}
+        <motion.div
+          variants={staggerContainer(0.18, 0.1)}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {members.map((member, i) => (
             <TeamCard key={member.name || i} member={member} index={i} />
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 }
 
-function TeamCard({ member }) {
+function TeamCard({ member, index }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const firstName = member.name.split(" ")[0];
+
   return (
-    <div
+    <motion.article
+      variants={{
+        hidden: { opacity: 0, y: 35, scale: 0.96 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          transition: { duration: 0.8, ease: ease.expo },
+        },
+      }}
+      whileHover={{ y: -10, transition: springs.snappy }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="group"
       style={{
-        backgroundColor: "var(--surface)",
-        border: "1px solid var(--hairline)",
-        borderRadius: "16px",
+        backgroundColor: "rgba(255,255,255,0.9)",
+        border: isHovered ? "1px solid rgba(47,99,224,0.3)" : "1px solid var(--line-2)",
+        borderRadius: "20px",
         padding: "2rem",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        boxShadow: "0 10px 30px rgba(14,27,61,0.04)",
+        boxShadow: isHovered
+          ? "0 22px 45px -12px rgba(14,27,61,0.12), 0 0 0 1px rgba(47,99,224,0.08)"
+          : "0 10px 30px -10px rgba(14,27,61,0.06)",
         position: "relative",
         overflow: "hidden",
+        transition: "border-color 0.35s ease, box-shadow 0.35s ease, background-color 0.35s ease",
       }}
     >
-      {/* Photo Frame with Offset Brand Circle Behind */}
+      {/* Top subtle highlight gradient indicator on hover */}
       <div
+        aria-hidden="true"
         style={{
-          position: "relative",
-          width: "100%",
-          maxWidth: "340px",
-          aspectRatio: "1/0.85",
-          borderRadius: "12px",
-          margin: "0 auto 1.5rem auto",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "3px",
+          background: `linear-gradient(90deg, transparent, ${member.circleColor || "var(--blue)"}, transparent)`,
+          opacity: isHovered ? 1 : 0,
+          transition: "opacity 0.4s ease",
         }}
-      >
-        {/* Offset Solid Brand Circle Behind (Blue, Coral, Orange) */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            top: "10%",
-            right: "5%",
-            width: "82%",
-            height: "82%",
-            borderRadius: "50%",
-            backgroundColor: member.circleColor || "var(--blue)",
-            opacity: 0.22,
-            mixBlendMode: "multiply",
-            zIndex: 1,
-            pointerEvents: "none",
-          }}
-        />
+      />
 
-        {/* Real Portrait Image (grayscale to colour on hover) */}
-        {member.image ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={member.image}
-            alt={member.name}
+      <div>
+        {/* Photo Frame with Offset Brand Circle Behind */}
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            aspectRatio: "1/0.88",
+            borderRadius: "14px",
+            margin: "0 auto 1.5rem auto",
+            overflow: "hidden",
+            backgroundColor: "var(--bg-2)",
+          }}
+        >
+          {/* Floating Solid Brand Disc Behind */}
+          <motion.div
+            aria-hidden="true"
+            animate={{
+              scale: isHovered ? 1.15 : 1,
+              opacity: isHovered ? 0.38 : 0.25,
+            }}
+            transition={{ duration: 0.5, ease: ease.expo }}
             style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: `${member.imageX || 50}% ${member.imageY || 20}%`,
-              borderRadius: "12px",
-              filter: "grayscale(100%)",
-              transition: "filter 0.35s ease, transform 0.35s ease",
-              position: "relative",
-              zIndex: 2,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.filter = "grayscale(0%)";
-              e.currentTarget.style.transform = "scale(1.02)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.filter = "grayscale(100%)";
-              e.currentTarget.style.transform = "scale(1)";
+              position: "absolute",
+              top: "10%",
+              right: "4%",
+              width: "75%",
+              height: "75%",
+              borderRadius: "50%",
+              backgroundColor: member.circleColor || "var(--blue)",
+              mixBlendMode: "multiply",
+              zIndex: 1,
+              pointerEvents: "none",
+              animation: "float 7s ease-in-out infinite",
             }}
           />
-        ) : (
-          /* Fallback Initials Monogram */
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              borderRadius: "12px",
-              backgroundColor: "var(--cream)",
-              border: "1px solid var(--hairline)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontFamily: "'Instrument Serif', Georgia, serif",
-              fontSize: "3.5rem",
-              color: "var(--ink)",
-              zIndex: 2,
-            }}
-          >
-            {member.name
-              .split(" ")
-              .map((n) => n[0])
-              .join("")}
-          </div>
-        )}
-      </div>
 
-      {/* Founder Details */}
-      <div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            marginBottom: "0.4rem",
-          }}
-        >
-          <h3
-            style={{
-              fontFamily: "'Instrument Serif', Georgia, serif",
-              fontSize: "1.9rem",
-              letterSpacing: "-0.015em",
-              color: "var(--ink)",
-              margin: 0,
-              lineHeight: 1.15,
-            }}
-          >
-            {member.name}
-          </h3>
-
-          {/* Social and Profile Links */}
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              flexWrap: "wrap",
-              gap: "0.35rem",
-            }}
-          >
-            {member.portfolio && (
-              <a
-                href={member.portfolio}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={`${member.name} Portfolio / Website`}
-                aria-label={`${member.name} Portfolio / Website`}
-                className="team-social-btn"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "28px",
-                  height: "28px",
-                  borderRadius: "50%",
-                  backgroundColor: "var(--cream)",
-                  border: "1px solid var(--hairline)",
-                  color: "var(--blue-deep)",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--blue-deep)";
-                  e.currentTarget.style.color = "var(--cream)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--cream)";
-                  e.currentTarget.style.color = "var(--blue-deep)";
-                }}
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="2" y1="12" x2="22" y2="12"/>
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                </svg>
-              </a>
-            )}
-
-            {member.linkedin && (
-              <a
-                href={member.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={`${member.name} LinkedIn Profile`}
-                aria-label={`${member.name} LinkedIn Profile`}
-                className="team-social-btn"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "28px",
-                  height: "28px",
-                  borderRadius: "50%",
-                  backgroundColor: "var(--cream)",
-                  border: "1px solid var(--hairline)",
-                  color: "var(--blue-deep)",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--blue-deep)";
-                  e.currentTarget.style.color = "var(--cream)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--cream)";
-                  e.currentTarget.style.color = "var(--blue-deep)";
-                }}
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M4.9 3.5a2.1 2.1 0 1 1 0 4.2 2.1 2.1 0 0 1 0-4.2ZM3.1 9.3h3.6v11.6H3.1V9.3Zm6 0h3.4v1.6h.05c.48-.9 1.65-1.85 3.4-1.85 3.63 0 4.3 2.35 4.3 5.4v6.45h-3.6v-5.72c0-1.36-.02-3.12-1.92-3.12-1.92 0-2.22 1.48-2.22 3.02v5.82H9.1V9.3Z" />
-                </svg>
-              </a>
-            )}
-
-            {member.instagram && (
-              <a
-                href={member.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={`${member.name} Instagram`}
-                aria-label={`${member.name} Instagram`}
-                className="team-social-btn"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "28px",
-                  height: "28px",
-                  borderRadius: "50%",
-                  backgroundColor: "var(--cream)",
-                  border: "1px solid var(--hairline)",
-                  color: "var(--blue-deep)",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--blue-deep)";
-                  e.currentTarget.style.color = "var(--cream)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--cream)";
-                  e.currentTarget.style.color = "var(--blue-deep)";
-                }}
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-                </svg>
-              </a>
-            )}
-
-            {member.github && (
-              <a
-                href={member.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={`${member.name} GitHub`}
-                aria-label={`${member.name} GitHub`}
-                className="team-social-btn"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "28px",
-                  height: "28px",
-                  borderRadius: "50%",
-                  backgroundColor: "var(--cream)",
-                  border: "1px solid var(--hairline)",
-                  color: "var(--blue-deep)",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--blue-deep)";
-                  e.currentTarget.style.color = "var(--cream)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--cream)";
-                  e.currentTarget.style.color = "var(--blue-deep)";
-                }}
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-                </svg>
-              </a>
-            )}
-
-            {member.youtube && (
-              <a
-                href={member.youtube}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={`${member.name} YouTube Channel`}
-                aria-label={`${member.name} YouTube Channel`}
-                className="team-social-btn"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "28px",
-                  height: "28px",
-                  borderRadius: "50%",
-                  backgroundColor: "var(--cream)",
-                  border: "1px solid var(--hairline)",
-                  color: "var(--blue-deep)",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--blue-deep)";
-                  e.currentTarget.style.color = "var(--cream)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--cream)";
-                  e.currentTarget.style.color = "var(--blue-deep)";
-                }}
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-              </a>
-            )}
-
-            {member.facebook && (
-              <a
-                href={member.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={`${member.name} Facebook`}
-                aria-label={`${member.name} Facebook`}
-                className="team-social-btn"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "28px",
-                  height: "28px",
-                  borderRadius: "50%",
-                  backgroundColor: "var(--cream)",
-                  border: "1px solid var(--hairline)",
-                  color: "var(--blue-deep)",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--blue-deep)";
-                  e.currentTarget.style.color = "var(--cream)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--cream)";
-                  e.currentTarget.style.color = "var(--blue-deep)";
-                }}
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-              </a>
-            )}
-
-            {member.twitter && (
-              <a
-                href={member.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={`${member.name} X / Twitter`}
-                aria-label={`${member.name} X / Twitter`}
-                className="team-social-btn"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "28px",
-                  height: "28px",
-                  borderRadius: "50%",
-                  backgroundColor: "var(--cream)",
-                  border: "1px solid var(--hairline)",
-                  color: "var(--blue-deep)",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--blue-deep)";
-                  e.currentTarget.style.color = "var(--cream)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--cream)";
-                  e.currentTarget.style.color = "var(--blue-deep)";
-                }}
-              >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-              </a>
-            )}
-
-            {(member.customLinks || []).map((cl, clIdx) => (
-              <a
-                key={clIdx}
-                href={cl.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={cl.name || "Link"}
-                aria-label={`${member.name} - ${cl.name || "Link"}`}
-                className="team-social-btn"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "28px",
-                  height: "28px",
-                  borderRadius: "50%",
-                  backgroundColor: "var(--cream)",
-                  border: "1px solid var(--hairline)",
-                  color: "var(--blue-deep)",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--blue-deep)";
-                  e.currentTarget.style.color = "var(--cream)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--cream)";
-                  e.currentTarget.style.color = "var(--blue-deep)";
-                }}
-              >
-                {cl.icon ? (
-                  <i className={`${cl.icon} text-xs`}></i>
-                ) : (
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                    <polyline points="15 3 21 3 21 9"/>
-                    <line x1="10" y1="14" x2="21" y2="3"/>
-                  </svg>
-                )}
-              </a>
-            ))}
-          </div>
+          {/* Portrait Image with synchronized card hover scale and grayscale transition */}
+          {member.image ? (
+            <motion.img
+              src={member.image}
+              alt={member.name}
+              animate={{
+                scale: isHovered ? 1.05 : 1,
+              }}
+              transition={springs.snappy}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: `${member.imageX || 50}% ${member.imageY || 20}%`,
+                filter: isHovered ? "grayscale(0%)" : "grayscale(100%)",
+                transition: "filter 0.5s ease",
+                position: "relative",
+                zIndex: 2,
+              }}
+            />
+          ) : (
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontFamily: "var(--serif)",
+                fontSize: "3.5rem",
+                color: "var(--ink)",
+                zIndex: 2,
+                position: "relative",
+              }}
+            >
+              {member.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")}
+            </div>
+          )}
         </div>
 
-        <span
+        {/* Role Badge Pill */}
+        <div className="flex justify-between items-center mb-3">
+          {(member.badge || member.role) && (
+            <span
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: "0.625rem",
+                fontWeight: 700,
+                letterSpacing: "0.1em",
+                padding: "0.25rem 0.65rem",
+                backgroundColor: isHovered ? "rgba(47,99,224,0.08)" : "var(--bg-2)",
+                borderRadius: "999px",
+                border: "1px solid var(--line)",
+                color: isHovered ? "var(--blue-deep)" : "var(--ink)",
+                textTransform: "uppercase",
+                transition: "background-color 0.3s ease, color 0.3s ease",
+              }}
+            >
+              {member.badge || member.role}
+            </span>
+          )}
+
+          {member.linkedin && (
+            <motion.a
+              href={member.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${member.name} LinkedIn Profile`}
+              data-cursor="link"
+              data-cursor-magnetic
+              whileHover={{ scale: 1.08, y: -1 }}
+              transition={springs.bouncy}
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: "0.6875rem",
+                color: "var(--ink-3)",
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.25rem",
+                padding: "0.2rem 0.55rem",
+                borderRadius: "6px",
+                backgroundColor: "rgba(14,27,61,0.03)",
+                transition: "color 0.2s ease, background-color 0.2s ease",
+              }}
+              className="hover:text-[var(--blue-deep)] hover:bg-[rgba(47,99,224,0.08)]"
+            >
+              <span>IN</span>
+              <span style={{ transform: isHovered ? "translate(1px, -1px)" : "none", transition: "transform 0.25s ease" }}>↗</span>
+            </motion.a>
+          )}
+        </div>
+
+        {/* Member Name */}
+        <h3
           style={{
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize: "0.6875rem",
-            color: "var(--blue-deep)",
-            fontWeight: 700,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-            display: "block",
-            marginBottom: "0.75rem",
+            fontFamily: "var(--serif)",
+            fontSize: "2.1rem",
+            letterSpacing: "-0.015em",
+            color: "var(--ink)",
+            margin: "0 0 0.4rem 0",
+            lineHeight: 1.15,
           }}
         >
-          {member.role}
-        </span>
+          {member.name}
+        </h3>
 
+        {/* Role Tagline */}
         <p
           style={{
-            fontSize: "0.875rem",
-            lineHeight: 1.6,
-            color: "var(--muted)",
-            margin: 0,
+            fontFamily: "var(--sans)",
+            fontSize: "0.9375rem",
+            color: "var(--ink-2)",
+            lineHeight: 1.5,
+            marginBottom: "1.25rem",
           }}
         >
-          {member.tagline || member.bio}
+          {member.tagline}
         </p>
+
+        {/* "Currently Building" Block with pulsing live telemetry pip */}
+        <div
+          style={{
+            backgroundColor: isHovered ? "rgba(255,255,255,0.95)" : "var(--bg-2)",
+            border: isHovered ? "1px solid rgba(239, 107, 46, 0.35)" : "1px solid var(--line)",
+            borderRadius: "10px",
+            padding: "0.85rem 1rem",
+            marginBottom: "1.5rem",
+            transition: "border-color 0.3s ease, background-color 0.3s ease",
+          }}
+        >
+          <div className="flex items-center gap-1.5 mb-1">
+            <span
+              style={{
+                width: "6px",
+                height: "6px",
+                borderRadius: "50%",
+                backgroundColor: "var(--orange)",
+                display: "inline-block",
+                boxShadow: "0 0 8px rgba(239, 107, 46, 0.8)",
+              }}
+              className="animate-pulse"
+            />
+            <span
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: "0.5625rem",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "var(--orange)",
+                display: "block",
+                fontWeight: 700,
+              }}
+            >
+              CURRENTLY BUILDING
+            </span>
+          </div>
+          <p
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: "0.75rem",
+              color: "var(--ink)",
+              margin: 0,
+              lineHeight: 1.45,
+            }}
+          >
+            {member.currently}
+          </p>
+        </div>
       </div>
-    </div>
+
+      {/* Footer "Talk to Founder" Action */}
+      <div
+        style={{
+          paddingTop: "1.25rem",
+          borderTop: "1px solid var(--line)",
+        }}
+      >
+        <Magnetic strength={0.3}>
+          <Link
+            href="/#contact"
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: "0.75rem",
+              fontWeight: 600,
+              color: isHovered ? "var(--blue-deep)" : "var(--ink)",
+              textDecoration: "none",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              transition: "color 0.25s ease",
+            }}
+          >
+            <span>Talk to {firstName}</span>
+            <span
+              style={{
+                color: "var(--orange)",
+                fontWeight: 700,
+                transform: isHovered ? "translateX(5px)" : "translateX(0)",
+                transition: "transform 0.25s ease",
+                display: "inline-block",
+              }}
+            >
+              →
+            </span>
+          </Link>
+        </Magnetic>
+      </div>
+    </motion.article>
   );
 }

@@ -72,6 +72,19 @@ export default function AdminPanel({
       { id: "ai", label: "Applied AI / Agentic Automation", baseRange: "₹40,000 – ₹2.5L+" },
     ]
   );
+  const [estimatorIncludedCharges, setEstimatorIncludedCharges] = useState(
+    data.estimator?.includedCharges || [
+      { title: "100% IP & Full Source Code Ownership", badge: "INCLUDED", note: "Zero vendor lock-in; complete repository rights" },
+      { title: "Cloud CI/CD & Zero-Downtime Deployment", badge: "INCLUDED", note: "Automated edge staging & production pipelines" },
+      { title: "End-to-End Security & QA Audit", badge: "INCLUDED", note: "OWASP best practices & performance stress testing" },
+      { title: "30-Day Post-Launch SLA Warranty", badge: "INCLUDED", note: "Dedicated bug resolution & uptime guarantees" },
+    ]
+  );
+
+  const [services, setServices] = useState(data.services || []);
+  const [processStages, setProcessStages] = useState(data.process || []);
+  const [marquee, setMarquee] = useState(data.marquee || { items1: [], items2: [] });
+  const [philosophy, setPhilosophy] = useState(data.philosophy || []);
 
   // --- Dynamic Lists States ---
   const [testimonials, setTestimonials] = useState(initialTestimonials || []);
@@ -133,7 +146,14 @@ export default function AdminPanel({
 
   // --- Handlers for Testimonials ---
   const handleAddTestimonial = () => {
-    const newTest = { text: "", author: "" };
+    const newTest = {
+      text: "",
+      author: "",
+      role: "",
+      project: "Appointry",
+      tag: "Appointry · Healthcare",
+      rating: 4.5
+    };
     setTestimonials([...testimonials, newTest]);
     setSelectedTestimonialIndex(testimonials.length);
     setIsEditingMobileTestimonials(true);
@@ -141,7 +161,11 @@ export default function AdminPanel({
 
   const handleTestimonialChange = (index, field, value) => {
     const updated = [...testimonials];
-    updated[index][field] = value;
+    if (field === "rating") {
+      updated[index][field] = parseFloat(value) || 5;
+    } else {
+      updated[index][field] = value;
+    }
     setTestimonials(updated);
   };
 
@@ -177,7 +201,7 @@ export default function AdminPanel({
 
   // --- Handlers for Founders ---
   const handleAddFounder = () => {
-    const newFounder = { name: "", role: "", tagline: "", image: "", imageX: 50, imageY: 50, linkedin: "", instagram: "", order: founders.length + 1, customLinks: [] };
+    const newFounder = { name: "", role: "", badge: "", tagline: "", currently: "", image: "", imageX: 50, imageY: 50, linkedin: "", instagram: "", order: founders.length + 1, customLinks: [] };
     setFounders([...founders, newFounder]);
     setSelectedFounderIndex(founders.length);
     setTeamEditorTab("basic");
@@ -268,7 +292,7 @@ export default function AdminPanel({
     }));
 
     setFounders(resorted);
-    
+
     // Maintain selection index on the moved item
     if (selectedFounderIndex === index) {
       setSelectedFounderIndex(targetIndex);
@@ -390,6 +414,7 @@ export default function AdminPanel({
       description: "",
       stack: [],
       link: "",
+      caseStudyLink: "",
       review: "",
       rating: 5
     };
@@ -547,8 +572,13 @@ export default function AdminPanel({
       },
       estimator: {
         startingPrice: estimatorStartingPrice,
-        types: estimatorTypes
+        types: estimatorTypes,
+        includedCharges: estimatorIncludedCharges
       },
+      services,
+      process: processStages,
+      marquee,
+      philosophy,
       testimonials,
       projects,
       caseStudies,
@@ -866,10 +896,10 @@ export default function AdminPanel({
           <div className="fixed top-6 right-6 z-50 animate-slide-in shadow-2xl max-w-sm">
             <div
               className={`p-4 rounded-xl flex items-center gap-3 border ${statusMessage.type === "success"
-                  ? "bg-green-950/80 border-green-800 text-green-400 backdrop-blur-md"
-                  : statusMessage.type === "error"
-                    ? "bg-red-950/80 border-red-800 text-red-400 backdrop-blur-md"
-                    : "bg-blue-950/80 border-blue-800 text-blue-400 backdrop-blur-md"
+                ? "bg-green-950/80 border-green-800 text-green-400 backdrop-blur-md"
+                : statusMessage.type === "error"
+                  ? "bg-red-950/80 border-red-800 text-red-400 backdrop-blur-md"
+                  : "bg-blue-950/80 border-blue-800 text-blue-400 backdrop-blur-md"
                 }`}
             >
               <i className={`fas ${statusMessage.type === "success" ? "fa-check-circle" : statusMessage.type === "error" ? "fa-exclamation-circle" : "fa-info-circle animate-pulse"
@@ -934,6 +964,16 @@ export default function AdminPanel({
             setEstimatorStartingPrice={setEstimatorStartingPrice}
             estimatorTypes={estimatorTypes}
             setEstimatorTypes={setEstimatorTypes}
+            estimatorIncludedCharges={estimatorIncludedCharges}
+            setEstimatorIncludedCharges={setEstimatorIncludedCharges}
+            services={services}
+            setServices={setServices}
+            processStages={processStages}
+            setProcessStages={setProcessStages}
+            marquee={marquee}
+            setMarquee={setMarquee}
+            philosophy={philosophy}
+            setPhilosophy={setPhilosophy}
             handleSaveCMS={handleSaveCMS}
             loading={loading}
           />

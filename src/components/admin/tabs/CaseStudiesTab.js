@@ -412,8 +412,48 @@ export default function CaseStudiesTab({
                     className="w-full bg-gray-950/60 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-amber-500/60 transition"
                   />
                   <p className="text-[10px] text-gray-500 font-mono">
-                    If provided, renders a &quot;Live Project ↗&quot; button. If empty, button is hidden.
+                    If provided, renders a &quot;Live Site ↗&quot; button. If empty, button is hidden.
                   </p>
+                </div>
+
+                {/* 7b. Case Study Internal Link */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-mono font-medium text-amber-300">
+                      Case Study Page URL
+                    </label>
+                    {currentItem.caseStudyLink && (
+                      <span className="text-[9px] font-mono text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full">
+                        LINKED
+                      </span>
+                    )}
+                  </div>
+                  <input
+                    type="text"
+                    value={currentItem.caseStudyLink || ""}
+                    onChange={(e) =>
+                      handleCaseStudyChange(selectedCaseStudyIndex, "caseStudyLink", e.target.value)
+                    }
+                    placeholder="e.g. /work/appointory or /work/vrix"
+                    className="w-full bg-gray-950/60 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-amber-500/60 transition"
+                  />
+                  <div className="flex items-center gap-1.5 pt-0.5">
+                    <span className="text-[9px] text-gray-500 font-mono">Presets:</span>
+                    <button
+                      type="button"
+                      onClick={() => handleCaseStudyChange(selectedCaseStudyIndex, "caseStudyLink", "/work/appointory")}
+                      className="text-[9px] font-mono px-2 py-0.5 rounded bg-gray-900 border border-white/10 text-gray-400 hover:text-white"
+                    >
+                      /work/appointory
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleCaseStudyChange(selectedCaseStudyIndex, "caseStudyLink", "/work/vrix")}
+                      className="text-[9px] font-mono px-2 py-0.5 rounded bg-gray-900 border border-white/10 text-gray-400 hover:text-white"
+                    >
+                      /work/vrix
+                    </button>
+                  </div>
                 </div>
 
                 {/* 8. Star Rating */}

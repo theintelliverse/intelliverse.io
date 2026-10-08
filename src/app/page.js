@@ -1,8 +1,9 @@
 import { getDb, localMockDb, defaultTestimonials } from "@/lib/db";
 import ClientHome from "./ClientHome";
 
-// Incremental Static Regeneration (ISR): Cache page data, revalidating in background every 10 seconds.
-export const revalidate = 10;
+// Ensure live MongoDB Atlas data is loaded dynamically on each request
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function Home() {
   let initialData = {
@@ -11,6 +12,10 @@ export default async function Home() {
     contact: { ...localMockDb.contact },
     stats: { ...localMockDb.stats },
     estimator: { ...localMockDb.estimator },
+    services: localMockDb.services,
+    process: localMockDb.process,
+    marquee: localMockDb.marquee,
+    philosophy: localMockDb.philosophy,
     testimonials: [...defaultTestimonials],
     projects: [...(localMockDb.projects || [])],
     caseStudies: [...(localMockDb.caseStudies || [])],
@@ -54,7 +59,18 @@ export default async function Home() {
           clients: testimonials.length > 0 ? testimonials.length : 15
         },
         estimator: content?.estimator || localMockDb.estimator,
-        testimonials: (testimonials && testimonials.length > 0 ? testimonials : defaultTestimonials).map(t => ({ text: t.text || t.quote, author: t.author })),
+        services: content?.services || localMockDb.services,
+        process: content?.process || localMockDb.process,
+        marquee: content?.marquee || localMockDb.marquee,
+        philosophy: content?.philosophy || localMockDb.philosophy,
+        testimonials: (testimonials && testimonials.length > 0 ? testimonials : defaultTestimonials).map(t => ({
+          text: t.text || t.quote || "",
+          author: t.author || "",
+          role: t.role || "",
+          project: t.project || "",
+          tag: t.tag || "",
+          rating: t.rating !== undefined ? Number(t.rating) : 5,
+        })),
         projects: projects.length > 0
           ? projects.map(p => ({
               name: p.name,
@@ -65,6 +81,7 @@ export default async function Home() {
               stack: p.stack || p.techTags || [],
               techTags: p.techTags || p.stack || [],
               link: p.link || "",
+              caseStudyLink: p.caseStudyLink || (p.name?.toLowerCase().includes("appointory") ? "/work/appointory" : p.name?.toLowerCase().includes("vrix") ? "/work/vrix" : ""),
               review: p.review || "",
               rating: p.rating || 5,
               type: p.type || p.category || "",
@@ -82,11 +99,15 @@ export default async function Home() {
               category: cs.category || cs.type || "",
               role: cs.role || "",
               impact: cs.impact || "",
+              problem: cs.problem || cs.summary || "",
+              broke: cs.broke || "",
+              result: cs.result || "",
               summary: cs.summary || cs.description || "",
               description: cs.description || cs.summary || "",
               stack: Array.isArray(cs.stack) ? cs.stack : (Array.isArray(cs.techTags) ? cs.techTags : []),
               techTags: Array.isArray(cs.techTags) ? cs.techTags : (Array.isArray(cs.stack) ? cs.stack : []),
               link: cs.link || "",
+              caseStudyLink: cs.caseStudyLink || (cs.name?.toLowerCase().includes("appointory") ? "/work/appointory" : cs.name?.toLowerCase().includes("vrix") ? "/work/vrix" : ""),
               review: cs.review || "",
               rating: cs.rating !== undefined ? Number(cs.rating) : 5
             }))
@@ -104,7 +125,9 @@ export default async function Home() {
               return {
                 name: f.name,
                 role: f.role,
+                badge: f.badge || "",
                 tagline: f.tagline || "",
+                currently: f.currently || "",
                 image: f.image || "",
                 imageX: f.imageX !== undefined ? Number(f.imageX) : 50,
                 imageY: f.imageY !== undefined ? Number(f.imageY) : 50,

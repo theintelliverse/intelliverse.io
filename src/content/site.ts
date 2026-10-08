@@ -188,7 +188,16 @@ export const siteConfig: SiteConfig = {
     "Applebot",
     "DuckDuckBot",
     "YandexBot",
-    // AI Answer Engines & Search Crawlers
+    // Messaging & Social Preview Crawlers (WhatsApp, Facebook, Twitter, LinkedIn, Telegram)
+    "WhatsApp",
+    "FacebookExternalHit",
+    "Facebot",
+    "Twitterbot",
+    "LinkedInBot",
+    "TelegramBot",
+    "Slackbot",
+    "Discordbot",
+    // AI Answer Engines & Search Crawlers (GEO / AEO)
     "GPTBot",
     "OAI-SearchBot",
     "ChatGPT-User",
@@ -196,8 +205,7 @@ export const siteConfig: SiteConfig = {
     "Claude-SearchBot",
     "PerplexityBot",
     "Google-Extended",
-    "FacebookExternalHit",
-    "Twitterbot",
-    "LinkedInBot",
+    "Applebot-Extended",
+    "cohere-ai",
   ],
 };

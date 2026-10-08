@@ -16,6 +16,7 @@ import Contact from "@/components/sections/Contact";
 import Chatbot from "@/components/ui/Chatbot";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import Preloader from "@/components/ui/Preloader";
+import VelocityMarquee from "@/components/ui/VelocityMarquee";
 import Footer from "@/components/sections/Footer";
 
 export default function ClientHome({ initialData }) {
@@ -30,6 +31,10 @@ export default function ClientHome({ initialData }) {
       clients: 15,
     },
     estimator: initialData?.estimator || null,
+    services: initialData?.services || null,
+    process: initialData?.process || null,
+    marquee: initialData?.marquee || null,
+    philosophy: initialData?.philosophy || null,
   });
 
   const [testimonials, setTestimonials] = useState(initialData?.testimonials || []);
@@ -41,7 +46,13 @@ export default function ClientHome({ initialData }) {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await fetch("/api/content");
+        const response = await fetch("/api/content", {
+          cache: "no-store",
+          headers: {
+            "Pragma": "no-cache",
+            "Cache-Control": "no-cache",
+          },
+        });
         if (response.ok) {
           const data = await response.json();
           if (data.hero && data.about) {
@@ -51,6 +62,10 @@ export default function ClientHome({ initialData }) {
               contact: data.contact || null,
               stats: data.stats || { projects: 2, satisfaction: 100, clients: 15 },
               estimator: data.estimator || null,
+              services: data.services || null,
+              process: data.process || null,
+              marquee: data.marquee || null,
+              philosophy: data.philosophy || null,
             });
             if (data.testimonials) setTestimonials(data.testimonials);
             if (data.projects) setProjects(data.projects);
@@ -80,26 +95,32 @@ export default function ClientHome({ initialData }) {
         {/* 01 / Hero */}
         <Hero data={contentData.hero} />
 
+        {/* 01b / Open Workshop Editorial Marquee */}
+        <VelocityMarquee
+          items1={contentData.marquee?.items1}
+          items2={contentData.marquee?.items2}
+        />
+
         {/* 01 / Manifesto & Context */}
         <About data={contentData.about} />
 
         {/* 02 / Philosophy: Single Service · Multi-Service · Complete Partner */}
-        <Philosophy />
+        <Philosophy data={contentData.philosophy} />
 
         {/* 03 / Services: 4 Core Pillars */}
-        <Services />
+        <Services data={contentData.services} />
 
         {/* 04 / Works & Sketchbook (ThreeUI exact MengToSketchbookLandingPage + Case Studies) */}
         <Projects data={projects} caseStudies={caseStudies} />
 
         {/* 05 / Process: The Build Flywheel */}
-        <Process />
+        <Process data={contentData.process} />
 
         {/* 06 / Project Scope & Budget Estimator */}
         <Estimator data={contentData.estimator} />
 
-        {/* 07 / Team & Leadership (Hidden if no team data provided) */}
-        {founders && founders.length > 0 && <Team data={founders} />}
+        {/* 07 / Team & Leadership */}
+        <Team data={founders} />
 
         {/* 08 / Metrics (Render numbers from database/content) */}
         {contentData?.stats && (

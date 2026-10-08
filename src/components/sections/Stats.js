@@ -1,69 +1,118 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { AnimateNumber } from "motion-number";
+import { scaleIn, staggerContainer } from "@/lib/motion";
 
 /**
- * Stats / Numbers section
- * Shows verified performance metrics:
- * - 2+ Projects shipped
- * - 100% Client satisfaction
- * - 15+ Happy clients
+ * Stats / Telemetry Metrics Section
+ * - Uses AnimateNumber from motion-number for smooth digit rolling
+ * - Staggered entrance on viewport intersection
+ * - Editorial hairline grid with serif figures & mono telemetry labels
  */
 export default function Stats({ data }) {
+  const [inView, setInView] = useState(false);
+
   if (!data) return null;
 
   const stats = [
-    { value: Number(data.projects) || 2,     label: "Projects shipped",    suffix: "+" },
-    { value: Number(data.satisfaction) || 100, label: "Client satisfaction", suffix: "%" },
-    { value: Number(data.clients) || 15,      label: "Happy clients",       suffix: "+" },
+    { value: Number(data.projects) || 2, label: "Verified Platforms Shipped", suffix: "+" },
+    { value: Number(data.satisfaction) || 100, label: "Client SLA & Satisfaction", suffix: "%" },
+    { value: Number(data.clients) || 15, label: "Worldwide Engagements", suffix: "+" },
   ];
 
   return (
     <section
       id="stats"
       data-theme="cream"
-      className="section-gap"
+      className="section-gap relative border-t border-[var(--line)]"
       style={{
-        background: "var(--cream)",
-        borderTop: "1px solid var(--hairline)",
-        position: "relative",
+        backgroundColor: "var(--cream)",
+        color: "var(--ink)",
+        paddingTop: "clamp(4.5rem, 8vh, 6.5rem)",
+        paddingBottom: "clamp(4.5rem, 8vh, 6.5rem)",
       }}
+      aria-label="Metrics & Telemetry"
     >
-      <div className="container-site">
-        {/* Label */}
-        <div style={{ marginBottom: "2.5rem" }}>
-          <span className="section-label">
-            <span className="section-dot" />
-            Numbers
+      <div className="container-site" style={{ maxWidth: "1440px", margin: "0 auto" }}>
+
+        {/* Eyebrow Label */}
+        <div className="mb-10 flex items-center justify-between flex-wrap gap-4">
+          <div className="inline-flex items-center gap-2">
+            <span
+              style={{
+                fontFamily: "var(--mono)",
+                fontSize: "0.6875rem",
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "var(--blue-deep)",
+                fontWeight: 700,
+              }}
+            >
+              TELEMETRY METRICS
+            </span>
+          </div>
+
+          <span
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: "0.6875rem",
+              color: "var(--ink-3)",
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+            }}
+          >
+            Audited Production Data
           </span>
         </div>
 
-        <div
+        {/* 3-Column Metrics Grid */}
+        <motion.div
+          variants={staggerContainer(0.14, 0.1)}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          onViewportEnter={() => setInView(true)}
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))",
-            border: "1px solid var(--hairline)",
-            background: "var(--surface)",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(260px, 100%), 1fr))",
+            backgroundColor: "rgba(255,255,255,0.75)",
+            border: "1px solid var(--line-2)",
+            borderRadius: "20px",
+            overflow: "hidden",
+            boxShadow: "0 10px 30px -10px rgba(14,27,61,0.06)",
           }}
         >
           {stats.map((stat, i) => (
-            <div
+            <motion.div
               key={i}
+              variants={scaleIn}
               style={{
                 padding: "clamp(2.5rem, 5vw, 4rem) clamp(1.75rem, 4vw, 3rem)",
-                borderRight: i < stats.length - 1 ? "1px solid var(--hairline)" : "none",
+                borderRight: i < stats.length - 1 ? "1px solid var(--line)" : "none",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
                 position: "relative",
               }}
             >
-              <div style={{ display: "flex", alignItems: "baseline", gap: "0.2rem" }}>
-                <CountUp target={stat.value} />
+              <div style={{ display: "flex", alignItems: "baseline", gap: "0.15rem" }}>
                 <span
                   style={{
-                    fontFamily: "'Instrument Serif', Georgia, serif",
-                    fontSize: "clamp(2.5rem, 6vw, 4.75rem)",
+                    fontFamily: "var(--serif)",
+                    fontSize: "clamp(3.25rem, 6.5vw, 5.5rem)",
+                    lineHeight: 1,
+                    color: "var(--ink)",
+                    fontWeight: 400,
+                  }}
+                >
+                  <AnimateNumber>{inView ? stat.value : 0}</AnimateNumber>
+                </span>
+                <span
+                  style={{
+                    fontFamily: "var(--serif)",
+                    fontSize: "clamp(2.5rem, 5vw, 4.25rem)",
                     color: "var(--blue-deep)",
                     lineHeight: 1,
                     fontWeight: 400,
@@ -72,77 +121,25 @@ export default function Stats({ data }) {
                   {stat.suffix}
                 </span>
               </div>
+
               <p
                 style={{
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "var(--mono)",
                   fontSize: "0.75rem",
-                  letterSpacing: "0.14em",
+                  letterSpacing: "0.12em",
                   textTransform: "uppercase",
-                  color: "var(--muted)",
+                  color: "var(--ink-2)",
                   marginTop: "1.25rem",
+                  marginBottom: 0,
                   fontWeight: 600,
                 }}
               >
                 {stat.label}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
-  );
-}
-
-function CountUp({ target }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
-      const timer = setTimeout(() => setCount(target), 0);
-      return () => clearTimeout(timer);
-    }
-
-    let started = false;
-    let animId = null;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting && !started) {
-          started = true;
-          const duration = 1200;
-          const start = performance.now();
-          const tick = (now) => {
-            const elapsed = now - start;
-            const progress = Math.min(1, elapsed / duration);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            setCount(Math.round(eased * target));
-            if (progress < 1) {
-              animId = requestAnimationFrame(tick);
-            } else {
-              setCount(target);
-            }
-          };
-          animId = requestAnimationFrame(tick);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    observer.observe(el);
-    return () => {
-      observer.disconnect();
-      if (animId) cancelAnimationFrame(animId);
-    };
-  }, [target]);
-
-  return (
-    <span ref={ref} className="stat-number" aria-live="polite">
-      {count}
-    </span>
   );
 }

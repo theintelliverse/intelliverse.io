@@ -3,6 +3,12 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function SmoothScroll({ children }) {
   const pathname = usePathname();
@@ -26,13 +32,22 @@ export default function SmoothScroll({ children }) {
       infinite: false,
     });
 
-    let rafId;
-    function raf(time) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
+    if (typeof window !== "undefined") {
+      window.__lenis = lenis;
     }
 
-    rafId = requestAnimationFrame(raf);
+    // Connect Lenis scroll events to ScrollTrigger
+    const handleScroll = () => {
+      ScrollTrigger.update();
+    };
+    lenis.on("scroll", handleScroll);
+
+    // Drive Lenis directly via GSAP ticker for frame-perfect sync
+    const handleTicker = (time) => {
+      lenis.raf(time * 1000);
+    };
+    gsap.ticker.add(handleTicker);
+    gsap.ticker.lagSmoothing(0);
 
     // Sync scroll with scroll-to-top button or external links by binding custom behavior
     const handleScrollTo = (e) => {
@@ -52,7 +67,8 @@ export default function SmoothScroll({ children }) {
     document.addEventListener("click", handleScrollTo);
 
     return () => {
-      cancelAnimationFrame(rafId);
+      gsap.ticker.remove(handleTicker);
+      lenis.off("scroll", handleScroll);
       document.removeEventListener("click", handleScrollTo);
       lenis.destroy();
       document.documentElement.classList.remove("lenis", "lenis-smooth", "lenis-stopped");

@@ -81,11 +81,11 @@ export default function Contact({ data = null } = {}) {
   return (
     <section
       id="contact"
-      data-theme="night"
+      data-theme="cream"
       style={{
-        backgroundColor: "var(--night)", // #0B1530
-        color: "var(--cream)",
-        borderTop: "1px solid rgba(228, 218, 195, 0.12)",
+        backgroundColor: "var(--cream)",
+        color: "var(--ink)",
+        borderTop: "1px solid var(--hairline)",
         paddingTop: "clamp(5rem, 10vh, 7.5rem)",
         paddingBottom: "clamp(5rem, 10vh, 8rem)",
         position: "relative",
@@ -100,7 +100,7 @@ export default function Contact({ data = null } = {}) {
               fontSize: "0.6875rem",
               letterSpacing: "0.15em",
               textTransform: "uppercase",
-              color: "var(--orange)",
+              color: "var(--blue-deep)",
               fontWeight: 700,
             }}
           >
@@ -115,13 +115,13 @@ export default function Contact({ data = null } = {}) {
             fontSize: "clamp(2.5rem, 6.5vw, 5.5rem)",
             letterSpacing: "-0.03em",
             lineHeight: 1.05,
-            color: "var(--cream)",
+            color: "var(--ink)",
             maxWidth: "38rem",
             marginBottom: "4rem",
           }}
         >
           Let&apos;s build something that{" "}
-          <em style={{ fontStyle: "italic", color: "var(--orange)" }}>
+          <em style={{ fontStyle: "italic", color: "var(--blue-deep)" }}>
             actually scales.
           </em>
         </h2>
@@ -138,10 +138,11 @@ export default function Contact({ data = null } = {}) {
           {/* LEFT: 3-Step Guided Form */}
           <div
             style={{
-              backgroundColor: "rgba(18, 30, 68, 0.7)",
-              border: "1px solid rgba(228, 218, 195, 0.14)",
-              borderRadius: "16px",
+              backgroundColor: "var(--surface)",
+              border: "1px solid var(--line-2)",
+              borderRadius: "20px",
               padding: "clamp(1.75rem, 4vw, 3rem)",
+              boxShadow: "0 20px 45px -15px rgba(14, 27, 61, 0.06), 0 0 0 1px rgba(14, 27, 61, 0.03)",
             }}
           >
             {status === "success" ? (
@@ -151,8 +152,8 @@ export default function Contact({ data = null } = {}) {
                     width: "48px",
                     height: "48px",
                     borderRadius: "50%",
-                    backgroundColor: "var(--blue)",
-                    color: "white",
+                    backgroundColor: "var(--blue-deep)",
+                    color: "#FFFFFF",
                     display: "inline-flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -166,13 +167,13 @@ export default function Contact({ data = null } = {}) {
                   style={{
                     fontFamily: "'Instrument Serif', Georgia, serif",
                     fontSize: "2rem",
-                    color: "var(--cream)",
+                    color: "var(--ink)",
                     marginBottom: "0.5rem",
                   }}
                 >
                   Message Dispatched
                 </h3>
-                <p style={{ color: "rgba(248, 242, 228, 0.75)", fontSize: "0.9375rem", lineHeight: 1.6 }}>
+                <p style={{ color: "var(--ink-2)", fontSize: "0.9375rem", lineHeight: 1.6 }}>
                   Thank you! Your project parameters have been delivered to our engineering founders. We respond within 24 hours.
                 </p>
                 <button
@@ -204,8 +205,8 @@ export default function Contact({ data = null } = {}) {
                       key={s}
                       onClick={() => setStep(s)}
                       style={{
-                        width: "30px",
-                        height: "30px",
+                        width: "32px",
+                        height: "32px",
                         borderRadius: "50%",
                         display: "flex",
                         alignItems: "center",
@@ -213,10 +214,11 @@ export default function Contact({ data = null } = {}) {
                         fontFamily: "'JetBrains Mono', monospace",
                         fontSize: "0.75rem",
                         fontWeight: 700,
-                        border: `1px solid ${step === s ? "var(--orange)" : "rgba(228, 218, 195, 0.15)"}`,
-                        backgroundColor: step === s ? "rgba(253, 179, 71, 0.15)" : "transparent",
-                        color: step === s ? "var(--orange)" : "rgba(248, 242, 228, 0.5)",
+                        border: `1px solid ${step === s ? "var(--blue-deep)" : "var(--line-2)"}`,
+                        backgroundColor: step === s ? "var(--blue-deep)" : "transparent",
+                        color: step === s ? "#FFFFFF" : "var(--ink-2)",
                         cursor: "pointer",
+                        transition: "all 0.2s ease",
                       }}
                     >
                       {s}
@@ -228,8 +230,9 @@ export default function Contact({ data = null } = {}) {
                       fontSize: "0.6875rem",
                       letterSpacing: "0.1em",
                       textTransform: "uppercase",
-                      color: "rgba(248, 242, 228, 0.5)",
+                      color: "var(--ink-3)",
                       marginLeft: "0.5rem",
+                      fontWeight: 600,
                     }}
                   >
                     Step {step} of 3
@@ -244,10 +247,11 @@ export default function Contact({ data = null } = {}) {
                         display: "block",
                         fontFamily: "'JetBrains Mono', monospace",
                         fontSize: "0.75rem",
-                        color: "var(--orange)",
+                        color: "var(--blue-deep)",
                         letterSpacing: "0.1em",
                         textTransform: "uppercase",
                         marginBottom: "1rem",
+                        fontWeight: 700,
                       }}
                     >
                       1. Select Project Objective
@@ -265,15 +269,29 @@ export default function Contact({ data = null } = {}) {
                             }}
                             style={{
                               padding: "0.85rem 1.25rem",
-                              borderRadius: "8px",
-                              fontFamily: "'Satoshi', sans-serif",
+                              borderRadius: "10px",
+                              fontFamily: "var(--sans)",
                               fontSize: "0.9375rem",
+                              fontWeight: isSelected ? 600 : 500,
                               textAlign: "left",
-                              border: `1px solid ${isSelected ? "var(--blue)" : "rgba(228, 218, 195, 0.12)"}`,
-                              backgroundColor: isSelected ? "var(--blue-deep)" : "rgba(248, 242, 228, 0.04)",
-                              color: isSelected ? "var(--cream)" : "var(--cream)",
+                              border: `1px solid ${isSelected ? "var(--blue-deep)" : "var(--line)"}`,
+                              backgroundColor: isSelected ? "var(--blue-deep)" : "rgba(14, 27, 61, 0.02)",
+                              color: isSelected ? "#FFFFFF" : "var(--ink)",
                               cursor: "pointer",
                               transition: "all 0.2s ease",
+                              boxShadow: isSelected ? "0 4px 14px rgba(47, 99, 224, 0.25)" : "none",
+                            }}
+                            onMouseEnter={(e) => {
+                              if (!isSelected) {
+                                e.currentTarget.style.borderColor = "var(--blue-deep)";
+                                e.currentTarget.style.backgroundColor = "rgba(47, 99, 224, 0.05)";
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (!isSelected) {
+                                e.currentTarget.style.borderColor = "var(--line)";
+                                e.currentTarget.style.backgroundColor = "rgba(14, 27, 61, 0.02)";
+                              }
                             }}
                           >
                             {t}
@@ -293,10 +311,11 @@ export default function Contact({ data = null } = {}) {
                         display: "block",
                         fontFamily: "'JetBrains Mono', monospace",
                         fontSize: "0.75rem",
-                        color: "var(--orange)",
+                        color: "var(--blue-deep)",
                         letterSpacing: "0.1em",
                         textTransform: "uppercase",
                         marginBottom: "0.75rem",
+                        fontWeight: 700,
                       }}
                     >
                       2. Project Details or Scope
@@ -312,23 +331,49 @@ export default function Contact({ data = null } = {}) {
                       style={{
                         width: "100%",
                         padding: "1rem",
-                        borderRadius: "8px",
-                        border: "1px solid rgba(228, 218, 195, 0.18)",
-                        backgroundColor: "rgba(248, 242, 228, 0.06)",
-                        color: "var(--cream)",
+                        borderRadius: "10px",
+                        border: "1px solid var(--line-2)",
+                        backgroundColor: "rgba(14, 27, 61, 0.02)",
+                        color: "var(--ink)",
                         fontSize: "0.9375rem",
-                        fontFamily: "'Satoshi', sans-serif",
+                        fontFamily: "var(--sans)",
                         lineHeight: 1.6,
                         outline: "none",
                         marginBottom: "1.5rem",
+                        transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+                      }}
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = "var(--blue-deep)";
+                        e.currentTarget.style.boxShadow = "0 0 0 3px rgba(47, 99, 224, 0.12)";
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor = "var(--line-2)";
+                        e.currentTarget.style.boxShadow = "none";
                       }}
                     />
                     <div style={{ display: "flex", gap: "0.75rem" }}>
                       <button
                         type="button"
                         onClick={() => setStep(1)}
-                        className="btn-outline btn-outline-light"
-                        style={{ color: "var(--cream)", borderColor: "rgba(228, 218, 195, 0.3)" }}
+                        style={{
+                          padding: "0.75rem 1.25rem",
+                          borderRadius: "8px",
+                          border: "1px solid var(--line-2)",
+                          backgroundColor: "transparent",
+                          color: "var(--ink)",
+                          fontFamily: "'JetBrains Mono', monospace",
+                          fontSize: "0.75rem",
+                          fontWeight: 600,
+                          letterSpacing: "0.05em",
+                          cursor: "pointer",
+                          transition: "all 0.2s ease",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "rgba(14, 27, 61, 0.05)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "transparent";
+                        }}
                       >
                         <span>← Back</span>
                       </button>
@@ -355,8 +400,9 @@ export default function Contact({ data = null } = {}) {
                           fontSize: "0.6875rem",
                           letterSpacing: "0.1em",
                           textTransform: "uppercase",
-                          color: "rgba(248, 242, 228, 0.7)",
+                          color: "var(--ink-2)",
                           marginBottom: "0.5rem",
+                          fontWeight: 600,
                         }}
                       >
                         Your Name
@@ -372,12 +418,22 @@ export default function Contact({ data = null } = {}) {
                         style={{
                           width: "100%",
                           padding: "0.85rem 1.15rem",
-                          borderRadius: "8px",
-                          border: "1px solid rgba(228, 218, 195, 0.18)",
-                          backgroundColor: "rgba(248, 242, 228, 0.06)",
-                          color: "var(--cream)",
+                          borderRadius: "10px",
+                          border: "1px solid var(--line-2)",
+                          backgroundColor: "rgba(14, 27, 61, 0.02)",
+                          color: "var(--ink)",
                           fontSize: "0.9375rem",
-                          fontFamily: "'Satoshi', sans-serif",
+                          fontFamily: "var(--sans)",
+                          outline: "none",
+                          transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+                        }}
+                        onFocus={(e) => {
+                          e.currentTarget.style.borderColor = "var(--blue-deep)";
+                          e.currentTarget.style.boxShadow = "0 0 0 3px rgba(47, 99, 224, 0.12)";
+                        }}
+                        onBlur={(e) => {
+                          e.currentTarget.style.borderColor = "var(--line-2)";
+                          e.currentTarget.style.boxShadow = "none";
                         }}
                       />
                     </div>
@@ -391,8 +447,9 @@ export default function Contact({ data = null } = {}) {
                           fontSize: "0.6875rem",
                           letterSpacing: "0.1em",
                           textTransform: "uppercase",
-                          color: "rgba(248, 242, 228, 0.7)",
+                          color: "var(--ink-2)",
                           marginBottom: "0.5rem",
+                          fontWeight: 600,
                         }}
                       >
                         Work Email
@@ -408,12 +465,22 @@ export default function Contact({ data = null } = {}) {
                         style={{
                           width: "100%",
                           padding: "0.85rem 1.15rem",
-                          borderRadius: "8px",
-                          border: "1px solid rgba(228, 218, 195, 0.18)",
-                          backgroundColor: "rgba(248, 242, 228, 0.06)",
-                          color: "var(--cream)",
+                          borderRadius: "10px",
+                          border: "1px solid var(--line-2)",
+                          backgroundColor: "rgba(14, 27, 61, 0.02)",
+                          color: "var(--ink)",
                           fontSize: "0.9375rem",
-                          fontFamily: "'Satoshi', sans-serif",
+                          fontFamily: "var(--sans)",
+                          outline: "none",
+                          transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+                        }}
+                        onFocus={(e) => {
+                          e.currentTarget.style.borderColor = "var(--blue-deep)";
+                          e.currentTarget.style.boxShadow = "0 0 0 3px rgba(47, 99, 224, 0.12)";
+                        }}
+                        onBlur={(e) => {
+                          e.currentTarget.style.borderColor = "var(--line-2)";
+                          e.currentTarget.style.boxShadow = "none";
                         }}
                       />
                     </div>
@@ -423,8 +490,8 @@ export default function Contact({ data = null } = {}) {
                       style={{
                         padding: "1rem 1.15rem",
                         borderRadius: "10px",
-                        backgroundColor: "rgba(11, 21, 48, 0.65)",
-                        border: "1px solid rgba(228, 218, 195, 0.22)",
+                        backgroundColor: "rgba(14, 27, 61, 0.03)",
+                        border: "1px solid var(--line-2)",
                         marginTop: "0.25rem",
                       }}
                     >
@@ -439,7 +506,7 @@ export default function Contact({ data = null } = {}) {
                             marginTop: "0.22rem",
                             width: "16px",
                             height: "16px",
-                            accentColor: "var(--orange)",
+                            accentColor: "var(--blue-deep)",
                             cursor: "pointer",
                             flexShrink: 0,
                           }}
@@ -449,19 +516,19 @@ export default function Contact({ data = null } = {}) {
                           style={{
                             fontSize: "0.8125rem",
                             lineHeight: 1.5,
-                            color: "rgba(248, 242, 228, 0.9)",
+                            color: "var(--ink-2)",
                             cursor: "pointer",
                             userSelect: "none",
                           }}
                         >
                           I provide free, specific, informed and unambiguous consent under the{" "}
-                          <strong style={{ color: "var(--cream)" }}>Digital Personal Data Protection (DPDP) Act, 2023</strong>{" "}
+                          <strong style={{ color: "var(--ink)" }}>Digital Personal Data Protection (DPDP) Act, 2023</strong>{" "}
                           for The Intelliverse to process my name, email, and project scope solely to evaluate this technical inquiry and communicate proposals. I understand I can withdraw consent anytime.{" "}
                           <Link
                             href="/privacy"
                             target="_blank"
                             style={{
-                              color: "var(--orange)",
+                              color: "var(--blue-deep)",
                               textDecoration: "underline",
                               fontWeight: 600,
                             }}
@@ -482,12 +549,13 @@ export default function Contact({ data = null } = {}) {
                             padding: 0,
                             fontFamily: "'JetBrains Mono', monospace",
                             fontSize: "0.6875rem",
-                            color: "var(--orange)",
+                            color: "var(--blue-deep)",
                             cursor: "pointer",
                             display: "inline-flex",
                             alignItems: "center",
                             gap: "0.35rem",
                             letterSpacing: "0.04em",
+                            fontWeight: 600,
                           }}
                         >
                           <span>{showDpdpNotice ? "▾ Hide DPDP Notice Details" : "▸ View DPDP Statutory Notice (Section 6)"}</span>
@@ -499,26 +567,26 @@ export default function Contact({ data = null } = {}) {
                               marginTop: "0.65rem",
                               padding: "0.85rem 1rem",
                               borderRadius: "8px",
-                              backgroundColor: "rgba(248, 242, 228, 0.05)",
-                              border: "1px solid rgba(228, 218, 195, 0.12)",
+                              backgroundColor: "rgba(14, 27, 61, 0.04)",
+                              border: "1px solid var(--line)",
                               fontSize: "0.75rem",
                               lineHeight: 1.6,
-                              color: "rgba(248, 242, 228, 0.8)",
-                              fontFamily: "'Satoshi', sans-serif",
+                              color: "var(--ink-2)",
+                              fontFamily: "var(--sans)",
                             }}
                           >
                             <p style={{ margin: "0 0 0.45rem 0" }}>
-                              <strong style={{ color: "var(--cream)" }}>Data Fiduciary:</strong> The Intelliverse (Ahmedabad, Gujarat, India).
+                              <strong style={{ color: "var(--ink)" }}>Data Fiduciary:</strong> The Intelliverse (Ahmedabad, Gujarat, India).
                             </p>
                             <p style={{ margin: "0 0 0.45rem 0" }}>
-                              <strong style={{ color: "var(--cream)" }}>Purpose of Processing:</strong> Scoping project architecture, providing quotes, scheduling technical discussions, and direct business communications. We do not sell personal data or send spam.
+                              <strong style={{ color: "var(--ink)" }}>Purpose of Processing:</strong> Scoping project architecture, providing quotes, scheduling technical discussions, and direct business communications. We do not sell personal data or send spam.
                             </p>
                             <p style={{ margin: "0 0 0.45rem 0" }}>
-                              <strong style={{ color: "var(--cream)" }}>Data Principal Rights:</strong> You have the right to access a summary of your data, request correction or erasure, withdraw consent at any time, and nominate another individual under Sections 11–14 of the DPDP Act, 2023.
+                              <strong style={{ color: "var(--ink)" }}>Data Principal Rights:</strong> You have the right to access a summary of your data, request correction or erasure, withdraw consent at any time, and nominate another individual under Sections 11–14 of the DPDP Act, 2023.
                             </p>
                             <p style={{ margin: 0 }}>
-                              <strong style={{ color: "var(--cream)" }}>Grievance Redressal:</strong> To exercise rights or contact our Grievance Officer, write to{" "}
-                              <a href="mailto:theintelliverse@gmail.com" style={{ color: "var(--orange)", textDecoration: "underline" }}>
+                              <strong style={{ color: "var(--ink)" }}>Grievance Redressal:</strong> To exercise rights or contact our Grievance Officer, write to{" "}
+                              <a href="mailto:theintelliverse@gmail.com" style={{ color: "var(--blue-deep)", textDecoration: "underline" }}>
                                 theintelliverse@gmail.com
                               </a>.
                             </p>
@@ -531,8 +599,25 @@ export default function Contact({ data = null } = {}) {
                       <button
                         type="button"
                         onClick={() => setStep(2)}
-                        className="btn-outline btn-outline-light"
-                        style={{ color: "var(--cream)", borderColor: "rgba(228, 218, 195, 0.3)" }}
+                        style={{
+                          padding: "0.75rem 1.25rem",
+                          borderRadius: "8px",
+                          border: "1px solid var(--line-2)",
+                          backgroundColor: "transparent",
+                          color: "var(--ink)",
+                          fontFamily: "'JetBrains Mono', monospace",
+                          fontSize: "0.75rem",
+                          fontWeight: 600,
+                          letterSpacing: "0.05em",
+                          cursor: "pointer",
+                          transition: "all 0.2s ease",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "rgba(14, 27, 61, 0.05)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "transparent";
+                        }}
                       >
                         <span>← Back</span>
                       </button>
@@ -546,7 +631,7 @@ export default function Contact({ data = null } = {}) {
                     </div>
 
                     {status === "error" && (
-                      <p style={{ color: "#ff6b7b", fontSize: "0.8125rem", marginTop: "0.5rem" }}>
+                      <p style={{ color: "var(--coral)", fontSize: "0.8125rem", marginTop: "0.5rem", fontWeight: 500 }}>
                         {error}
                       </p>
                     )}
@@ -566,20 +651,23 @@ export default function Contact({ data = null } = {}) {
                 justifyContent: "space-between",
                 alignItems: "center",
                 padding: "1.75rem 2rem",
-                borderRadius: "14px",
-                backgroundColor: "rgba(18, 30, 68, 0.5)",
-                border: "1px solid rgba(228, 218, 195, 0.12)",
+                borderRadius: "16px",
+                backgroundColor: "var(--surface)",
+                border: "1px solid var(--line-2)",
                 textDecoration: "none",
-                color: "var(--cream)",
+                color: "var(--ink)",
+                boxShadow: "0 10px 25px -10px rgba(14, 27, 61, 0.04)",
                 transition: "all 0.25s ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "var(--blue)";
-                e.currentTarget.style.backgroundColor = "rgba(18, 30, 68, 0.9)";
+                e.currentTarget.style.borderColor = "var(--blue-deep)";
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow = "0 14px 30px -10px rgba(47, 99, 224, 0.12)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(228, 218, 195, 0.12)";
-                e.currentTarget.style.backgroundColor = "rgba(18, 30, 68, 0.5)";
+                e.currentTarget.style.borderColor = "var(--line-2)";
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 10px 25px -10px rgba(14, 27, 61, 0.04)";
               }}
             >
               <div>
@@ -589,18 +677,19 @@ export default function Contact({ data = null } = {}) {
                     fontSize: "0.6875rem",
                     letterSpacing: "0.12em",
                     textTransform: "uppercase",
-                    color: "var(--orange)",
+                    color: "var(--blue-deep)",
+                    fontWeight: 700,
                     display: "block",
-                    marginBottom: "0.25rem",
+                    marginBottom: "0.35rem",
                   }}
                 >
                   Direct Founder Inbox
                 </span>
-                <span style={{ fontSize: "1.125rem", fontWeight: 500 }}>
+                <span style={{ fontSize: "1.125rem", fontWeight: 600, color: "var(--ink)" }}>
                   {data?.email || "theintelliverse@gmail.com"}
                 </span>
               </div>
-              <span style={{ fontSize: "1.25rem", color: "var(--blue)" }}>↗</span>
+              <span style={{ fontSize: "1.25rem", color: "var(--blue-deep)", fontWeight: 600 }}>↗</span>
             </a>
 
             {/* LinkedIn */}
@@ -613,20 +702,23 @@ export default function Contact({ data = null } = {}) {
                 justifyContent: "space-between",
                 alignItems: "center",
                 padding: "1.75rem 2rem",
-                borderRadius: "14px",
-                backgroundColor: "rgba(18, 30, 68, 0.5)",
-                border: "1px solid rgba(228, 218, 195, 0.12)",
+                borderRadius: "16px",
+                backgroundColor: "var(--surface)",
+                border: "1px solid var(--line-2)",
                 textDecoration: "none",
-                color: "var(--cream)",
+                color: "var(--ink)",
+                boxShadow: "0 10px 25px -10px rgba(14, 27, 61, 0.04)",
                 transition: "all 0.25s ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "var(--blue)";
-                e.currentTarget.style.backgroundColor = "rgba(18, 30, 68, 0.9)";
+                e.currentTarget.style.borderColor = "var(--blue-deep)";
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow = "0 14px 30px -10px rgba(47, 99, 224, 0.12)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(228, 218, 195, 0.12)";
-                e.currentTarget.style.backgroundColor = "rgba(18, 30, 68, 0.5)";
+                e.currentTarget.style.borderColor = "var(--line-2)";
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 10px 25px -10px rgba(14, 27, 61, 0.04)";
               }}
             >
               <div>
@@ -636,18 +728,19 @@ export default function Contact({ data = null } = {}) {
                     fontSize: "0.6875rem",
                     letterSpacing: "0.12em",
                     textTransform: "uppercase",
-                    color: "var(--orange)",
+                    color: "var(--blue-deep)",
+                    fontWeight: 700,
                     display: "block",
-                    marginBottom: "0.25rem",
+                    marginBottom: "0.35rem",
                   }}
                 >
                   Corporate Network
                 </span>
-                <span style={{ fontSize: "1.125rem", fontWeight: 500 }}>
+                <span style={{ fontSize: "1.125rem", fontWeight: 600, color: "var(--ink)" }}>
                   LinkedIn / The Intelliverse
                 </span>
               </div>
-              <span style={{ fontSize: "1.25rem", color: "var(--blue)" }}>↗</span>
+              <span style={{ fontSize: "1.25rem", color: "var(--blue-deep)", fontWeight: 600 }}>↗</span>
             </a>
 
             {/* Instagram */}
@@ -660,20 +753,23 @@ export default function Contact({ data = null } = {}) {
                 justifyContent: "space-between",
                 alignItems: "center",
                 padding: "1.75rem 2rem",
-                borderRadius: "14px",
-                backgroundColor: "rgba(18, 30, 68, 0.5)",
-                border: "1px solid rgba(228, 218, 195, 0.12)",
+                borderRadius: "16px",
+                backgroundColor: "var(--surface)",
+                border: "1px solid var(--line-2)",
                 textDecoration: "none",
-                color: "var(--cream)",
+                color: "var(--ink)",
+                boxShadow: "0 10px 25px -10px rgba(14, 27, 61, 0.04)",
                 transition: "all 0.25s ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "var(--blue)";
-                e.currentTarget.style.backgroundColor = "rgba(18, 30, 68, 0.9)";
+                e.currentTarget.style.borderColor = "var(--blue-deep)";
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow = "0 14px 30px -10px rgba(47, 99, 224, 0.12)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(228, 218, 195, 0.12)";
-                e.currentTarget.style.backgroundColor = "rgba(18, 30, 68, 0.5)";
+                e.currentTarget.style.borderColor = "var(--line-2)";
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 10px 25px -10px rgba(14, 27, 61, 0.04)";
               }}
             >
               <div>
@@ -683,18 +779,19 @@ export default function Contact({ data = null } = {}) {
                     fontSize: "0.6875rem",
                     letterSpacing: "0.12em",
                     textTransform: "uppercase",
-                    color: "var(--orange)",
+                    color: "var(--blue-deep)",
+                    fontWeight: 700,
                     display: "block",
-                    marginBottom: "0.25rem",
+                    marginBottom: "0.35rem",
                   }}
                 >
                   Studio Work &amp; Culture
                 </span>
-                <span style={{ fontSize: "1.125rem", fontWeight: 500 }}>
+                <span style={{ fontSize: "1.125rem", fontWeight: 600, color: "var(--ink)" }}>
                   @the_intelliverse
                 </span>
               </div>
-              <span style={{ fontSize: "1.25rem", color: "var(--blue)" }}>↗</span>
+              <span style={{ fontSize: "1.25rem", color: "var(--blue-deep)", fontWeight: 600 }}>↗</span>
             </a>
           </div>
         </div>

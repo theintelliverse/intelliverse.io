@@ -1,15 +1,8 @@
 import { cookies } from "next/headers";
-import { clientPromise, localMockDb } from "@/lib/db";
+import { clientPromise, localMockDb, defaultTestimonials } from "@/lib/db";
 import { verifySession, ensureDefaultAdmin } from "@/lib/auth";
 import AdminLoginForm from "@/components/admin/AdminLoginForm";
 import AdminPanel from "@/components/admin/AdminPanel";
-
-const defaultTestimonials = [
-  { text: "The Intelliverse delivered an outstanding product on time and on budget. Highly recommended!", author: "Client A" },
-  { text: "A fantastic team to work with. Professional, creative, and highly skilled.", author: "Client B" },
-  { text: "Our new website has seen a significant increase in traffic thanks to their expertise.", author: "Client C" },
-  { text: "They transformed our vision into a reality. Exceptional work!", author: "Client D" }
-];
 
 const defaultStats = { projects: 50, satisfaction: 100, clients: 30 };
 
@@ -58,6 +51,10 @@ export default async function AdminPage() {
   let contact = { ...localMockDb.contact };
   let stats = { ...defaultStats };
   let estimator = localMockDb.estimator ? { ...localMockDb.estimator } : null;
+  let services = localMockDb.services ? [...localMockDb.services] : [];
+  let processStages = localMockDb.process ? [...localMockDb.process] : [];
+  let marquee = localMockDb.marquee ? { ...localMockDb.marquee } : { items1: [], items2: [] };
+  let philosophy = localMockDb.philosophy ? [...localMockDb.philosophy] : [];
   let testimonials = [...defaultTestimonials];
   let projects = [];
   let caseStudies = [];
@@ -75,11 +72,22 @@ export default async function AdminPage() {
         if (content.contact) contact = { ...contact, ...content.contact };
         if (content.stats) stats = content.stats;
         if (content.estimator) estimator = content.estimator;
+        if (content.services) services = content.services;
+        if (content.process) processStages = content.process;
+        if (content.marquee) marquee = content.marquee;
+        if (content.philosophy) philosophy = content.philosophy;
       }
       
       const dbTestimonials = await db.collection("testimonials").find({}).toArray();
       if (dbTestimonials.length > 0) {
-        testimonials = dbTestimonials.map(t => ({ text: t.text, author: t.author }));
+        testimonials = dbTestimonials.map(t => ({
+          text: t.text || t.quote || "",
+          author: t.author || "",
+          role: t.role || "",
+          project: t.project || "",
+          tag: t.tag || "",
+          rating: t.rating !== undefined ? Number(t.rating) : 5,
+        }));
       }
 
       const dbProjects = await db.collection("projects").find({}).toArray();
@@ -123,6 +131,7 @@ export default async function AdminPage() {
           stack: Array.isArray(cs.stack) ? cs.stack : (Array.isArray(cs.techTags) ? cs.techTags : []),
           techTags: Array.isArray(cs.techTags) ? cs.techTags : (Array.isArray(cs.stack) ? cs.stack : []),
           link: cs.link || "",
+          caseStudyLink: cs.caseStudyLink || (cs.name?.toLowerCase().includes("appointory") ? "/work/appointory" : cs.name?.toLowerCase().includes("vrix") ? "/work/vrix" : ""),
           review: cs.review || "",
           rating: cs.rating !== undefined ? Number(cs.rating) : 5
         }));
@@ -164,6 +173,7 @@ export default async function AdminPage() {
           return {
             name: f.name,
             role: f.role,
+            badge: f.badge || "",
             tagline: f.tagline || "",
             image: f.image || "",
             imageX: f.imageX !== undefined ? Number(f.imageX) : 50,
@@ -196,7 +206,11 @@ export default async function AdminPage() {
     about,
     contact,
     stats,
-    estimator
+    estimator,
+    services,
+    process: processStages,
+    marquee,
+    philosophy
   };
 
   return (

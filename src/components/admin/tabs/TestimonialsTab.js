@@ -81,12 +81,26 @@ export default function TestimonialsTab({
                     </div>
                     
                     <div className="min-w-0">
-                      <h4 className="text-xs font-bold text-white truncate max-w-[120px] sm:max-w-none">
-                        {test.author || <span className="text-gray-600 italic">Unnamed Client</span>}
-                      </h4>
-                      <p className="text-[10px] text-gray-500 truncate mt-0.5 max-w-[120px] sm:max-w-none">
-                        &quot;{test.text || <span className="text-gray-600 italic">No text review</span>}&quot;
-                      </p>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <h4 className="text-xs font-bold text-white truncate max-w-[120px] sm:max-w-none">
+                          {test.author || <span className="text-gray-600 italic">Unnamed Client</span>}
+                        </h4>
+                        {test.rating && (
+                          <span className="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-1.5 py-0.2 rounded font-mono font-bold flex items-center gap-0.5">
+                            ★ {Number(test.rating).toFixed(1)}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                        {test.tag && (
+                          <span className="text-[9px] text-blue-400 font-mono uppercase bg-blue-500/10 px-1.5 rounded">
+                            {test.tag}
+                          </span>
+                        )}
+                        <p className="text-[10px] text-gray-500 truncate max-w-[120px] sm:max-w-none">
+                          &quot;{test.text || <span className="text-gray-600 italic">No text review</span>}&quot;
+                        </p>
+                      </div>
                     </div>
                   </div>
 
@@ -155,7 +169,7 @@ export default function TestimonialsTab({
                     <button
                       type="button"
                       onClick={() => setIsEditingMobileTestimonials(false)}
-                      className="flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-white px-3.5 py-2 rounded-xl bg-gray-950 border border-gray-850 active:scale-95 transition"
+                      className="flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-white px-3.5 py-2 rounded-xl bg-gray-950 border border-gray-855 active:scale-95 transition"
                     >
                       <i className="fas fa-arrow-left"></i>
                       <span>Back to Reviews List</span>
@@ -169,39 +183,88 @@ export default function TestimonialsTab({
                         <i className="fas fa-comments text-base"></i>
                       </div>
                       <div className="text-left">
-                        <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                        <h3 className="text-sm font-bold text-white flex items-center gap-2 flex-wrap">
                           <span>Editing: Review from {test.author || "New Client"}</span>
                           <span className="text-[10px] bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2.5 py-0.5 rounded-full font-mono font-bold">
                             INDEX #{index + 1}
                           </span>
+                          {test.rating && (
+                            <span className="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full font-mono font-bold">
+                              ★ {Number(test.rating).toFixed(1)} / 5.0
+                            </span>
+                          )}
                         </h3>
-                        <p className="text-[10px] text-gray-500 mt-0.5">Customize client name and their quote review description text below.</p>
+                        <p className="text-[10px] text-gray-500 mt-0.5">Customize client details, designation, category tag, rating, and quote below.</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Form Inputs */}
                   <div className="space-y-4 text-left">
-                    <div>
-                      <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono font-bold">Author / Client Name</label>
-                      <input
-                        type="text"
-                        value={test.author}
-                        onChange={(e) => handleTestimonialChange(index, "author", e.target.value)}
-                        className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-855 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-white rounded-xl text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-sans"
-                        placeholder="e.g. John Doe, CEO of Acme Inc."
-                        required
-                      />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono font-bold">Author / Client Name</label>
+                        <input
+                          type="text"
+                          value={test.author || ""}
+                          onChange={(e) => handleTestimonialChange(index, "author", e.target.value)}
+                          className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-855 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-white rounded-xl text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-sans"
+                          placeholder="e.g. Dr. Rajesh K. Patel"
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono font-bold">Client Role / Designation</label>
+                        <input
+                          type="text"
+                          value={test.role || ""}
+                          onChange={(e) => handleTestimonialChange(index, "role", e.target.value)}
+                          className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-855 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-white rounded-xl text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-sans"
+                          placeholder="e.g. Senior Consultant Cardiologist"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono font-bold">Project / Category Tag</label>
+                        <input
+                          type="text"
+                          value={test.tag || test.project || ""}
+                          onChange={(e) => {
+                            handleTestimonialChange(index, "tag", e.target.value);
+                            handleTestimonialChange(index, "project", e.target.value.split("·")[0].trim());
+                          }}
+                          className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-855 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-white rounded-xl text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 font-sans"
+                          placeholder="e.g. Appointry · Doctor, Vrix · Luxury E-Commerce"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono font-bold">Rating (Stars)</label>
+                        <select
+                          value={test.rating !== undefined ? String(test.rating) : "5"}
+                          onChange={(e) => handleTestimonialChange(index, "rating", parseFloat(e.target.value))}
+                          className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-855 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-white rounded-xl text-xs focus:outline-none transition-all duration-300 font-mono"
+                        >
+                          <option value="5">5.0 ★★★★★ (Top Tier Excellence)</option>
+                          <option value="4.5">4.5 ★★★★½ (High Satisfaction)</option>
+                          <option value="4">4.0 ★★★★☆ (Strong Reliable Delivery)</option>
+                          <option value="3.5">3.5 ★★★½☆ (Good Performance / Evolving)</option>
+                          <option value="3">3.0 ★★★☆☆ (Baseline Service)</option>
+                        </select>
+                      </div>
                     </div>
 
                     <div>
                       <label className="text-[10px] text-gray-400 uppercase font-semibold font-mono">Client Review Quote Text</label>
                       <textarea
-                        value={test.text}
+                        value={test.text || ""}
                         onChange={(e) => handleTestimonialChange(index, "text", e.target.value)}
                         className="w-full mt-1.5 p-2.5 bg-gray-950 border border-gray-855 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-white rounded-xl text-xs focus:outline-none transition-all duration-300 placeholder:text-gray-600 leading-relaxed font-sans"
                         placeholder="Write client testimonial quote here..."
-                        rows="5"
+                        rows="4"
                         required
                       ></textarea>
                     </div>
