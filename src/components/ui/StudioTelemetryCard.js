@@ -154,7 +154,7 @@ export default function StudioTelemetryCard({
 
   const currentLog = (logsList && logsList[activeLogIndex % logsList.length]) || STUDIO_LOGS[0];
   const currentStream = (streamList && streamList[streamIndex % streamList.length]) || STREAM_EVENTS[0];
-  const displayDeployCount = targetCount + liveBump;S[0];
+  const displayDeployCount = targetCount + liveBump;
 
   return (
     <div
@@ -298,17 +298,9 @@ export default function StudioTelemetryCard({
               }}
             >
               <span style={{ color: "var(--blue-deep)", marginRight: "4px" }}>▸</span>
-              {currentLog.msg.slice(0, typedChars)}
-              <span
-                style={{
-                  display: "inline-block",
-                  width: "5px",
-                  height: "12px",
-                  backgroundColor: "var(--blue-deep)",
-                  marginLeft: "3px",
-                  verticalAlign: "middle",
-                }}
-                className="animate-pulse"
+              <TypewriterMessage
+                key={`${activeLogIndex}-${currentLog.msg}`}
+                text={currentLog.msg}
               />
             </span>
           </div>
@@ -351,7 +343,7 @@ export default function StudioTelemetryCard({
               fontWeight: 400,
             }}
           >
-            <AnimateNumber>{deployCount}</AnimateNumber>
+            <AnimateNumber>{displayDeployCount}</AnimateNumber>
           </span>
           <span
             style={{
