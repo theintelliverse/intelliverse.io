@@ -1,38 +1,145 @@
 import { siteConfig } from "@/content/site";
+import { BLOG_POSTS } from "@/content/blog";
 
 /**
  * Next.js App Router Sitemap Generator
- * Valid XML sitemap with all indexable canonical URLs (no hash fragments)
+ * Dynamically serves /sitemap.xml conforming to the sitemaps.org 0.9 XML protocol.
+ * Includes all canonical, indexable URLs with accurate lastModified, changeFrequency,
+ * priority, and Google Image Search references.
+ *
+ * @type {() => Promise<import('next').MetadataRoute.Sitemap> | import('next').MetadataRoute.Sitemap}
  */
 export default async function sitemap() {
-  const baseUrl = siteConfig.url;
-  const lastModified = new Date("2026-10-05T00:00:00Z");
+  const baseUrl = (siteConfig.url || "https://intelliverse.io").replace(/\/+$/, "");
+  const currentReleaseDate = new Date("2026-10-08T00:00:00.000Z");
 
-  const routes = [
-    { path: "", changeFrequency: "daily", priority: 1.0 },
-    { path: "/software-development-company-ahmedabad", changeFrequency: "weekly", priority: 0.95 },
-    { path: "/services/web-development", changeFrequency: "weekly", priority: 0.9 },
-    { path: "/services/software-engineering", changeFrequency: "weekly", priority: 0.9 },
-    { path: "/services/it-architecture-support", changeFrequency: "weekly", priority: 0.9 },
-    { path: "/services/ai-data-robotics-iot", changeFrequency: "weekly", priority: 0.9 },
-    { path: "/work/appointory", changeFrequency: "monthly", priority: 0.85 },
-    { path: "/work/vrix", changeFrequency: "monthly", priority: 0.85 },
-    { path: "/about", changeFrequency: "monthly", priority: 0.8 },
-    { path: "/contact", changeFrequency: "monthly", priority: 0.85 },
-    { path: "/faq", changeFrequency: "weekly", priority: 0.8 },
-    { path: "/blog", changeFrequency: "daily", priority: 0.8 },
-    { path: "/blog/what-is-the-intelliverse", changeFrequency: "monthly", priority: 0.8 },
-    { path: "/blog/how-much-does-custom-software-cost-in-india", changeFrequency: "monthly", priority: 0.75 },
-    { path: "/blog/web-app-vs-mobile-app-how-to-choose", changeFrequency: "monthly", priority: 0.75 },
-    { path: "/blog/how-to-digitise-a-clinic-appointment-queue", changeFrequency: "monthly", priority: 0.75 },
-    { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
-    { path: "/terms", changeFrequency: "yearly", priority: 0.3 },
+  /** @type {import('next').MetadataRoute.Sitemap} */
+  const staticRoutes = [
+    // ── Primary Landing & Core Discovery ───────────────────────
+    {
+      url: `${baseUrl}`,
+      lastModified: currentReleaseDate,
+      changeFrequency: "daily",
+      priority: 1.0,
+      images: [
+        `${baseUrl}/og-image.png`,
+        `${baseUrl}/the-intelliverse-logo.jpg`,
+      ],
+    },
+    {
+      url: `${baseUrl}/software-development-company-ahmedabad`,
+      lastModified: currentReleaseDate,
+      changeFrequency: "weekly",
+      priority: 0.95,
+      images: [`${baseUrl}/og-image.png`],
+    },
+
+    // ── Core Service Architecture ──────────────────────────────
+    {
+      url: `${baseUrl}/services/web-development`,
+      lastModified: currentReleaseDate,
+      changeFrequency: "weekly",
+      priority: 0.9,
+      images: [`${baseUrl}/og-image.png`],
+    },
+    {
+      url: `${baseUrl}/services/software-engineering`,
+      lastModified: currentReleaseDate,
+      changeFrequency: "weekly",
+      priority: 0.9,
+      images: [`${baseUrl}/og-image.png`],
+    },
+    {
+      url: `${baseUrl}/services/it-architecture-support`,
+      lastModified: currentReleaseDate,
+      changeFrequency: "weekly",
+      priority: 0.9,
+      images: [`${baseUrl}/og-image.png`],
+    },
+    {
+      url: `${baseUrl}/services/ai-data-robotics-iot`,
+      lastModified: currentReleaseDate,
+      changeFrequency: "weekly",
+      priority: 0.9,
+      images: [`${baseUrl}/og-image.png`],
+    },
+
+    // ── Case Studies & Production Proof ────────────────────────
+    {
+      url: `${baseUrl}/work/appointory`,
+      lastModified: currentReleaseDate,
+      changeFrequency: "monthly",
+      priority: 0.85,
+      images: [`${baseUrl}/og-image.png`],
+    },
+    {
+      url: `${baseUrl}/work/vrix`,
+      lastModified: currentReleaseDate,
+      changeFrequency: "monthly",
+      priority: 0.85,
+      images: [`${baseUrl}/og-image.png`],
+    },
+
+    // ── Company & Knowledge Hub ────────────────────────────────
+    {
+      url: `${baseUrl}/about`,
+      lastModified: currentReleaseDate,
+      changeFrequency: "monthly",
+      priority: 0.8,
+      images: [
+        `${baseUrl}/founder_dhruvil.jpg`,
+        `${baseUrl}/founder_jal.jpg`,
+        `${baseUrl}/founder_rudra.jpg`,
+      ],
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified: currentReleaseDate,
+      changeFrequency: "monthly",
+      priority: 0.85,
+      images: [`${baseUrl}/og-image.png`],
+    },
+    {
+      url: `${baseUrl}/faq`,
+      lastModified: currentReleaseDate,
+      changeFrequency: "weekly",
+      priority: 0.8,
+      images: [`${baseUrl}/og-image.png`],
+    },
+
+    // ── Engineering Journal / Blog Index ───────────────────────
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: currentReleaseDate,
+      changeFrequency: "daily",
+      priority: 0.85,
+      images: [`${baseUrl}/og-image.png`],
+    },
+
+    // ── Legal & Policies ───────────────────────────────────────
+    {
+      url: `${baseUrl}/privacy`,
+      lastModified: new Date("2026-10-05T00:00:00.000Z"),
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/terms`,
+      lastModified: new Date("2026-10-05T00:00:00.000Z"),
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
   ];
 
-  return routes.map((route) => ({
-    url: `${baseUrl}${route.path}`,
-    lastModified,
-    changeFrequency: route.changeFrequency,
-    priority: route.priority,
+  // ── Dynamic Engineering Journal Articles ───────────────────
+  /** @type {import('next').MetadataRoute.Sitemap} */
+  const blogRoutes = BLOG_POSTS.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(`${post.updatedDate || post.publishedDate}T00:00:00.000Z`),
+    changeFrequency: "monthly",
+    priority: post.slug === "what-is-the-intelliverse" ? 0.8 : 0.75,
+    images: [`${baseUrl}/og-image.png`],
   }));
+
+  return [...staticRoutes, ...blogRoutes];
 }
