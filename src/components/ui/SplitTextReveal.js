@@ -71,7 +71,7 @@ export default function SplitTextReveal({
     >
       {words.map((word, wIdx) => (
         <span
-          key={wIdx}
+          key={`word-${wIdx}-${word}`}
           style={{
             display: "inline-block",
             whiteSpace: "nowrap",
@@ -79,7 +79,7 @@ export default function SplitTextReveal({
         >
           {word.split("").map((char, cIdx) => (
             <span
-              key={cIdx}
+              key={`char-${wIdx}-${cIdx}`}
               className="split-char inline-block will-change-transform opacity-0"
               style={{ display: "inline-block" }}
             >
@@ -88,6 +88,7 @@ export default function SplitTextReveal({
           ))}
           {wIdx < words.length - 1 && (
             <span
+              key={`space-${wIdx}`}
               style={{
                 display: "inline-block",
                 width: "0.28em",

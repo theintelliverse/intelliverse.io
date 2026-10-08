@@ -373,28 +373,35 @@ export default function RootLayout({ children }) {
       className={`${instrumentSerif.variable} ${jetbrainsMono.variable} ${plusJakartaSans.variable} ${caveat.variable}`}
     >
       <head>
-        {/* Favicons (SVG, ICO, PNG) for All Browsers, Google Search & Mobile Devices */}
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/icon.png" type="image/png" sizes="48x48" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-        <link rel="shortcut icon" href="/favicon.ico" />
+        {/* Font Awesome 6 Icons for Admin Console and UI */}
+        <link
+          key="font-awesome-css"
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
+        />
 
-        {/* WhatsApp & Social Media Preview Tags (Strict Crawler Fallback) */}
-        <meta property="og:image" content={`${siteConfig.url}/og-image.png`} />
-        <meta property="og:image:secure_url" content={`${siteConfig.url}/og-image.png`} />
-        <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="The Intelliverse — Software, Web & IT Services in Ahmedabad, India" />
-        <link rel="image_src" href={`${siteConfig.url}/og-image.png`} />
+        {/* AI & LLM Machine-Readable Link */}
+        <link key="llms-txt" rel="alternate" type="text/plain" href="/llms.txt" title="LLM Knowledge Dossier" />
+
+        {/* JSON-LD Structured Data via Reusable Server Component */}
+        <JsonLd key="json-ld-structured-data" schema={[websiteSchema, orgSchema, localBizSchema, homeFaqSchema]} />
+      </head>
+      <body className="font-sans antialiased">
+        {/* Skip to content for accessibility */}
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
 
         {/* Google Analytics 4 (gtag.js) */}
         <Script
+          key="ga4-script"
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-S2ZW1XMDW8"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script key="ga4-init" id="google-analytics" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -407,7 +414,7 @@ export default function RootLayout({ children }) {
         </Script>
 
         {/* Microsoft Clarity Tracking */}
-        <Script id="microsoft-clarity" strategy="afterInteractive">
+        <Script key="clarity-script" id="microsoft-clarity" strategy="afterInteractive">
           {`
             (function(c,l,a,r,i,t,y){
               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -416,30 +423,6 @@ export default function RootLayout({ children }) {
             })(window, document, "clarity", "script", "w7o4l96z6s");
           `}
         </Script>
-
-        {/* Fonts served locally — no CDN round-trip */}
-
-        {/* Font Awesome 6 Icons for Admin Console and UI */}
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-          crossOrigin="anonymous"
-          referrerPolicy="no-referrer"
-        />
-
-        {/* AI & LLM Machine-Readable Link */}
-        <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM Knowledge Dossier" />
-        <link rel="sitemap" type="application/xml" href="/sitemap.xml" title="Sitemap" />
-
-        {/* JSON-LD Structured Data via Reusable Server Component */}
-        <JsonLd schema={[websiteSchema, orgSchema, localBizSchema, homeFaqSchema]} />
-      </head>
-      <body className="font-sans antialiased">
-        {/* Skip to content for accessibility */}
-        <a href="#main-content" className="skip-link">
-          Skip to content
-        </a>
 
         <MotionConfig
           reducedMotion="user"
