@@ -31,6 +31,42 @@ const BARS_DATA = [
   { day: "S", name: "Sunday", val: 96, col: "#2F63E0", grad: "linear-gradient(180deg, #4A7BFA 0%, #2F63E0 100%)" },
 ];
 
+function TypewriterMessage({ text }) {
+  const [typedChars, setTypedChars] = useState(0);
+
+  useEffect(() => {
+    const typeInterval = setInterval(() => {
+      setTypedChars((prev) => {
+        if (prev < text.length) {
+          return prev + 1;
+        } else {
+          clearInterval(typeInterval);
+          return prev;
+        }
+      });
+    }, 38);
+
+    return () => clearInterval(typeInterval);
+  }, [text]);
+
+  return (
+    <>
+      {text.slice(0, typedChars)}
+      <span
+        style={{
+          display: "inline-block",
+          width: "5px",
+          height: "12px",
+          backgroundColor: "var(--blue-deep)",
+          marginLeft: "3px",
+          verticalAlign: "middle",
+        }}
+        className="animate-pulse"
+      />
+    </>
+  );
+}
+
 export default function StudioTelemetryCard({
   data = null,
   className = "",
@@ -38,15 +74,9 @@ export default function StudioTelemetryCard({
   showFullLogs = true,
 }) {
   const targetCount = data?.deployCount !== undefined ? Number(data.deployCount) : initialCount;
-  const [deployCount, setDeployCount] = useState(targetCount);
-  const [prevTargetCount, setPrevTargetCount] = useState(targetCount);
-  if (targetCount !== prevTargetCount) {
-    setPrevTargetCount(targetCount);
-    setDeployCount(targetCount);
-  }
+  const [liveBump, setLiveBump] = useState(0);
 
   const [activeLogIndex, setActiveLogIndex] = useState(0);
-  const [typedChars, setTypedChars] = useState(0);
   const [streamIndex, setStreamIndex] = useState(0);
   const [hoveredBar, setHoveredBar] = useState(null);
 
@@ -98,32 +128,13 @@ export default function StudioTelemetryCard({
       ]
     : STREAM_EVENTS;
 
-  // Typewriting effect for current studio log row
+  // Rotating studio log row
   useEffect(() => {
-    const safeLog = logsList[activeLogIndex % logsList.length] || logsList[0];
-    const currentMsg = safeLog.msg;
-
-    const typeInterval = setInterval(() => {
-      setTypedChars((prev) => {
-        if (prev < currentMsg.length) {
-          return prev + 1;
-        } else {
-          clearInterval(typeInterval);
-          return prev;
-        }
-      });
-    }, 38);
-
-    const switchTimeout = setTimeout(() => {
-      setTypedChars(0);
+    const timer = setInterval(() => {
       setActiveLogIndex((prev) => (prev + 1) % logsList.length);
     }, 4500);
-
-    return () => {
-      clearInterval(typeInterval);
-      clearTimeout(switchTimeout);
-    };
-  }, [activeLogIndex, logsList]);
+    return () => clearInterval(timer);
+  }, [logsList.length]);
 
   // Rotating verified event stream
   useEffect(() => {
@@ -136,13 +147,14 @@ export default function StudioTelemetryCard({
   // Subtle live counter bump
   useEffect(() => {
     const timer = setInterval(() => {
-      setDeployCount((prev) => prev + Math.floor(Math.random() * 2));
+      setLiveBump((prev) => prev + Math.floor(Math.random() * 2));
     }, 8500);
     return () => clearInterval(timer);
   }, []);
 
   const currentLog = (logsList && logsList[activeLogIndex % logsList.length]) || STUDIO_LOGS[0];
   const currentStream = (streamList && streamList[streamIndex % streamList.length]) || STREAM_EVENTS[0];
+  const displayDeployCount = targetCount + liveBump;S[0];
 
   return (
     <div
