@@ -170,9 +170,13 @@ export const metadata = {
     creator: "@theintelliverse",
   },
   verification: {
-    google:
-      process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
-      "V9ShBblTx27Z4kLyDmhiU4PPANzjWD_j1O76UrDD40I",
+    google: [
+      "_bBKjibzbtCllmNG_idI9G98RKmAUWOYhREw9eoQXQY",
+      "VokGQwH0xmoTvEfJqEn5787EY10aWuIuYa6tKNazEBw",
+      ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+        ? [process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION]
+        : []),
+    ],
     yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION,
     other: {
       "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION || "",

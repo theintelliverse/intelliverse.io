@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "index:google": "node scripts/google-index.mjs",
+    "index:now": "node scripts/export-sitemap-xml.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

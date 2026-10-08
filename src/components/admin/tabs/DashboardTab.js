@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 export default function DashboardTab({
   contactLogs,
   projects,
@@ -12,6 +14,78 @@ export default function DashboardTab({
   dbStatus,
   currentUser
 }) {
+  const [googleIndexingLoading, setGoogleIndexingLoading] = useState(false);
+  const [googleIndexingResult, setGoogleIndexingResult] = useState(null);
+  const [indexNowLoading, setIndexNowLoading] = useState(false);
+  const [indexNowResult, setIndexNowResult] = useState(null);
+
+  const handleTriggerGoogleIndexing = async () => {
+    setGoogleIndexingLoading(true);
+    setGoogleIndexingResult(null);
+    try {
+      const res = await fetch("/api/google-indexing", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setGoogleIndexingResult({
+          type: "success",
+          msg: `Successfully submitted ${data.successCount}/${data.totalSubmitted} canonical pages to Google Search.`,
+        });
+      } else if (data.configured === false) {
+        setGoogleIndexingResult({
+          type: "info",
+          msg: `${data.urlsToSubmit?.length || 16} URLs prepared. Add GOOGLE_CLIENT_EMAIL and GOOGLE_PRIVATE_KEY in .env.local to activate instant Google Search dispatch.`,
+        });
+      } else {
+        setGoogleIndexingResult({
+          type: "error",
+          msg: data.error || data.message || "Failed to submit indexing request to Google.",
+        });
+      }
+    } catch (err) {
+      setGoogleIndexingResult({
+        type: "error",
+        msg: `Connection error: ${err.message}`,
+      });
+    } finally {
+      setGoogleIndexingLoading(false);
+    }
+  };
+
+  const handleTriggerIndexNow = async () => {
+    setIndexNowLoading(true);
+    setIndexNowResult(null);
+    try {
+      const res = await fetch("/api/indexnow", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setIndexNowResult({
+          type: "success",
+          msg: `Submitted ${data.submittedUrls} URLs to IndexNow network (Bing & Yandex).`,
+        });
+      } else {
+        setIndexNowResult({
+          type: "error",
+          msg: data.message || "IndexNow ping failed.",
+        });
+      }
+    } catch (err) {
+      setIndexNowResult({
+        type: "error",
+        msg: `Connection error: ${err.message}`,
+      });
+    } finally {
+      setIndexNowLoading(false);
+    }
+  };
+
   // --- Calculate Last 7 Days CRM Submission Trend for Chart ---
   const getSubmissionTrendData = () => {
     const trendData = [];
@@ -366,6 +440,134 @@ export default function DashboardTab({
               <p className="text-center text-xs py-8 italic font-mono" style={{ color: "rgba(248, 242, 228, 0.5)" }}>No recent activity received.</p>
             )}
           </div>
+        </div>
+      </div>
+
+      {/* Search Engine Page Indexing Controls */}
+      <div
+        className="rounded-2xl p-5 md:p-6 backdrop-blur-sm space-y-4"
+        style={{
+          backgroundColor: "rgba(18, 30, 68, 0.7)",
+          border: "1px solid rgba(228, 218, 195, 0.14)",
+        }}
+      >
+        <div
+          className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 gap-2"
+          style={{ borderBottom: "1px solid rgba(228, 218, 195, 0.1)" }}
+        >
+          <div className="flex items-center gap-2">
+            <i className="fab fa-google text-blue-400 font-bold"></i>
+            <h4
+              className="text-xs font-bold font-mono uppercase tracking-wider"
+              style={{ color: "var(--cream)" }}
+            >
+              Search Engine Page Indexing (Google & IndexNow)
+            </h4>
+          </div>
+          <span
+            className="text-[10px] px-2.5 py-0.5 rounded-full font-bold font-mono self-start sm:self-auto"
+            style={{
+              backgroundColor: "rgba(61, 123, 247, 0.15)",
+              color: "var(--blue)",
+              border: "1px solid rgba(61, 123, 247, 0.3)",
+            }}
+          >
+            Google Indexing API v1.0
+          </span>
+        </div>
+
+        <p className="text-xs font-mono" style={{ color: "rgba(248, 242, 228, 0.7)" }}>
+          Notify Googlebot and Bingbot immediately whenever new content, blogs, or case studies are published.
+        </p>
+
+        {/* Feedback alerts */}
+        {googleIndexingResult && (
+          <div
+            className={`p-3 rounded-xl text-xs font-mono border transition-all ${googleIndexingResult.type === "success"
+              ? "bg-emerald-950/30 border-emerald-500/30 text-emerald-300"
+              : googleIndexingResult.type === "info"
+                ? "bg-blue-950/30 border-blue-500/30 text-blue-300"
+                : "bg-red-950/30 border-red-500/30 text-red-300"
+              }`}
+          >
+            <div className="flex items-start gap-2">
+              <i
+                className={`fas mt-0.5 ${googleIndexingResult.type === "success"
+                  ? "fa-check-circle"
+                  : googleIndexingResult.type === "info"
+                    ? "fa-info-circle"
+                    : "fa-exclamation-triangle"
+                  }`}
+              ></i>
+              <span>{googleIndexingResult.msg}</span>
+            </div>
+          </div>
+        )}
+
+        {indexNowResult && (
+          <div
+            className={`p-3 rounded-xl text-xs font-mono border transition-all ${indexNowResult.type === "success"
+              ? "bg-emerald-950/30 border-emerald-500/30 text-emerald-300"
+              : "bg-red-950/30 border-red-500/30 text-red-300"
+              }`}
+          >
+            <div className="flex items-start gap-2">
+              <i
+                className={`fas mt-0.5 ${indexNowResult.type === "success" ? "fa-check-circle" : "fa-exclamation-triangle"
+                  }`}
+              ></i>
+              <span>{indexNowResult.msg}</span>
+            </div>
+          </div>
+        )}
+
+        {/* Action Buttons & Status */}
+        <div className="flex flex-wrap gap-3 pt-1">
+          <button
+            type="button"
+            onClick={handleTriggerGoogleIndexing}
+            disabled={googleIndexingLoading}
+            className="px-4 py-2.5 rounded-xl text-xs font-bold font-mono transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+            style={{
+              backgroundColor: "var(--blue-deep)",
+              color: "var(--cream)",
+              border: "1px solid rgba(228, 218, 195, 0.2)",
+              boxShadow: "0 4px 12px rgba(47, 99, 224, 0.3)",
+            }}
+          >
+            <i className={`fab fa-google ${googleIndexingLoading ? "fa-spin" : ""}`}></i>
+            <span>{googleIndexingLoading ? "Publishing to Google..." : "Submit All Pages to Google"}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleTriggerIndexNow}
+            disabled={indexNowLoading}
+            className="px-4 py-2.5 rounded-xl text-xs font-bold font-mono transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+            style={{
+              backgroundColor: "rgba(248, 242, 228, 0.08)",
+              color: "var(--cream)",
+              border: "1px solid rgba(228, 218, 195, 0.16)",
+            }}
+          >
+            <i className={`fas fa-bolt ${indexNowLoading ? "fa-spin" : ""}`} style={{ color: "var(--orange)" }}></i>
+            <span>{indexNowLoading ? "Pinging IndexNow..." : "Submit to Bing & Yandex"}</span>
+          </button>
+
+          <a
+            href="/sitemap.xml"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-2.5 rounded-xl text-xs font-bold font-mono transition-all flex items-center gap-2 cursor-pointer ml-auto"
+            style={{
+              backgroundColor: "transparent",
+              color: "rgba(248, 242, 228, 0.7)",
+              border: "1px solid rgba(228, 218, 195, 0.12)",
+            }}
+          >
+            <i className="fas fa-external-link-alt text-[10px]"></i>
+            <span>View sitemap.xml ↗</span>
+          </a>
         </div>
       </div>
 
