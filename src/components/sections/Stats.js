@@ -86,7 +86,7 @@ export default function Stats({ data }) {
         >
           {stats.map((stat, i) => (
             <motion.div
-              key={i}
+              key={stat.label || `stat-${i}`}
               variants={scaleIn}
               style={{
                 padding: "clamp(2.5rem, 5vw, 4rem) clamp(1.75rem, 4vw, 3rem)",

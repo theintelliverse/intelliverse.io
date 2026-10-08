@@ -141,18 +141,18 @@ export default function Estimator({ data }) {
     <section
       id="estimator"
       data-theme="cream"
-      className="section-gap relative border-t border-[var(--line)]"
+      className="relative border-t border-[var(--line)]"
       style={{
         backgroundColor: "var(--cream)",
         color: "var(--ink)",
-        paddingTop: "clamp(5rem, 9vh, 7.5rem)",
-        paddingBottom: "clamp(5rem, 9vh, 7.5rem)",
+        paddingTop: "clamp(2.5rem, 4.5vh, 3.5rem)",
+        paddingBottom: "clamp(2.5rem, 4.5vh, 3.5rem)",
       }}
     >
       <div className="container-site" style={{ maxWidth: "1440px", margin: "0 auto" }}>
 
         {/* Top Eyebrow Header */}
-        <div className="flex justify-between items-center flex-wrap gap-4 mb-12">
+        <div className="flex justify-between items-center flex-wrap gap-3 mb-5">
           <div className="inline-flex items-center gap-2">
             <span
               style={{
@@ -174,7 +174,7 @@ export default function Estimator({ data }) {
               fontSize: "0.6875rem",
               letterSpacing: "0.1em",
               textTransform: "uppercase",
-              padding: "0.35rem 0.85rem",
+              padding: "0.3rem 0.75rem",
               borderRadius: "999px",
               backgroundColor: "rgba(253, 179, 71, 0.2)",
               color: "var(--ink)",
@@ -187,19 +187,19 @@ export default function Estimator({ data }) {
         </div>
 
         {/* 2-Column Layout: Left Controls, Right Rotating Paper Brief */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 lg:items-stretch">
 
           {/* Left Column: Interactive Scope Chips & Options */}
-          <div className="lg:col-span-7 flex flex-col justify-between gap-8 h-full">
+          <div className="lg:col-span-7 flex flex-col justify-between gap-5 h-full">
             <div>
               <h2
                 style={{
                   fontFamily: "var(--serif)",
-                  fontSize: "clamp(2.5rem, 5vw, 3.75rem)",
-                  lineHeight: 1.08,
+                  fontSize: "clamp(1.85rem, 3.2vw, 2.5rem)",
+                  lineHeight: 1.12,
                   letterSpacing: "-0.025em",
                   color: "var(--ink)",
-                  margin: "0 0 1rem 0",
+                  margin: "0 0 0.4rem 0",
                   fontWeight: 400,
                 }}
               >
@@ -208,8 +208,8 @@ export default function Estimator({ data }) {
               <p
                 style={{
                   fontFamily: "var(--sans)",
-                  fontSize: "1.0625rem",
-                  lineHeight: 1.65,
+                  fontSize: "0.9375rem",
+                  lineHeight: 1.5,
                   color: "var(--ink-2)",
                   maxWidth: "36rem",
                   margin: 0,
@@ -230,41 +230,42 @@ export default function Estimator({ data }) {
                   textTransform: "uppercase",
                   color: "var(--ink-3)",
                   display: "block",
-                  marginBottom: "0.75rem",
+                  marginBottom: "0.4rem",
                 }}
               >
                 01 / SELECT ARCHITECTURE
               </span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {types.map((t) => {
                   const isSelected = type === t.id;
                   return (
                     <motion.button
                       key={t.id}
                       onClick={() => setType(t.id)}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      whileHover={{ scale: 1.015 }}
+                      whileTap={{ scale: 0.985 }}
                       transition={springs.snappy}
                       style={{
-                        padding: "0.95rem 1.15rem",
-                        borderRadius: "12px",
+                        padding: "0.55rem 0.8rem",
+                        borderRadius: "8px",
                         textAlign: "left",
                         display: "flex",
                         flexDirection: "column",
-                        gap: "0.25rem",
+                        gap: "0.15rem",
                         border: `1px solid ${isSelected ? "var(--night)" : "var(--line-2)"}`,
                         backgroundColor: isSelected ? "var(--night)" : "rgba(255,255,255,0.7)",
                         color: isSelected ? "#F6F7FC" : "var(--ink)",
                         cursor: "pointer",
                         boxShadow: isSelected
-                          ? "0 8px 20px -6px rgba(11,21,48,0.3)"
+                          ? "0 4px 14px -4px rgba(11,21,48,0.25)"
                           : "none",
                       }}
                     >
                       <span
                         style={{
                           fontFamily: "var(--sans)",
-                          fontSize: "0.9375rem",
+                          fontSize: "0.8125rem",
+                          lineHeight: 1.25,
                           fontWeight: isSelected ? 600 : 500,
                         }}
                       >
@@ -273,7 +274,7 @@ export default function Estimator({ data }) {
                       <span
                         style={{
                           fontFamily: "var(--mono)",
-                          fontSize: "0.6875rem",
+                          fontSize: "0.625rem",
                           color: isSelected ? "var(--orange)" : "var(--ink-3)",
                           fontWeight: 600,
                         }}
@@ -297,26 +298,26 @@ export default function Estimator({ data }) {
                   textTransform: "uppercase",
                   color: "var(--ink-3)",
                   display: "block",
-                  marginBottom: "0.75rem",
+                  marginBottom: "0.4rem",
                 }}
               >
                 02 / KEY MODULES &amp; CAPABILITIES
               </span>
-              <div className="flex flex-wrap gap-2.5">
+              <div className="flex flex-wrap gap-1.5">
                 {ESTIMATOR_CONFIG.features.map((f) => {
                   const isSelected = features.includes(f.id);
                   return (
                     <motion.button
                       key={f.id}
                       onClick={() => toggleFeature(f.id)}
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       transition={springs.snappy}
                       style={{
-                        padding: "0.55rem 1rem",
+                        padding: "0.35rem 0.65rem",
                         borderRadius: "999px",
                         fontFamily: "var(--mono)",
-                        fontSize: "0.75rem",
+                        fontSize: "0.6875rem",
                         fontWeight: 600,
                         border: `1px solid ${isSelected ? "var(--blue-deep)" : "var(--line-2)"}`,
                         backgroundColor: isSelected ? "var(--blue-deep)" : "rgba(255,255,255,0.7)",
@@ -324,10 +325,10 @@ export default function Estimator({ data }) {
                         cursor: "pointer",
                         display: "inline-flex",
                         alignItems: "center",
-                        gap: "0.35rem",
+                        gap: "0.3rem",
                       }}
                     >
-                      <span>{isSelected ? "✓" : "+"}</span>
+                      <span style={{ fontSize: "0.625rem" }}>{isSelected ? "✓" : "+"}</span>
                       <span>{f.label}</span>
                     </motion.button>
                   );
@@ -346,26 +347,26 @@ export default function Estimator({ data }) {
                   textTransform: "uppercase",
                   color: "var(--ink-3)",
                   display: "block",
-                  marginBottom: "0.75rem",
+                  marginBottom: "0.4rem",
                 }}
               >
                 03 / DESIRED TIMELINE
               </span>
-              <div className="flex flex-wrap gap-2.5">
+              <div className="flex flex-wrap gap-1.5">
                 {ESTIMATOR_CONFIG.timelines.map((t) => {
                   const isSelected = timeline === t.id;
                   return (
                     <motion.button
                       key={t.id}
                       onClick={() => setTimeline(t.id)}
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       transition={springs.snappy}
                       style={{
-                        padding: "0.55rem 1rem",
-                        borderRadius: "8px",
+                        padding: "0.35rem 0.65rem",
+                        borderRadius: "6px",
                         fontFamily: "var(--mono)",
-                        fontSize: "0.75rem",
+                        fontSize: "0.6875rem",
                         fontWeight: 500,
                         border: `1px solid ${isSelected ? "var(--night)" : "var(--line-2)"}`,
                         backgroundColor: isSelected ? "var(--night)" : "rgba(255,255,255,0.7)",
@@ -382,7 +383,7 @@ export default function Estimator({ data }) {
 
             {/* Step 4: Core Bottleneck / What Hurts Today */}
             <div>
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-1">
                 <span
                   style={{
                     fontFamily: "var(--mono)",
@@ -413,10 +414,10 @@ export default function Estimator({ data }) {
                 style={{
                   display: "block",
                   fontFamily: "var(--serif)",
-                  fontSize: "1.35rem",
+                  fontSize: "1.05rem",
                   color: "var(--ink)",
                   lineHeight: 1.25,
-                  marginBottom: "0.65rem",
+                  marginBottom: "0.35rem",
                 }}
               >
                 In one sentence, what hurts today?
@@ -430,14 +431,14 @@ export default function Estimator({ data }) {
                 placeholder="Our team tracks every order in three spreadsheets…"
                 style={{
                   width: "100%",
-                  padding: "0.85rem 1rem",
-                  borderRadius: "10px",
+                  padding: "0.55rem 0.75rem",
+                  borderRadius: "8px",
                   backgroundColor: "rgba(255,255,255,0.85)",
                   border: "1px solid var(--line-2)",
                   color: "var(--ink)",
                   fontFamily: "var(--sans)",
-                  fontSize: "0.9375rem",
-                  lineHeight: 1.5,
+                  fontSize: "0.85rem",
+                  lineHeight: 1.45,
                   outline: "none",
                   resize: "none",
                   transition: "border-color 0.2s, box-shadow 0.2s, background-color 0.2s",
@@ -466,9 +467,9 @@ export default function Estimator({ data }) {
               style={{
                 backgroundColor: "#FCFAF4",
                 border: "1px solid var(--line-2)",
-                borderRadius: "16px",
-                padding: isContactMode ? "2rem 1.75rem 1.5rem" : "2.5rem 2rem 2rem",
-                boxShadow: "0 22px 50px -15px rgba(14,27,61,0.12)",
+                borderRadius: "14px",
+                padding: isContactMode ? "1.5rem 1.25rem 1.25rem" : "1.65rem 1.4rem 1.4rem",
+                boxShadow: "0 20px 45px -15px rgba(14,27,61,0.1)",
                 position: "relative",
                 display: "flex",
                 flexDirection: "column",
@@ -1137,7 +1138,7 @@ export default function Estimator({ data }) {
                           <div className="space-y-1.5">
                             {includedCharges.map((item, idx) => (
                               <div
-                                key={idx}
+                                key={item.title || `inc-${idx}`}
                                 style={{
                                   display: "flex",
                                   justifyContent: "space-between",

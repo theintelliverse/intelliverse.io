@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import StudioTelemetryCard from "@/components/ui/StudioTelemetryCard";
 
 export default function CMSTab({
   heroHeadline,
@@ -41,6 +42,8 @@ export default function CMSTab({
   setEstimatorTypes,
   estimatorIncludedCharges,
   setEstimatorIncludedCharges,
+  telemetry,
+  setTelemetry,
   services,
   setServices,
   processStages,
@@ -52,7 +55,26 @@ export default function CMSTab({
   handleSaveCMS,
   loading
 }) {
-  const [activeSection, setActiveSection] = useState("hero"); // hero | about | services | process | philosophy | marquee | estimator | numbers | contact
+  const [activeSection, setActiveSection] = useState("hero"); // hero | about | services | process | philosophy | marquee | estimator | numbers | contact | telemetry
+
+  const handleUpdateTelemetry = (field, value) => {
+    setTelemetry((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleUpdateTelemetryBar = (index, field, value) => {
+    const updatedBars = [...(telemetry?.bars || [])];
+    updatedBars[index] = {
+      ...updatedBars[index],
+      [field]: field === "val" ? Number(value) : value,
+    };
+    setTelemetry((prev) => ({
+      ...prev,
+      bars: updatedBars,
+    }));
+  };
 
   const handleUpdateEstimatorType = (index, field, value) => {
     const updated = [...estimatorTypes];
@@ -305,6 +327,7 @@ export default function CMSTab({
           { id: "estimator", label: "07. Estimator & Pricing", icon: "fa-calculator" },
           { id: "numbers", label: "08. Verified Numbers", icon: "fa-chart-bar" },
           { id: "contact", label: "09. Studio Channels", icon: "fa-paper-plane" },
+          { id: "telemetry", label: "10. Studio Telemetry", icon: "fa-satellite-dish" },
         ].map((tab) => {
           const isActive = activeSection === tab.id;
           return (
@@ -1990,6 +2013,479 @@ export default function CMSTab({
                 }}
               />
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* SECTION 10: STUDIO TELEMETRY & EDGE ACTIVITY */}
+      {activeSection === "telemetry" && (
+        <div className="space-y-6 animate-fade-in">
+          {/* Section Header */}
+          <div
+            className="p-6 rounded-2xl shadow-xl flex flex-wrap items-center justify-between gap-4"
+            style={{
+              backgroundColor: "rgba(18, 30, 68, 0.7)",
+              border: "1px solid rgba(228, 218, 195, 0.14)",
+            }}
+          >
+            <div className="flex items-center gap-3">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+              <div>
+                <h3 className="text-sm font-bold uppercase tracking-wider font-mono text-[var(--cream)]">
+                  10. Studio Telemetry &amp; Edge Activity Feed
+                </h3>
+                <p className="text-xs font-sans text-[rgba(248,242,228,0.6)] mt-0.5">
+                  Configure live deployment counters, journal ticker, 7-day sparkline edge activity bars, and event stream console.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-mono uppercase px-2.5 py-1 rounded-full bg-[rgba(34,165,91,0.15)] text-[#22a55b] border border-[rgba(34,165,91,0.3)] font-bold">
+                ● Live Dynamic Feed
+              </span>
+            </div>
+          </div>
+
+          {/* 2-Column Layout: Left Controls, Right Realtime Preview */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            {/* Left Column: Form Controls */}
+            <div className="lg:col-span-7 space-y-6">
+
+              {/* Group 1: Header & Live Feed Badges */}
+              <div
+                className="p-5 md:p-6 rounded-2xl space-y-4 shadow-lg"
+                style={{
+                  backgroundColor: "rgba(18, 30, 68, 0.55)",
+                  border: "1px solid rgba(228, 218, 195, 0.12)",
+                }}
+              >
+                <div className="flex items-center gap-2 pb-2 border-b border-[rgba(228,218,195,0.08)]">
+                  <i className="fas fa-satellite text-xs text-[var(--orange)]" />
+                  <span className="text-xs font-bold uppercase tracking-wider font-mono text-[var(--cream)]">
+                    Card Header &amp; Live Badges
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                      Card Title
+                    </label>
+                    <input
+                      type="text"
+                      value={telemetry?.headerTitle || ""}
+                      onChange={(e) => handleUpdateTelemetry("headerTitle", e.target.value)}
+                      placeholder="Studio Telemetry"
+                      className="w-full mt-1.5 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                      Feed Badge Label
+                    </label>
+                    <input
+                      type="text"
+                      value={telemetry?.badgeLabel || ""}
+                      onChange={(e) => handleUpdateTelemetry("badgeLabel", e.target.value)}
+                      placeholder="LIVE FEED"
+                      className="w-full mt-1.5 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                      Week / Sub Badge
+                    </label>
+                    <input
+                      type="text"
+                      value={telemetry?.badgeSub || ""}
+                      onChange={(e) => handleUpdateTelemetry("badgeSub", e.target.value)}
+                      placeholder="· W41"
+                      className="w-full mt-1.5 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Group 2: Workshop Journal Log / Terminal Typewriter */}
+              <div
+                className="p-5 md:p-6 rounded-2xl space-y-4 shadow-lg"
+                style={{
+                  backgroundColor: "rgba(18, 30, 68, 0.55)",
+                  border: "1px solid rgba(228, 218, 195, 0.12)",
+                }}
+              >
+                <div className="flex items-center gap-2 pb-2 border-b border-[rgba(228,218,195,0.08)]">
+                  <i className="fas fa-terminal text-xs text-[var(--orange)]" />
+                  <span className="text-xs font-bold uppercase tracking-wider font-mono text-[var(--cream)]">
+                    Typewriting Journal Log (Open Workshop Terminal)
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                      Timestamp
+                    </label>
+                    <input
+                      type="text"
+                      value={telemetry?.terminalTimestamp || ""}
+                      onChange={(e) => handleUpdateTelemetry("terminalTimestamp", e.target.value)}
+                      placeholder="03 OCT 21:04"
+                      className="w-full mt-1.5 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                      Project Tag
+                    </label>
+                    <input
+                      type="text"
+                      value={telemetry?.terminalProject || ""}
+                      onChange={(e) => handleUpdateTelemetry("terminalProject", e.target.value)}
+                      placeholder="site"
+                      className="w-full mt-1.5 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                      Tag Color (Hex / Var)
+                    </label>
+                    <div className="flex items-center gap-2 mt-1.5">
+                      <input
+                        type="color"
+                        value={telemetry?.terminalColor?.startsWith("#") ? telemetry.terminalColor : "#2F63E0"}
+                        onChange={(e) => handleUpdateTelemetry("terminalColor", e.target.value)}
+                        className="w-8 h-8 rounded-lg border-0 bg-transparent cursor-pointer shrink-0"
+                      />
+                      <input
+                        type="text"
+                        value={telemetry?.terminalColor || ""}
+                        onChange={(e) => handleUpdateTelemetry("terminalColor", e.target.value)}
+                        placeholder="#2F63E0"
+                        className="flex-1 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                    Typewritten Terminal Message
+                  </label>
+                  <input
+                    type="text"
+                    value={telemetry?.terminalMessage || ""}
+                    onChange={(e) => handleUpdateTelemetry("terminalMessage", e.target.value)}
+                    placeholder="v0.7: Vrix journal published"
+                    className="w-full mt-1.5 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                  />
+                </div>
+              </div>
+
+              {/* Group 3: Primary Counter & Trend */}
+              <div
+                className="p-5 md:p-6 rounded-2xl space-y-4 shadow-lg"
+                style={{
+                  backgroundColor: "rgba(18, 30, 68, 0.55)",
+                  border: "1px solid rgba(228, 218, 195, 0.12)",
+                }}
+              >
+                <div className="flex items-center gap-2 pb-2 border-b border-[rgba(228,218,195,0.08)]">
+                  <i className="fas fa-chart-line text-xs text-[var(--orange)]" />
+                  <span className="text-xs font-bold uppercase tracking-wider font-mono text-[var(--cream)]">
+                    Active Deployments &amp; Counter Metric
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                      Metric Title
+                    </label>
+                    <input
+                      type="text"
+                      value={telemetry?.metricTitle || ""}
+                      onChange={(e) => handleUpdateTelemetry("metricTitle", e.target.value)}
+                      placeholder="Active Deployments · Q1"
+                      className="w-full mt-1.5 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                      Trend Badge
+                    </label>
+                    <input
+                      type="text"
+                      value={telemetry?.metricTrend || ""}
+                      onChange={(e) => handleUpdateTelemetry("metricTrend", e.target.value)}
+                      placeholder="↑ 18.4%"
+                      className="w-full mt-1.5 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                      Total Count Number
+                    </label>
+                    <input
+                      type="number"
+                      value={telemetry?.deployCount ?? 302}
+                      onChange={(e) => handleUpdateTelemetry("deployCount", parseInt(e.target.value) || 0)}
+                      placeholder="302"
+                      className="w-full mt-1.5 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                      Sub-label Beside Number
+                    </label>
+                    <input
+                      type="text"
+                      value={telemetry?.deployLabel || ""}
+                      onChange={(e) => handleUpdateTelemetry("deployLabel", e.target.value)}
+                      placeholder="total live"
+                      className="w-full mt-1.5 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Group 4: 7-Day Activity Sparkline & Bars */}
+              <div
+                className="p-5 md:p-6 rounded-2xl space-y-4 shadow-lg"
+                style={{
+                  backgroundColor: "rgba(18, 30, 68, 0.55)",
+                  border: "1px solid rgba(228, 218, 195, 0.12)",
+                }}
+              >
+                <div className="flex items-center gap-2 pb-2 border-b border-[rgba(228,218,195,0.08)]">
+                  <i className="fas fa-signal text-xs text-[var(--orange)]" />
+                  <span className="text-xs font-bold uppercase tracking-wider font-mono text-[var(--cream)]">
+                    7-Day Activity Sparkline &amp; Colorful Bars
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                      Sparkline Section Title
+                    </label>
+                    <input
+                      type="text"
+                      value={telemetry?.activityTitle || ""}
+                      onChange={(e) => handleUpdateTelemetry("activityTitle", e.target.value)}
+                      placeholder="7-DAY ACTIVITY · PEAK 96%"
+                      className="w-full mt-1.5 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                      Default Status Badge
+                    </label>
+                    <input
+                      type="text"
+                      value={telemetry?.activityStatus || ""}
+                      onChange={(e) => handleUpdateTelemetry("activityStatus", e.target.value)}
+                      placeholder="HEALTHY"
+                      className="w-full mt-1.5 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                    />
+                  </div>
+                </div>
+
+                {/* Individual 7 Days Bars Editor */}
+                <div className="pt-2">
+                  <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)] block mb-2">
+                    7-Day Bar Percentages &amp; Accents (M, T, W, T, F, S, S)
+                  </label>
+                  <div className="space-y-2">
+                    {(telemetry?.bars || [
+                      { day: "M", name: "Monday", val: 45, col: "#5B3FD9" },
+                      { day: "T", name: "Tuesday", val: 68, col: "#3D7BF7" },
+                      { day: "W", name: "Wednesday", val: 82, col: "#FF6B7B" },
+                      { day: "T", name: "Thursday", val: 54, col: "#FDB347" },
+                      { day: "F", name: "Friday", val: 91, col: "#10B981" },
+                      { day: "S", name: "Saturday", val: 74, col: "#8B5CF6" },
+                      { day: "S", name: "Sunday", val: 96, col: "#2F63E0" },
+                    ]).map((bar, idx) => (
+                      <div
+                        key={`admin-bar-${idx}`}
+                        className="flex items-center gap-2.5 p-2 rounded-xl bg-[rgba(248,242,228,0.03)] border border-[rgba(228,218,195,0.08)]"
+                      >
+                        <span
+                          className="w-6 h-6 rounded-lg flex items-center justify-center font-mono text-xs font-bold shrink-0"
+                          style={{ backgroundColor: bar.col || "#5B3FD9", color: "#ffffff" }}
+                        >
+                          {bar.day || ["M", "T", "W", "T", "F", "S", "S"][idx]}
+                        </span>
+
+                        <input
+                          type="text"
+                          value={bar.name || ""}
+                          onChange={(e) => handleUpdateTelemetryBar(idx, "name", e.target.value)}
+                          placeholder="Day Name"
+                          className="w-28 p-1.5 rounded-lg text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.12)] text-[var(--cream)] outline-none"
+                        />
+
+                        <div className="flex items-center gap-2 flex-1">
+                          <input
+                            type="range"
+                            min="10"
+                            max="100"
+                            value={bar.val || 50}
+                            onChange={(e) => handleUpdateTelemetryBar(idx, "val", e.target.value)}
+                            className="flex-1 cursor-pointer accent-[var(--blue)]"
+                          />
+                          <span className="font-mono text-xs w-10 text-right text-[var(--cream)] font-bold">
+                            {bar.val}%
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <input
+                            type="color"
+                            value={bar.col?.startsWith("#") ? bar.col : "#5B3FD9"}
+                            onChange={(e) => handleUpdateTelemetryBar(idx, "col", e.target.value)}
+                            className="w-6 h-6 rounded border-0 bg-transparent cursor-pointer"
+                          />
+                          <input
+                            type="text"
+                            value={bar.col || ""}
+                            onChange={(e) => handleUpdateTelemetryBar(idx, "col", e.target.value)}
+                            placeholder="#5B3FD9"
+                            className="w-20 p-1 rounded text-[11px] font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.12)] text-[var(--cream)] outline-none"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Group 5: Event Stream Console */}
+              <div
+                className="p-5 md:p-6 rounded-2xl space-y-4 shadow-lg"
+                style={{
+                  backgroundColor: "rgba(18, 30, 68, 0.55)",
+                  border: "1px solid rgba(228, 218, 195, 0.12)",
+                }}
+              >
+                <div className="flex items-center gap-2 pb-2 border-b border-[rgba(228,218,195,0.08)]">
+                  <i className="fas fa-stream text-xs text-[var(--orange)]" />
+                  <span className="text-xs font-bold uppercase tracking-wider font-mono text-[var(--cream)]">
+                    Bottom Event Stream Console
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                      Event Tag
+                    </label>
+                    <input
+                      type="text"
+                      value={telemetry?.eventTag || ""}
+                      onChange={(e) => handleUpdateTelemetry("eventTag", e.target.value)}
+                      placeholder="DEPLOY"
+                      className="w-full mt-1.5 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                      Event Status Badge
+                    </label>
+                    <input
+                      type="text"
+                      value={telemetry?.eventStatus || ""}
+                      onChange={(e) => handleUpdateTelemetry("eventStatus", e.target.value)}
+                      placeholder="OK"
+                      className="w-full mt-1.5 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                      Tag Highlight Color
+                    </label>
+                    <div className="flex items-center gap-2 mt-1.5">
+                      <input
+                        type="color"
+                        value={telemetry?.eventColor?.startsWith("#") ? telemetry.eventColor : "#3D7BF7"}
+                        onChange={(e) => handleUpdateTelemetry("eventColor", e.target.value)}
+                        className="w-8 h-8 rounded-lg border-0 bg-transparent cursor-pointer shrink-0"
+                      />
+                      <input
+                        type="text"
+                        value={telemetry?.eventColor || ""}
+                        onChange={(e) => handleUpdateTelemetry("eventColor", e.target.value)}
+                        placeholder="var(--blue) or #3D7BF7"
+                        className="flex-1 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-[10px] uppercase font-semibold tracking-wider font-mono text-[var(--orange)]">
+                    Event Stream Message
+                  </label>
+                  <input
+                    type="text"
+                    value={telemetry?.eventMessage || ""}
+                    onChange={(e) => handleUpdateTelemetry("eventMessage", e.target.value)}
+                    placeholder="vrix-edge-proxy online [18ms]"
+                    className="w-full mt-1.5 p-2.5 rounded-xl text-xs font-mono bg-[rgba(248,242,228,0.05)] border border-[rgba(228,218,195,0.16)] text-[var(--cream)] outline-none focus:border-[var(--blue)]"
+                  />
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right Column: Sticky Live Card Preview */}
+            <div className="lg:col-span-5 sticky top-24 space-y-4">
+              <div className="flex items-center justify-between px-1">
+                <span className="text-[11px] font-mono uppercase tracking-wider text-[var(--orange)] font-bold flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  Live Preview
+                </span>
+                <span className="text-[10px] font-mono text-[rgba(248,242,228,0.5)]">
+                  Synchronizes in real time
+                </span>
+              </div>
+
+              <div className="p-4 md:p-5 rounded-2xl bg-[rgba(11,21,48,0.65)] border border-[rgba(228,218,195,0.16)] backdrop-blur-md shadow-2xl">
+                <StudioTelemetryCard
+                  data={telemetry}
+                  initialCount={telemetry?.deployCount || 302}
+                  showFullLogs={true}
+                />
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-[rgba(248,242,228,0.04)] border border-[rgba(228,218,195,0.1)] text-[11px] font-mono text-[rgba(248,242,228,0.65)] leading-relaxed space-y-1.5">
+                <div className="flex items-center gap-1.5 text-[var(--orange)] font-bold">
+                  <i className="fas fa-info-circle text-xs" />
+                  <span>Deployment Targets:</span>
+                </div>
+                <p>
+                  • <strong>Hero Section:</strong> Desktop upper-right live card.
+                </p>
+                <p>
+                  • <strong>How We Work / Process:</strong> Pinned flywheel telemetry interactive view.
+                </p>
+                <p className="text-[10px] text-[rgba(248,242,228,0.45)] pt-1">
+                  Click <em>Save All Content</em> below to persist these telemetry settings to MongoDB.
+                </p>
+              </div>
+            </div>
+
           </div>
         </div>
       )}

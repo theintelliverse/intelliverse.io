@@ -12,6 +12,7 @@ export default async function Home() {
     contact: { ...localMockDb.contact },
     stats: { ...localMockDb.stats },
     estimator: { ...localMockDb.estimator },
+    telemetry: { ...localMockDb.telemetry },
     services: localMockDb.services,
     process: localMockDb.process,
     marquee: localMockDb.marquee,
@@ -59,6 +60,7 @@ export default async function Home() {
           clients: testimonials.length > 0 ? testimonials.length : 15
         },
         estimator: content?.estimator || localMockDb.estimator,
+        telemetry: content?.telemetry || localMockDb.telemetry,
         services: content?.services || localMockDb.services,
         process: content?.process || localMockDb.process,
         marquee: content?.marquee || localMockDb.marquee,
@@ -152,5 +154,5 @@ export default async function Home() {
     console.error("Failed to pre-fetch page data on server:", error);
   }
 
-  return <ClientHome initialData={initialData} />;
+  return <ClientHome initialData={JSON.parse(JSON.stringify(initialData))} />;
 }

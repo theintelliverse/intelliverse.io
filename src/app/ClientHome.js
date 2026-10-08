@@ -31,6 +31,7 @@ export default function ClientHome({ initialData }) {
       clients: 15,
     },
     estimator: initialData?.estimator || null,
+    telemetry: initialData?.telemetry || null,
     services: initialData?.services || null,
     process: initialData?.process || null,
     marquee: initialData?.marquee || null,
@@ -62,6 +63,7 @@ export default function ClientHome({ initialData }) {
               contact: data.contact || null,
               stats: data.stats || { projects: 2, satisfaction: 100, clients: 15 },
               estimator: data.estimator || null,
+              telemetry: data.telemetry || null,
               services: data.services || null,
               process: data.process || null,
               marquee: data.marquee || null,
@@ -93,7 +95,7 @@ export default function ClientHome({ initialData }) {
 
       <main id="main-content">
         {/* 01 / Hero */}
-        <Hero data={contentData.hero} />
+        <Hero data={contentData.hero} telemetry={contentData.telemetry} />
 
         {/* 01b / Open Workshop Editorial Marquee */}
         <VelocityMarquee
@@ -114,7 +116,7 @@ export default function ClientHome({ initialData }) {
         <Projects data={projects} caseStudies={caseStudies} />
 
         {/* 05 / Process: The Build Flywheel */}
-        <Process data={contentData.process} />
+        <Process data={contentData.process} telemetry={contentData.telemetry} />
 
         {/* 06 / Project Scope & Budget Estimator */}
         <Estimator data={contentData.estimator} />

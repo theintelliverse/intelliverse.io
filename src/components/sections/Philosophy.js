@@ -276,7 +276,7 @@ export default function Philosophy({ data }) {
 
             return (
               <motion.div
-                key={row.num}
+                key={row.num || `row-${idx}`}
                 variants={fadeUp}
                 onClick={() => setActiveModel(row.num)}
                 whileHover={{ y: -6 }}
@@ -432,9 +432,9 @@ export default function Philosophy({ data }) {
                       DELIVERABLE SPECIFICATIONS:
                     </span>
                     <div className="flex flex-wrap gap-2">
-                      {(row.chips || []).map((chip) => (
+                      {(row.chips || []).map((chip, chipIdx) => (
                         <span
-                          key={chip}
+                          key={`${row.num || idx}-${chip}-${chipIdx}`}
                           style={{
                             fontFamily: "var(--mono)",
                             fontSize: "0.6875rem",

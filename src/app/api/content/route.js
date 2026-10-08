@@ -62,6 +62,7 @@ export async function GET(request) {
         },
         stats: content?.stats || localMockDb.stats || defaultStats,
         estimator: content?.estimator || localMockDb.estimator,
+        telemetry: content?.telemetry || localMockDb.telemetry,
         services: content?.services || localMockDb.services,
         process: content?.process || localMockDb.process,
         marquee: content?.marquee || localMockDb.marquee,
@@ -191,6 +192,7 @@ export async function POST(request) {
       contact,
       stats,
       estimator,
+      telemetry,
       services,
       process: processStages,
       marquee,
@@ -220,7 +222,7 @@ export async function POST(request) {
     }
 
     if (db) {
-      // 1. Save Content (hero, about, contact, stats, estimator, services, process, marquee, philosophy)
+      // 1. Save Content (hero, about, contact, stats, estimator, telemetry, services, process, marquee, philosophy)
       await db.collection("content").updateOne(
         {},
         {
@@ -230,6 +232,7 @@ export async function POST(request) {
             contact: contact || localMockDb.contact,
             stats: stats || defaultStats,
             estimator: estimator || localMockDb.estimator,
+            telemetry: telemetry || localMockDb.telemetry,
             services: services || localMockDb.services,
             process: processStages || localMockDb.process,
             marquee: marquee || localMockDb.marquee,
@@ -336,6 +339,7 @@ export async function POST(request) {
     if (contact) localMockDb.contact = contact;
     if (stats) localMockDb.stats = stats;
     if (estimator) localMockDb.estimator = estimator;
+    if (telemetry) localMockDb.telemetry = telemetry;
     if (services) localMockDb.services = services;
     if (processStages) localMockDb.process = processStages;
     if (marquee) localMockDb.marquee = marquee;

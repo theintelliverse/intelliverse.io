@@ -22,7 +22,7 @@ import StudioTelemetryCard from "@/components/ui/StudioTelemetryCard";
  * ─ Live Studio Telemetry Log card with bar metrics & animated counters
  * ─ Production pillars grid with hairline dividers
  */
-export default function Hero({ data = null } = {}) {
+export default function Hero({ data = null, telemetry = null } = {}) {
   const headline = data?.headline || "Innovation. Create. Grow.";
   const subtitle =
     data?.subtitle ||
@@ -544,7 +544,7 @@ export default function Hero({ data = null } = {}) {
               animate={isMounted ? "visible" : "hidden"}
               transition={{ delay: 0.55 }}
             >
-              <StudioTelemetryCard initialCount={302} showFullLogs={true} />
+              <StudioTelemetryCard data={telemetry} initialCount={telemetry?.deployCount || 302} showFullLogs={true} />
             </motion.div>
           </div>
 

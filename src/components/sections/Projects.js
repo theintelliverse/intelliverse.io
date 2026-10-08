@@ -217,7 +217,7 @@ export default function Projects({ data, caseStudies }) {
 
               return (
                 <motion.article
-                  key={p.num || idx}
+                  key={p.id || p._id || p.num || p.name || `proj-${idx}`}
                   variants={scaleIn}
                   whileHover={{ y: -8, transition: springs.snappy }}
                   style={{
@@ -441,9 +441,9 @@ export default function Projects({ data, caseStudies }) {
                     }}
                   >
                     <div className="flex flex-wrap gap-1.5">
-                      {stack.slice(0, 3).map((t) => (
+                      {stack.slice(0, 3).map((t, tIdx) => (
                         <span
-                          key={t}
+                          key={`${p.name || idx}-${t}-${tIdx}`}
                           style={{
                             fontFamily: "var(--mono)",
                             fontSize: "0.625rem",

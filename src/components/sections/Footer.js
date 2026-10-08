@@ -382,7 +382,7 @@ export default function Footer({ data = null } = {}) {
                 { tag: "v2.2", note: "Vrix Headless Storefront" },
                 { tag: "v2.1", note: "Appointory Real-Time Dispatch" },
               ].map((rel, i) => (
-                <li key={i} className="flex items-baseline gap-2">
+                <li key={rel.tag || `rel-${i}`} className="flex items-baseline gap-2">
                   <span
                     style={{
                       fontFamily: "var(--mono)",

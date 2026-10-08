@@ -225,7 +225,7 @@ export default function Testimonials({ data }) {
 
                         return (
                             <motion.div
-                                key={i}
+                                key={testimonial.author || testimonial.id || `testi-${i}`}
                                 role="listitem"
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -302,7 +302,7 @@ export default function Testimonials({ data }) {
                                                     const isHalf = !isFilled && ratingVal >= star - 0.5;
                                                     return (
                                                         <span
-                                                            key={star}
+                                                            key={`star-${star}`}
                                                             style={{
                                                                 color: isFilled || isHalf ? "var(--orange)" : "rgba(26, 26, 26, 0.2)",
                                                             }}

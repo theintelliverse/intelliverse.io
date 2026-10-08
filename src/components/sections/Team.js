@@ -197,7 +197,7 @@ export default function Team({ data }) {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {members.map((member, i) => (
-            <TeamCard key={member.name || i} member={member} index={i} />
+            <TeamCard key={member.id || member._id || member.name || `team-${i}`} member={member} index={i} />
           ))}
         </motion.div>
       </div>

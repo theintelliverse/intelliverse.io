@@ -156,7 +156,7 @@ export default function Services({ data }) {
 
             return (
               <motion.li
-                key={svc.id}
+                key={svc.id || svc.index || `svc-${i}`}
                 onHoverStart={() => setHoveredIndex(i)}
                 onHoverEnd={() => setHoveredIndex(null)}
                 style={{
@@ -257,8 +257,8 @@ export default function Services({ data }) {
                   {/* Sub-item capabilities pills */}
                   <div className="mt-4 pl-7 md:pl-16">
                     <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
-                      {svc.sub.map((item) => (
-                        <li key={item}>
+                      {svc.sub.map((item, subIdx) => (
+                        <li key={`${svc.id || i}-${item}-${subIdx}`}>
                           <span
                             style={{
                               fontFamily: "var(--mono)",

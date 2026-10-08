@@ -81,6 +81,37 @@ export default function AdminPanel({
     ]
   );
 
+  const [telemetry, setTelemetry] = useState(
+    data.telemetry || {
+      headerTitle: "Studio Telemetry",
+      badgeLabel: "LIVE FEED",
+      badgeSub: "· W41",
+      terminalTimestamp: "03 OCT 21:04",
+      terminalProject: "site",
+      terminalColor: "#2F63E0",
+      terminalMessage: "v0.7: Vrix journal published",
+      metricTitle: "Active Deployments · Q1",
+      metricTrend: "↑ 18.4%",
+      deployCount: 302,
+      deployLabel: "total live",
+      activityTitle: "7-DAY ACTIVITY · PEAK 96%",
+      activityStatus: "HEALTHY",
+      bars: [
+        { day: "M", name: "Monday", val: 45, col: "#5B3FD9" },
+        { day: "T", name: "Tuesday", val: 68, col: "#3D7BF7" },
+        { day: "W", name: "Wednesday", val: 82, col: "#FF6B7B" },
+        { day: "T", name: "Thursday", val: 54, col: "#FDB347" },
+        { day: "F", name: "Friday", val: 91, col: "#10B981" },
+        { day: "S", name: "Saturday", val: 74, col: "#8B5CF6" },
+        { day: "S", name: "Sunday", val: 96, col: "#2F63E0" },
+      ],
+      eventTag: "DEPLOY",
+      eventMessage: "vrix-edge-proxy online [18ms]",
+      eventStatus: "OK",
+      eventColor: "var(--blue)"
+    }
+  );
+
   const [services, setServices] = useState(data.services || []);
   const [processStages, setProcessStages] = useState(data.process || []);
   const [marquee, setMarquee] = useState(data.marquee || { items1: [], items2: [] });
@@ -575,6 +606,7 @@ export default function AdminPanel({
         types: estimatorTypes,
         includedCharges: estimatorIncludedCharges
       },
+      telemetry,
       services,
       process: processStages,
       marquee,
@@ -966,6 +998,8 @@ export default function AdminPanel({
             setEstimatorTypes={setEstimatorTypes}
             estimatorIncludedCharges={estimatorIncludedCharges}
             setEstimatorIncludedCharges={setEstimatorIncludedCharges}
+            telemetry={telemetry}
+            setTelemetry={setTelemetry}
             services={services}
             setServices={setServices}
             processStages={processStages}

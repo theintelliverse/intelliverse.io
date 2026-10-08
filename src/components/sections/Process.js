@@ -69,7 +69,7 @@ const DEFAULT_STAGES = [
   },
 ];
 
-export default function Process({ data }) {
+export default function Process({ data, telemetry }) {
   const containerRef = useRef(null);
   const sectionRef = useRef(null);
   const pinRef = useRef(null);
@@ -1004,7 +1004,7 @@ export default function Process({ data }) {
                 {/* ── VIEW 3: Live Studio Telemetry Card Overlay ───────────── */}
                 <div ref={telemRef} className="process-telemetry-view">
                   <div style={{ maxWidth: "480px", width: "100%" }}>
-                    <StudioTelemetryCard initialCount={302} showFullLogs={true} />
+                    <StudioTelemetryCard data={telemetry} initialCount={telemetry?.deployCount || 302} showFullLogs={true} />
                   </div>
                 </div>
               </div>
@@ -1231,9 +1231,9 @@ export default function Process({ data }) {
               </div>
 
               {/* 3 Step cards */}
-              {DEFAULT_STAGES.map((s) => (
+              {DEFAULT_STAGES.map((s, idx) => (
                 <div
-                  key={s.num}
+                  key={s.num || `mob-stage-${idx}`}
                   style={{
                     backgroundColor: "#fff",
                     border: "1px solid var(--line-2)",
@@ -1326,7 +1326,7 @@ export default function Process({ data }) {
           )}
 
           {activeTab === "telemetry" && (
-            <StudioTelemetryCard initialCount={302} showFullLogs={true} />
+            <StudioTelemetryCard data={telemetry} initialCount={telemetry?.deployCount || 302} showFullLogs={true} />
           )}
         </div>
       </section>

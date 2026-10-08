@@ -32,20 +32,76 @@ const BARS_DATA = [
 ];
 
 export default function StudioTelemetryCard({
+  data = null,
   className = "",
   initialCount = 302,
   showFullLogs = true,
 }) {
-  const [deployCount, setDeployCount] = useState(initialCount);
+  const targetCount = data?.deployCount !== undefined ? Number(data.deployCount) : initialCount;
+  const [deployCount, setDeployCount] = useState(targetCount);
+  const [prevTargetCount, setPrevTargetCount] = useState(targetCount);
+  if (targetCount !== prevTargetCount) {
+    setPrevTargetCount(targetCount);
+    setDeployCount(targetCount);
+  }
+
   const [activeLogIndex, setActiveLogIndex] = useState(0);
   const [typedChars, setTypedChars] = useState(0);
   const [streamIndex, setStreamIndex] = useState(0);
   const [hoveredBar, setHoveredBar] = useState(null);
 
+  const headerTitle = data?.headerTitle || "Studio Telemetry";
+  const badgeLabel = data?.badgeLabel || "LIVE FEED";
+  const badgeSub = data?.badgeSub || "· W41";
+
+  const metricTitle = data?.metricTitle || "Active Deployments · Q1";
+  const metricTrend = data?.metricTrend || "↑ 18.4%";
+  const deployLabel = data?.deployLabel || "total live";
+
+  const activityTitle = data?.activityTitle || "7-DAY ACTIVITY · PEAK 96%";
+  const activityStatus = data?.activityStatus || "HEALTHY";
+
+  // Build bars data (merging any custom values from data.bars if provided)
+  const barsData = data?.bars && Array.isArray(data.bars) && data.bars.length === 7
+    ? data.bars.map((b, idx) => ({
+        day: b.day || BARS_DATA[idx].day,
+        name: b.name || BARS_DATA[idx].name,
+        val: b.val !== undefined ? Number(b.val) : BARS_DATA[idx].val,
+        col: b.col || BARS_DATA[idx].col,
+        grad: b.col ? `linear-gradient(180deg, ${b.col} 0%, ${b.col}cc 100%)` : BARS_DATA[idx].grad
+      }))
+    : BARS_DATA;
+
+  // Active logs
+  const logsList = data?.terminalMessage
+    ? [
+        {
+          ts: data.terminalTimestamp || "03 OCT 21:04",
+          pr: data.terminalProject || "site",
+          col: data.terminalColor || "#2F63E0",
+          msg: data.terminalMessage,
+        },
+        ...STUDIO_LOGS.filter(l => l.msg !== data.terminalMessage)
+      ]
+    : STUDIO_LOGS;
+
+  // Stream events
+  const streamList = data?.eventMessage
+    ? [
+        {
+          tag: data.eventTag || "DEPLOY",
+          msg: data.eventMessage,
+          status: data.eventStatus || "OK",
+          col: data.eventColor || "var(--blue)",
+        },
+        ...STREAM_EVENTS.filter(e => e.msg !== data.eventMessage)
+      ]
+    : STREAM_EVENTS;
+
   // Typewriting effect for current studio log row
   useEffect(() => {
-    const currentMsg = STUDIO_LOGS[activeLogIndex].msg;
-    setTypedChars(0);
+    const safeLog = logsList[activeLogIndex % logsList.length] || logsList[0];
+    const currentMsg = safeLog.msg;
 
     const typeInterval = setInterval(() => {
       setTypedChars((prev) => {
@@ -59,22 +115,23 @@ export default function StudioTelemetryCard({
     }, 38);
 
     const switchTimeout = setTimeout(() => {
-      setActiveLogIndex((prev) => (prev + 1) % STUDIO_LOGS.length);
+      setTypedChars(0);
+      setActiveLogIndex((prev) => (prev + 1) % logsList.length);
     }, 4500);
 
     return () => {
       clearInterval(typeInterval);
       clearTimeout(switchTimeout);
     };
-  }, [activeLogIndex]);
+  }, [activeLogIndex, logsList]);
 
   // Rotating verified event stream
   useEffect(() => {
     const timer = setInterval(() => {
-      setStreamIndex((prev) => (prev + 1) % STREAM_EVENTS.length);
+      setStreamIndex((prev) => (prev + 1) % streamList.length);
     }, 3400);
     return () => clearInterval(timer);
-  }, []);
+  }, [streamList.length]);
 
   // Subtle live counter bump
   useEffect(() => {
@@ -84,8 +141,8 @@ export default function StudioTelemetryCard({
     return () => clearInterval(timer);
   }, []);
 
-  const currentLog = STUDIO_LOGS[activeLogIndex];
-  const currentStream = STREAM_EVENTS[streamIndex];
+  const currentLog = (logsList && logsList[activeLogIndex % logsList.length]) || STUDIO_LOGS[0];
+  const currentStream = (streamList && streamList[streamIndex % streamList.length]) || STREAM_EVENTS[0];
 
   return (
     <div
@@ -135,7 +192,7 @@ export default function StudioTelemetryCard({
               color: "var(--ink)",
             }}
           >
-            Studio Telemetry
+            {headerTitle}
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
@@ -148,7 +205,7 @@ export default function StudioTelemetryCard({
               fontWeight: 600,
             }}
           >
-            LIVE FEED
+            {badgeLabel}
           </span>
           <span
             style={{
@@ -157,7 +214,7 @@ export default function StudioTelemetryCard({
               color: "var(--ink-3)",
             }}
           >
-            · W41
+            {badgeSub}
           </span>
         </div>
       </div>
@@ -258,7 +315,7 @@ export default function StudioTelemetryCard({
               color: "var(--ink-3)",
             }}
           >
-            Active Deployments · Q1
+            {metricTitle}
           </span>
           <span
             style={{
@@ -268,7 +325,7 @@ export default function StudioTelemetryCard({
               fontWeight: 700,
             }}
           >
-            ↑ 18.4%
+            {metricTrend}
           </span>
         </div>
 
@@ -293,7 +350,7 @@ export default function StudioTelemetryCard({
               textTransform: "uppercase",
             }}
           >
-            total live
+            {deployLabel}
           </span>
         </div>
       </div>
@@ -329,20 +386,20 @@ export default function StudioTelemetryCard({
               textTransform: "uppercase",
             }}
           >
-            {hoveredBar !== null
-              ? `${BARS_DATA[hoveredBar].name.toUpperCase()} · ${BARS_DATA[hoveredBar].val}% EDGE ACTIVITY`
-              : "7-DAY ACTIVITY · PEAK 96%"}
+            {hoveredBar !== null && barsData[hoveredBar]
+              ? `${barsData[hoveredBar].name.toUpperCase()} · ${barsData[hoveredBar].val}% EDGE ACTIVITY`
+              : activityTitle}
           </span>
           <span
             style={{
               fontFamily: "var(--mono)",
               fontSize: "0.5625rem",
               fontWeight: 700,
-              color: hoveredBar !== null ? BARS_DATA[hoveredBar].col : "var(--live)",
+              color: hoveredBar !== null && barsData[hoveredBar] ? barsData[hoveredBar].col : "var(--live)",
               transition: "color 0.2s ease",
             }}
           >
-            {hoveredBar !== null ? `${BARS_DATA[hoveredBar].val}% ACTIVE` : "HEALTHY"}
+            {hoveredBar !== null && barsData[hoveredBar] ? `${barsData[hoveredBar].val}% ACTIVE` : activityStatus}
           </span>
         </div>
 
@@ -357,11 +414,11 @@ export default function StudioTelemetryCard({
           }}
           aria-hidden="true"
         >
-          {BARS_DATA.map((item, idx) => {
+          {barsData.map((item, idx) => {
             const isHovered = hoveredBar === idx;
             return (
               <motion.div
-                key={idx}
+                key={`telem-bar-${item.day}-${idx}`}
                 initial={{ scaleY: 0, opacity: 0 }}
                 animate={{
                   scaleY: 1,
@@ -422,11 +479,11 @@ export default function StudioTelemetryCard({
             justifyContent: "space-between",
           }}
         >
-          {BARS_DATA.map((item, idx) => {
+          {barsData.map((item, idx) => {
             const isHovered = hoveredBar === idx;
             return (
               <span
-                key={idx}
+                key={`telem-day-${item.day}-${idx}`}
                 style={{
                   flex: "1 1 0%",
                   textAlign: "center",
