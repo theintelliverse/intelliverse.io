@@ -25,6 +25,18 @@ export default function Contact({ data = null } = {}) {
   const [showDpdpNotice, setShowDpdpNotice] = useState(false);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
+  const [copiedEmail, setCopiedEmail] = useState(false);
+
+  const emailAddress = data?.email || "theintelliverse@gmail.com";
+
+  const handleCopyEmail = (e) => {
+    e?.stopPropagation?.();
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(emailAddress);
+      setCopiedEmail(true);
+      setTimeout(() => setCopiedEmail(false), 2200);
+    }
+  };
 
   const update = (key, val) => setFormData((prev) => ({ ...prev, [key]: val }));
 
@@ -643,9 +655,8 @@ export default function Contact({ data = null } = {}) {
 
           {/* RIGHT: Direct Channels (Email, Instagram, LinkedIn only) */}
           <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-            {/* Direct Email */}
-            <a
-              href={`mailto:${data?.email || "theintelliverse@gmail.com"}`}
+            {/* Direct Email Card (Plain selectable text + Copy button + Direct Gmail web compose) */}
+            <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -654,20 +665,10 @@ export default function Contact({ data = null } = {}) {
                 borderRadius: "16px",
                 backgroundColor: "var(--surface)",
                 border: "1px solid var(--line-2)",
-                textDecoration: "none",
                 color: "var(--ink)",
                 boxShadow: "0 10px 25px -10px rgba(14, 27, 61, 0.04)",
-                transition: "all 0.25s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "var(--blue-deep)";
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow = "0 14px 30px -10px rgba(47, 99, 224, 0.12)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "var(--line-2)";
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 10px 25px -10px rgba(14, 27, 61, 0.04)";
+                gap: "1rem",
+                flexWrap: "wrap",
               }}
             >
               <div>
@@ -685,12 +686,68 @@ export default function Contact({ data = null } = {}) {
                 >
                   Direct Founder Inbox
                 </span>
-                <span style={{ fontSize: "1.125rem", fontWeight: 600, color: "var(--ink)" }}>
-                  {data?.email || "theintelliverse@gmail.com"}
+                <span
+                  style={{
+                    fontSize: "1.0625rem",
+                    fontWeight: 600,
+                    color: "var(--ink)",
+                    userSelect: "all",
+                    cursor: "text",
+                    fontFamily: "var(--sans)",
+                  }}
+                >
+                  {emailAddress}
                 </span>
               </div>
-              <span style={{ fontSize: "1.25rem", color: "var(--blue-deep)", fontWeight: 600 }}>↗</span>
-            </a>
+
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <button
+                  type="button"
+                  onClick={handleCopyEmail}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.35rem",
+                    padding: "0.5rem 0.85rem",
+                    borderRadius: "8px",
+                    border: "1px solid var(--line-2)",
+                    backgroundColor: copiedEmail ? "rgba(34, 165, 91, 0.12)" : "rgba(14, 27, 61, 0.04)",
+                    color: copiedEmail ? "var(--live)" : "var(--ink)",
+                    fontFamily: "var(--mono)",
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                  title="Copy email to clipboard"
+                >
+                  <span>{copiedEmail ? "✓ Copied" : "Copy"}</span>
+                </button>
+
+                <a
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(emailAddress)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.35rem",
+                    padding: "0.5rem 0.85rem",
+                    borderRadius: "8px",
+                    backgroundColor: "var(--blue-deep)",
+                    color: "#ffffff",
+                    fontFamily: "var(--mono)",
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    textDecoration: "none",
+                    transition: "opacity 0.2s ease",
+                  }}
+                  title="Open directly in Gmail web"
+                >
+                  <span>Gmail ↗</span>
+                </a>
+              </div>
+            </div>
 
             {/* LinkedIn */}
             <a

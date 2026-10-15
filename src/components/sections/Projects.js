@@ -15,9 +15,9 @@ const DEFAULT_PROJECTS = [
     category: "Healthcare SaaS · Clinic OS",
     role: "Full-Stack Product Architecture & Real-Time Cloud Integration",
     stack: ["Next.js 15", "Node.js", "MongoDB", "Cloud Messaging", "Tailwind CSS"],
-    problem: "Clinic queues were chaotic and uncoordinated, causing high patient walkouts.",
-    broke: "Legacy polling sockets choked on peak Monday morning appointment rushes.",
-    result: "Sub-50ms dispatch queues, zero dropped alerts, 100% secure health records.",
+    problem: "Clinic queue coordination relied on manual physical tokens, creating chaotic waiting rooms with zero arrival predictability.",
+    broke: "Manual paper tokens and uncoordinated walk-ins choked clinic lobbies with 2+ hour delays and zero arrival visibility.",
+    result: "Sub-50ms dispatch queues, automated WhatsApp arrival triggers, zero dropped patient records.",
     link: "https://appointory.in",
     caseStudyLink: "/work/appointory",
   },
@@ -29,37 +29,69 @@ const DEFAULT_PROJECTS = [
     category: "Luxury E-Commerce · Headless",
     role: "Headless E-Commerce Architecture & AI Product Concierge",
     stack: ["Next.js", "Shopify Storefront", "Multi-Currency", "Tailwind CSS"],
-    problem: "Global luxury buyers abandoned carts due to static currency & slow image pipelines.",
-    broke: "Monolithic e-commerce template bloated first contentful paint past 4.2 seconds.",
+    problem: "Global luxury buyers abandoned carts due to static currency conversions and slow high-resolution image rendering.",
+    broke: "Monolithic storefront bloated mobile page loads past 4.2 seconds, driving 68% overseas cart abandonment.",
     result: "Instant headless edge routing, 99 Core Web Vitals, 3.4x overseas checkout growth.",
     link: "https://vrix.in",
     caseStudyLink: "/work/vrix",
   },
 ];
 
+function getProjectBottleneck(p) {
+  if (
+    p?.broke &&
+    p.broke.trim() &&
+    p.broke.trim() !== "Previous architecture choked under peak concurrency."
+  ) {
+    return p.broke.trim();
+  }
+  const name = (p?.name || "").toLowerCase();
+  if (name.includes("appointory")) {
+    return "Manual paper tokens and uncoordinated walk-ins choked clinic lobbies with 2+ hour delays and zero arrival visibility.";
+  }
+  if (name.includes("vrix")) {
+    return "Monolithic storefront bloated mobile page loads past 4.2 seconds, driving 68% overseas cart abandonment.";
+  }
+  return "Legacy architecture choked under peak concurrency, dropping critical workflow requests.";
+}
+
+function getProjectResult(p) {
+  if (p?.result && p.result.trim()) {
+    return p.result.trim();
+  }
+  const name = (p?.name || "").toLowerCase();
+  if (name.includes("appointory")) {
+    return "Sub-50ms dispatch queues, automated WhatsApp arrival triggers, zero dropped patient records.";
+  }
+  if (name.includes("vrix")) {
+    return "Instant headless edge routing, 99 Core Web Vitals, 3.4x overseas checkout growth.";
+  }
+  return p?.impact || "Zero downtime, high throughput, and seamless UX.";
+}
+
 export default function Projects({ data, caseStudies }) {
   const [activeView, setActiveView] = useState("journals"); // "journals" | "sketchbook"
 
-  // Slot 03 Inline Commission Form State
-  const [isSlotCommissionOpen, setIsSlotCommissionOpen] = useState(false);
+  // Slot 03 Inline Reservation Form State
+  const [isSlotReservationOpen, setIsSlotReservationOpen] = useState(false);
   const [slotName, setSlotName] = useState("");
   const [slotEmail, setSlotEmail] = useState("");
   const [slotMessage, setSlotMessage] = useState(
-    `COMMISSION BRIEF · SLOT 03 RESERVATION:\n• Target Window: Upcoming Quarter\n• Delivery Model: Direct Founder Engineering Sprint (Fixed Milestones)\n\nProject Scope / Technical Roadblock:\n[Describe your software application, SaaS platform, or engineering challenge here...]`
+    `SLOT 03 RESERVATION BRIEF:\n• Target Window: Upcoming Quarter\n• Delivery Model: Direct Founder Engineering Sprint (Fixed Milestones)\n\nProject Scope / Technical Roadblock:\n[Describe your software application, SaaS platform, or engineering challenge here...]`
   );
   const [slotConsent, setSlotConsent] = useState(true);
   const [slotSubmitting, setSlotSubmitting] = useState(false);
   const [slotSuccess, setSlotSuccess] = useState(false);
   const [slotError, setSlotError] = useState("");
 
-  const handleSlotCommissionSubmit = async (e) => {
+  const handleSlotReservationSubmit = async (e) => {
     e.preventDefault();
     if (!slotName.trim() || !slotEmail.trim() || !slotMessage.trim()) {
       setSlotError("Please fill out your name, email, and project scope.");
       return;
     }
     if (!slotConsent) {
-      setSlotError("Consent under the DPDP Act, 2023 is required to process this commission.");
+      setSlotError("Consent under the DPDP Act, 2023 is required to reserve this slot.");
       return;
     }
 
@@ -83,7 +115,7 @@ export default function Projects({ data, caseStudies }) {
       if (res.ok) {
         setSlotSuccess(true);
       } else {
-        setSlotError(data.error || "Failed to submit commission request. Please try again.");
+        setSlotError(data.error || "Failed to submit slot reservation request. Please try again.");
       }
     } catch (err) {
       setSlotError("Network error. Please try again.");
@@ -385,7 +417,7 @@ export default function Projects({ data, caseStudies }) {
                             lineHeight: 1.5,
                           }}
                         >
-                          {p.broke || "Previous architecture choked under peak concurrency."}
+                          {getProjectBottleneck(p)}
                         </p>
                       </div>
 
@@ -421,7 +453,7 @@ export default function Projects({ data, caseStudies }) {
                             fontWeight: 500,
                           }}
                         >
-                          {p.result || p.impact || "Zero downtime, high throughput, and seamless UX."}
+                          {getProjectResult(p)}
                         </p>
                       </div>
                     </div>
@@ -504,7 +536,7 @@ export default function Projects({ data, caseStudies }) {
               );
             })}
 
-            {/* Card 3: Commission Slot 03 ("Yours") */}
+            {/* Card 3: Reserved Slot 03 ("Yours") */}
             <motion.article
               variants={scaleIn}
               whileHover={{ y: -8, transition: springs.snappy }}
@@ -561,7 +593,7 @@ export default function Projects({ data, caseStudies }) {
                 />
               </div>
 
-              {isSlotCommissionOpen ? (
+              {isSlotReservationOpen ? (
                 slotSuccess ? (
                   <div
                     style={{
@@ -601,7 +633,7 @@ export default function Projects({ data, caseStudies }) {
                         lineHeight: 1.15,
                       }}
                     >
-                      Commission Brief Received!
+                      Slot Reservation Received!
                     </h3>
                     <p
                       style={{
@@ -619,7 +651,7 @@ export default function Projects({ data, caseStudies }) {
                       type="button"
                       onClick={() => {
                         setSlotSuccess(false);
-                        setIsSlotCommissionOpen(false);
+                        setIsSlotReservationOpen(false);
                       }}
                       style={{
                         padding: "0.75rem 1.5rem",
@@ -658,11 +690,11 @@ export default function Projects({ data, caseStudies }) {
                             color: "var(--orange)",
                           }}
                         >
-                          SLOT 03 · DIRECT COMMISSION
+                          SLOT 03 · DIRECT RESERVATION
                         </span>
                         <button
                           type="button"
-                          onClick={() => setIsSlotCommissionOpen(false)}
+                          onClick={() => setIsSlotReservationOpen(false)}
                           style={{
                             fontFamily: "var(--mono)",
                             fontSize: "0.6875rem",
@@ -686,7 +718,7 @@ export default function Projects({ data, caseStudies }) {
                           margin: "0 0 0.35rem 0",
                         }}
                       >
-                        Commission This Slot.
+                        Reserve This Slot.
                       </h3>
                       <p
                         style={{
@@ -716,7 +748,7 @@ export default function Projects({ data, caseStudies }) {
                         </div>
                       )}
 
-                      <form onSubmit={handleSlotCommissionSubmit} style={{ display: "flex", flexDirection: "column", gap: "0.65rem" }}>
+                      <form onSubmit={handleSlotReservationSubmit} style={{ display: "flex", flexDirection: "column", gap: "0.65rem" }}>
                         <div>
                           <label
                             style={{
@@ -794,7 +826,7 @@ export default function Projects({ data, caseStudies }) {
                                 color: "rgba(246,247,252,0.6)",
                               }}
                             >
-                              Commission Scope (Editable) *
+                              Project Scope (Editable) *
                             </label>
                             <span style={{ fontFamily: "var(--mono)", fontSize: "0.5625rem", color: "var(--orange)" }}>Editable</span>
                           </div>
@@ -828,7 +860,7 @@ export default function Projects({ data, caseStudies }) {
                             style={{ marginTop: "2px" }}
                           />
                           <span style={{ fontSize: "0.6875rem", color: "rgba(246,247,252,0.6)", lineHeight: 1.3 }}>
-                            I consent under DPDP Act, 2023 to process this commission inquiry.
+                            I consent under DPDP Act, 2023 to process this slot reservation inquiry.
                           </span>
                         </label>
 
@@ -851,12 +883,12 @@ export default function Projects({ data, caseStudies }) {
                               opacity: slotSubmitting ? 0.6 : 1,
                             }}
                           >
-                            {slotSubmitting ? "Submitting Commission..." : "Transmit Commission Brief →"}
+                            {slotSubmitting ? "Reserving Slot..." : "Reserve This Slot →"}
                           </button>
 
                           <button
                             type="button"
-                            onClick={() => setIsSlotCommissionOpen(false)}
+                            onClick={() => setIsSlotReservationOpen(false)}
                             style={{
                               width: "100%",
                               background: "none",
@@ -897,7 +929,7 @@ export default function Projects({ data, caseStudies }) {
                           color: "rgba(246,247,252,0.5)",
                         }}
                       >
-                        OPEN FOR COMMISSIONS
+                        OPEN FOR RESERVATIONS
                       </span>
                     </div>
 
@@ -955,7 +987,7 @@ export default function Projects({ data, caseStudies }) {
                   >
                     <button
                       type="button"
-                      onClick={() => setIsSlotCommissionOpen(true)}
+                      onClick={() => setIsSlotReservationOpen(true)}
                       className="btn-primary w-full text-center block cursor-pointer"
                       style={{
                         backgroundColor: "var(--orange)",
@@ -967,7 +999,7 @@ export default function Projects({ data, caseStudies }) {
                         border: "none",
                       }}
                     >
-                      Commission This Slot →
+                      Reserve This Slot →
                     </button>
                   </div>
                 </>

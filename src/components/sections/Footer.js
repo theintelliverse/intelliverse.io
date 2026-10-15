@@ -428,7 +428,9 @@ export default function Footer({ data = null } = {}) {
             <ul className="space-y-2.5 list-none p-0 m-0">
               <li>
                 <a
-                  href={`mailto:${data?.email || "theintelliverse@gmail.com"}`}
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(data?.email || "theintelliverse@gmail.com")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
                     fontFamily: "var(--mono)",
                     fontSize: "0.75rem",
@@ -438,7 +440,7 @@ export default function Footer({ data = null } = {}) {
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(246, 247, 252, 0.65)")}
                 >
-                  Founder Email ↗
+                  {data?.email || "theintelliverse@gmail.com"} ↗
                 </a>
               </li>
               <li>

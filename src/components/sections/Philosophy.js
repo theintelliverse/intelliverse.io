@@ -25,7 +25,7 @@ const MODEL_EXTRAS = {
     circleColor: "var(--indigo)",
     glowColor: "rgba(91, 63, 217, 0.15)",
     borderColor: "rgba(91, 63, 217, 0.35)",
-    ctaLabel: "Commission Platform",
+    ctaLabel: "Build Platform",
     bestFor: "End-to-end web apps, multi-tenant SaaS, and cloud/AI integrations.",
   },
   "03": {
@@ -455,24 +455,26 @@ export default function Philosophy({ data }) {
                 </div>
 
                 {/* Card Footer: Ideal Use Case & Action Link */}
-                <div className="pt-4 border-t border-[var(--hairline)] flex items-center justify-between gap-3">
-                  <div className="text-[11px] font-sans text-[var(--ink-3)] line-clamp-1">
-                    <strong className="text-[var(--ink-2)]">Best For: </strong>
+                <div className="pt-4 border-t border-[var(--hairline)] flex flex-col gap-2.5">
+                  <div className="text-[12px] font-sans text-[var(--ink-3)] leading-relaxed">
+                    <strong className="text-[var(--ink-2)] font-semibold">Best For: </strong>
                     {extras.bestFor}
                   </div>
 
-                  <a
-                    href="#contact"
-                    className="shrink-0 inline-flex items-center gap-1.5 text-xs font-bold transition-transform group-hover:translate-x-1"
-                    style={{
-                      fontFamily: "var(--mono)",
-                      color: extras.circleColor,
-                      textDecoration: "none",
-                    }}
-                  >
-                    <span>{extras.ctaLabel}</span>
-                    <i className="fas fa-arrow-right text-[10px]"></i>
-                  </a>
+                  <div className="flex items-center justify-end pt-0.5">
+                    <a
+                      href="#contact"
+                      className="inline-flex items-center gap-1.5 text-xs font-bold transition-transform group-hover:translate-x-1"
+                      style={{
+                        fontFamily: "var(--mono)",
+                        color: extras.circleColor,
+                        textDecoration: "none",
+                      }}
+                    >
+                      <span>{extras.ctaLabel}</span>
+                      <i className="fas fa-arrow-right text-[10px]"></i>
+                    </a>
+                  </div>
                 </div>
               </motion.div>
             );

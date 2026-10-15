@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { springs, ease, fadeUp, staggerContainer } from "@/lib/motion";
 import SplitTextReveal from "@/components/ui/SplitTextReveal";
@@ -67,39 +67,11 @@ const SERVICES = [
 export default function Services({ data }) {
   const servicesList = Array.isArray(data) && data.length > 0 ? data : SERVICES;
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [trailPos, setTrailPos] = useState({ x: 0, y: 0 });
-  const sectionRef = useRef(null);
-  const targetPos = useRef({ x: 0, y: 0 });
-
-  const onMouseMove = useCallback((e) => {
-    targetPos.current = { x: e.clientX, y: e.clientY };
-  }, []);
-
-  useEffect(() => {
-    let raf = null;
-    const animate = () => {
-      setTrailPos((prev) => ({
-        x: prev.x + (targetPos.current.x - prev.x) * 0.14,
-        y: prev.y + (targetPos.current.y - prev.y) * 0.14,
-      }));
-      raf = requestAnimationFrame(animate);
-    };
-    raf = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    el.addEventListener("mousemove", onMouseMove, { passive: true });
-    return () => el.removeEventListener("mousemove", onMouseMove);
-  }, [onMouseMove]);
 
   return (
     <section
       id="services"
       data-theme="cream"
-      ref={sectionRef}
       className="section-gap relative border-t border-[var(--line)]"
       style={{
         backgroundColor: "var(--cream)",
@@ -145,7 +117,7 @@ export default function Services({ data }) {
               margin: 0,
             }}
           >
-            Hover service row to inspect architecture
+            Four Core Disciplines · Full-Stack Longevity
           </p>
         </div>
 
@@ -219,7 +191,7 @@ export default function Services({ data }) {
                       {/* Display Serif Title (Slides right + turns white on hover) */}
                       <motion.h3
                         animate={{
-                          x: isHovered ? 12 : 0,
+                          x: isHovered ? 10 : 0,
                           color: isHovered ? "#F6F7FC" : "var(--ink)",
                         }}
                         transition={springs.snappy}
@@ -234,28 +206,28 @@ export default function Services({ data }) {
                         {svc.title}
                       </motion.h3>
                     </div>
-
-                    {/* Arrow reveal on right */}
-                    <motion.span
-                      animate={{
-                        x: isHovered ? 0 : -20,
-                        opacity: isHovered ? 1 : 0,
-                        color: "var(--orange)",
-                      }}
-                      transition={springs.snappy}
-                      style={{
-                        fontFamily: "var(--serif)",
-                        fontSize: "2rem",
-                        paddingRight: "1rem",
-                      }}
-                      aria-hidden="true"
-                    >
-                      →
-                    </motion.span>
                   </div>
 
+                  {/* Architecture Overview Line (Placed cleanly underneath, never covers chips) */}
+                  {svc.previewText && (
+                    <p
+                      style={{
+                        fontFamily: "var(--sans)",
+                        fontSize: "0.9375rem",
+                        lineHeight: 1.6,
+                        color: isHovered ? "rgba(246,247,252,0.85)" : "var(--ink-2)",
+                        margin: "0.75rem 0 0.85rem 0",
+                        maxWidth: "850px",
+                        transition: "color 0.25s ease",
+                      }}
+                      className="pl-7 md:pl-16"
+                    >
+                      {svc.previewText}
+                    </p>
+                  )}
+
                   {/* Sub-item capabilities pills */}
-                  <div className="mt-4 pl-7 md:pl-16">
+                  <div className="mt-2 pl-7 md:pl-16">
                     <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
                       {svc.sub.map((item, subIdx) => (
                         <li key={`${svc.id || i}-${item}-${subIdx}`}>
@@ -288,61 +260,6 @@ export default function Services({ data }) {
           })}
         </ul>
       </div>
-
-      {/* Floating Cursor-Following Architecture Preview Tooltip */}
-      {hoveredIndex !== null && (
-        <div
-          aria-hidden="true"
-          style={{
-            position: "fixed",
-            left: trailPos.x + 28,
-            top: trailPos.y - 70,
-            width: "320px",
-            pointerEvents: "none",
-            zIndex: 7000,
-            backgroundColor: "rgba(11, 21, 48, 0.95)",
-            border: "1px solid rgba(253, 179, 71, 0.35)",
-            borderRadius: "14px",
-            padding: "1.25rem",
-            boxShadow: "0 20px 45px rgba(0,0,0,0.35)",
-            backdropFilter: "blur(12px)",
-          }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <span
-              style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                backgroundColor: servicesList[hoveredIndex]?.dotColor,
-              }}
-            />
-            <span
-              style={{
-                fontFamily: "var(--mono)",
-                fontSize: "0.6875rem",
-                fontWeight: 700,
-                color: "var(--orange)",
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
-              }}
-            >
-              {servicesList[hoveredIndex]?.index} / SYSTEM ARCHITECTURE
-            </span>
-          </div>
-          <p
-            style={{
-              fontFamily: "var(--sans)",
-              fontSize: "0.8125rem",
-              lineHeight: 1.55,
-              color: "rgba(246,247,252,0.9)",
-              margin: 0,
-            }}
-          >
-            {servicesList[hoveredIndex]?.previewText}
-          </p>
-        </div>
-      )}
     </section>
   );
 }

@@ -567,7 +567,7 @@ export default function CursorLabClient() {
                   className="btn-primary"
                   style={{ fontSize: "0.75rem", padding: "0.55rem 1.25rem" }}
                 >
-                  <span>Commission Project ↗</span>
+                  <span>Start Project ↗</span>
                 </button>
               </div>
 
