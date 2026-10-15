@@ -88,6 +88,7 @@ const STUDIO_GUARANTEES = [
 export default function Philosophy({ data }) {
   const rows = Array.isArray(data) && data.length > 0 ? data : DEFAULT_ROWS;
   const [activeModel, setActiveModel] = useState("02");
+  const [hoveredModel, setHoveredModel] = useState(null);
   const [underlineKey, setUnderlineKey] = useState(0);
 
   return (
@@ -273,33 +274,38 @@ export default function Philosophy({ data }) {
             };
 
             const isSelected = activeModel === row.num;
+            const isHovered = hoveredModel === row.num;
+            const isHighlighted = isHovered || (isSelected && hoveredModel === null);
 
             return (
               <motion.div
                 key={row.num || `row-${idx}`}
                 variants={fadeUp}
                 onClick={() => setActiveModel(row.num)}
-                whileHover={{ y: -6 }}
-                transition={{ duration: 0.3, ease: ease.expo }}
-                className="group relative rounded-2xl flex flex-col justify-between transition-all duration-300 cursor-pointer"
+                onMouseEnter={() => setHoveredModel(row.num)}
+                onMouseLeave={() => setHoveredModel(null)}
+                className="group relative rounded-2xl flex flex-col justify-between cursor-pointer"
                 style={{
-                  backgroundColor: "rgba(255, 255, 255, 0.85)",
-                  border: isSelected
+                  backgroundColor: isHighlighted ? "#FFFFFF" : "rgba(255, 255, 255, 0.85)",
+                  border: isHighlighted
                     ? `2px solid ${extras.circleColor}`
                     : "1px solid var(--line-2)",
-                  boxShadow: isSelected
-                    ? `0 24px 50px -15px ${extras.glowColor}, 0 10px 25px rgba(14, 27, 61, 0.06)`
+                  boxShadow: isHighlighted
+                    ? `0 24px 50px -15px ${extras.glowColor}, 0 10px 25px rgba(14, 27, 61, 0.08)`
                     : "0 12px 30px -10px rgba(14, 27, 61, 0.04)",
                   padding: "clamp(1.75rem, 3.2vw, 2.35rem)",
                   backdropFilter: "blur(12px)",
+                  transform: isHovered ? "translateY(-8px)" : "translateY(0px)",
+                  transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border 0.25s ease, box-shadow 0.3s ease, background-color 0.25s ease",
                 }}
               >
                 {/* Top Subtle Color Accent Bar */}
                 <div
-                  className="absolute top-0 left-6 right-6 h-1 rounded-b-md transition-all duration-300"
+                  className="absolute top-0 left-6 right-6 rounded-b-md transition-all duration-300"
                   style={{
                     backgroundColor: extras.circleColor,
-                    opacity: isSelected ? 1 : 0.4,
+                    opacity: isHighlighted ? 1 : 0.35,
+                    height: isHighlighted ? "4px" : "3px",
                   }}
                 />
 
@@ -321,6 +327,8 @@ export default function Philosophy({ data }) {
                           fontSize: "0.875rem",
                           fontWeight: 700,
                           boxShadow: `0 4px 14px ${extras.glowColor}`,
+                          transform: isHovered ? "scale(1.08)" : "scale(1)",
+                          transition: "transform 0.3s ease, box-shadow 0.3s ease",
                         }}
                       >
                         {row.num}
@@ -344,7 +352,8 @@ export default function Philosophy({ data }) {
                             fontFamily: "var(--mono)",
                             fontSize: "0.6875rem",
                             fontWeight: 600,
-                            color: isSelected ? extras.circleColor : "var(--ink-2)",
+                            color: isHighlighted ? extras.circleColor : "var(--ink-2)",
+                            transition: "color 0.25s ease",
                           }}
                         >
                           {extras.timeline}
@@ -440,8 +449,12 @@ export default function Philosophy({ data }) {
                             fontSize: "0.6875rem",
                             padding: "0.3rem 0.65rem",
                             borderRadius: "6px",
-                            backgroundColor: "rgba(14, 27, 61, 0.04)",
-                            border: "1px solid var(--line)",
+                            backgroundColor: isHovered
+                              ? "rgba(14, 27, 61, 0.08)"
+                              : "rgba(14, 27, 61, 0.04)",
+                            border: `1px solid ${
+                              isHovered ? "rgba(14, 27, 61, 0.16)" : "var(--line)"
+                            }`,
                             color: "var(--ink)",
                             fontWeight: 500,
                             transition: "all 0.2s ease",
@@ -464,11 +477,12 @@ export default function Philosophy({ data }) {
                   <div className="flex items-center justify-end pt-0.5">
                     <a
                       href="#contact"
-                      className="inline-flex items-center gap-1.5 text-xs font-bold transition-transform group-hover:translate-x-1"
+                      className="inline-flex items-center gap-1.5 text-xs font-bold transition-transform duration-200"
                       style={{
                         fontFamily: "var(--mono)",
                         color: extras.circleColor,
                         textDecoration: "none",
+                        transform: isHovered ? "translateX(4px)" : "translateX(0px)",
                       }}
                     >
                       <span>{extras.ctaLabel}</span>
