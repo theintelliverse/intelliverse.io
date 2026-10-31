@@ -417,6 +417,9 @@ export default function RootLayout({ children }) {
             function gtag(){dataLayer.push(arguments);}
             window.gtag = gtag;
 
+            // Enable URL Passthrough for tracking when ad_storage is denied
+            gtag('set', 'url_passthrough', true);
+
             // Set default consent to 'denied' as placeholder / check existing preference
             var storedConsent = null;
             try {

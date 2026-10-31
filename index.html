@@ -10,6 +10,9 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
 
+    // Enable URL Passthrough for tracking when ad_storage is denied
+    gtag('set', 'url_passthrough', true);
+
     // Check stored consent or set default to denied
     var storedConsent = null;
     try {
