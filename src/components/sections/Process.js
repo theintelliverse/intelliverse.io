@@ -348,8 +348,6 @@ export default function Process({ data, telemetry }) {
               yQuick(0);
             });
           });
-
-        
       }
     );
   },

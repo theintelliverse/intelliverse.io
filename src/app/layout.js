@@ -15,7 +15,7 @@ import { seoConfig } from "@/content/seo";
 const instrumentSerif = localFont({
   src: [
     { path: "../../fonts/instrument-serif-latin-400-normal.woff2", weight: "400", style: "normal" },
-    { path: "../../fonts/instrument-serif-latin-400-italic.woff2",  weight: "400", style: "italic" },
+    { path: "../../fonts/instrument-serif-latin-400-italic.woff2", weight: "400", style: "italic" },
   ],
   variable: "--font-serif",
   display: "swap",
@@ -102,15 +102,23 @@ export const metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/favicon.ico", sizes: "any" },
-      { url: "/icon.png", type: "image/png", sizes: "48x48" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
       { url: "/favicon-48x48.png", type: "image/png", sizes: "48x48" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
     ],
     shortcut: ["/favicon.ico"],
     apple: [
       { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/apple-touch-icon-precomposed.png", sizes: "180x180", type: "image/png" },
+    ],
+    other: [
+      {
+        rel: "apple-touch-icon-precomposed",
+        url: "/apple-touch-icon-precomposed.png",
+      },
     ],
   },
   alternates: {
@@ -148,14 +156,14 @@ export const metadata = {
         width: 1200,
         height: 630,
         type: "image/png",
-        alt: "The Intelliverse — Software, Web & IT Services in Ahmedabad, India",
+        alt: "The Intelliverse - Software, Web & IT Services in Ahmedabad, India",
       },
       {
-        url: `${siteConfig.url}/the-intelliverse-logo.jpg`,
-        secureUrl: `${siteConfig.url}/the-intelliverse-logo.jpg`,
-        width: 500,
-        height: 500,
-        type: "image/jpeg",
+        url: `${siteConfig.url}/the-intelliverse-logo.png`,
+        secureUrl: `${siteConfig.url}/the-intelliverse-logo.png`,
+        width: 281,
+        height: 299,
+        type: "image/png",
         alt: "The Intelliverse Brand Identity",
       },
       {
@@ -163,7 +171,7 @@ export const metadata = {
         width: 1200,
         height: 630,
         type: "image/png",
-        alt: "The Intelliverse — Engineering Studio",
+        alt: "The Intelliverse - Engineering Studio",
       },
     ],
   },
@@ -237,9 +245,9 @@ const orgSchema = {
   url: siteConfig.url,
   logo: {
     "@type": "ImageObject",
-    url: `${siteConfig.url}/the-intelliverse-logo.jpg`,
-    width: 500,
-    height: 500,
+    url: `${siteConfig.url}/the-intelliverse-logo.png`,
+    width: 281,
+    height: 299,
   },
   slogan: siteConfig.tagline,
   description: siteConfig.description,

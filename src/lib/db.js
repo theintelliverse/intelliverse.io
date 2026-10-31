@@ -80,12 +80,12 @@ export const localMockDb = {
   estimator: {
     startingPrice: "₹15,000",
     types: [
-      { id: "starter", label: "Starter Web / Landing Page", baseRange: "₹15,000 – ₹45,000" },
-      { id: "web", label: "Web Architecture / Next.js", baseRange: "₹45,000 – ₹1.5L" },
-      { id: "mobile", label: "Mobile App (Android / iOS)", baseRange: "₹80,000 – ₹3.5L" },
-      { id: "saas", label: "Custom SaaS Platform", baseRange: "₹1.5L – ₹8L+" },
-      { id: "it", label: "Cloud & DevOps Architecture", baseRange: "₹25,000 – ₹1.2L" },
-      { id: "ai", label: "Applied AI / Agentic Automation", baseRange: "₹40,000 – ₹2.5L+" },
+      { id: "starter", label: "Starter Web / Landing Page", baseRange: "₹15,000 – ₹45,000", baseRangeINR: "₹15,000 – ₹45,000", baseRangeUSD: "$350 – $950" },
+      { id: "web", label: "Web Architecture / Next.js", baseRange: "₹45,000 – ₹1.5L", baseRangeINR: "₹45,000 – ₹1.5L", baseRangeUSD: "$950 – $2,500" },
+      { id: "mobile", label: "Mobile App (Android / iOS)", baseRange: "₹80,000 – ₹3.5L", baseRangeINR: "₹80,000 – ₹3.5L", baseRangeUSD: "$1,500 – $4,800" },
+      { id: "saas", label: "Custom SaaS Platform", baseRange: "₹1.5L – ₹8L+", baseRangeINR: "₹1.5L – ₹8L+", baseRangeUSD: "$2,500 – $10,000+" },
+      { id: "it", label: "Cloud & DevOps Architecture", baseRange: "₹25,000 – ₹1.2L", baseRangeINR: "₹25,000 – ₹1.2L", baseRangeUSD: "$500 – $1,800" },
+      { id: "ai", label: "Applied AI / Agentic Automation", baseRange: "₹40,000 – ₹2.5L+", baseRangeINR: "₹40,000 – ₹2.5L+", baseRangeUSD: "$800 – $3,500+" },
     ],
     includedCharges: [
       { title: "100% IP & Full Source Code Ownership", badge: "INCLUDED", note: "Zero vendor lock-in; complete repository rights" },

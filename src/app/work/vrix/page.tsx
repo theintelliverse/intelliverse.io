@@ -69,7 +69,7 @@ export default function VrixCaseStudyPage() {
       url: siteConfig.url,
       logo: {
         "@type": "ImageObject",
-        url: `${siteConfig.url}/the%20intelliverse%20logo.jpg`,
+        url: `${siteConfig.url}/the-intelliverse-logo.png`,
       },
     },
     mainEntityOfPage: `${siteConfig.url}${config.canonicalPath}`,
@@ -100,20 +100,41 @@ export default function VrixCaseStudyPage() {
         {/* Hero */}
         <section className="py-12 md:py-16 px-4 sm:px-6 container-site" style={{ maxWidth: "1100px", margin: "0 auto" }}>
           <div className="space-y-6">
-            <div className="flex flex-wrap items-center gap-3">
-              <span
-                className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-widest border"
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-3">
+                <span
+                  className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-widest border"
+                  style={{
+                    backgroundColor: "rgba(155, 114, 216, 0.12)",
+                    color: "#6b21a8",
+                    borderColor: "rgba(155, 114, 216, 0.28)",
+                  }}
+                >
+                  Production Case Study · Luxury E-Commerce
+                </span>
+                <span className="text-xs font-mono text-[var(--muted)]">
+                  Live URL: <a href="https://vrix.in" target="_blank" rel="noopener noreferrer" className="text-[var(--blue-deep)] underline font-semibold">vrix.in ↗</a>
+                </span>
+              </div>
+
+              {/* Prominent View This Live Project Button */}
+              <a
+                href="https://vrix.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cursor="link"
+                data-cursor-magnetic
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono font-bold transition-all shadow-sm hover:shadow-md hover:scale-105 active:scale-95 group"
                 style={{
-                  backgroundColor: "rgba(155, 114, 216, 0.12)",
-                  color: "#6b21a8",
-                  borderColor: "rgba(155, 114, 216, 0.28)",
+                  backgroundColor: "var(--night)",
+                  color: "#ffffff",
+                  border: "1px solid rgba(255,255,255,0.15)",
                 }}
               >
-                Production Case Study · Luxury E-Commerce
-              </span>
-              <span className="text-xs font-mono text-[var(--muted)]">
-                Live URL: <a href="https://vrix.in" target="_blank" rel="noopener noreferrer" className="text-[var(--blue-deep)] underline">vrix.in ↗</a>
-              </span>
+                <span className="w-2 h-2 rounded-full bg-[var(--live)] animate-pulse"></span>
+                <span>View This Live Project</span>
+                <span className="text-[var(--orange)] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+              </a>
             </div>
 
             <h1
@@ -129,13 +150,76 @@ export default function VrixCaseStudyPage() {
                 <strong>Executive Summary: </strong>
                 {config.heroAnswer}
               </p>
-              <div className="flex flex-wrap items-center gap-4 text-xs font-mono mt-4 pt-3 border-t" style={{ borderColor: "var(--hairline)", color: "var(--muted)" }}>
-                <span>Lead Architect: <strong>Dhruvil Thummar (CTO)</strong></span>
-                <span>·</span>
-                <span>Published: March 2026 · Updated: October 2026</span>
-                <span>·</span>
-                <span>Engineering HQ: Ahmedabad, Gujarat</span>
+              <div className="flex flex-wrap items-center justify-between gap-4 text-xs font-mono mt-4 pt-3 border-t" style={{ borderColor: "var(--hairline)", color: "var(--muted)" }}>
+                <div className="flex flex-wrap items-center gap-4">
+                  <span>Lead Architect: <strong>Dhruvil Thummar (CTO)</strong></span>
+                  <span>·</span>
+                  <span>Published: March 2026 · Updated: October 2026</span>
+                  <span>·</span>
+                  <span>Engineering HQ: Ahmedabad, Gujarat</span>
+                </div>
+                <a
+                  href="https://vrix.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all hover:bg-[rgba(47,99,224,0.14)]"
+                  style={{
+                    backgroundColor: "rgba(47,99,224,0.08)",
+                    color: "var(--blue-deep)",
+                    border: "1px solid rgba(47,99,224,0.2)",
+                  }}
+                >
+                  <span>Visit vrix.in</span>
+                  <span>↗</span>
+                </a>
               </div>
+            </div>
+
+            {/* Live Storefront Quick Link Card */}
+            <div
+              className="p-4 sm:p-5 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-all"
+              style={{
+                backgroundColor: "rgba(47,99,224,0.04)",
+                borderColor: "rgba(47,99,224,0.18)",
+              }}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: "rgba(47,99,224,0.12)", color: "var(--blue-deep)" }}
+                >
+                  <i className="fas fa-arrow-up-right-from-square text-base"></i>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--blue-deep)]">
+                      Production Storefront
+                    </span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-700 border border-emerald-500/20">
+                      LIVE IN PRODUCTION
+                    </span>
+                  </div>
+                  <p className="text-xs text-[var(--muted)] font-mono mt-0.5">
+                    Experience the sub-second headless diamond boutique live at <strong>vrix.in</strong>
+                  </p>
+                </div>
+              </div>
+
+              <a
+                href="https://vrix.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cursor="link"
+                data-cursor-magnetic
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-mono font-bold transition-all hover:scale-105 active:scale-95 shadow-sm"
+                style={{
+                  backgroundColor: "var(--blue-deep)",
+                  color: "#ffffff",
+                }}
+              >
+                <span>View This Project</span>
+                <span>↗</span>
+              </a>
             </div>
           </div>
         </section>

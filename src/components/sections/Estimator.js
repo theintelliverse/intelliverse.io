@@ -1,18 +1,55 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { springs, ease, scaleIn, fadeUp, staggerContainer } from "@/lib/motion";
 import Magnetic from "@/components/ui/Magnetic";
 import { trackEstimatorComplete } from "@/lib/analytics";
 
 const DEFAULT_TYPES = [
-  { id: "starter", label: "Starter Web / Landing Page", baseRange: "₹15,000 – ₹45,000" },
-  { id: "web", label: "Web Architecture / Next.js", baseRange: "₹45,000 – ₹1.5L" },
-  { id: "mobile", label: "Mobile App (Android / iOS)", baseRange: "₹80,000 – ₹3.5L" },
-  { id: "saas", label: "Custom SaaS Platform", baseRange: "₹1.5L – ₹8L+" },
-  { id: "it", label: "Cloud & DevOps Architecture", baseRange: "₹25,000 – ₹1.2L" },
-  { id: "ai", label: "Applied AI / Agentic Automation", baseRange: "₹40,000 – ₹2.5L+" },
+  {
+    id: "starter",
+    label: "Starter Web / Landing Page",
+    baseRangeINR: "₹15,000 – ₹45,000",
+    baseRangeUSD: "$350 – $950",
+    baseRange: "₹15,000 – ₹45,000",
+  },
+  {
+    id: "web",
+    label: "Web Architecture / Next.js",
+    baseRangeINR: "₹45,000 – ₹1.5L",
+    baseRangeUSD: "$950 – $2,500",
+    baseRange: "₹45,000 – ₹1.5L",
+  },
+  {
+    id: "mobile",
+    label: "Mobile App (Android / iOS)",
+    baseRangeINR: "₹80,000 – ₹3.5L",
+    baseRangeUSD: "$1,500 – $4,800",
+    baseRange: "₹80,000 – ₹3.5L",
+  },
+  {
+    id: "saas",
+    label: "Custom SaaS Platform",
+    baseRangeINR: "₹1.5L – ₹8L+",
+    baseRangeUSD: "$2,500 – $10,000+",
+    baseRange: "₹1.5L – ₹8L+",
+  },
+  {
+    id: "it",
+    label: "Cloud & DevOps Architecture",
+    baseRangeINR: "₹25,000 – ₹1.2L",
+    baseRangeUSD: "$500 – $1,800",
+    baseRange: "₹25,000 – ₹1.2L",
+  },
+  {
+    id: "ai",
+    label: "Applied AI / Agentic Automation",
+    baseRangeINR: "₹40,000 – ₹2.5L+",
+    baseRangeUSD: "$800 – $3,500+",
+    baseRange: "₹40,000 – ₹2.5L+",
+  },
 ];
 
 const ESTIMATOR_CONFIG = {
@@ -41,11 +78,11 @@ const DEFAULT_INCLUDED_CHARGES = [
 
 export default function Estimator({ data }) {
   const types = data?.types && data.types.length > 0 ? data.types : DEFAULT_TYPES;
-  const startingPrice = data?.startingPrice || "₹15,000";
   const includedCharges = data?.includedCharges && data.includedCharges.length > 0
     ? data.includedCharges
     : DEFAULT_INCLUDED_CHARGES;
 
+  const [currency, setCurrency] = useState("INR"); // "INR" | "USD"
   const [type, setType] = useState(types[0]?.id || "starter");
   const [features, setFeatures] = useState(["auth", "payments"]);
   const [timeline, setTimeline] = useState("1month");
@@ -67,6 +104,35 @@ export default function Estimator({ data }) {
     ESTIMATOR_CONFIG.timelines.find((t) => t.id === timeline) ||
     ESTIMATOR_CONFIG.timelines[1];
 
+  const USD_RANGES = {
+    starter: "$350 – $950",
+    web: "$950 – $2,500",
+    mobile: "$1,500 – $4,800",
+    saas: "$2,500 – $10,000+",
+    it: "$500 – $1,800",
+    ai: "$800 – $3,500+",
+  };
+
+  const INR_RANGES = {
+    starter: "₹15,000 – ₹45,000",
+    web: "₹45,000 – ₹1.5L",
+    mobile: "₹80,000 – ₹3.5L",
+    saas: "₹1.5L – ₹8L+",
+    it: "₹25,000 – ₹1.2L",
+    ai: "₹40,000 – ₹2.5L+",
+  };
+
+  const getPriceRange = (typeItem, curr = currency) => {
+    if (!typeItem) return "N/A";
+    if (curr === "USD") {
+      return typeItem.baseRangeUSD || USD_RANGES[typeItem.id] || "$350 – $950";
+    }
+    return typeItem.baseRangeINR || INR_RANGES[typeItem.id] || typeItem.baseRange;
+  };
+
+  const startingPrice = currency === "USD" ? "$350" : (data?.startingPrice || "₹15,000");
+  const currentPrice = getPriceRange(selectedType, currency);
+
   const toggleFeature = (id) => {
     setFeatures((prev) =>
       prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]
@@ -80,11 +146,11 @@ export default function Estimator({ data }) {
       .join(", ");
 
     const includedSummary = includedCharges.map((c) => c.title).join(", ");
-    return `PROJECT BRIEF SPECIFICATION:\n• Architecture: ${selectedType?.label || "Custom Architecture"}\n• Scope Modules: ${featureNames || "Standard Stack"}\n• Target Launch Window: ${selectedTimeline?.label || "Standard Sprint"}\n• Core Bottleneck / What Hurts Today: ${painPoint.trim() || "Our team tracks every order in three spreadsheets…"}\n• Indicative Investment: ${selectedType?.baseRange || "N/A"}\n• Predefined Inclusions: ${includedSummary || "Production Inclusions"}\n\nProject Scope & Objectives:\n[Describe your specific requirements, custom integrations, or roadmap here...]`;
+    return `PROJECT BRIEF SPECIFICATION:\n• Architecture: ${selectedType?.label || "Custom Architecture"}\n• Scope Modules: ${featureNames || "Standard Stack"}\n• Target Launch Window: ${selectedTimeline?.label || "Standard Sprint"}\n• Core Bottleneck / What Hurts Today: ${painPoint.trim() || "Our team tracks every order in three spreadsheets…"}\n• Indicative Investment (${currency}): ${currentPrice || "N/A"}\n• Predefined Inclusions: ${includedSummary || "Production Inclusions"}\n• Commercial Terms: Indicative estimate subject to final discovery & milestone SOW. Terms & Conditions apply (theintelliverse.tech/terms).\n\nProject Scope & Objectives:\n[Describe your specific requirements, custom integrations, or roadmap here...]`;
   };
 
   const handleOpenContact = () => {
-    trackEstimatorComplete(selectedType?.label || "Unknown", selectedType?.baseRange || "N/A");
+    trackEstimatorComplete(selectedType?.label || "Unknown", currentPrice || "N/A");
     const brief = generateBriefText();
     setContactMessage(brief);
     setContactSuccess(false);
@@ -221,23 +287,91 @@ export default function Estimator({ data }) {
 
             {/* Step 1: Architecture Category */}
             <div>
-              <span
-                style={{
-                  fontFamily: "var(--mono)",
-                  fontSize: "0.6875rem",
-                  fontWeight: 700,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: "var(--ink-3)",
-                  display: "block",
-                  marginBottom: "0.4rem",
-                }}
-              >
-                01 / SELECT ARCHITECTURE
-              </span>
+              <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
+                <span
+                  style={{
+                    fontFamily: "var(--mono)",
+                    fontSize: "0.6875rem",
+                    fontWeight: 700,
+                    letterSpacing: "0.14em",
+                    textTransform: "uppercase",
+                    color: "var(--ink-3)",
+                  }}
+                >
+                  01 / SELECT ARCHITECTURE
+                </span>
+
+                {/* Currency Switcher for Domestic vs Abroad / Overseas Projects */}
+                <div
+                  className="inline-flex items-center p-0.5 rounded-full"
+                  style={{
+                    backgroundColor: "rgba(14,27,61,0.06)",
+                    border: "1px solid var(--line-2)",
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setCurrency("INR")}
+                    aria-label="View pricing in Indian Rupees (₹)"
+                    style={{
+                      padding: "0.2rem 0.65rem",
+                      borderRadius: "999px",
+                      fontFamily: "var(--mono)",
+                      fontSize: "0.625rem",
+                      fontWeight: 700,
+                      border: "none",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                      backgroundColor: currency === "INR" ? "var(--night)" : "transparent",
+                      color: currency === "INR" ? "#ffffff" : "var(--ink-3)",
+                      boxShadow: currency === "INR" ? "0 2px 6px rgba(11,21,48,0.2)" : "none",
+                    }}
+                  >
+                    ₹ INR
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCurrency("USD")}
+                    aria-label="View pricing in US Dollars ($ for abroad / global projects)"
+                    style={{
+                      padding: "0.2rem 0.65rem",
+                      borderRadius: "999px",
+                      fontFamily: "var(--mono)",
+                      fontSize: "0.625rem",
+                      fontWeight: 700,
+                      border: "none",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.25rem",
+                      backgroundColor: currency === "USD" ? "var(--night)" : "transparent",
+                      color: currency === "USD" ? "#ffffff" : "var(--ink-3)",
+                      boxShadow: currency === "USD" ? "0 2px 6px rgba(11,21,48,0.2)" : "none",
+                    }}
+                  >
+                    <span>$ USD</span>
+                    <span
+                      style={{
+                        fontSize: "0.5rem",
+                        padding: "0.05rem 0.3rem",
+                        borderRadius: "3px",
+                        backgroundColor: currency === "USD" ? "rgba(253,179,71,0.3)" : "rgba(14,27,61,0.08)",
+                        color: currency === "USD" ? "#FDB347" : "var(--ink-3)",
+                        fontWeight: 700,
+                        letterSpacing: "0.04em",
+                      }}
+                    >
+                      GLOBAL
+                    </span>
+                  </button>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {types.map((t) => {
                   const isSelected = type === t.id;
+                  const price = getPriceRange(t, currency);
                   return (
                     <motion.button
                       key={t.id}
@@ -279,7 +413,7 @@ export default function Estimator({ data }) {
                           fontWeight: 600,
                         }}
                       >
-                        {t.baseRange}
+                        {price}
                       </span>
                     </motion.button>
                   );
@@ -1201,29 +1335,46 @@ export default function Estimator({ data }) {
                         {/* Range Field */}
                         <div
                           style={{
-                            padding: "1rem",
+                            padding: "0.9rem 1rem",
                             backgroundColor: "rgba(47,99,224,0.06)",
                             border: "1px solid rgba(47,99,224,0.2)",
                             borderRadius: "10px",
                           }}
                         >
-                          <span
-                            style={{
-                              fontFamily: "var(--mono)",
-                              fontSize: "0.5625rem",
-                              letterSpacing: "0.12em",
-                              textTransform: "uppercase",
-                              color: "var(--blue-deep)",
-                              display: "block",
-                              fontWeight: 700,
-                              marginBottom: "0.2rem",
-                            }}
-                          >
-                            INDICATIVE BUDGET RANGE
-                          </span>
+                          <div className="flex items-center justify-between gap-2 mb-1">
+                            <span
+                              style={{
+                                fontFamily: "var(--mono)",
+                                fontSize: "0.5625rem",
+                                letterSpacing: "0.12em",
+                                textTransform: "uppercase",
+                                color: "var(--blue-deep)",
+                                display: "block",
+                                fontWeight: 700,
+                              }}
+                            >
+                              INDICATIVE BUDGET RANGE
+                            </span>
+                            <span
+                              style={{
+                                fontFamily: "var(--mono)",
+                                fontSize: "0.5625rem",
+                                letterSpacing: "0.08em",
+                                textTransform: "uppercase",
+                                padding: "0.12rem 0.45rem",
+                                borderRadius: "4px",
+                                backgroundColor: currency === "USD" ? "rgba(253,179,71,0.22)" : "rgba(47,99,224,0.12)",
+                                color: currency === "USD" ? "#b45309" : "var(--blue-deep)",
+                                fontWeight: 700,
+                              }}
+                            >
+                              {currency === "USD" ? "$ USD (GLOBAL / ABROAD)" : "₹ INR (DOMESTIC)"}
+                            </span>
+                          </div>
+
                           <AnimatePresence mode="wait">
                             <motion.div
-                              key={selectedType.baseRange}
+                              key={`${selectedType.id}-${currency}`}
                               initial={{ opacity: 0, scale: 0.95 }}
                               animate={{ opacity: 1, scale: 1 }}
                               exit={{ opacity: 0, scale: 0.95 }}
@@ -1236,9 +1387,46 @@ export default function Estimator({ data }) {
                                 fontWeight: 400,
                               }}
                             >
-                              {selectedType.baseRange}
+                              {currentPrice}
                             </motion.div>
                           </AnimatePresence>
+
+                          {/* Terms & Conditions Note */}
+                          <div
+                            className="mt-2.5 pt-2 border-t border-[rgba(47,99,224,0.15)] flex flex-col gap-1"
+                            style={{
+                              fontFamily: "var(--mono)",
+                              fontSize: "0.5625rem",
+                              lineHeight: 1.35,
+                              color: "var(--ink-3)",
+                            }}
+                          >
+                            <div className="flex items-start gap-1">
+                              <span style={{ color: "var(--orange)", fontWeight: 700 }}>*</span>
+                              <span>
+                                Indicative ballpark for engineering estimation. Final commercials governed by customized scope, milestones &amp;{" "}
+                                <Link
+                                  href="/terms"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  style={{
+                                    color: "var(--blue-deep)",
+                                    fontWeight: 700,
+                                    textDecoration: "underline",
+                                  }}
+                                >
+                                  Terms &amp; Conditions
+                                </Link>
+                                .
+                              </span>
+                            </div>
+                            {currency === "USD" && (
+                              <div className="flex items-center gap-1" style={{ color: "#168744", fontWeight: 600 }}>
+                                <span>🌐</span>
+                                <span>Overseas invoicing via SWIFT / Wire / Stripe with cross-border SLA &amp; IP protection.</span>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
