@@ -38,6 +38,8 @@ export default function CMSTab({
   setStatsClients,
   estimatorStartingPrice,
   setEstimatorStartingPrice,
+  estimatorStartingPriceUsd,
+  setEstimatorStartingPriceUsd,
   estimatorTypes,
   setEstimatorTypes,
   estimatorIncludedCharges,
@@ -79,6 +81,9 @@ export default function CMSTab({
   const handleUpdateEstimatorType = (index, field, value) => {
     const updated = [...estimatorTypes];
     updated[index] = { ...updated[index], [field]: value };
+    if (field === "baseRange") {
+      updated[index].baseRangeINR = value;
+    }
     setEstimatorTypes(updated);
   };
 
@@ -86,7 +91,9 @@ export default function CMSTab({
     const newType = {
       id: `type-${Date.now()}`,
       label: "New Project Architecture",
-      baseRange: "₹25,000 – ₹1.5L"
+      baseRange: "₹25,000 – ₹1.5L",
+      baseRangeINR: "₹25,000 – ₹1.5L",
+      baseRangeUSD: "$400 – $2,000"
     };
     setEstimatorTypes([...estimatorTypes, newType]);
   };
@@ -527,6 +534,33 @@ export default function CMSTab({
                 }}
               />
             </div>
+
+            {/* Live Hero Typography Preview */}
+            <div
+              className="md:col-span-2 p-5 rounded-xl border border-[rgba(61,123,247,0.25)] bg-[rgba(10,16,34,0.65)] space-y-3"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono uppercase text-gray-400">
+                  ⚡ Live Hero Display Preview
+                </span>
+                <span className="text-[10px] font-mono text-emerald-400">
+                  ● Realtime Sync
+                </span>
+              </div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[rgba(255,255,255,0.06)] border border-[rgba(228,218,195,0.18)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-xs font-mono text-gray-300">{heroStatus}</span>
+              </div>
+              <h2 className="text-2xl md:text-3xl font-serif tracking-tight text-white">
+                {heroHeadline}
+              </h2>
+              <p className="text-xs md:text-sm text-gray-300 max-w-xl leading-relaxed">
+                {heroSubtitle}
+              </p>
+              <div className="pt-2 text-[11px] font-mono text-gray-400">
+                Pillars: <span className="text-blue-400">{pillarsText}</span>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -648,6 +682,29 @@ export default function CMSTab({
                   outline: "none",
                 }}
               />
+            </div>
+
+            {/* Live Manifesto Typography Preview */}
+            <div
+              className="p-5 rounded-xl border border-[rgba(61,123,247,0.25)] bg-[rgba(10,16,34,0.65)] space-y-3"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono uppercase text-gray-400">
+                  ⚡ Live Manifesto &amp; Pull-Quote Preview
+                </span>
+                <span className="text-[10px] font-mono text-emerald-400">
+                  ● Editorial Typography
+                </span>
+              </div>
+              <blockquote className="text-lg md:text-xl font-serif italic text-white/90 border-l-2 border-blue-500 pl-4 py-1">
+                &ldquo;{aboutPullQuote}&rdquo;
+              </blockquote>
+              <div className="p-3 rounded-lg bg-[rgba(255,255,255,0.04)] text-xs text-gray-300 leading-relaxed font-sans">
+                <span className="font-mono text-[10px] uppercase text-orange-400 block mb-1">
+                  Mission Narrative:
+                </span>
+                {aboutMission}
+              </div>
             </div>
           </div>
         </div>
@@ -1635,6 +1692,24 @@ export default function CMSTab({
               </p>
             </div>
           </div>
+
+          {/* Live Metrics Summary Bar */}
+          <div className="p-4 rounded-xl border border-[rgba(61,123,247,0.25)] bg-[rgba(10,16,34,0.65)] flex flex-wrap items-center justify-between gap-4">
+            <span className="text-[10px] font-mono uppercase text-gray-400">
+              ⚡ Live Metrics Feed
+            </span>
+            <div className="flex flex-wrap items-center gap-6 font-mono text-xs">
+              <span className="text-white font-bold">
+                <span className="text-blue-400 text-sm font-serif">{statsProjects}+</span> Projects Shipped
+              </span>
+              <span className="text-white font-bold">
+                <span className="text-emerald-400 text-sm font-serif">{statsSatisfaction}%</span> Satisfaction
+              </span>
+              <span className="text-white font-bold">
+                <span className="text-orange-400 text-sm font-serif">{statsClients}+</span> Happy Clients
+              </span>
+            </div>
+          </div>
         </div>
       )}
 
@@ -1674,60 +1749,118 @@ export default function CMSTab({
             </button>
           </div>
 
-          {/* Starting Price Field */}
+          {/* Starting Price Dual Currency Fields */}
           <div
-            className="p-4 rounded-xl"
+            className="p-5 rounded-xl space-y-4"
             style={{
               backgroundColor: "rgba(248, 242, 228, 0.04)",
               border: "1px solid rgba(228, 218, 195, 0.14)",
             }}
           >
-            <label className="text-[10px] uppercase font-semibold tracking-wider font-mono" style={{ color: "var(--orange)" }}>
-              Starting Price Badge (e.g. ₹15,000 / ₹15K)
-            </label>
-            <div className="flex items-center gap-3 mt-2">
-              <input
-                type="text"
-                value={estimatorStartingPrice}
-                onChange={(e) => setEstimatorStartingPrice(e.target.value)}
-                placeholder="₹15,000"
-                style={{
-                  maxWidth: "320px",
-                  padding: "0.75rem 1rem",
-                  backgroundColor: "rgba(11, 21, 48, 0.6)",
-                  border: "1px solid rgba(228, 218, 195, 0.16)",
-                  borderRadius: "0.75rem",
-                  color: "var(--cream)",
-                  fontSize: "1rem",
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontWeight: 600,
-                  outline: "none",
-                }}
-              />
-              <span className="text-xs font-mono" style={{ color: "rgba(248, 242, 228, 0.65)" }}>
-                Shown on the Estimator header badge and scoping briefs.
+            <div className="flex items-center justify-between">
+              <label className="text-[10px] uppercase font-semibold tracking-wider font-mono" style={{ color: "var(--orange)" }}>
+                Estimator Starting Price Badges (Dual Currency)
+              </label>
+              <span className="text-[10px] font-mono text-emerald-400">
+                ₹ INR + $ USD Synchronized
               </span>
             </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <span className="text-[10px] uppercase font-mono block text-gray-400">
+                  Starting Price Badge (₹ INR)
+                </span>
+                <input
+                  type="text"
+                  value={estimatorStartingPrice || ""}
+                  onChange={(e) => setEstimatorStartingPrice(e.target.value)}
+                  placeholder="₹15,000"
+                  style={{
+                    width: "100%",
+                    marginTop: "0.25rem",
+                    padding: "0.65rem 1rem",
+                    backgroundColor: "rgba(11, 21, 48, 0.6)",
+                    border: "1px solid rgba(228, 218, 195, 0.16)",
+                    borderRadius: "0.75rem",
+                    color: "var(--cream)",
+                    fontSize: "0.95rem",
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontWeight: 600,
+                    outline: "none",
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = "var(--blue)";
+                    e.currentTarget.style.boxShadow = "0 0 12px rgba(61, 123, 247, 0.25)";
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(228, 218, 195, 0.16)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                />
+              </div>
+
+              <div>
+                <span className="text-[10px] uppercase font-mono block text-gray-400">
+                  Starting Price Badge ($ USD)
+                </span>
+                <input
+                  type="text"
+                  value={estimatorStartingPriceUsd || ""}
+                  onChange={(e) => setEstimatorStartingPriceUsd?.(e.target.value)}
+                  placeholder="$350"
+                  style={{
+                    width: "100%",
+                    marginTop: "0.25rem",
+                    padding: "0.65rem 1rem",
+                    backgroundColor: "rgba(11, 21, 48, 0.6)",
+                    border: "1px solid rgba(228, 218, 195, 0.16)",
+                    borderRadius: "0.75rem",
+                    color: "var(--cream)",
+                    fontSize: "0.95rem",
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontWeight: 600,
+                    outline: "none",
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = "var(--blue)";
+                    e.currentTarget.style.boxShadow = "0 0 12px rgba(61, 123, 247, 0.25)";
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(228, 218, 195, 0.16)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                />
+              </div>
+            </div>
+            <p className="text-[11px] font-mono text-gray-400">
+              Displayed on the live Estimator header badge when users switch between ₹ INR and $ USD currency modes.
+            </p>
           </div>
 
           {/* Architecture Tiers List */}
           <div className="space-y-4">
-            <label className="text-[10px] uppercase font-semibold tracking-wider font-mono block" style={{ color: "var(--cream)" }}>
-              Configurable Architecture Tiers ({estimatorTypes?.length || 0})
-            </label>
+            <div className="flex items-center justify-between">
+              <label className="text-[10px] uppercase font-semibold tracking-wider font-mono block" style={{ color: "var(--cream)" }}>
+                Configurable Architecture Tiers ({estimatorTypes?.length || 0})
+              </label>
+              <span className="text-[10px] font-mono text-gray-400">
+                Supports Dual Currency (₹ INR / $ USD) per Tier
+              </span>
+            </div>
 
             <div className="space-y-3">
               {estimatorTypes && estimatorTypes.map((tier, idx) => (
                 <div
                   key={tier.id || idx}
-                  className="p-4 rounded-xl flex flex-col md:flex-row items-start md:items-center gap-3"
+                  className="p-4 rounded-xl flex flex-col md:flex-row items-start md:items-center gap-3 transition-all hover:border-[rgba(61,123,247,0.35)]"
                   style={{
                     backgroundColor: "rgba(248, 242, 228, 0.03)",
                     border: "1px solid rgba(228, 218, 195, 0.12)",
                   }}
                 >
                   <span
-                    className="text-xs font-mono font-bold px-2 py-1 rounded"
+                    className="text-xs font-mono font-bold px-2 py-1 rounded shrink-0"
                     style={{
                       backgroundColor: "rgba(253, 179, 71, 0.15)",
                       color: "var(--orange)",
@@ -1736,14 +1869,14 @@ export default function CMSTab({
                     0{idx + 1}
                   </span>
 
-                  <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
+                  <div className="flex-grow grid grid-cols-1 md:grid-cols-3 gap-3 w-full">
                     <div>
                       <span className="text-[10px] uppercase font-mono block" style={{ color: "rgba(248, 242, 228, 0.55)" }}>
                         Service / Tier Name
                       </span>
                       <input
                         type="text"
-                        value={tier.label}
+                        value={tier.label || ""}
                         onChange={(e) => handleUpdateEstimatorType(idx, "label", e.target.value)}
                         placeholder="e.g. Starter Web / Landing Page"
                         style={{
@@ -1757,16 +1890,24 @@ export default function CMSTab({
                           fontSize: "0.8125rem",
                           outline: "none",
                         }}
+                        onFocus={(e) => {
+                          e.currentTarget.style.borderColor = "var(--blue)";
+                          e.currentTarget.style.boxShadow = "0 0 10px rgba(61, 123, 247, 0.2)";
+                        }}
+                        onBlur={(e) => {
+                          e.currentTarget.style.borderColor = "rgba(228, 218, 195, 0.14)";
+                          e.currentTarget.style.boxShadow = "none";
+                        }}
                       />
                     </div>
 
                     <div>
                       <span className="text-[10px] uppercase font-mono block" style={{ color: "rgba(248, 242, 228, 0.55)" }}>
-                        Indicative Price Range
+                        Price Range (₹ INR)
                       </span>
                       <input
                         type="text"
-                        value={tier.baseRange}
+                        value={tier.baseRange || tier.baseRangeINR || ""}
                         onChange={(e) => handleUpdateEstimatorType(idx, "baseRange", e.target.value)}
                         placeholder="e.g. ₹15,000 – ₹45,000"
                         style={{
@@ -1780,6 +1921,46 @@ export default function CMSTab({
                           fontSize: "0.8125rem",
                           fontFamily: "'JetBrains Mono', monospace",
                           outline: "none",
+                        }}
+                        onFocus={(e) => {
+                          e.currentTarget.style.borderColor = "var(--blue)";
+                          e.currentTarget.style.boxShadow = "0 0 10px rgba(61, 123, 247, 0.2)";
+                        }}
+                        onBlur={(e) => {
+                          e.currentTarget.style.borderColor = "rgba(228, 218, 195, 0.14)";
+                          e.currentTarget.style.boxShadow = "none";
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <span className="text-[10px] uppercase font-mono block" style={{ color: "rgba(248, 242, 228, 0.55)" }}>
+                        Price Range ($ USD)
+                      </span>
+                      <input
+                        type="text"
+                        value={tier.baseRangeUSD || ""}
+                        onChange={(e) => handleUpdateEstimatorType(idx, "baseRangeUSD", e.target.value)}
+                        placeholder="e.g. $350 – $950"
+                        style={{
+                          width: "100%",
+                          marginTop: "0.25rem",
+                          padding: "0.55rem 0.85rem",
+                          backgroundColor: "rgba(11, 21, 48, 0.6)",
+                          border: "1px solid rgba(228, 218, 195, 0.14)",
+                          borderRadius: "0.5rem",
+                          color: "var(--cream)",
+                          fontSize: "0.8125rem",
+                          fontFamily: "'JetBrains Mono', monospace",
+                          outline: "none",
+                        }}
+                        onFocus={(e) => {
+                          e.currentTarget.style.borderColor = "var(--blue)";
+                          e.currentTarget.style.boxShadow = "0 0 10px rgba(61, 123, 247, 0.2)";
+                        }}
+                        onBlur={(e) => {
+                          e.currentTarget.style.borderColor = "rgba(228, 218, 195, 0.14)";
+                          e.currentTarget.style.boxShadow = "none";
                         }}
                       />
                     </div>
@@ -1946,72 +2127,145 @@ export default function CMSTab({
               <label className="text-[10px] uppercase font-semibold tracking-wider font-mono" style={{ color: "var(--orange)" }}>
                 Direct Founder Email
               </label>
-              <input
-                type="email"
-                value={contactEmail}
-                onChange={(e) => setContactEmail(e.target.value)}
-                placeholder="theintelliverse@gmail.com"
-                style={{
-                  width: "100%",
-                  marginTop: "0.5rem",
-                  padding: "0.75rem 1rem",
-                  backgroundColor: "rgba(248, 242, 228, 0.05)",
-                  border: "1px solid rgba(228, 218, 195, 0.16)",
-                  borderRadius: "0.75rem",
-                  color: "var(--cream)",
-                  fontSize: "0.875rem",
-                  fontFamily: "'JetBrains Mono', monospace",
-                  outline: "none",
-                }}
-              />
+              <div className="flex items-center gap-2 mt-2">
+                <input
+                  type="email"
+                  value={contactEmail || ""}
+                  onChange={(e) => setContactEmail(e.target.value)}
+                  placeholder="theintelliverse@gmail.com"
+                  style={{
+                    flex: 1,
+                    padding: "0.75rem 1rem",
+                    backgroundColor: "rgba(248, 242, 228, 0.05)",
+                    border: "1px solid rgba(228, 218, 195, 0.16)",
+                    borderRadius: "0.75rem",
+                    color: "var(--cream)",
+                    fontSize: "0.875rem",
+                    fontFamily: "'JetBrains Mono', monospace",
+                    outline: "none",
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = "var(--blue)";
+                    e.currentTarget.style.boxShadow = "0 0 12px rgba(61, 123, 247, 0.25)";
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(228, 218, 195, 0.16)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                />
+                <a
+                  href={`mailto:${contactEmail}`}
+                  className="px-3 py-2.5 rounded-xl text-xs font-mono font-semibold flex items-center gap-1.5 shrink-0 transition"
+                  style={{
+                    backgroundColor: "rgba(61, 123, 247, 0.15)",
+                    color: "var(--blue)",
+                    border: "1px solid rgba(61, 123, 247, 0.3)",
+                    textDecoration: "none",
+                  }}
+                  title="Compose test email"
+                >
+                  <span>Compose</span>
+                  <i className="fas fa-paper-plane text-[10px]"></i>
+                </a>
+              </div>
             </div>
 
             <div>
               <label className="text-[10px] uppercase font-semibold tracking-wider font-mono" style={{ color: "var(--orange)" }}>
                 Official LinkedIn URL
               </label>
-              <input
-                type="url"
-                value={contactLinkedin}
-                onChange={(e) => setContactLinkedin(e.target.value)}
-                placeholder="https://www.linkedin.com/company/the-intelliverse/"
-                style={{
-                  width: "100%",
-                  marginTop: "0.5rem",
-                  padding: "0.75rem 1rem",
-                  backgroundColor: "rgba(248, 242, 228, 0.05)",
-                  border: "1px solid rgba(228, 218, 195, 0.16)",
-                  borderRadius: "0.75rem",
-                  color: "var(--cream)",
-                  fontSize: "0.875rem",
-                  fontFamily: "'JetBrains Mono', monospace",
-                  outline: "none",
-                }}
-              />
+              <div className="flex items-center gap-2 mt-2">
+                <input
+                  type="url"
+                  value={contactLinkedin || ""}
+                  onChange={(e) => setContactLinkedin(e.target.value)}
+                  placeholder="https://www.linkedin.com/company/the-intelliverse/"
+                  style={{
+                    flex: 1,
+                    padding: "0.75rem 1rem",
+                    backgroundColor: "rgba(248, 242, 228, 0.05)",
+                    border: "1px solid rgba(228, 218, 195, 0.16)",
+                    borderRadius: "0.75rem",
+                    color: "var(--cream)",
+                    fontSize: "0.875rem",
+                    fontFamily: "'JetBrains Mono', monospace",
+                    outline: "none",
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = "var(--blue)";
+                    e.currentTarget.style.boxShadow = "0 0 12px rgba(61, 123, 247, 0.25)";
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(228, 218, 195, 0.16)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                />
+                <a
+                  href={contactLinkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3 py-2.5 rounded-xl text-xs font-mono font-semibold flex items-center gap-1.5 shrink-0 transition"
+                  style={{
+                    backgroundColor: "rgba(61, 123, 247, 0.15)",
+                    color: "var(--blue)",
+                    border: "1px solid rgba(61, 123, 247, 0.3)",
+                    textDecoration: "none",
+                  }}
+                  title="Open LinkedIn in new tab"
+                >
+                  <span>Open</span>
+                  <i className="fas fa-external-link-alt text-[10px]"></i>
+                </a>
+              </div>
             </div>
 
             <div>
               <label className="text-[10px] uppercase font-semibold tracking-wider font-mono" style={{ color: "var(--orange)" }}>
                 Official Instagram URL
               </label>
-              <input
-                type="url"
-                value={contactInstagram}
-                onChange={(e) => setContactInstagram(e.target.value)}
-                placeholder="https://www.instagram.com/the_intelliverse/"
-                style={{
-                  width: "100%",
-                  marginTop: "0.5rem",
-                  padding: "0.75rem 1rem",
-                  backgroundColor: "rgba(248, 242, 228, 0.05)",
-                  border: "1px solid rgba(228, 218, 195, 0.16)",
-                  borderRadius: "0.75rem",
-                  color: "var(--cream)",
-                  fontSize: "0.875rem",
-                  fontFamily: "'JetBrains Mono', monospace",
-                  outline: "none",
-                }}
-              />
+              <div className="flex items-center gap-2 mt-2">
+                <input
+                  type="url"
+                  value={contactInstagram || ""}
+                  onChange={(e) => setContactInstagram(e.target.value)}
+                  placeholder="https://www.instagram.com/the_intelliverse/"
+                  style={{
+                    flex: 1,
+                    padding: "0.75rem 1rem",
+                    backgroundColor: "rgba(248, 242, 228, 0.05)",
+                    border: "1px solid rgba(228, 218, 195, 0.16)",
+                    borderRadius: "0.75rem",
+                    color: "var(--cream)",
+                    fontSize: "0.875rem",
+                    fontFamily: "'JetBrains Mono', monospace",
+                    outline: "none",
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = "var(--blue)";
+                    e.currentTarget.style.boxShadow = "0 0 12px rgba(61, 123, 247, 0.25)";
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(228, 218, 195, 0.16)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                />
+                <a
+                  href={contactInstagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3 py-2.5 rounded-xl text-xs font-mono font-semibold flex items-center gap-1.5 shrink-0 transition"
+                  style={{
+                    backgroundColor: "rgba(61, 123, 247, 0.15)",
+                    color: "var(--blue)",
+                    border: "1px solid rgba(61, 123, 247, 0.3)",
+                    textDecoration: "none",
+                  }}
+                  title="Open Instagram in new tab"
+                >
+                  <span>Open</span>
+                  <i className="fas fa-external-link-alt text-[10px]"></i>
+                </a>
+              </div>
             </div>
           </div>
         </div>

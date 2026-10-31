@@ -60,7 +60,7 @@ export default function Sidebar({
       <nav className="flex-grow p-4 space-y-1.5 overflow-y-auto scrollbar-none">
         {[
           { id: "dashboard", label: "Dashboard", icon: "fa-chart-pie" },
-          { id: "cms", label: "Hero & About CMS", icon: "fa-edit" },
+          { id: "cms", label: "Website Content & CMS", icon: "fa-sliders-h" },
           { id: "team", label: "Team Members", icon: "fa-users" },
           { id: "projects", label: "Projects & Portfolio", icon: "fa-layer-group" },
           { id: "casestudies", label: "Case Studies & Specs", icon: "fa-microchip" },

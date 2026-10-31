@@ -79,6 +79,7 @@ export const localMockDb = {
   },
   estimator: {
     startingPrice: "₹15,000",
+    startingPriceUsd: "$350",
     types: [
       { id: "starter", label: "Starter Web / Landing Page", baseRange: "₹15,000 – ₹45,000", baseRangeINR: "₹15,000 – ₹45,000", baseRangeUSD: "$350 – $950" },
       { id: "web", label: "Web Architecture / Next.js", baseRange: "₹45,000 – ₹1.5L", baseRangeINR: "₹45,000 – ₹1.5L", baseRangeUSD: "$950 – $2,500" },
@@ -359,7 +360,7 @@ export const localMockDb = {
       stack: ["Next.js", "Shopify Storefront API", "Tailwind CSS", "Multi-Currency"],
       techTags: ["Next.js", "Shopify Storefront API", "Tailwind CSS", "Multi-Currency"],
       impact: "Fast Global Delivery · Multi-Currency Storefront",
-      link: "https://vrix.in",
+      link: "https://vrixjewels.com/",
       caseStudyLink: "/work/vrix",
       problem: "Global luxury buyers abandoned carts due to static currency conversions and slow high-resolution image rendering.",
       broke: "Monolithic storefront bloated mobile page loads past 4.2 seconds, driving 68% overseas cart abandonment.",
@@ -397,7 +398,7 @@ export const localMockDb = {
       role: "Headless E-Commerce Architecture & AI Product Concierge",
       stack: ["Next.js", "Shopify Storefront API", "Tailwind CSS", "Multi-Currency"],
       impact: "Fast Global Delivery · Multi-Currency Storefront",
-      link: "https://vrix.in",
+      link: "https://vrixjewels.com/",
       caseStudyLink: "/work/vrix",
       problem: "Global luxury buyers abandoned carts due to static currency conversions and slow high-resolution image rendering.",
       broke: "Monolithic storefront bloated mobile page loads past 4.2 seconds, driving 68% overseas cart abandonment.",

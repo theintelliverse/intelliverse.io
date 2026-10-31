@@ -74,9 +74,9 @@ export default function AdminLoginForm() {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/the%20intelliverse%20logo.jpg"
+              src="/the-intelliverse-mark.png"
               alt="The Intelliverse Logo"
-              className="w-16 h-16 rounded-xl object-cover group-hover:scale-105 transition-transform duration-500"
+              className="w-16 h-16 object-contain group-hover:scale-105 transition-transform duration-500"
             />
           </div>
           <h1

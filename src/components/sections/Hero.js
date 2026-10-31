@@ -56,6 +56,64 @@ export default function Hero({ data = null, telemetry = null } = {}) {
   }, []);
 
   const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
+  const [gyroOffset, setGyroOffset] = useState({ x: 0, y: 0 });
+
+  // Gyroscope / DeviceOrientation Listener for Mobile Devices
+  useEffect(() => {
+    let initialBeta = null;
+    let initialGamma = null;
+
+    const handleOrientation = (e) => {
+      const { beta, gamma } = e;
+      if (beta === null || gamma === null) return;
+
+      // Calibrate reference point when user opens the page in their posture
+      if (initialBeta === null) {
+        initialBeta = beta;
+        initialGamma = gamma;
+      }
+
+      // Calculate smooth tilt delta relative to initial hold (-30 to +30 degrees)
+      const deltaX = Math.max(-30, Math.min(30, gamma - initialGamma));
+      const deltaY = Math.max(-30, Math.min(30, beta - initialBeta));
+
+      // Normalized to range [-1, 1]
+      const nx = deltaX / 30;
+      const ny = deltaY / 30;
+
+      setGyroOffset({ x: nx, y: ny });
+    };
+
+    if (typeof window !== "undefined" && window.DeviceOrientationEvent) {
+      // iOS 13+ permission protocol
+      if (typeof DeviceOrientationEvent.requestPermission === "function") {
+        const requestIOSPermission = async () => {
+          try {
+            const res = await DeviceOrientationEvent.requestPermission();
+            if (res === "granted") {
+              window.addEventListener("deviceorientation", handleOrientation, { passive: true });
+            }
+          } catch (_) {}
+          window.removeEventListener("touchstart", requestIOSPermission);
+          window.removeEventListener("click", requestIOSPermission);
+        };
+        window.addEventListener("touchstart", requestIOSPermission, { once: true });
+        window.addEventListener("click", requestIOSPermission, { once: true });
+      } else {
+        // Direct event listener for Android & modern browsers
+        window.addEventListener("deviceorientation", handleOrientation, { passive: true });
+      }
+    }
+
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("deviceorientation", handleOrientation);
+      }
+    };
+  }, []);
+
+  const totalOffsetX = Math.max(-1.5, Math.min(1.5, mouseOffset.x + gyroOffset.x));
+  const totalOffsetY = Math.max(-1.5, Math.min(1.5, mouseOffset.y + gyroOffset.y));
 
   const handleMouseMove = (e) => {
     if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) return;
@@ -434,32 +492,41 @@ export default function Hero({ data = null, telemetry = null } = {}) {
             </motion.div>
           </div>
 
-          {/* Right Column: Floating Interactive Official Brand Mark */}
-          <div className="lg:col-span-4 mt-8 lg:mt-0 relative flex items-center justify-center min-h-[320px] sm:min-h-[400px]">
+          {/* Right Column: Floating Interactive Official Brand Mark (Gyro + Mouse 3D Tilt) */}
+          <div
+            className="lg:col-span-4 mt-8 lg:mt-0 relative flex items-center justify-center min-h-[320px] sm:min-h-[400px]"
+            style={{ perspective: "1000px" }}
+          >
             <motion.div
               animate={{
-                x: mouseOffset.x * 24,
-                y: mouseOffset.y * 24 + (isMounted ? 4 : 0),
-                rotate: [0, 2, -2, 0],
+                x: totalOffsetX * 32,
+                y: totalOffsetY * 32 + (isMounted ? 4 : 0),
+                rotateX: totalOffsetY * -22,
+                rotateY: totalOffsetX * 22,
+                rotateZ: [0, 1.5, -1.5, 0],
               }}
               transition={{
-                x: { type: "spring", stiffness: 120, damping: 25 },
-                y: { type: "spring", stiffness: 120, damping: 25 },
-                rotate: { duration: 9, repeat: Infinity, ease: "easeInOut" },
+                x: { type: "spring", stiffness: 95, damping: 20 },
+                y: { type: "spring", stiffness: 95, damping: 20 },
+                rotateX: { type: "spring", stiffness: 95, damping: 20 },
+                rotateY: { type: "spring", stiffness: 95, damping: 20 },
+                rotateZ: { duration: 9, repeat: Infinity, ease: "easeInOut" },
               }}
               className="w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] lg:w-[420px] lg:h-[420px] select-none flex items-center justify-center"
               style={{
                 opacity: 0.95,
                 transformOrigin: "center center",
+                transformStyle: "preserve-3d",
               }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/the-intelliverse-mark.png"
                 alt="The Intelliverse Brand Mark"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain pointer-events-none"
                 style={{
-                  filter: "drop-shadow(0 25px 50px rgba(61, 123, 247, 0.22))",
+                  filter: `drop-shadow(${totalOffsetX * -14}px ${25 + totalOffsetY * -14}px 45px rgba(61, 123, 247, 0.26))`,
+                  transition: "filter 0.15s ease-out",
                 }}
               />
             </motion.div>

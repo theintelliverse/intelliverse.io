@@ -62,6 +62,7 @@ export default function AdminPanel({
   const [statsClients, setStatsClients] = useState(data.stats?.clients !== undefined ? data.stats.clients : 15);
 
   const [estimatorStartingPrice, setEstimatorStartingPrice] = useState(data.estimator?.startingPrice || "₹15,000");
+  const [estimatorStartingPriceUsd, setEstimatorStartingPriceUsd] = useState(data.estimator?.startingPriceUsd || "$350");
   const [estimatorTypes, setEstimatorTypes] = useState(
     data.estimator?.types || [
       { id: "starter", label: "Starter Web / Landing Page", baseRange: "₹15,000 – ₹45,000" },
@@ -603,6 +604,7 @@ export default function AdminPanel({
       },
       estimator: {
         startingPrice: estimatorStartingPrice,
+        startingPriceUsd: estimatorStartingPriceUsd,
         types: estimatorTypes,
         includedCharges: estimatorIncludedCharges
       },
@@ -798,10 +800,9 @@ export default function AdminPanel({
         <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/the%20intelliverse%20logo.jpg"
+            src="/the-intelliverse-mark.png"
             alt="Intelliverse Logo"
-            className="w-7 h-7 rounded-lg object-cover"
-            style={{ border: "1px solid rgba(228, 218, 195, 0.2)" }}
+            className="w-8 h-8 object-contain"
           />
           <div>
             <h1
@@ -851,9 +852,9 @@ export default function AdminPanel({
 
         {/* Persistent Global Top Action Bar */}
         <div
-          className="sticky top-0 -mt-4 md:-mt-10 mb-6 md:mb-8 pt-4 md:pt-6 pb-4 z-30 flex flex-wrap items-center justify-between gap-3"
+          className="sticky top-0 mb-6 md:mb-8 pb-4 z-30 flex flex-wrap items-center justify-between gap-3 pt-2"
           style={{
-            backgroundColor: "rgba(11, 21, 48, 0.9)",
+            backgroundColor: "rgba(11, 21, 48, 0.92)",
             borderBottom: "1px solid rgba(228, 218, 195, 0.12)",
             backdropFilter: "blur(16px)",
           }}
@@ -869,7 +870,7 @@ export default function AdminPanel({
               className="text-xs font-bold uppercase tracking-wider"
               style={{ fontFamily: "'JetBrains Mono', monospace", color: "var(--cream)" }}
             >
-              {activeTab === "casestudies" ? "Case Studies & Specs" : activeTab === "cms" ? "Hero & About CMS" : activeTab}
+              {activeTab === "casestudies" ? "Case Studies & Specs" : activeTab === "cms" ? "Website Content & CMS" : activeTab}
             </span>
           </div>
 
@@ -994,6 +995,8 @@ export default function AdminPanel({
             setStatsClients={setStatsClients}
             estimatorStartingPrice={estimatorStartingPrice}
             setEstimatorStartingPrice={setEstimatorStartingPrice}
+            estimatorStartingPriceUsd={estimatorStartingPriceUsd}
+            setEstimatorStartingPriceUsd={setEstimatorStartingPriceUsd}
             estimatorTypes={estimatorTypes}
             setEstimatorTypes={setEstimatorTypes}
             estimatorIncludedCharges={estimatorIncludedCharges}
