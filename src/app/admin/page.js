@@ -17,6 +17,19 @@ const dummySubmissions = [
   }
 ];
 
+export const metadata = {
+  title: "Admin Portal | The Intelliverse",
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
+};
+
 export default async function AdminPage() {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("admin_session")?.value;

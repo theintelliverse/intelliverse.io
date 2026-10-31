@@ -14,10 +14,7 @@ Allow: /llm.txt
 Allow: /llms-full.txt
 Allow: /humans.txt
 Allow: /.well-known/security.txt
-Disallow: /admin
-Disallow: /admin/
-Disallow: /api/admin
-Disallow: /api/content
+Disallow:
 
 # ── Major Search Engines ──────────────────────────────────────────────────────
 User-agent: Googlebot
@@ -26,10 +23,7 @@ Allow: /sitemap.xml
 Allow: /llms.txt
 Allow: /llm.txt
 Allow: /llms-full.txt
-Disallow: /admin
-Disallow: /admin/
-Disallow: /api/admin
-Disallow: /api/content
+Disallow:
 
 User-agent: Googlebot-Image
 Allow: /
@@ -38,27 +32,27 @@ Allow: /the-intelliverse-logo.jpg
 Allow: /*.jpg$
 Allow: /*.png$
 Allow: /*.svg$
-Disallow: /admin/
+Disallow:
 
 User-agent: Bingbot
 Allow: /
-Disallow: /admin/
+Disallow:
 
 User-agent: Applebot
 Allow: /
-Disallow: /admin/
+Disallow:
 
 User-agent: YandexBot
 Allow: /
-Disallow: /admin/
+Disallow:
 
 User-agent: DuckDuckBot
 Allow: /
-Disallow: /admin/
+Disallow:
 
 User-agent: Baiduspider
 Allow: /
-Disallow: /admin/
+Disallow:
 
 # ── AI Agents & Answer Engine Crawlers (AEO / GEO) ───────────────────────────
 User-agent: GPTBot
@@ -66,41 +60,41 @@ Allow: /
 Allow: /llms.txt
 Allow: /llm.txt
 Allow: /llms-full.txt
-Disallow: /admin/
+Disallow:
 
 User-agent: ChatGPT-User
 Allow: /
-Disallow: /admin/
+Disallow:
 
 User-agent: ClaudeBot
 Allow: /
 Allow: /llms.txt
 Allow: /llm.txt
 Allow: /llms-full.txt
-Disallow: /admin/
+Disallow:
 
 User-agent: Anthropic-AI
 Allow: /
-Disallow: /admin/
+Disallow:
 
 User-agent: PerplexityBot
 Allow: /
 Allow: /llms.txt
 Allow: /llm.txt
 Allow: /llms-full.txt
-Disallow: /admin/
+Disallow:
 
 User-agent: Google-Extended
 Allow: /
-Disallow: /admin/
+Disallow:
 
 User-agent: Bytespider
 Allow: /
-Disallow: /admin/
+Disallow:
 
 User-agent: CCBot
 Allow: /
-Disallow: /admin/
+Disallow:
 
 # ── Canonical Sitemaps ────────────────────────────────────────────────────────
 Sitemap: https://theintelliverse.tech/sitemap.xml
