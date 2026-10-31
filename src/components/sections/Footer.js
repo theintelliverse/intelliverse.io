@@ -337,7 +337,7 @@ export default function Footer({ data = null } = {}) {
               {[
                 { label: "Appointory Case Study", href: "/work/appointory" },
                 { label: "Vrix Jewellery Study", href: "/work/vrix" },
-                { label: "Interactive Sketchbook", href: "/landing-pages/meng-to-sketchbook.html" },
+                { label: "Engineering Journal / Blog", href: "/blog" },
                 { label: "Scoping Estimator", href: "/#estimator" },
               ].map((item) => (
                 <li key={item.href}>

@@ -13,6 +13,30 @@ export interface BlogPostMeta {
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "appointory-healthcare-saas-architecture-case-study",
+    title: "Case Study: How We Built Appointory — Real-Time Clinic Queue & OPD Token Dispatch Engine",
+    description:
+      "An engineering breakdown of Appointory (appointory.in): sub-50ms WebSocket queue synchronization, automated WhatsApp patient arrival triggers, and zero-wait doctor OPD dispatch.",
+    author: "Dhruvil Thummar",
+    authorRole: "Co-founder & CTO",
+    publishedDate: "2026-10-31",
+    updatedDate: "2026-10-31",
+    readTime: "12 min read",
+    category: "Project Case Study · Healthcare",
+  },
+  {
+    slug: "vrix-jewels-headless-shopify-nextjs-case-study",
+    title: "Case Study: How We Engineered Vrix Jewellery — Sub-Second Headless Storefront with Next.js & Shopify",
+    description:
+      "How The Intelliverse built vrixjewels.com: Next.js headless architecture, dynamic multi-currency geolocation checkout, high-res diamond visualizers, and 99 Core Web Vitals.",
+    author: "Dhruvil Thummar",
+    authorRole: "Co-founder & CTO",
+    publishedDate: "2026-10-31",
+    updatedDate: "2026-10-31",
+    readTime: "11 min read",
+    category: "Project Case Study · E-Commerce",
+  },
+  {
     slug: "what-is-the-intelliverse",
     title: "What is The Intelliverse? Our Story and What We Build",
     description:

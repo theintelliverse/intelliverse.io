@@ -12,8 +12,10 @@ import ProjectsTab from "./tabs/ProjectsTab";
 import CaseStudiesTab from "./tabs/CaseStudiesTab";
 import TestimonialsTab from "./tabs/TestimonialsTab";
 import ChatbotTab from "./tabs/ChatbotTab";
+import BlogsTab from "./tabs/BlogsTab";
 import CRMTab from "./tabs/CRMTab";
 import SettingsTab from "./tabs/SettingsTab";
+import { BLOG_POSTS } from "@/content/blog";
 
 // Modals
 import LeadDetailsModal from "./modals/LeadDetailsModal";
@@ -848,6 +850,7 @@ export default function AdminPanel({
           casestudies: caseStudies.length,
           testimonials: testimonials.length,
           chatbot: chatbotKnowledge.length,
+          blogs: BLOG_POSTS.length,
           crm: contactLogs.length,
         }}
       />
@@ -1139,6 +1142,9 @@ export default function AdminPanel({
             loading={loading}
           />
         )}
+
+        {/* Engineering Blogs & Journal Tab */}
+        {activeTab === "blogs" && <BlogsTab />}
 
         {/* CRM Submissions Tab */}
         {activeTab === "crm" && (

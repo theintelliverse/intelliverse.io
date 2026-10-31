@@ -67,6 +67,7 @@ export default function Sidebar({
           { id: "casestudies", label: "Case Studies & Specs", icon: "fa-microchip", countKey: "casestudies" },
           { id: "testimonials", label: "Client Reviews", icon: "fa-comments", countKey: "testimonials" },
           { id: "chatbot", label: "Chatbot Q&A", icon: "fa-robot", countKey: "chatbot" },
+          { id: "blogs", label: "Engineering Blogs", icon: "fa-book-open", countKey: "blogs" },
           { id: "crm", label: "CRM Form Leads", icon: "fa-address-book", countKey: "crm" },
           { id: "settings", label: "Manage Admins", icon: "fa-users-cog" },
         ].map((tab) => {

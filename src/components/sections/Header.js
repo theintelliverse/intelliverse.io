@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { label: "Work",      href: "/#projects" },
   { label: "Process",   href: "/#process" },
   { label: "Estimator", href: "/#estimator" },
+  { label: "Blog",      href: "/blog" },
   { label: "About",     href: "/#about" },
   { label: "Contact",   href: "/#contact" },
 ];
@@ -39,7 +40,11 @@ export default function Header() {
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
 
-  const scrollTo = (e, id) => {
+  const scrollTo = (e, id, href) => {
+    if (href && !href.startsWith("/#")) {
+      setMenuOpen(false);
+      return;
+    }
     e.preventDefault();
     setMenuOpen(false);
     const el = document.getElementById(id);
@@ -84,7 +89,7 @@ export default function Header() {
                   <motion.a
                     key={link.label}
                     href={link.href}
-                    onClick={(e) => scrollTo(e, id)}
+                    onClick={(e) => scrollTo(e, id, link.href)}
                     initial={{ x: -40, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.08 * i + 0.15, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
@@ -182,7 +187,7 @@ export default function Header() {
               <Link
                 key={link.label}
                 href={link.href}
-                onClick={(e) => scrollTo(e, id)}
+                onClick={(e) => scrollTo(e, id, link.href)}
                 className="nav-link"
                 data-cursor="link"
               >
