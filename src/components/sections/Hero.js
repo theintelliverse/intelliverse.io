@@ -100,108 +100,7 @@ export default function Hero({ data = null, telemetry = null } = {}) {
         aria-hidden="true"
       />
 
-      {/* ── 4-Circle Brand Orb Venn Diagram (Multiply Blend with 3D Parallax) ─ */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
-      >
-        <motion.div
-          className="hidden md:block absolute"
-          animate={{
-            x: mouseOffset.x * 26,
-            y: mouseOffset.y * 26,
-          }}
-          transition={{ type: "spring", stiffness: 120, damping: 25 }}
-          style={{
-            top: "14%",
-            right: "4%",
-            width: "clamp(380px, 42vw, 620px)",
-            height: "clamp(380px, 42vw, 620px)",
-          }}
-        >
-          {/* Continuous organic float motion container */}
-          <motion.div
-            animate={{
-              y: [-10, 10, -10],
-              rotate: [0, 1.5, -1.5, 0],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            style={{ width: "100%", height: "100%", position: "relative" }}
-          >
-            {/* Orb 1: Electric Blue (#3D7BF7) */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={isMounted ? { opacity: 0.32, scale: 1 } : { opacity: 0, scale: 0.6 }}
-              transition={{ ...springs.gentle, delay: 0.15 }}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: "12%",
-                width: "66%",
-                height: "66%",
-                borderRadius: "50%",
-                backgroundColor: "var(--blue)",
-                mixBlendMode: "multiply",
-              }}
-            />
 
-            {/* Orb 2: Warm Amber (#FDB347) */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={isMounted ? { opacity: 0.36, scale: 1 } : { opacity: 0, scale: 0.6 }}
-              transition={{ ...springs.gentle, delay: 0.3 }}
-              style={{
-                position: "absolute",
-                top: "8%",
-                right: 0,
-                width: "62%",
-                height: "62%",
-                borderRadius: "50%",
-                backgroundColor: "var(--orange)",
-                mixBlendMode: "multiply",
-              }}
-            />
-
-            {/* Orb 3: Deep Indigo (#5B3FD9) */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={isMounted ? { opacity: 0.28, scale: 1 } : { opacity: 0, scale: 0.6 }}
-              transition={{ ...springs.gentle, delay: 0.45 }}
-              style={{
-                position: "absolute",
-                bottom: "4%",
-                left: "4%",
-                width: "64%",
-                height: "64%",
-                borderRadius: "50%",
-                backgroundColor: "var(--indigo)",
-                mixBlendMode: "multiply",
-              }}
-            />
-
-            {/* Orb 4: Vivid Coral (#FF6B7B) */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={isMounted ? { opacity: 0.34, scale: 1 } : { opacity: 0, scale: 0.6 }}
-              transition={{ ...springs.gentle, delay: 0.6 }}
-              style={{
-                position: "absolute",
-                bottom: 0,
-                right: "8%",
-                width: "60%",
-                height: "60%",
-                borderRadius: "50%",
-                backgroundColor: "var(--coral)",
-                mixBlendMode: "multiply",
-              }}
-            />
-          </motion.div>
-        </motion.div>
-      </div>
 
       {/* ── Main Hero Content ───────────────────────────────────────── */}
       <div
@@ -537,12 +436,47 @@ export default function Hero({ data = null, telemetry = null } = {}) {
           </div>
 
           {/* Right Column: Editorial Studio Telemetry Log Card */}
-          <div className="lg:col-span-4 mt-4 lg:mt-0">
+          <div className="lg:col-span-4 mt-6 lg:mt-0 relative">
+            {/* Background Floating Official Brand Mark (Replaced Mock CSS Orbs) */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -inset-6 sm:-inset-12 flex items-center justify-center z-0 overflow-visible"
+            >
+              <motion.div
+                animate={{
+                  x: mouseOffset.x * 24,
+                  y: mouseOffset.y * 24 + (isMounted ? 4 : 0),
+                  rotate: [0, 1.5, -1.5, 0],
+                }}
+                transition={{
+                  x: { type: "spring", stiffness: 120, damping: 25 },
+                  y: { type: "spring", stiffness: 120, damping: 25 },
+                  rotate: { duration: 8, repeat: Infinity, ease: "easeInOut" },
+                }}
+                className="w-[320px] h-[320px] sm:w-[440px] sm:h-[440px] lg:w-[520px] lg:h-[520px] select-none"
+                style={{
+                  opacity: 0.88,
+                  transformOrigin: "center center",
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/the-intelliverse-mark.png"
+                  alt="The Intelliverse Brand Mark"
+                  className="w-full h-full object-contain"
+                  style={{
+                    filter: "drop-shadow(0 20px 45px rgba(61, 123, 247, 0.18))",
+                  }}
+                />
+              </motion.div>
+            </div>
+
             <motion.div
               variants={fadeUp}
               initial="hidden"
               animate={isMounted ? "visible" : "hidden"}
               transition={{ delay: 0.55 }}
+              className="relative z-10"
             >
               <StudioTelemetryCard data={telemetry} initialCount={telemetry?.deployCount || 302} showFullLogs={true} />
             </motion.div>
