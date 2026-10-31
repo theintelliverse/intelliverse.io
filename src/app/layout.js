@@ -403,14 +403,14 @@ export default function RootLayout({ children }) {
         <Script
           key="ga4-script"
           strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=G-S2ZW1XMDW8"
+          src="https://www.googletagmanager.com/gtag/js?id=G-9G65ML1LNR"
         />
         <Script key="ga4-init" id="google-analytics" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-S2ZW1XMDW8', {
+            gtag('config', 'G-9G65ML1LNR', {
               page_path: window.location.pathname,
               send_page_view: true
             });
