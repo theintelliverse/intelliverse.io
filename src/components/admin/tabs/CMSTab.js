@@ -55,9 +55,30 @@ export default function CMSTab({
   philosophy,
   setPhilosophy,
   handleSaveCMS,
-  loading
+  loading,
+  contactLogs = [],
+  setSelectedLead,
+  handleDeleteLead
 }) {
-  const [activeSection, setActiveSection] = useState("hero"); // hero | about | services | process | philosophy | marquee | estimator | numbers | contact | telemetry
+  const [activeSection, setActiveSection] = useState("hero"); // hero | about | services | process | philosophy | marquee | estimator | numbers | contact | telemetry | leads
+  const [leadSearch, setLeadSearch] = useState("");
+  const [leadCopiedId, setLeadCopiedId] = useState(null);
+
+  const filteredCmsLeads = contactLogs.filter((log) => {
+    const q = leadSearch.toLowerCase();
+    return (
+      (log.name && log.name.toLowerCase().includes(q)) ||
+      (log.email && log.email.toLowerCase().includes(q)) ||
+      (log.message && log.message.toLowerCase().includes(q))
+    );
+  });
+
+  const handleCopyCmsEmail = (e, email, id) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(email);
+    setLeadCopiedId(id);
+    setTimeout(() => setLeadCopiedId(null), 2500);
+  };
 
   const handleUpdateTelemetry = (field, value) => {
     setTelemetry((prev) => ({
@@ -334,7 +355,7 @@ export default function CMSTab({
           { id: "estimator", label: "07. Estimator & Pricing", icon: "fa-calculator" },
           { id: "numbers", label: "08. Verified Numbers", icon: "fa-chart-bar" },
           { id: "contact", label: "09. Studio Channels", icon: "fa-paper-plane" },
-          { id: "telemetry", label: "10. Studio Telemetry", icon: "fa-satellite-dish" },
+          { id: "leads", label: `10. Lead Management ${contactLogs.length > 0 ? `(${contactLogs.length})` : ""}`, icon: "fa-inbox", accent: true },
         ].map((tab) => {
           const isActive = activeSection === tab.id;
           return (
@@ -343,16 +364,20 @@ export default function CMSTab({
               onClick={() => setActiveSection(tab.id)}
               className="px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition duration-200 cursor-pointer shrink-0 font-mono"
               style={{
-                backgroundColor: isActive ? "var(--blue-deep)" : "transparent",
+                backgroundColor: isActive
+                  ? tab.accent ? "rgba(253, 179, 71, 0.18)" : "var(--blue-deep)"
+                  : "transparent",
                 color: isActive ? "var(--cream)" : "rgba(248, 242, 228, 0.65)",
                 border: isActive
-                  ? "1px solid rgba(228, 218, 195, 0.25)"
+                  ? tab.accent ? "1px solid rgba(253, 179, 71, 0.35)" : "1px solid rgba(228, 218, 195, 0.25)"
                   : "1px solid transparent",
-                boxShadow: isActive ? "0 4px 14px rgba(47, 99, 224, 0.3)" : "none",
+                boxShadow: isActive
+                  ? tab.accent ? "0 4px 14px rgba(253, 179, 71, 0.2)" : "0 4px 14px rgba(47, 99, 224, 0.3)"
+                  : "none",
               }}
               onMouseEnter={(e) => {
                 if (!isActive) {
-                  e.currentTarget.style.backgroundColor = "rgba(248, 242, 228, 0.06)";
+                  e.currentTarget.style.backgroundColor = tab.accent ? "rgba(253, 179, 71, 0.08)" : "rgba(248, 242, 228, 0.06)";
                   e.currentTarget.style.color = "var(--cream)";
                 }
               }}
@@ -365,7 +390,7 @@ export default function CMSTab({
             >
               <i
                 className={`fas ${tab.icon} text-xs`}
-                style={{ color: isActive ? "var(--orange)" : "rgba(248, 242, 228, 0.5)" }}
+                style={{ color: isActive ? (tab.accent ? "var(--orange)" : "var(--orange)") : tab.accent ? "rgba(253,179,71,0.6)" : "rgba(248, 242, 228, 0.5)" }}
               ></i>
               <span>{tab.label}</span>
             </button>
@@ -2741,6 +2766,184 @@ export default function CMSTab({
             </div>
 
           </div>
+        </div>
+      )}
+
+      {/* SECTION 11: LEAD GENERATION & MANAGEMENT */}
+      {activeSection === "leads" && (
+        <div className="space-y-6 animate-fade-in">
+
+          {/* Section Header */}
+          <div className="admin-console-card overflow-hidden">
+            <div
+              className="px-5 md:px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
+              style={{ borderBottom: "1px solid rgba(228, 218, 195, 0.08)", background: "rgba(11, 21, 48, 0.5)" }}
+            >
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg" style={{ backgroundColor: "rgba(253, 179, 71, 0.15)", border: "1px solid rgba(253, 179, 71, 0.25)" }}>
+                  <i className="fas fa-inbox text-xs" style={{ color: "var(--orange)" }}></i>
+                </div>
+                <div>
+                  <h3 className="text-xs font-bold font-mono uppercase tracking-wider" style={{ color: "var(--cream)" }}>Lead Generation & Management</h3>
+                  <p className="text-[10px] mt-0.5 font-mono" style={{ color: "rgba(248, 242, 228, 0.5)" }}>All inbound client inquiries from the website contact form</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-[10px] font-mono px-3 py-1 rounded-full font-bold flex items-center gap-1.5" style={{ backgroundColor: contactLogs.length > 0 ? "rgba(16, 185, 129, 0.12)" : "rgba(47, 99, 224, 0.12)", color: contactLogs.length > 0 ? "#34d399" : "var(--blue)", border: `1px solid ${contactLogs.length > 0 ? "rgba(16, 185, 129, 0.3)" : "rgba(61, 123, 247, 0.25)"}` }}>
+                  <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: contactLogs.length > 0 ? "#34d399" : "var(--blue)" }} />
+                  {contactLogs.length} Total Leads
+                </span>
+                <span className="text-[10px] font-mono px-3 py-1 rounded-full font-bold" style={{ backgroundColor: "rgba(253, 179, 71, 0.1)", color: "var(--orange)", border: "1px solid rgba(253, 179, 71, 0.2)" }}>
+                  {contactLogs.filter(l => {
+                    const d = new Date(l.createdAt);
+                    const now = new Date();
+                    return (now - d) < 7 * 24 * 60 * 60 * 1000;
+                  }).length} This Week
+                </span>
+              </div>
+            </div>
+
+            {/* Stats Strip */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-y sm:divide-y-0" style={{ borderBottom: "1px solid rgba(228, 218, 195, 0.08)", borderColor: "rgba(228, 218, 195, 0.08)" }}>
+              {[
+                { label: "Total Leads", value: contactLogs.length, icon: "fa-inbox", color: "var(--blue)" },
+                { label: "This Week", value: contactLogs.filter(l => (new Date() - new Date(l.createdAt)) < 7 * 86400000).length, icon: "fa-calendar-week", color: "var(--orange)" },
+                { label: "Today", value: contactLogs.filter(l => new Date(l.createdAt).toDateString() === new Date().toDateString()).length, icon: "fa-clock", color: "#34d399" },
+                { label: "Unique Emails", value: new Set(contactLogs.map(l => l.email?.toLowerCase())).size, icon: "fa-at", color: "var(--purple)" },
+              ].map((stat, i) => (
+                <div key={i} className="p-4 text-center" style={{ borderColor: "rgba(228, 218, 195, 0.08)" }}>
+                  <i className={`fas ${stat.icon} text-sm mb-1.5 block`} style={{ color: stat.color }}></i>
+                  <div className="text-lg font-black font-mono" style={{ color: "var(--cream)" }}>{stat.value}</div>
+                  <div className="text-[9px] font-mono uppercase tracking-wider mt-0.5" style={{ color: "rgba(248, 242, 228, 0.45)" }}>{stat.label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Search Bar */}
+            <div className="p-4 md:p-5" style={{ borderBottom: "1px solid rgba(228, 218, 195, 0.08)" }}>
+              <div className="relative">
+                <i className="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-xs" style={{ color: "rgba(248, 242, 228, 0.4)" }}></i>
+                <input
+                  type="text"
+                  value={leadSearch}
+                  onChange={e => setLeadSearch(e.target.value)}
+                  placeholder="Search leads by name, email, or message content..."
+                  className="admin-input-field pl-9 pr-9 text-xs font-mono w-full"
+                />
+                {leadSearch && (
+                  <button onClick={() => setLeadSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-xs cursor-pointer" style={{ color: "rgba(248, 242, 228, 0.5)" }}>✕</button>
+                )}
+              </div>
+              <div className="mt-2 text-[10px] font-mono" style={{ color: "rgba(248, 242, 228, 0.45)" }}>
+                Showing <strong style={{ color: "var(--cream)" }}>{filteredCmsLeads.length}</strong> of <strong style={{ color: "var(--cream)" }}>{contactLogs.length}</strong> submissions
+              </div>
+            </div>
+
+            {/* Lead Cards */}
+            <div className="p-4 md:p-5 space-y-3 max-h-[65vh] overflow-y-auto scrollbar-none">
+              {filteredCmsLeads.length === 0 && (
+                <div className="text-center py-16">
+                  <i className="fas fa-inbox text-4xl mb-4 block" style={{ color: "rgba(248, 242, 228, 0.1)" }}></i>
+                  <p className="text-xs font-mono" style={{ color: "rgba(248, 242, 228, 0.4)" }}>
+                    {leadSearch ? `No results for "${leadSearch}"` : "No inbound leads received yet."}
+                  </p>
+                </div>
+              )}
+              {filteredCmsLeads.map((log, index) => {
+                const isCopied = leadCopiedId === (log._id || index);
+                const timeAgo = (() => {
+                  const diff = Date.now() - new Date(log.createdAt);
+                  const mins = Math.floor(diff / 60000);
+                  const hours = Math.floor(diff / 3600000);
+                  const days = Math.floor(diff / 86400000);
+                  if (days > 0) return `${days}d ago`;
+                  if (hours > 0) return `${hours}h ago`;
+                  if (mins > 0) return `${mins}m ago`;
+                  return "Just now";
+                })();
+                const isNew = (Date.now() - new Date(log.createdAt)) < 24 * 3600000;
+
+                return (
+                  <div
+                    key={log._id || index}
+                    className="rounded-2xl overflow-hidden transition-all duration-300"
+                    style={{ background: "rgba(11, 21, 48, 0.7)", border: "1px solid rgba(228, 218, 195, 0.1)" }}
+                  >
+                    {/* Lead Header */}
+                    <div className="px-4 py-3 flex flex-wrap items-center justify-between gap-2" style={{ borderBottom: "1px solid rgba(228, 218, 195, 0.07)" }}>
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs font-mono shrink-0" style={{ background: "rgba(61, 123, 247, 0.15)", border: "1px solid rgba(61, 123, 247, 0.25)", color: "var(--blue)" }}>
+                          {(log.name || "?").charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-sm font-mono" style={{ color: "var(--cream)" }}>{log.name || "Unknown"}</span>
+                            {isNew && (
+                              <span className="text-[8px] font-bold font-mono px-1.5 py-0.5 rounded-full uppercase tracking-wider" style={{ background: "rgba(16, 185, 129, 0.2)", color: "#34d399", border: "1px solid rgba(16, 185, 129, 0.3)" }}>New</span>
+                            )}
+                          </div>
+                          <span className="text-[10px] font-mono" style={{ color: "var(--orange)" }}>{log.email}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[9px] font-mono" style={{ color: "rgba(248, 242, 228, 0.4)" }}>{timeAgo}</span>
+                        {log.ip && <span className="text-[9px] font-mono px-2 py-0.5 rounded-lg" style={{ background: "rgba(248, 242, 228, 0.05)", color: "rgba(248, 242, 228, 0.4)", border: "1px solid rgba(228, 218, 195, 0.1)" }}>{log.ip}</span>}
+                      </div>
+                    </div>
+
+                    {/* Message Body */}
+                    <div className="px-4 py-3">
+                      <p className="text-xs font-sans leading-relaxed line-clamp-3" style={{ color: "rgba(248, 242, 228, 0.85)" }}>{log.message}</p>
+                    </div>
+
+                    {/* Action Bar */}
+                    <div className="px-4 pb-3 flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={e => handleCopyCmsEmail(e, log.email, log._id || index)}
+                        className="px-2.5 py-1.5 rounded-lg text-[10px] font-mono font-bold flex items-center gap-1.5 transition cursor-pointer"
+                        style={{ backgroundColor: isCopied ? "rgba(16, 185, 129, 0.15)" : "rgba(248, 242, 228, 0.06)", color: isCopied ? "#34d399" : "rgba(248, 242, 228, 0.7)", border: `1px solid ${isCopied ? "rgba(16, 185, 129, 0.3)" : "rgba(228, 218, 195, 0.12)"}` }}
+                      >
+                        <i className={`fas ${isCopied ? "fa-check" : "fa-copy"} text-[9px]`}></i>
+                        <span>{isCopied ? "Copied!" : "Copy Email"}</span>
+                      </button>
+                      <a
+                        href={`mailto:${log.email}?subject=The Intelliverse — Follow up on your inquiry`}
+                        onClick={e => e.stopPropagation()}
+                        className="px-2.5 py-1.5 rounded-lg text-[10px] font-mono font-bold flex items-center gap-1.5 transition cursor-pointer"
+                        style={{ backgroundColor: "rgba(47, 99, 224, 0.15)", color: "var(--blue)", border: "1px solid rgba(61, 123, 247, 0.3)", textDecoration: "none" }}
+                      >
+                        <i className="fas fa-paper-plane text-[9px]"></i>
+                        <span>Reply</span>
+                      </a>
+                      {setSelectedLead && (
+                        <button
+                          type="button"
+                          onClick={() => setSelectedLead(log)}
+                          className="px-2.5 py-1.5 rounded-lg text-[10px] font-mono font-bold flex items-center gap-1.5 transition cursor-pointer"
+                          style={{ backgroundColor: "rgba(155, 114, 216, 0.12)", color: "var(--purple)", border: "1px solid rgba(155, 114, 216, 0.25)" }}
+                        >
+                          <i className="fas fa-expand-alt text-[9px]"></i>
+                          <span>Full Details</span>
+                        </button>
+                      )}
+                      {handleDeleteLead && log._id && (
+                        <button
+                          type="button"
+                          onClick={() => { if (confirm(`Delete lead from ${log.name}?`)) handleDeleteLead(log._id); }}
+                          className="ml-auto px-2.5 py-1.5 rounded-lg text-[10px] font-mono font-bold flex items-center gap-1.5 transition cursor-pointer"
+                          style={{ backgroundColor: "rgba(255, 107, 123, 0.1)", color: "var(--coral, #ff6b7b)", border: "1px solid rgba(255, 107, 123, 0.2)" }}
+                        >
+                          <i className="fas fa-trash-alt text-[9px]"></i>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
         </div>
       )}
 

@@ -1039,6 +1039,9 @@ export default function AdminPanel({
             setPhilosophy={setPhilosophy}
             handleSaveCMS={handleSaveCMS}
             loading={loading}
+            contactLogs={contactLogs}
+            setSelectedLead={setSelectedLead}
+            handleDeleteLead={handleDeleteLead}
           />
         )}
 
