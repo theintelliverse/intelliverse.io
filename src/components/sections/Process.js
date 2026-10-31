@@ -28,11 +28,10 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import StudioTelemetryCard from "@/components/ui/StudioTelemetryCard";
 
 // Register core plugins once
 if (typeof window !== "undefined") {
@@ -87,19 +86,8 @@ export default function Process({ data, telemetry }) {
   const statusDotRef = useRef(null);
   const statusLabelRef = useRef(null);
 
-  // Tab views
+  // SVG Flywheel Architecture diagram
   const dgRef = useRef(null);
-  const shipvRef = useRef(null);
-  const telemRef = useRef(null);
-
-  // Tab switcher buttons & sliding pill
-  const tabPillRef = useRef(null);
-  const tabBtnArchRef = useRef(null);
-  const tabBtnShipRef = useRef(null);
-  const tabBtnTelemRef = useRef(null);
-
-  // Active tab state
-  const [activeTab, setActiveTab] = useState("diagram"); // "diagram" | "products" | "telemetry"
   const scrollTriggerRef = useRef(null);
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -206,14 +194,6 @@ export default function Process({ data, telemetry }) {
           gsap.set(allElabs, { opacity: 0, y: 4 });
           gsap.set(allDecTexts, { opacity: 0, y: 4 });
           if (loopEdge) gsap.set(loopEdge, { opacity: 0 });
-
-          // Position sliding tab pill on initial tab
-          if (tabPillRef.current && tabBtnArchRef.current) {
-            gsap.set(tabPillRef.current, {
-              x: tabBtnArchRef.current.offsetLeft,
-              width: tabBtnArchRef.current.offsetWidth,
-            });
-          }
 
           // Subtle moving dash tween on loopEdge
           const dashLoopTween = gsap.to(loopEdge, {
@@ -369,967 +349,592 @@ export default function Process({ data, telemetry }) {
             });
           });
 
-          // ── D) MICRO-INTERACTIONS: PRODUCT CARDS 3D TILT ───────────────────
-          const prodCards = shipvRef.current?.querySelectorAll(".process-prod");
-          if (prodCards) {
-            prodCards.forEach((card) => {
-              const gl = card.querySelector(".gl");
-
-              const handleMouseMove = (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = (e.clientX - rect.left) / rect.width - 0.5;
-                const y = (e.clientY - rect.top) / rect.height - 0.5;
-                const tiltX = -y * 6; // max 6deg
-                const tiltY = x * 6;
-
-                gsap.to(card, {
-                  rotateX: tiltX,
-                  rotateY: tiltY,
-                  transformPerspective: 800,
-                  duration: 0.3,
-                  ease: "power2.out",
-                });
-
-                if (gl) {
-                  gsap.to(gl, {
-                    x: x * 14,
-                    y: y * 14,
-                    duration: 0.4,
-                    ease: "power2.out",
-                  });
-                }
-              };
-
-              const handleMouseLeave = () => {
-                gsap.to(card, {
-                  rotateX: 0,
-                  rotateY: 0,
-                  duration: 0.5,
-                  ease: "power2.out",
-                });
-                if (gl) {
-                  gsap.to(gl, {
-                    x: 0,
-                    y: 0,
-                    duration: 0.5,
-                    ease: "power2.out",
-                  });
-                }
-              };
-
-              card.addEventListener("mousemove", handleMouseMove);
-              card.addEventListener("mouseleave", handleMouseLeave);
-            });
-          }
-        }
-      );
-
-      // Refresh ScrollTrigger once fonts and images are ready
-      if (typeof document !== "undefined" && document.fonts) {
-        document.fonts.ready.then(() => {
-          ScrollTrigger.refresh();
-        });
+        
       }
-
-      return () => {
-        mm.revert();
-      };
-    },
-    { scope: containerRef }
-  );
-
-  // ───────────────────────────────────────────────────────────────────────────
-  // C) TAB CROSS-FADE CONTROLLER (Architecture / Shipped / Telemetry)
-  // ───────────────────────────────────────────────────────────────────────────
-  const handleTabSwitch = (targetTab) => {
-    setActiveTab(targetTab);
-
-    // 1. Animate sliding pill background
-    const pill = tabPillRef.current;
-    const btnMap = {
-      diagram: tabBtnArchRef.current,
-      products: tabBtnShipRef.current,
-      telemetry: tabBtnTelemRef.current,
-    };
-    const activeBtn = btnMap[targetTab];
-    if (pill && activeBtn) {
-      gsap.to(pill, {
-        x: activeBtn.offsetLeft,
-        width: activeBtn.offsetWidth,
-        duration: 0.35,
-        ease: "power3.out",
-      });
-    }
-
-    // 2. Animate button text colors
-    [tabBtnArchRef.current, tabBtnShipRef.current, tabBtnTelemRef.current].forEach((btn) => {
-      if (!btn) return;
-      const isTarget = btn === activeBtn;
-      gsap.to(btn, {
-        color: isTarget ? "#ffffff" : "var(--ink-2)",
-        duration: 0.25,
-        ease: "power2.out",
-      });
-    });
-
-    // 3. Cross-fade stage panels (opacity + y:12, 0.4s, power2.out)
-    const views = [
-      { id: "diagram", el: dgRef.current },
-      { id: "products", el: shipvRef.current },
-      { id: "telemetry", el: telemRef.current },
-    ];
-
-    views.forEach(({ id, el }) => {
-      if (!el) return;
-      if (id === targetTab) {
-        el.style.visibility = "visible";
-        el.style.pointerEvents = "auto";
-        gsap.fromTo(
-          el,
-          { opacity: 0, y: 12 },
-          { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }
-        );
-
-        // Stagger product cards if entering Shipped Products
-        if (id === "products") {
-          const cards = el.querySelectorAll(".process-prod");
-          if (cards.length) {
-            gsap.fromTo(
-              cards,
-              { y: 24, opacity: 0 },
-              { y: 0, opacity: 1, duration: 0.45, stagger: 0.12, ease: "power3.out" }
-            );
-          }
-        }
-      } else {
-        gsap.to(el, {
-          opacity: 0,
-          y: -8,
-          duration: 0.25,
-          ease: "power2.in",
-          onComplete: () => {
-            el.style.visibility = "hidden";
-            el.style.pointerEvents = "none";
-          },
-        });
-      }
-    });
-  };
+    );
+  },
+  { scope: containerRef }
+);
 
   // ───────────────────────────────────────────────────────────────────────────
   // CLICKING A LEFT-COLUMN STEP: JUMP TO THE CORRESPONDING TIMELINE PROGRESS
   // ───────────────────────────────────────────────────────────────────────────
   const handleStepClick = (index) => {
-    if (activeTab !== "diagram") {
-      handleTabSwitch("diagram");
-    }
-
     const st = scrollTriggerRef.current;
     if (!st) return;
 
-    const targetProgress = index === 0 ? 0.05 : index === 1 ? 0.45 : 0.85;
-    const targetScroll = st.start + (st.end - st.start) * targetProgress;
+        const targetProgress = index === 0 ? 0.05 : index === 1 ? 0.45 : 0.85;
+        const targetScroll = st.start + (st.end - st.start) * targetProgress;
 
-    if (typeof window !== "undefined" && window.__lenis) {
-      window.__lenis.scrollTo(targetScroll, { duration: 1.2 });
-    } else {
-      window.scrollTo({ top: targetScroll, behavior: "smooth" });
-    }
-  };
+        if (typeof window !== "undefined" && window.__lenis) {
+          window.__lenis.scrollTo(targetScroll, { duration: 1.2 });
+        } else {
+          window.scrollTo({ top: targetScroll, behavior: "smooth" });
+        }
+      };
 
-  return (
-    <div ref={containerRef}>
-      {/* ── DESKTOP PINNED EXPERIENCE (Sticky 300% GSAP Pin Track) ─────────── */}
-      <section
-        id="how"
-        ref={sectionRef}
-        className="hidden lg:block process-pinsec"
-        style={{
-          backgroundColor: "var(--bg-2, #F6F7FC)",
-          color: "var(--ink, #0E1B3D)",
-          borderTop: "1px solid var(--line, rgba(14,27,61,0.1))",
-          borderBottom: "1px solid var(--line, rgba(14,27,61,0.1))",
-        }}
-      >
-        <div ref={pinRef} className="process-pin">
-          <div
-            className="container-site w-full"
-            style={{ maxWidth: "1440px", margin: "0 auto", padding: "0 2.5rem" }}
+      return (
+        <div ref={containerRef}>
+          {/* ── DESKTOP PINNED EXPERIENCE (Sticky 300% GSAP Pin Track) ─────────── */}
+          <section
+            id="how"
+            ref={sectionRef}
+            className="hidden lg:block process-pinsec"
+            style={{
+              backgroundColor: "var(--bg-2, #F6F7FC)",
+              color: "var(--ink, #0E1B3D)",
+              borderTop: "1px solid var(--line, rgba(14,27,61,0.1))",
+              borderBottom: "1px solid var(--line, rgba(14,27,61,0.1))",
+            }}
           >
-            <div className="process-sys">
-              {/* ── LEFT COLUMN: Methodology Steps & Dynamic Progress ──────── */}
-              <div className="process-sys-l">
-                <div>
-                  {/* Eyebrow tag */}
-                  <div
-                    ref={eyebrowRef}
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "0.6rem",
-                      color: "var(--ink-2)",
-                      fontFamily: "var(--mono)",
-                      fontSize: "0.75rem",
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      marginBottom: "1rem",
-                    }}
-                  >
-                    <span style={{ color: "var(--blue-deep)", fontWeight: 700 }}>02</span>
-                    <span>How we work · Every project</span>
-                    <span className="pulse-dot" />
-                  </div>
-
-                  {/* Headline */}
-                  <h2 ref={h2Ref}>Every project starts on the same sheet.</h2>
-                  <p
-                    ref={descRef}
-                    style={{
-                      fontFamily: "var(--sans)",
-                      fontSize: "1.05rem",
-                      color: "var(--ink-2)",
-                      lineHeight: 1.55,
-                      marginTop: "0.75rem",
-                      maxWidth: "23rem",
-                    }}
-                  >
-                    Execution Flywheel &amp; System Architecture. From discovery to scale.
-                  </p>
-                </div>
-
-                {/* The 3 Sequential Steps */}
-                <div>
-                  <ol ref={stepsListRef} className="process-steps">
-                    {/* Step 01 */}
-                    <li className="on" onClick={() => handleStepClick(0)}>
-                      <span className="no">01</span>
-                      <div>
-                        <h4>Map the problem</h4>
-                        <p>Who touches what, and where it hurts. One sheet, before any code.</p>
+            <div ref={pinRef} className="process-pin">
+              <div
+                className="container-site w-full"
+                style={{ maxWidth: "1440px", margin: "0 auto", padding: "0 2.5rem" }}
+              >
+                <div className="process-sys">
+                  {/* ── LEFT COLUMN: Methodology Steps & Dynamic Progress ──────── */}
+                  <div className="process-sys-l">
+                    <div>
+                      {/* Eyebrow tag */}
+                      <div
+                        ref={eyebrowRef}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "0.6rem",
+                          color: "var(--ink-2)",
+                          fontFamily: "var(--mono)",
+                          fontSize: "0.75rem",
+                          letterSpacing: "0.1em",
+                          textTransform: "uppercase",
+                          marginBottom: "1rem",
+                        }}
+                      >
+                        <span style={{ color: "var(--blue-deep)", fontWeight: 700 }}>02</span>
+                        <span>How we work · Every project</span>
+                        <span className="pulse-dot" />
                       </div>
-                    </li>
 
-                    {/* Step 02 */}
-                    <li onClick={() => handleStepClick(1)}>
-                      <span className="no">02</span>
-                      <div>
-                        <h4>Log every decision</h4>
-                        <p>Each call gets a number and a reason, so you can read why it was built this way.</p>
+                      {/* Headline */}
+                      <h2 ref={h2Ref}>Every project starts on the same sheet.</h2>
+                      <p
+                        ref={descRef}
+                        style={{
+                          fontFamily: "var(--sans)",
+                          fontSize: "1.05rem",
+                          color: "var(--ink-2)",
+                          lineHeight: 1.55,
+                          marginTop: "0.75rem",
+                          maxWidth: "23rem",
+                        }}
+                      >
+                        Execution Flywheel &amp; System Architecture. From discovery to scale.
+                      </p>
+                    </div>
+
+                    {/* The 3 Sequential Steps */}
+                    <div>
+                      <ol ref={stepsListRef} className="process-steps">
+                        {/* Step 01 */}
+                        <li className="on" onClick={() => handleStepClick(0)}>
+                          <span className="no">01</span>
+                          <div>
+                            <h4>Map the problem</h4>
+                            <p>Who touches what, and where it hurts. One sheet, before any code.</p>
+                          </div>
+                        </li>
+
+                        {/* Step 02 */}
+                        <li onClick={() => handleStepClick(1)}>
+                          <span className="no">02</span>
+                          <div>
+                            <h4>Log every decision</h4>
+                            <p>Each call gets a number and a reason, so you can read why it was built this way.</p>
+                          </div>
+                        </li>
+
+                        {/* Step 03 */}
+                        <li onClick={() => handleStepClick(2)}>
+                          <span className="no">03</span>
+                          <div>
+                            <h4>Ship, then keep the journal</h4>
+                            <p>Weekly demos, a launch, and a public log of what changed.</p>
+                          </div>
+                        </li>
+                      </ol>
+
+                      {/* Multi-colored Progress Bar */}
+                      <div className="process-prog">
+                        <i ref={progBarRef} style={{ width: "10%" }} />
                       </div>
-                    </li>
 
-                    {/* Step 03 */}
-                    <li onClick={() => handleStepClick(2)}>
-                      <span className="no">03</span>
-                      <div>
-                        <h4>Ship, then keep the journal</h4>
-                        <p>Weekly demos, a launch, and a public log of what changed.</p>
+                      {/* Quick CTAs */}
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "1.25rem",
+                          marginTop: "1.5rem",
+                          fontFamily: "var(--mono)",
+                          fontSize: "0.6875rem",
+                          letterSpacing: "0.08em",
+                          textTransform: "uppercase",
+                          color: "var(--ink-3)",
+                        }}
+                      >
+                        <a
+                          href="#projects"
+                          style={{
+                            color: "var(--blue-deep)",
+                            fontWeight: 600,
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "0.35rem",
+                          }}
+                        >
+                          Read the journals <span>↓</span>
+                        </a>
+                        <span>·</span>
+                        <a
+                          href="#estimator"
+                          style={{
+                            color: "var(--ink)",
+                            fontWeight: 600,
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "0.35rem",
+                          }}
+                        >
+                          Open a brief <span>→</span>
+                        </a>
                       </div>
-                    </li>
-                  </ol>
-
-                  {/* Multi-colored Progress Bar */}
-                  <div className="process-prog">
-                    <i ref={progBarRef} style={{ width: "10%" }} />
+                    </div>
                   </div>
 
-                  {/* Quick CTAs */}
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "1.25rem",
-                      marginTop: "1.5rem",
-                      fontFamily: "var(--mono)",
-                      fontSize: "0.6875rem",
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      color: "var(--ink-3)",
-                    }}
-                  >
-                    <a
-                      href="#projects"
-                      style={{
-                        color: "var(--blue-deep)",
-                        fontWeight: 600,
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: "0.35rem",
-                      }}
-                    >
-                      Read the journals <span>↓</span>
-                    </a>
-                    <span>·</span>
-                    <a
-                      href="#estimator"
-                      style={{
-                        color: "var(--ink)",
-                        fontWeight: 600,
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: "0.35rem",
-                      }}
-                    >
-                      Open a brief <span>→</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
+                  {/* ── RIGHT COLUMN: Technical Stage (Interactive SVG & Views) ── */}
+                  <div ref={stageRef} className="process-stage">
+                    <div ref={gridBgRef} className="grid-bg" />
 
-              {/* ── RIGHT COLUMN: Technical Stage (Interactive SVG & Views) ── */}
-              <div ref={stageRef} className="process-stage">
-                <div ref={gridBgRef} className="grid-bg" />
-
-                {/* Stage Header */}
-                <div className="process-stage-h">
-                  <div className="flex items-center gap-3">
-                    <span
-                      style={{
-                        fontFamily: "var(--mono)",
-                        fontSize: "0.6875rem",
-                        letterSpacing: "0.08em",
-                        textTransform: "uppercase",
-                        fontWeight: 600,
-                        color: "var(--ink)",
-                      }}
-                    >
-                      Sheet 00 / The Intelliverse way
-                    </span>
-                  </div>
-
-                  {/* Mode switcher tabs with sliding pill indicator */}
-                  <div className="relative flex items-center bg-[rgba(14,27,61,0.06)] p-1 rounded-full border border-[var(--line)]">
-                    <div ref={tabPillRef} className="process-tab-pill" />
-                    <button
-                      ref={tabBtnArchRef}
-                      type="button"
-                      onClick={() => handleTabSwitch("diagram")}
-                      style={{
-                        position: "relative",
-                        zIndex: 2,
-                        fontFamily: "var(--mono)",
-                        fontSize: "0.625rem",
-                        letterSpacing: "0.06em",
-                        textTransform: "uppercase",
-                        padding: "0.35rem 0.75rem",
-                        borderRadius: "999px",
-                        backgroundColor: "transparent",
-                        color: "#fff",
-                        fontWeight: 600,
-                        cursor: "pointer",
-                      }}
-                    >
-                      Architecture
-                    </button>
-                    <button
-                      ref={tabBtnShipRef}
-                      type="button"
-                      onClick={() => handleTabSwitch("products")}
-                      style={{
-                        position: "relative",
-                        zIndex: 2,
-                        fontFamily: "var(--mono)",
-                        fontSize: "0.625rem",
-                        letterSpacing: "0.06em",
-                        textTransform: "uppercase",
-                        padding: "0.35rem 0.75rem",
-                        borderRadius: "999px",
-                        backgroundColor: "transparent",
-                        color: "var(--ink-2)",
-                        fontWeight: 600,
-                        cursor: "pointer",
-                      }}
-                    >
-                      Shipped Products
-                    </button>
-                    <button
-                      ref={tabBtnTelemRef}
-                      type="button"
-                      onClick={() => handleTabSwitch("telemetry")}
-                      style={{
-                        position: "relative",
-                        zIndex: 2,
-                        fontFamily: "var(--mono)",
-                        fontSize: "0.625rem",
-                        letterSpacing: "0.06em",
-                        textTransform: "uppercase",
-                        padding: "0.35rem 0.75rem",
-                        borderRadius: "999px",
-                        backgroundColor: "transparent",
-                        color: "var(--ink-2)",
-                        fontWeight: 600,
-                        cursor: "pointer",
-                      }}
-                    >
-                      Studio Telemetry
-                    </button>
-                  </div>
-
-                  {/* Status Indicator */}
-                  <div className="flex items-center gap-2">
-                    <span
-                      ref={statusDotRef}
-                      style={{
-                        width: "6px",
-                        height: "6px",
-                        borderRadius: "50%",
-                        backgroundColor: "var(--blue, #3D7BF7)",
-                        transition: "background-color 0.3s ease",
-                      }}
-                    />
-                    <span
-                      ref={statusLabelRef}
-                      style={{
-                        fontFamily: "var(--mono)",
-                        fontSize: "0.6875rem",
-                        letterSpacing: "0.06em",
-                        color: "var(--blue-deep, #2F63E0)",
-                        fontWeight: 600,
-                        transition: "color 0.3s ease",
-                      }}
-                    >
-                      Drawing…
-                    </span>
-                  </div>
-                </div>
-
-                {/* ── VIEW 1: Interactive SVG Flywheel Diagram ─────────────── */}
-                <svg
-                  ref={dgRef}
-                  className="process-dg"
-                  viewBox="0 0 800 520"
-                  preserveAspectRatio="xMidYMid meet"
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "100%",
-                  }}
-                >
-                  {/* Connecting Edges */}
-                  <path className="edge edge-0" d="M200 108 L 312 108" />
-                  <path className="edge edge-1" d="M482 108 L 594 108" />
-                  <path className="edge edge-2" d="M680 145 L 680 330" />
-                  <path className="edge edge-3" d="M594 368 L 482 368" />
-                  <path className="edge edge-4" d="M312 368 L 200 368" />
-                  <path className="edge dash edge-loop" d="M115 330 L 115 145" />
-
-                  {/* Flow Milestone Labels */}
-                  <text className="elab elab-0" x="222" y="98">
-                    1-hr call
-                  </text>
-                  <text className="elab elab-1" x="506" y="98">
-                    you approve
-                  </text>
-                  <text className="elab elab-2" x="692" y="242">
-                    sprints
-                  </text>
-                  <text className="elab elab-3" x="500" y="358">
-                    every friday
-                  </text>
-                  <text className="elab elab-4" x="226" y="358">
-                    go live
-                  </text>
-                  <text className="elab elab-5" x="126" y="242">
-                    next iteration
-                  </text>
-
-                  {/* ── 6 SYSTEM NODES ── */}
-                  {/* Node 1: Your Problem */}
-                  <g className="node node-1">
-                    <rect x="30" y="72" width="170" height="74" rx="10" />
-                    <circle cx="182" cy="90" r="7" fill="#5B3FD9" />
-                    <text className="lab" x="46" y="97">
-                      STEP 1
-                    </text>
-                    <text className="nm" x="46" y="125">
-                      Your problem
-                    </text>
-                  </g>
-
-                  {/* Node 2: System Map */}
-                  <g className="node node-2">
-                    <rect x="312" y="72" width="170" height="74" rx="10" />
-                    <circle cx="464" cy="90" r="7" fill="#3D7BF7" />
-                    <text className="lab" x="328" y="97">
-                      STEP 2
-                    </text>
-                    <text className="nm" x="328" y="125">
-                      System map
-                    </text>
-                  </g>
-
-                  {/* Node 3: Decision Log */}
-                  <g className="node node-3">
-                    <rect x="594" y="72" width="170" height="74" rx="10" />
-                    <circle cx="746" cy="90" r="7" fill="#FF6B7B" />
-                    <text className="lab" x="610" y="97">
-                      STEP 3
-                    </text>
-                    <text className="nm" x="610" y="125">
-                      Decision log
-                    </text>
-                  </g>
-
-                  {/* Node 4: Weekly Demos */}
-                  <g className="node node-4">
-                    <rect x="594" y="332" width="170" height="74" rx="10" />
-                    <circle cx="746" cy="350" r="7" fill="#FDB347" />
-                    <text className="lab" x="610" y="357">
-                      STEP 4
-                    </text>
-                    <text className="nm" x="610" y="385">
-                      Weekly demos
-                    </text>
-                  </g>
-
-                  {/* Node 5: Launch */}
-                  <g className="node node-5">
-                    <rect x="312" y="332" width="170" height="74" rx="10" />
-                    <circle cx="464" cy="350" r="7" fill="#5B3FD9" />
-                    <text className="lab" x="328" y="357">
-                      STEP 5
-                    </text>
-                    <text className="nm" x="328" y="385">
-                      Launch
-                    </text>
-                  </g>
-
-                  {/* Node 6: Public Journal */}
-                  <g className="node node-6">
-                    <rect x="30" y="332" width="170" height="74" rx="10" />
-                    <circle cx="182" cy="350" r="7" fill="#3D7BF7" />
-                    <text className="lab" x="46" y="357">
-                      STEP 6
-                    </text>
-                    <text className="nm" x="46" y="385">
-                      Public journal
-                    </text>
-                  </g>
-
-                  {/* ── 3 HANDWRITTEN DECISION ANNOTATIONS ── */}
-                  {/* Annotation 1 (Coral) */}
-                  <g className="dec dec-1">
-                    <path d="M640 160 C 610 210, 560 220, 520 222" stroke="#FF6B7B" />
-                    <path d="M528 214 L 518 222 L 530 229" stroke="#FF6B7B" />
-                    <text className="txt" x="320" y="228" fill="#FF6B7B">
-                      you see why, not just what
-                    </text>
-                  </g>
-
-                  {/* Annotation 2 (Indigo) */}
-                  <g className="dec dec-2">
-                    <path d="M690 420 C 690 450, 650 470, 610 472" stroke="#5B3FD9" />
-                    <path d="M618 465 L 608 472 L 619 479" stroke="#5B3FD9" />
-                    <text className="txt" x="420" y="478" fill="#5B3FD9">
-                      no 3-month silences
-                    </text>
-                  </g>
-
-                  {/* Annotation 3 (Deep Blue) */}
-                  <g className="dec dec-3">
-                    <path d="M115 420 C 115 450, 150 470, 190 472" stroke="#2F63E0" />
-                    <path d="M182 465 L 192 472 L 181 479" stroke="#2F63E0" />
-                    <text className="txt" x="198" y="478" fill="#2F63E0">
-                      every project gets one
-                    </text>
-                  </g>
-                </svg>
-
-                {/* ── VIEW 2: Shipped Products ("Sheets that became products") ─ */}
-                <div ref={shipvRef} className="process-shipv">
-                  <div className="hd">
-                    <h3>Sheets that became products.</h3>
-                    <span
-                      style={{
-                        fontFamily: "var(--mono)",
-                        fontSize: "0.6875rem",
-                        letterSpacing: "0.08em",
-                        color: "var(--ink-3)",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      2 live · more on the bench
-                    </span>
-                  </div>
-
-                  <div className="process-prods">
-                    {/* Product 1: Appointory */}
-                    <a className="process-prod" href="#projects">
-                      <div className="top process-ap">
-                        <span className="gl">A</span>
-                        <div className="mk">A</div>
-                        <div>
-                          <h4>Appointory</h4>
-                          <p>Care without the waiting room.</p>
-                        </div>
-                      </div>
-                      <div className="bt">
-                        <span>Healthcare · own</span>
-                        <b>Journal →</b>
-                      </div>
-                    </a>
-
-                    {/* Product 2: Vrix Jewellery */}
-                    <a className="process-prod" href="#projects">
-                      <div className="top process-vx">
-                        <span className="gl" style={{ color: "#C8A46A", opacity: 0.18 }}>
-                          V
+                    {/* Stage Header */}
+                    <div className="process-stage-h">
+                      <div className="flex items-center gap-3">
+                        <span
+                          style={{
+                            fontFamily: "var(--mono)",
+                            fontSize: "0.6875rem",
+                            letterSpacing: "0.08em",
+                            textTransform: "uppercase",
+                            fontWeight: 600,
+                            color: "var(--ink)",
+                          }}
+                        >
+                          Sheet 00 / The Intelliverse way
                         </span>
-                        <div className="mk">V</div>
-                        <div>
-                          <h4>
-                            Vrix <em>Jewellery</em>
-                          </h4>
-                          <p>Luxury, priced for every country.</p>
-                        </div>
                       </div>
-                      <div className="bt">
-                        <span>E-commerce · client</span>
-                        <b>Journal →</b>
+
+                      {/* Architecture System Badge */}
+                      <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[rgba(14,27,61,0.06)] border border-[var(--line)]">
+                        <span
+                          style={{
+                            fontFamily: "var(--mono)",
+                            fontSize: "0.625rem",
+                            letterSpacing: "0.08em",
+                            textTransform: "uppercase",
+                            color: "var(--blue-deep)",
+                            fontWeight: 700,
+                          }}
+                        >
+                          System Architecture
+                        </span>
                       </div>
-                    </a>
 
-                    {/* Product 3: Your Sheet */}
-                    <a className="process-prod you" href="#estimator">
-                      <span className="hand">
-                        Your sheet
-                        <br />
-                        goes here
-                      </span>
-                      <span className="mono">Open a brief →</span>
-                    </a>
-                  </div>
-                </div>
+                      {/* Status Indicator */}
+                      <div className="flex items-center gap-2">
+                        <span
+                          ref={statusDotRef}
+                          style={{
+                            width: "6px",
+                            height: "6px",
+                            borderRadius: "50%",
+                            backgroundColor: "var(--blue, #3D7BF7)",
+                            transition: "background-color 0.3s ease",
+                          }}
+                        />
+                        <span
+                          ref={statusLabelRef}
+                          style={{
+                            fontFamily: "var(--mono)",
+                            fontSize: "0.6875rem",
+                            letterSpacing: "0.06em",
+                            color: "var(--blue-deep, #2F63E0)",
+                            fontWeight: 600,
+                            transition: "color 0.3s ease",
+                          }}
+                        >
+                          Drawing…
+                        </span>
+                      </div>
+                    </div>
 
-                {/* ── VIEW 3: Live Studio Telemetry Card Overlay ───────────── */}
-                <div ref={telemRef} className="process-telemetry-view">
-                  <div style={{ maxWidth: "480px", width: "100%" }}>
-                    <StudioTelemetryCard data={telemetry} initialCount={telemetry?.deployCount || 302} showFullLogs={true} />
+                    {/* ── VIEW 1: Interactive SVG Flywheel Diagram ─────────────── */}
+                    <svg
+                      ref={dgRef}
+                      className="process-dg"
+                      viewBox="0 0 800 520"
+                      preserveAspectRatio="xMidYMid meet"
+                      style={{
+                        position: "relative",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    >
+                      {/* Connecting Edges */}
+                      <path className="edge edge-0" d="M200 108 L 312 108" />
+                      <path className="edge edge-1" d="M482 108 L 594 108" />
+                      <path className="edge edge-2" d="M680 145 L 680 330" />
+                      <path className="edge edge-3" d="M594 368 L 482 368" />
+                      <path className="edge edge-4" d="M312 368 L 200 368" />
+                      <path className="edge dash edge-loop" d="M115 330 L 115 145" />
+
+                      {/* Flow Milestone Labels */}
+                      <text className="elab elab-0" x="222" y="98">
+                        1-hr call
+                      </text>
+                      <text className="elab elab-1" x="506" y="98">
+                        you approve
+                      </text>
+                      <text className="elab elab-2" x="692" y="242">
+                        sprints
+                      </text>
+                      <text className="elab elab-3" x="500" y="358">
+                        every friday
+                      </text>
+                      <text className="elab elab-4" x="226" y="358">
+                        go live
+                      </text>
+                      <text className="elab elab-5" x="126" y="242">
+                        next iteration
+                      </text>
+
+                      {/* ── 6 SYSTEM NODES ── */}
+                      {/* Node 1: Your Problem */}
+                      <g className="node node-1">
+                        <rect x="30" y="72" width="170" height="74" rx="10" />
+                        <circle cx="182" cy="90" r="7" fill="#5B3FD9" />
+                        <text className="lab" x="46" y="97">
+                          STEP 1
+                        </text>
+                        <text className="nm" x="46" y="125">
+                          Your problem
+                        </text>
+                      </g>
+
+                      {/* Node 2: System Map */}
+                      <g className="node node-2">
+                        <rect x="312" y="72" width="170" height="74" rx="10" />
+                        <circle cx="464" cy="90" r="7" fill="#3D7BF7" />
+                        <text className="lab" x="328" y="97">
+                          STEP 2
+                        </text>
+                        <text className="nm" x="328" y="125">
+                          System map
+                        </text>
+                      </g>
+
+                      {/* Node 3: Decision Log */}
+                      <g className="node node-3">
+                        <rect x="594" y="72" width="170" height="74" rx="10" />
+                        <circle cx="746" cy="90" r="7" fill="#FF6B7B" />
+                        <text className="lab" x="610" y="97">
+                          STEP 3
+                        </text>
+                        <text className="nm" x="610" y="125">
+                          Decision log
+                        </text>
+                      </g>
+
+                      {/* Node 4: Weekly Demos */}
+                      <g className="node node-4">
+                        <rect x="594" y="332" width="170" height="74" rx="10" />
+                        <circle cx="746" cy="350" r="7" fill="#FDB347" />
+                        <text className="lab" x="610" y="357">
+                          STEP 4
+                        </text>
+                        <text className="nm" x="610" y="385">
+                          Weekly demos
+                        </text>
+                      </g>
+
+                      {/* Node 5: Launch */}
+                      <g className="node node-5">
+                        <rect x="312" y="332" width="170" height="74" rx="10" />
+                        <circle cx="464" cy="350" r="7" fill="#5B3FD9" />
+                        <text className="lab" x="328" y="357">
+                          STEP 5
+                        </text>
+                        <text className="nm" x="328" y="385">
+                          Launch
+                        </text>
+                      </g>
+
+                      {/* Node 6: Public Journal */}
+                      <g className="node node-6">
+                        <rect x="30" y="332" width="170" height="74" rx="10" />
+                        <circle cx="182" cy="350" r="7" fill="#3D7BF7" />
+                        <text className="lab" x="46" y="357">
+                          STEP 6
+                        </text>
+                        <text className="nm" x="46" y="385">
+                          Public journal
+                        </text>
+                      </g>
+
+                      {/* ── 3 HANDWRITTEN DECISION ANNOTATIONS ── */}
+                      {/* Annotation 1 (Coral) */}
+                      <g className="dec dec-1">
+                        <path d="M640 160 C 610 210, 560 220, 520 222" stroke="#FF6B7B" />
+                        <path d="M528 214 L 518 222 L 530 229" stroke="#FF6B7B" />
+                        <text className="txt" x="320" y="228" fill="#FF6B7B">
+                          you see why, not just what
+                        </text>
+                      </g>
+
+                      {/* Annotation 2 (Indigo) */}
+                      <g className="dec dec-2">
+                        <path d="M690 420 C 690 450, 650 470, 610 472" stroke="#5B3FD9" />
+                        <path d="M618 465 L 608 472 L 619 479" stroke="#5B3FD9" />
+                        <text className="txt" x="420" y="478" fill="#5B3FD9">
+                          no 3-month silences
+                        </text>
+                      </g>
+
+                      {/* Annotation 3 (Deep Blue) */}
+                      <g className="dec dec-3">
+                        <path d="M115 420 C 115 450, 150 470, 190 472" stroke="#2F63E0" />
+                        <path d="M182 465 L 192 472 L 181 479" stroke="#2F63E0" />
+                        <text className="txt" x="198" y="478" fill="#2F63E0">
+                          every project gets one
+                        </text>
+                      </g>
+                    </svg>
+
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      {/* ── MOBILE / TABLET EXPERIENCE (< lg) ─────────────────────────────── */}
-      <section
-        className="block lg:hidden py-16 px-6"
-        style={{
-          backgroundColor: "var(--bg-2, #F6F7FC)",
-          color: "var(--ink, #0E1B3D)",
-          borderTop: "1px solid var(--line, rgba(14,27,61,0.1))",
-          borderBottom: "1px solid var(--line, rgba(14,27,61,0.1))",
-        }}
-      >
-        <div className="max-w-xl mx-auto">
-          {/* Eyebrow */}
-          <div
+          {/* ── MOBILE / TABLET EXPERIENCE (< lg) ─────────────────────────────── */}
+          <section
+            className="block lg:hidden py-16 px-6"
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              fontFamily: "var(--mono)",
-              fontSize: "0.6875rem",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "var(--blue-deep)",
-              fontWeight: 700,
-              marginBottom: "0.75rem",
+              backgroundColor: "var(--bg-2, #F6F7FC)",
+              color: "var(--ink, #0E1B3D)",
+              borderTop: "1px solid var(--line, rgba(14,27,61,0.1))",
+              borderBottom: "1px solid var(--line, rgba(14,27,61,0.1))",
             }}
           >
-            <span>02 · How we work</span>
-          </div>
-
-          <h2
-            style={{
-              fontFamily: "var(--serif)",
-              fontSize: "clamp(2.25rem, 6vw, 3rem)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.02em",
-              color: "var(--ink)",
-              marginBottom: "0.75rem",
-            }}
-          >
-            Every project starts on the same sheet.
-          </h2>
-
-          <p
-            style={{
-              fontFamily: "var(--sans)",
-              fontSize: "0.95rem",
-              lineHeight: 1.6,
-              color: "var(--ink-2)",
-              marginBottom: "1.75rem",
-            }}
-          >
-            Execution Flywheel &amp; System Architecture. From discovery to scale.
-          </p>
-
-          {/* Interactive Mobile Tabs */}
-          <div className="flex gap-2 mb-6">
-            <button
-              onClick={() => setActiveTab("diagram")}
-              style={{
-                fontFamily: "var(--mono)",
-                fontSize: "0.6875rem",
-                padding: "0.4rem 0.85rem",
-                borderRadius: "999px",
-                border: "1px solid var(--line)",
-                backgroundColor: activeTab === "diagram" ? "var(--ink)" : "var(--card)",
-                color: activeTab === "diagram" ? "#fff" : "var(--ink-2)",
-                fontWeight: 600,
-              }}
-            >
-              The System
-            </button>
-            <button
-              onClick={() => setActiveTab("products")}
-              style={{
-                fontFamily: "var(--mono)",
-                fontSize: "0.6875rem",
-                padding: "0.4rem 0.85rem",
-                borderRadius: "999px",
-                border: "1px solid var(--line)",
-                backgroundColor: activeTab === "products" ? "var(--ink)" : "var(--card)",
-                color: activeTab === "products" ? "#fff" : "var(--ink-2)",
-                fontWeight: 600,
-              }}
-            >
-              Shipped Products
-            </button>
-            <button
-              onClick={() => setActiveTab("telemetry")}
-              style={{
-                fontFamily: "var(--mono)",
-                fontSize: "0.6875rem",
-                padding: "0.4rem 0.85rem",
-                borderRadius: "999px",
-                border: "1px solid var(--line)",
-                backgroundColor: activeTab === "telemetry" ? "var(--ink)" : "var(--card)",
-                color: activeTab === "telemetry" ? "#fff" : "var(--ink-2)",
-                fontWeight: 600,
-              }}
-            >
-              Telemetry
-            </button>
-          </div>
-
-          {/* Mobile Tab Content */}
-          {activeTab === "diagram" && (
-            <div className="space-y-4">
+            <div className="max-w-xl mx-auto">
+              {/* Eyebrow */}
               <div
                 style={{
-                  border: "1px solid var(--line-2)",
-                  borderRadius: "16px",
-                  backgroundColor: "#fff",
-                  padding: "1rem",
-                  boxShadow: "0 10px 30px -15px rgba(14,27,61,0.1)",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  fontFamily: "var(--mono)",
+                  fontSize: "0.6875rem",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "var(--blue-deep)",
+                  fontWeight: 700,
+                  marginBottom: "0.75rem",
                 }}
               >
-                <div
-                  style={{
-                    fontFamily: "var(--mono)",
-                    fontSize: "0.625rem",
-                    color: "var(--ink-3)",
-                    letterSpacing: "0.08em",
-                    textTransform: "uppercase",
-                    marginBottom: "0.75rem",
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <span>Sheet 00 / The Intelliverse Way</span>
-                  <span style={{ color: "var(--blue-deep)", fontWeight: 600 }}>Architecture</span>
-                </div>
-                <svg viewBox="0 0 800 520" className="w-full h-auto">
-                  <path className="edge" d="M200 108 L 312 108" stroke="var(--ink)" strokeWidth="1.6" fill="none" />
-                  <path className="edge" d="M482 108 L 594 108" stroke="var(--ink)" strokeWidth="1.6" fill="none" />
-                  <path className="edge" d="M680 145 L 680 330" stroke="var(--ink)" strokeWidth="1.6" fill="none" />
-                  <path className="edge" d="M594 368 L 482 368" stroke="var(--ink)" strokeWidth="1.6" fill="none" />
-                  <path className="edge" d="M312 368 L 200 368" stroke="var(--ink)" strokeWidth="1.6" fill="none" />
-                  <path className="edge dash" d="M115 330 L 115 145" stroke="var(--ink)" strokeWidth="1.6" strokeDasharray="6 6" fill="none" />
-
-                  <text className="elab" x="222" y="98" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-2)">
-                    1-hr call
-                  </text>
-                  <text className="elab" x="506" y="98" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-2)">
-                    you approve
-                  </text>
-                  <text className="elab" x="692" y="242" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-2)">
-                    sprints
-                  </text>
-                  <text className="elab" x="500" y="358" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-2)">
-                    every friday
-                  </text>
-                  <text className="elab" x="226" y="358" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-2)">
-                    go live
-                  </text>
-
-                  <g className="node">
-                    <rect x="30" y="72" width="170" height="74" rx="10" fill="#fff" stroke="var(--ink)" strokeWidth="1.6" />
-                    <circle cx="182" cy="90" r="7" fill="#5B3FD9" />
-                    <text x="46" y="97" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-3)">
-                      STEP 1
-                    </text>
-                    <text x="46" y="125" fontFamily="var(--sans)" fontWeight="700" fontSize="17" fill="var(--ink)">
-                      Your problem
-                    </text>
-                  </g>
-                  <g className="node">
-                    <rect x="312" y="72" width="170" height="74" rx="10" fill="#fff" stroke="var(--ink)" strokeWidth="1.6" />
-                    <circle cx="464" cy="90" r="7" fill="#3D7BF7" />
-                    <text x="328" y="97" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-3)">
-                      STEP 2
-                    </text>
-                    <text x="328" y="125" fontFamily="var(--sans)" fontWeight="700" fontSize="17" fill="var(--ink)">
-                      System map
-                    </text>
-                  </g>
-                  <g className="node">
-                    <rect x="594" y="72" width="170" height="74" rx="10" fill="#fff" stroke="var(--ink)" strokeWidth="1.6" />
-                    <circle cx="746" cy="90" r="7" fill="#FF6B7B" />
-                    <text x="610" y="97" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-3)">
-                      STEP 3
-                    </text>
-                    <text x="610" y="125" fontFamily="var(--sans)" fontWeight="700" fontSize="17" fill="var(--ink)">
-                      Decision log
-                    </text>
-                  </g>
-                  <g className="node">
-                    <rect x="594" y="332" width="170" height="74" rx="10" fill="#fff" stroke="var(--ink)" strokeWidth="1.6" />
-                    <circle cx="746" cy="350" r="7" fill="#FDB347" />
-                    <text x="610" y="357" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-3)">
-                      STEP 4
-                    </text>
-                    <text x="610" y="385" fontFamily="var(--sans)" fontWeight="700" fontSize="17" fill="var(--ink)">
-                      Weekly demos
-                    </text>
-                  </g>
-                  <g className="node">
-                    <rect x="312" y="332" width="170" height="74" rx="10" fill="#fff" stroke="var(--ink)" strokeWidth="1.6" />
-                    <circle cx="464" cy="350" r="7" fill="#5B3FD9" />
-                    <text x="328" y="357" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-3)">
-                      STEP 5
-                    </text>
-                    <text x="328" y="385" fontFamily="var(--sans)" fontWeight="700" fontSize="17" fill="var(--ink)">
-                      Launch
-                    </text>
-                  </g>
-                  <g className="node">
-                    <rect x="30" y="332" width="170" height="74" rx="10" fill="#fff" stroke="var(--ink)" strokeWidth="1.6" />
-                    <circle cx="182" cy="350" r="7" fill="#3D7BF7" />
-                    <text x="46" y="357" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-3)">
-                      STEP 6
-                    </text>
-                    <text x="46" y="385" fontFamily="var(--sans)" fontWeight="700" fontSize="17" fill="var(--ink)">
-                      Public journal
-                    </text>
-                  </g>
-                </svg>
+                <span>02 · How we work</span>
               </div>
 
-              {/* 3 Step cards */}
-              {DEFAULT_STAGES.map((s, idx) => (
-                <div
-                  key={s.num || `mob-stage-${idx}`}
-                  style={{
-                    backgroundColor: "#fff",
-                    border: "1px solid var(--line-2)",
-                    borderRadius: "14px",
-                    padding: "1.25rem",
-                  }}
-                >
-                  <div className="flex justify-between items-baseline mb-2">
-                    <span
-                      style={{
-                        fontFamily: "var(--serif)",
-                        fontSize: "2rem",
-                        color: s.color,
-                      }}
-                    >
-                      {s.num}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: "var(--mono)",
-                        fontSize: "0.6875rem",
-                        letterSpacing: "0.08em",
-                        color: "var(--ink-3)",
-                      }}
-                    >
-                      {s.tag}
-                    </span>
-                  </div>
-                  <h4 style={{ fontFamily: "var(--serif)", fontSize: "1.45rem", marginBottom: "0.5rem" }}>
-                    {s.title}
-                  </h4>
-                  <p style={{ fontSize: "0.9rem", color: "var(--ink-2)", lineHeight: 1.5 }}>
-                    {s.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {activeTab === "products" && (
-            <div className="space-y-4">
-              <a
-                href="#projects"
-                className="block p-5 rounded-2xl text-white"
-                style={{ background: "linear-gradient(160deg, #0F7A57, #0B5A40)" }}
-              >
-                <div className="w-10 h-10 rounded-xl bg-white text-[#0F7A57] flex items-center justify-center font-serif text-2xl mb-3">
-                  A
-                </div>
-                <h4 className="font-serif text-2xl font-normal">Appointory</h4>
-                <p className="text-sm opacity-90 mt-1">Care without the waiting room.</p>
-                <div className="mt-4 pt-3 border-t border-[rgba(255,255,255,0.2)] flex justify-between text-xs font-mono">
-                  <span>Healthcare · own</span>
-                  <b>Journal →</b>
-                </div>
-              </a>
-
-              <a
-                href="#projects"
-                className="block p-5 rounded-2xl text-white"
-                style={{ background: "linear-gradient(160deg, #25211C, #14120F)" }}
-              >
-                <div className="w-10 h-10 rounded-xl bg-[#C8A46A] text-[#14120F] flex items-center justify-center font-serif text-2xl mb-3">
-                  V
-                </div>
-                <h4 className="font-serif text-2xl font-normal">
-                  Vrix <em>Jewellery</em>
-                </h4>
-                <p className="text-sm opacity-90 mt-1">Luxury, priced for every country.</p>
-                <div className="mt-4 pt-3 border-t border-[rgba(255,255,255,0.2)] flex justify-between text-xs font-mono">
-                  <span>E-commerce · client</span>
-                  <b style={{ color: "#E4C892" }}>Journal →</b>
-                </div>
-              </a>
-
-              <a
-                href="#estimator"
-                className="block p-6 rounded-2xl text-center"
+              <h2
                 style={{
-                  border: "1.5px dashed var(--line-2)",
-                  backgroundColor: "rgba(255,255,255,0.9)",
+                  fontFamily: "var(--serif)",
+                  fontSize: "clamp(2.25rem, 6vw, 3rem)",
+                  lineHeight: 1.05,
+                  letterSpacing: "-0.02em",
+                  color: "var(--ink)",
+                  marginBottom: "0.75rem",
                 }}
               >
-                <span className="font-hand text-3xl text-[var(--ink)] block">Your sheet goes here</span>
-                <span className="font-mono text-xs text-[var(--blue-deep)] mt-2 block">
-                  Open a brief →
-                </span>
-              </a>
-            </div>
-          )}
+                Every project starts on the same sheet.
+              </h2>
 
-          {activeTab === "telemetry" && (
-            <StudioTelemetryCard data={telemetry} initialCount={telemetry?.deployCount || 302} showFullLogs={true} />
-          )}
+              <p
+                style={{
+                  fontFamily: "var(--sans)",
+                  fontSize: "0.95rem",
+                  lineHeight: 1.6,
+                  color: "var(--ink-2)",
+                  marginBottom: "1.75rem",
+                }}
+              >
+                Execution Flywheel &amp; System Architecture. From discovery to scale.
+              </p>
+
+              {/* Mobile Architecture Diagram & Steps */}
+              <div className="space-y-4">
+                <div
+                  style={{
+                    border: "1px solid var(--line-2)",
+                    borderRadius: "16px",
+                    backgroundColor: "#fff",
+                    padding: "1rem",
+                    boxShadow: "0 10px 30px -15px rgba(14,27,61,0.1)",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: "0.625rem",
+                      color: "var(--ink-3)",
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      marginBottom: "0.75rem",
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <span>Sheet 00 / The Intelliverse Way</span>
+                    <span style={{ color: "var(--blue-deep)", fontWeight: 600 }}>Architecture</span>
+                  </div>
+                  <svg viewBox="0 0 800 520" className="w-full h-auto">
+                    <path className="edge" d="M200 108 L 312 108" stroke="var(--ink)" strokeWidth="1.6" fill="none" />
+                    <path className="edge" d="M482 108 L 594 108" stroke="var(--ink)" strokeWidth="1.6" fill="none" />
+                    <path className="edge" d="M680 145 L 680 330" stroke="var(--ink)" strokeWidth="1.6" fill="none" />
+                    <path className="edge" d="M594 368 L 482 368" stroke="var(--ink)" strokeWidth="1.6" fill="none" />
+                    <path className="edge" d="M312 368 L 200 368" stroke="var(--ink)" strokeWidth="1.6" fill="none" />
+                    <path className="edge dash" d="M115 330 L 115 145" stroke="var(--ink)" strokeWidth="1.6" strokeDasharray="6 6" fill="none" />
+
+                    <text className="elab" x="222" y="98" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-2)">
+                      1-hr call
+                    </text>
+                    <text className="elab" x="506" y="98" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-2)">
+                      you approve
+                    </text>
+                    <text className="elab" x="692" y="242" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-2)">
+                      sprints
+                    </text>
+                    <text className="elab" x="500" y="358" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-2)">
+                      every friday
+                    </text>
+                    <text className="elab" x="226" y="358" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-2)">
+                      go live
+                    </text>
+
+                    <g className="node">
+                      <rect x="30" y="72" width="170" height="74" rx="10" fill="#fff" stroke="var(--ink)" strokeWidth="1.6" />
+                      <circle cx="182" cy="90" r="7" fill="#5B3FD9" />
+                      <text x="46" y="97" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-3)">
+                        STEP 1
+                      </text>
+                      <text x="46" y="125" fontFamily="var(--sans)" fontWeight="700" fontSize="17" fill="var(--ink)">
+                        Your problem
+                      </text>
+                    </g>
+                    <g className="node">
+                      <rect x="312" y="72" width="170" height="74" rx="10" fill="#fff" stroke="var(--ink)" strokeWidth="1.6" />
+                      <circle cx="464" cy="90" r="7" fill="#3D7BF7" />
+                      <text x="328" y="97" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-3)">
+                        STEP 2
+                      </text>
+                      <text x="328" y="125" fontFamily="var(--sans)" fontWeight="700" fontSize="17" fill="var(--ink)">
+                        System map
+                      </text>
+                    </g>
+                    <g className="node">
+                      <rect x="594" y="72" width="170" height="74" rx="10" fill="#fff" stroke="var(--ink)" strokeWidth="1.6" />
+                      <circle cx="746" cy="90" r="7" fill="#FF6B7B" />
+                      <text x="610" y="97" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-3)">
+                        STEP 3
+                      </text>
+                      <text x="610" y="125" fontFamily="var(--sans)" fontWeight="700" fontSize="17" fill="var(--ink)">
+                        Decision log
+                      </text>
+                    </g>
+                    <g className="node">
+                      <rect x="594" y="332" width="170" height="74" rx="10" fill="#fff" stroke="var(--ink)" strokeWidth="1.6" />
+                      <circle cx="746" cy="350" r="7" fill="#FDB347" />
+                      <text x="610" y="357" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-3)">
+                        STEP 4
+                      </text>
+                      <text x="610" y="385" fontFamily="var(--sans)" fontWeight="700" fontSize="17" fill="var(--ink)">
+                        Weekly demos
+                      </text>
+                    </g>
+                    <g className="node">
+                      <rect x="312" y="332" width="170" height="74" rx="10" fill="#fff" stroke="var(--ink)" strokeWidth="1.6" />
+                      <circle cx="464" cy="350" r="7" fill="#5B3FD9" />
+                      <text x="328" y="357" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-3)">
+                        STEP 5
+                      </text>
+                      <text x="328" y="385" fontFamily="var(--sans)" fontWeight="700" fontSize="17" fill="var(--ink)">
+                        Launch
+                      </text>
+                    </g>
+                    <g className="node">
+                      <rect x="30" y="332" width="170" height="74" rx="10" fill="#fff" stroke="var(--ink)" strokeWidth="1.6" />
+                      <circle cx="182" cy="350" r="7" fill="#3D7BF7" />
+                      <text x="46" y="357" fontFamily="var(--mono)" fontSize="11" fill="var(--ink-3)">
+                        STEP 6
+                      </text>
+                      <text x="46" y="385" fontFamily="var(--sans)" fontWeight="700" fontSize="17" fill="var(--ink)">
+                        Public journal
+                      </text>
+                    </g>
+                  </svg>
+                </div>
+
+                {/* 3 Step cards */}
+                {DEFAULT_STAGES.map((s, idx) => (
+                  <div
+                    key={s.num || `mob-stage-${idx}`}
+                    style={{
+                      backgroundColor: "#fff",
+                      border: "1px solid var(--line-2)",
+                      borderRadius: "14px",
+                      padding: "1.25rem",
+                    }}
+                  >
+                    <div className="flex justify-between items-baseline mb-2">
+                      <span
+                        style={{
+                          fontFamily: "var(--serif)",
+                          fontSize: "2rem",
+                          color: s.color,
+                        }}
+                      >
+                        {s.num}
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: "var(--mono)",
+                          fontSize: "0.6875rem",
+                          letterSpacing: "0.08em",
+                          color: "var(--ink-3)",
+                        }}
+                      >
+                        {s.tag}
+                      </span>
+                    </div>
+                    <h4 style={{ fontFamily: "var(--serif)", fontSize: "1.45rem", marginBottom: "0.5rem" }}>
+                      {s.title}
+                    </h4>
+                    <p style={{ fontSize: "0.9rem", color: "var(--ink-2)", lineHeight: 1.5 }}>
+                      {s.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
         </div>
-      </section>
-    </div>
-  );
-}
+      );
+    }
