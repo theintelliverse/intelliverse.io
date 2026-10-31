@@ -61,7 +61,7 @@ const DEFAULT_ROWS = [
     num: "03",
     circleColor: "var(--coral)",
     title: "Complete Technical Partner",
-    subtitle: "Your embedded engineering leadership.",
+    subtitle: "Your embedded engineering leadership and dedicated partner.",
     body: "For ambitious founders and growing companies that require continuous technical excellence: we embed into your product roadmap, help hire and mentor internal developers, and guarantee uptime as you scale.",
     chips: ["CTO Advisory", "Dedicated Retainer", "Continuous DevOps", "Enterprise Security"],
   },
@@ -383,7 +383,7 @@ export default function Philosophy({ data }) {
                   </div>
 
                   {/* Title & Subtitle */}
-                  <div className="mb-5 md:min-h-[92px] lg:min-h-[102px] flex flex-col justify-start">
+                  <div className="mb-4 md:min-h-[104px] lg:min-h-[114px] flex flex-col justify-start">
                     <h3
                       style={{
                         fontFamily: "var(--serif)",
@@ -411,22 +411,23 @@ export default function Philosophy({ data }) {
                     </p>
                   </div>
 
-                  {/* Body Narrative */}
-                  <p
-                    className="md:min-h-[110px] lg:min-h-[118px] flex flex-col justify-start"
-                    style={{
-                      fontFamily: "var(--sans)",
-                      fontSize: "0.875rem",
-                      lineHeight: 1.7,
-                      color: "var(--ink-2)",
-                      margin: "0 0 1.5rem 0",
-                    }}
-                  >
-                    {row.body}
-                  </p>
+                  {/* Body Narrative - Balanced to lock Deliverable Specifications on the exact same line */}
+                  <div className="mb-5 md:min-h-[148px] lg:min-h-[158px] flex flex-col justify-start">
+                    <p
+                      style={{
+                        fontFamily: "var(--sans)",
+                        fontSize: "0.875rem",
+                        lineHeight: 1.7,
+                        color: "var(--ink-2)",
+                        margin: 0,
+                      }}
+                    >
+                      {row.body}
+                    </p>
+                  </div>
 
-                  {/* Deliverable Scope Chips */}
-                  <div className="mb-6 md:min-h-[105px] lg:min-h-[112px] flex flex-col justify-start">
+                  {/* Deliverable Scope Chips - Matched height locks the bottom divider in line */}
+                  <div className="mb-6 md:min-h-[148px] lg:min-h-[158px] flex flex-col justify-start">
                     <span
                       style={{
                         display: "block",
@@ -435,7 +436,7 @@ export default function Philosophy({ data }) {
                         letterSpacing: "0.12em",
                         textTransform: "uppercase",
                         color: "var(--ink-3)",
-                        marginBottom: "0.6rem",
+                        marginBottom: "0.65rem",
                         fontWeight: 700,
                       }}
                     >
@@ -470,7 +471,7 @@ export default function Philosophy({ data }) {
 
                 {/* Card Footer: Ideal Use Case & Action Link */}
                 <div className="pt-4 border-t border-[var(--hairline)] flex flex-col gap-2.5 mt-auto">
-                  <div className="text-[12px] font-sans text-[var(--ink-3)] leading-relaxed md:min-h-[36px]">
+                  <div className="text-[12px] font-sans text-[var(--ink-3)] leading-relaxed md:min-h-[44px]">
                     <strong className="text-[var(--ink-2)] font-semibold">Best For: </strong>
                     {extras.bestFor}
                   </div>

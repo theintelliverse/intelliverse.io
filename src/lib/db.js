@@ -256,7 +256,7 @@ export const localMockDb = {
       num: "03",
       circleColor: "var(--coral)",
       title: "Complete Technical Partner",
-      subtitle: "Your embedded engineering leadership.",
+      subtitle: "Your embedded engineering leadership and dedicated partner.",
       body: "For ambitious founders and growing companies that require continuous technical excellence: we embed into your product roadmap, help hire and mentor internal developers, and guarantee uptime as you scale.",
       chips: ["CTO Advisory", "Dedicated Retainer", "Continuous DevOps", "Enterprise Security"],
     },

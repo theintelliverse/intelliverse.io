@@ -13,7 +13,6 @@ import {
 } from "@/lib/motion";
 import { AnimateNumber } from "motion-number";
 import Magnetic from "@/components/ui/Magnetic";
-import StudioTelemetryCard from "@/components/ui/StudioTelemetryCard";
 
 /**
  * THE INTELLIVERSE — Hero Section
@@ -435,50 +434,34 @@ export default function Hero({ data = null, telemetry = null } = {}) {
             </motion.div>
           </div>
 
-          {/* Right Column: Editorial Studio Telemetry Log Card */}
-          <div className="lg:col-span-4 mt-6 lg:mt-0 relative">
-            {/* Background Floating Official Brand Mark (Replaced Mock CSS Orbs) */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute -inset-6 sm:-inset-12 flex items-center justify-center z-0 overflow-visible"
-            >
-              <motion.div
-                animate={{
-                  x: mouseOffset.x * 24,
-                  y: mouseOffset.y * 24 + (isMounted ? 4 : 0),
-                  rotate: [0, 1.5, -1.5, 0],
-                }}
-                transition={{
-                  x: { type: "spring", stiffness: 120, damping: 25 },
-                  y: { type: "spring", stiffness: 120, damping: 25 },
-                  rotate: { duration: 8, repeat: Infinity, ease: "easeInOut" },
-                }}
-                className="w-[320px] h-[320px] sm:w-[440px] sm:h-[440px] lg:w-[520px] lg:h-[520px] select-none"
-                style={{
-                  opacity: 0.88,
-                  transformOrigin: "center center",
-                }}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/the-intelliverse-mark.png"
-                  alt="The Intelliverse Brand Mark"
-                  className="w-full h-full object-contain"
-                  style={{
-                    filter: "drop-shadow(0 20px 45px rgba(61, 123, 247, 0.18))",
-                  }}
-                />
-              </motion.div>
-            </div>
-
+          {/* Right Column: Floating Interactive Official Brand Mark */}
+          <div className="lg:col-span-4 mt-8 lg:mt-0 relative flex items-center justify-center min-h-[320px] sm:min-h-[400px]">
             <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              animate={isMounted ? "visible" : "hidden"}
-              transition={{ delay: 0.55 }}
-              className="relative z-10"
+              animate={{
+                x: mouseOffset.x * 24,
+                y: mouseOffset.y * 24 + (isMounted ? 4 : 0),
+                rotate: [0, 2, -2, 0],
+              }}
+              transition={{
+                x: { type: "spring", stiffness: 120, damping: 25 },
+                y: { type: "spring", stiffness: 120, damping: 25 },
+                rotate: { duration: 9, repeat: Infinity, ease: "easeInOut" },
+              }}
+              className="w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] lg:w-[420px] lg:h-[420px] select-none flex items-center justify-center"
+              style={{
+                opacity: 0.95,
+                transformOrigin: "center center",
+              }}
             >
-              <StudioTelemetryCard data={telemetry} initialCount={telemetry?.deployCount || 302} showFullLogs={true} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/the-intelliverse-mark.png"
+                alt="The Intelliverse Brand Mark"
+                className="w-full h-full object-contain"
+                style={{
+                  filter: "drop-shadow(0 25px 50px rgba(61, 123, 247, 0.22))",
+                }}
+              />
             </motion.div>
           </div>
 

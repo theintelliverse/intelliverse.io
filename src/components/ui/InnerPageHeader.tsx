@@ -31,10 +31,10 @@ export default function InnerPageHeader() {
               The Intelliverse
             </span>
             <span
-              className="text-[10px] uppercase tracking-wider font-mono"
+              className="text-[9.5px] font-mono tracking-wide"
               style={{ color: "var(--muted)" }}
             >
-              Ahmedabad · India
+              innovation create &amp; grow
             </span>
           </div>
         </Link>

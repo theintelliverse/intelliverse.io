@@ -144,19 +144,34 @@ export default function Header() {
             height={40}
             className="h-10 sm:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
           />
-          <span
-            style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: "0.75rem",
-              fontWeight: 600,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "var(--ink)",
-            }}
-            className="hidden sm:inline"
-          >
-            The Intelliverse
-          </span>
+          <div className="hidden sm:flex flex-col">
+            <span
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "var(--ink)",
+                lineHeight: 1.2,
+              }}
+            >
+              The Intelliverse
+            </span>
+            <span
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "0.5625rem",
+                fontWeight: 500,
+                letterSpacing: "0.06em",
+                color: "var(--ink-3)",
+                lineHeight: 1.2,
+                marginTop: "0.12rem",
+              }}
+            >
+              innovation create &amp; grow
+            </span>
+          </div>
         </Link>
 
         {/* Desktop nav */}
