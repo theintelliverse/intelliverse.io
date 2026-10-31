@@ -383,7 +383,7 @@ export default function Philosophy({ data }) {
                   </div>
 
                   {/* Title & Subtitle */}
-                  <div className="mb-5">
+                  <div className="mb-5 md:min-h-[92px] lg:min-h-[102px] flex flex-col justify-start">
                     <h3
                       style={{
                         fontFamily: "var(--serif)",
@@ -413,6 +413,7 @@ export default function Philosophy({ data }) {
 
                   {/* Body Narrative */}
                   <p
+                    className="md:min-h-[110px] lg:min-h-[118px] flex flex-col justify-start"
                     style={{
                       fontFamily: "var(--sans)",
                       fontSize: "0.875rem",
@@ -425,7 +426,7 @@ export default function Philosophy({ data }) {
                   </p>
 
                   {/* Deliverable Scope Chips */}
-                  <div className="mb-6">
+                  <div className="mb-6 md:min-h-[105px] lg:min-h-[112px] flex flex-col justify-start">
                     <span
                       style={{
                         display: "block",
@@ -468,8 +469,8 @@ export default function Philosophy({ data }) {
                 </div>
 
                 {/* Card Footer: Ideal Use Case & Action Link */}
-                <div className="pt-4 border-t border-[var(--hairline)] flex flex-col gap-2.5">
-                  <div className="text-[12px] font-sans text-[var(--ink-3)] leading-relaxed">
+                <div className="pt-4 border-t border-[var(--hairline)] flex flex-col gap-2.5 mt-auto">
+                  <div className="text-[12px] font-sans text-[var(--ink-3)] leading-relaxed md:min-h-[36px]">
                     <strong className="text-[var(--ink-2)] font-semibold">Best For: </strong>
                     {extras.bestFor}
                   </div>
