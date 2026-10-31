@@ -174,6 +174,7 @@ export const metadata = {
     google: [
       "_bBKjibzbtCllmNG_idI9G98RKmAUWOYhREw9eoQXQY",
       "VokGQwH0xmoTvEfJqEn5787EY10aWuIuYa6tKNazEBw",
+      "s7Q6LYBnHQrQ8R0SPIZdfs84RFJyiCmwhY6WgEqxAXA",
       ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
         ? [process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION]
         : []),
@@ -493,7 +494,7 @@ export default function RootLayout({ children }) {
             gtag('config', 'G-9G65ML1LNR', {
               page_path: window.location.pathname,
               send_page_view: true,
-              server_container_url: 'https://intelliverse.io'
+              server_container_url: 'https://theintelliverse.tech'
             });
           `}
         </Script>
