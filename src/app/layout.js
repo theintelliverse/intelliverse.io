@@ -7,6 +7,7 @@ import SmoothScroll from "@/components/ui/SmoothScroll";
 import JsonLd from "@/components/seo/JsonLd";
 import { CursorProvider } from "@/components/cursor/CursorProvider";
 import CursorWrapper from "@/components/cursor/CursorWrapper";
+import CookieConsentBanner from "@/components/analytics/CookieConsentBanner";
 import { siteConfig } from "@/content/site";
 import { seoConfig } from "@/content/seo";
 
@@ -394,10 +395,88 @@ export default function RootLayout({ children }) {
         <JsonLd key="json-ld-structured-data" schema={[websiteSchema, orgSchema, localBizSchema, homeFaqSchema]} />
       </head>
       <body className="font-sans antialiased">
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-55LNSWG7"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+
         {/* Skip to content for accessibility */}
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>
+
+        {/* Google Consent Mode v2 Default (Must execute before any Google tags fire) */}
+        <Script id="google-consent-mode" strategy="beforeInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            window.gtag = gtag;
+
+            // Set default consent to 'denied' as placeholder / check existing preference
+            var storedConsent = null;
+            try {
+              storedConsent = localStorage.getItem('cookie_consent');
+            } catch (e) {}
+
+            if (storedConsent === 'granted') {
+              gtag('consent', 'default', {
+                'ad_storage': 'granted',
+                'ad_user_data': 'granted',
+                'ad_personalization': 'granted',
+                'analytics_storage': 'granted'
+              });
+            } else {
+              gtag('consent', 'default', {
+                'ad_storage': 'denied',
+                'ad_user_data': 'denied',
+                'ad_personalization': 'denied',
+                'analytics_storage': 'denied'
+              });
+            }
+
+            function allConsentGranted() {
+              gtag('consent', 'update', {
+                'ad_user_data': 'granted',
+                'ad_personalization': 'granted',
+                'ad_storage': 'granted',
+                'analytics_storage': 'granted'
+              });
+              try {
+                localStorage.setItem('cookie_consent', 'granted');
+              } catch (e) {}
+            }
+            window.allConsentGranted = allConsentGranted;
+
+            function allConsentDenied() {
+              gtag('consent', 'update', {
+                'ad_user_data': 'denied',
+                'ad_personalization': 'denied',
+                'ad_storage': 'denied',
+                'analytics_storage': 'denied'
+              });
+              try {
+                localStorage.setItem('cookie_consent', 'denied');
+              } catch (e) {}
+            }
+            window.allConsentDenied = allConsentDenied;
+          `}
+        </Script>
+
+        {/* Google Tag Manager */}
+        <Script id="gtm-script" strategy="afterInteractive">
+          {`
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-55LNSWG7');
+          `}
+        </Script>
 
         {/* Google Analytics 4 (gtag.js) */}
         <Script
@@ -407,8 +486,6 @@ export default function RootLayout({ children }) {
         />
         <Script key="ga4-init" id="google-analytics" strategy="afterInteractive">
           {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-9G65ML1LNR', {
               page_path: window.location.pathname,
@@ -442,6 +519,7 @@ export default function RootLayout({ children }) {
           </CursorProvider>
         </MotionConfig>
 
+        <CookieConsentBanner />
         <Analytics />
       </body>
     </html>

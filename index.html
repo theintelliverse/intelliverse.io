@@ -5,13 +5,70 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9G65ML1LNR"></script>
+  <!-- Google Consent Mode v2 Default (Must execute before any Google tags) -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+
+    // Check stored consent or set default to denied
+    var storedConsent = null;
+    try {
+      storedConsent = localStorage.getItem('cookie_consent');
+    } catch(e) {}
+
+    if (storedConsent === 'granted') {
+      gtag('consent', 'default', {
+        'ad_storage': 'granted',
+        'ad_user_data': 'granted',
+        'ad_personalization': 'granted',
+        'analytics_storage': 'granted'
+      });
+    } else {
+      gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied'
+      });
+    }
+
+    function allConsentGranted() {
+      gtag('consent', 'update', {
+        'ad_user_data': 'granted',
+        'ad_personalization': 'granted',
+        'ad_storage': 'granted',
+        'analytics_storage': 'granted'
+      });
+      try {
+        localStorage.setItem('cookie_consent', 'granted');
+      } catch (e) {}
+    }
+
+    function allConsentDenied() {
+      gtag('consent', 'update', {
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'ad_storage': 'denied',
+        'analytics_storage': 'denied'
+      });
+      try {
+        localStorage.setItem('cookie_consent', 'denied');
+      } catch (e) {}
+    }
+  </script>
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-55LNSWG7');</script>
+  <!-- End Google Tag Manager -->
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9G65ML1LNR"></script>
+  <script>
     gtag('js', new Date());
-  
     gtag('config', 'G-9G65ML1LNR');
   </script>
 
@@ -626,6 +683,11 @@
 </head>
 
 <body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-55LNSWG7"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
   <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-40 hidden transition-opacity duration-300"></div>
   <aside id="sidebar-menu"
     class="fixed top-0 left-0 h-full w-72 bg-gray-900/50 backdrop-blur-xl border-r border-gray-700 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out">

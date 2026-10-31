@@ -11,6 +11,47 @@
 declare global {
   interface Window {
     gtag?: (...args: any[]) => void;
+    dataLayer?: any[];
+    allConsentGranted?: () => void;
+    allConsentDenied?: () => void;
+  }
+}
+
+/**
+ * Grant all Consent Mode v2 storage categories and save preference
+ */
+export function allConsentGranted() {
+  if (typeof window !== "undefined") {
+    if (typeof window.gtag === "function") {
+      window.gtag("consent", "update", {
+        ad_user_data: "granted",
+        ad_personalization: "granted",
+        ad_storage: "granted",
+        analytics_storage: "granted",
+      });
+    }
+    try {
+      localStorage.setItem("cookie_consent", "granted");
+    } catch (e) {}
+  }
+}
+
+/**
+ * Deny optional Consent Mode v2 categories and save preference
+ */
+export function allConsentDenied() {
+  if (typeof window !== "undefined") {
+    if (typeof window.gtag === "function") {
+      window.gtag("consent", "update", {
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        ad_storage: "denied",
+        analytics_storage: "denied",
+      });
+    }
+    try {
+      localStorage.setItem("cookie_consent", "denied");
+    } catch (e) {}
   }
 }
 
