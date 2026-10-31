@@ -19,23 +19,41 @@ export default function ProjectsTab({
       {/* Header Area */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white font-mono uppercase">Projects, Case Studies &amp; Engineering Specifications</h2>
-          <p className="text-xs md:text-sm text-gray-400 mt-1">Manage active software projects, architectural case studies, technical engineering specifications, impact metrics, and live demo URLs.</p>
+          <div className="flex items-center gap-2.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-[var(--blue)] animate-pulse shadow-[0_0_10px_rgba(61,123,247,0.8)]"></span>
+            <h2 className="text-xl md:text-2xl font-bold tracking-tight font-mono uppercase" style={{ color: "var(--cream)" }}>
+              Projects &amp; Architectural Portfolio
+            </h2>
+          </div>
+          <p className="text-xs md:text-sm mt-1 font-mono" style={{ color: "rgba(248, 242, 228, 0.65)" }}>
+            Manage published software projects, tech stack badges, metrics, and live production endpoints.
+          </p>
         </div>
         <div className="flex gap-3 w-full sm:w-auto">
           <button
             onClick={handleAddProject}
-            className="flex-grow sm:flex-grow-0 px-4 py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-green-500/10 active:scale-95"
+            className="flex-grow sm:flex-grow-0 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer font-mono active:scale-95"
+            style={{
+              backgroundColor: "rgba(16, 185, 129, 0.18)",
+              color: "#34d399",
+              border: "1px solid rgba(16, 185, 129, 0.35)",
+            }}
           >
-            <i className="fas fa-plus"></i>
+            <i className="fas fa-plus text-[10px]"></i>
             <span>Add Project</span>
           </button>
           <button
             onClick={handleSaveCMS}
             disabled={loading}
-            className="flex-grow sm:flex-grow-0 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-blue-500/10 disabled:opacity-50 active:scale-95"
+            className="flex-grow sm:flex-grow-0 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer font-mono disabled:opacity-50 active:scale-95"
+            style={{
+              backgroundColor: "var(--blue-deep)",
+              color: "var(--cream)",
+              border: "1px solid rgba(228, 218, 195, 0.2)",
+              boxShadow: "0 4px 14px rgba(47, 99, 224, 0.35)",
+            }}
           >
-            <i className="fas fa-save"></i>
+            <i className={`fas ${loading ? "fa-spinner fa-spin" : "fa-save"}`}></i>
             <span>Save Changes</span>
           </button>
         </div>
@@ -45,11 +63,13 @@ export default function ProjectsTab({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
         {/* LEFT SIDEBAR: Projects list */}
-        <div className={`lg:col-span-4 bg-gray-900/30 border border-white/5 rounded-2xl p-4 md:p-5 backdrop-blur-sm space-y-4 transition-all duration-300 ${isEditingMobileProjects ? "hidden lg:block animate-fade-out lg:animate-none" : "block animate-fade-in lg:animate-none"}`}>
-          <div className="flex items-center justify-between pb-3 border-b border-white/5">
-            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider font-mono">Project Cards ({projects.length})</h3>
+        <div className={`lg:col-span-4 admin-console-card p-4 md:p-5 space-y-4 transition-all duration-300 ${isEditingMobileProjects ? "hidden lg:block animate-fade-out lg:animate-none" : "block animate-fade-in lg:animate-none"}`}>
+          <div className="flex items-center justify-between pb-3" style={{ borderBottom: "1px solid rgba(228, 218, 195, 0.1)" }}>
+            <h3 className="text-xs font-bold uppercase tracking-wider font-mono" style={{ color: "var(--cream)" }}>
+              Project Cards ({projects.length})
+            </h3>
             {projects.length > 0 && (
-              <span className="text-[10px] text-gray-500 font-mono">Select to Edit</span>
+              <span className="text-[10px] font-mono" style={{ color: "var(--orange)" }}>Select to Edit</span>
             )}
           </div>
 
@@ -157,7 +177,7 @@ export default function ProjectsTab({
               const proj = projects[index];
 
               return (
-                <div className="bg-gray-900/30 border border-white/5 rounded-2xl p-5 md:p-6 backdrop-blur-sm space-y-6 relative transition-all duration-300">
+                <div className="admin-console-card p-5 md:p-6 space-y-6 relative transition-all duration-300">
                   {/* Mobile Back Button */}
                   <div className="lg:hidden">
                     <button
@@ -487,19 +507,34 @@ export default function ProjectsTab({
               );
             })()
           ) : (
-            <div className="bg-gray-900/30 border border-white/5 rounded-2xl p-10 md:p-16 backdrop-blur-sm flex flex-col items-center justify-center text-center space-y-4">
-              <div className="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-2xl shadow-inner">
+            <div className="admin-console-card p-10 md:p-16 flex flex-col items-center justify-center text-center space-y-4">
+              <div
+                className="w-16 h-16 rounded-full flex items-center justify-center text-2xl shadow-inner font-mono border"
+                style={{
+                  backgroundColor: "rgba(47, 99, 224, 0.15)",
+                  color: "var(--blue)",
+                  borderColor: "rgba(61, 123, 247, 0.3)",
+                }}
+              >
                 <i className="fas fa-folder-open"></i>
               </div>
               <div className="max-w-xs space-y-1">
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">No Project Selected</h3>
-                <p className="text-xs text-gray-500 leading-relaxed font-sans">
-                  Select an existing worked project card from the list on the left to begin editing its details, or add a new one.
+                <h3 className="text-sm font-bold uppercase tracking-wider font-mono" style={{ color: "var(--cream)" }}>
+                  No Project Selected
+                </h3>
+                <p className="text-xs font-sans" style={{ color: "rgba(248, 242, 228, 0.6)" }}>
+                  Select an existing project card from the list on the left to begin editing, or create a new entry.
                 </p>
               </div>
               <button
                 onClick={handleAddProject}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-lg transition-all shadow-md shadow-blue-500/10 cursor-pointer active:scale-95 font-mono"
+                className="px-4 py-2 text-xs font-bold rounded-xl transition cursor-pointer font-mono"
+                style={{
+                  backgroundColor: "var(--blue-deep)",
+                  color: "var(--cream)",
+                  border: "1px solid rgba(228, 218, 195, 0.2)",
+                  boxShadow: "0 4px 14px rgba(47, 99, 224, 0.35)",
+                }}
               >
                 <i className="fas fa-plus mr-1.5"></i>
                 Add New Project

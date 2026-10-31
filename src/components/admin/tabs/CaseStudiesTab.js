@@ -48,40 +48,58 @@ export default function CaseStudiesTab({
       {/* Header Area */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
-            <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white font-mono uppercase">
+          <div className="flex items-center gap-2.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-[var(--orange)] animate-pulse shadow-[0_0_10px_rgba(253,179,71,0.8)]"></span>
+            <h2 className="text-xl md:text-2xl font-bold tracking-tight font-mono uppercase" style={{ color: "var(--cream)" }}>
               Case Studies &amp; Engineering Specifications
             </h2>
           </div>
-          <p className="text-xs md:text-sm text-gray-400 mt-1">
-            Manage deep architectural case studies, technical engineering specifications, impact metrics, and production deployments.
+          <p className="text-xs md:text-sm mt-1 font-mono" style={{ color: "rgba(248, 242, 228, 0.65)" }}>
+            Deep architectural case studies, technical engineering specifications, impact metrics, and production deployments.
           </p>
         </div>
         <div className="flex gap-3 w-full sm:w-auto">
           <button
             onClick={handleAddCaseStudy}
-            className="flex-grow sm:flex-grow-0 px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-amber-500/10 active:scale-95"
+            className="flex-grow sm:flex-grow-0 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer font-mono active:scale-95"
+            style={{
+              backgroundColor: "rgba(253, 179, 71, 0.18)",
+              color: "var(--orange)",
+              border: "1px solid rgba(253, 179, 71, 0.35)",
+            }}
           >
-            <i className="fas fa-plus"></i>
+            <i className="fas fa-plus text-[10px]"></i>
             <span>Add Case Study</span>
           </button>
           <button
             onClick={handleSaveCMS}
             disabled={loading}
-            className="flex-grow sm:flex-grow-0 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-blue-500/10 disabled:opacity-50 active:scale-95"
+            className="flex-grow sm:flex-grow-0 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer font-mono disabled:opacity-50 active:scale-95"
+            style={{
+              backgroundColor: "var(--blue-deep)",
+              color: "var(--cream)",
+              border: "1px solid rgba(228, 218, 195, 0.2)",
+              boxShadow: "0 4px 14px rgba(47, 99, 224, 0.35)",
+            }}
           >
-            <i className="fas fa-save"></i>
+            <i className={`fas ${loading ? "fa-spinner fa-spin" : "fa-save"}`}></i>
             <span>Save Changes</span>
           </button>
         </div>
       </div>
 
       {/* Strict Display Rule Alert Banner */}
-      <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-amber-300 flex items-start gap-3">
-        <i className="fas fa-shield-halved mt-0.5 shrink-0 text-sm"></i>
+      <div
+        className="p-3.5 rounded-xl text-xs flex items-start gap-3 font-mono border"
+        style={{
+          backgroundColor: "rgba(253, 179, 71, 0.08)",
+          borderColor: "rgba(253, 179, 71, 0.22)",
+          color: "rgba(248, 242, 228, 0.9)",
+        }}
+      >
+        <i className="fas fa-shield-halved mt-0.5 shrink-0 text-sm" style={{ color: "var(--orange)" }}></i>
         <div>
-          <strong className="font-semibold">Strict Conditional Rendering:</strong> Any section or individual field (Role, Brief, Impact, Live Link, Review, Tags) that is left empty will be <strong>automatically hidden</strong> on the frontend. If all Case Studies are removed, the entire Case Studies section will not render.
+          <strong style={{ color: "var(--orange)" }}>Strict Conditional Rendering:</strong> Any section or individual field (Role, Brief, Impact, Live Link, Review, Tags) that is left empty will be <strong>automatically hidden</strong> on the frontend. If all Case Studies are removed, the entire Case Studies section will not render.
         </div>
       </div>
 
@@ -89,18 +107,18 @@ export default function CaseStudiesTab({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* LEFT SIDEBAR: Case Studies list */}
         <div
-          className={`lg:col-span-4 bg-gray-900/30 border border-white/5 rounded-2xl p-4 md:p-5 backdrop-blur-sm space-y-4 transition-all duration-300 ${
+          className={`lg:col-span-4 admin-console-card p-4 md:p-5 space-y-4 transition-all duration-300 ${
             isEditingMobileCaseStudies
               ? "hidden lg:block animate-fade-out lg:animate-none"
               : "block animate-fade-in lg:animate-none"
           }`}
         >
-          <div className="flex items-center justify-between pb-3 border-b border-white/5">
-            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider font-mono">
+          <div className="flex items-center justify-between pb-3" style={{ borderBottom: "1px solid rgba(228, 218, 195, 0.1)" }}>
+            <h3 className="text-xs font-bold uppercase tracking-wider font-mono" style={{ color: "var(--cream)" }}>
               Case Studies ({caseStudies.length})
             </h3>
             {caseStudies.length > 0 && (
-              <span className="text-[10px] text-gray-500 font-mono">Select to Edit</span>
+              <span className="text-[10px] font-mono" style={{ color: "var(--orange)" }}>Select to Edit</span>
             )}
           </div>
 
@@ -202,7 +220,7 @@ export default function CaseStudiesTab({
 
         {/* RIGHT MAIN PANEL: Detailed Specification Form */}
         <div
-          className={`lg:col-span-8 bg-gray-900/30 border border-white/5 rounded-2xl p-4 md:p-6 backdrop-blur-sm transition-all duration-300 ${
+          className={`lg:col-span-8 admin-console-card p-4 md:p-6 transition-all duration-300 ${
             isEditingMobileCaseStudies
               ? "block animate-fade-in lg:animate-none"
               : "hidden lg:block animate-fade-out lg:animate-none"

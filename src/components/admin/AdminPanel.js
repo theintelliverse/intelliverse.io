@@ -842,6 +842,14 @@ export default function AdminPanel({
         currentUser={currentUser}
         dbStatus={dbStatus}
         handleLogout={handleLogout}
+        counts={{
+          team: founders.length,
+          projects: projects.length,
+          casestudies: caseStudies.length,
+          testimonials: testimonials.length,
+          chatbot: chatbotKnowledge.length,
+          crm: contactLogs.length,
+        }}
       />
 
       {/* Main Content Area */}
@@ -928,16 +936,34 @@ export default function AdminPanel({
         {statusMessage.text && (
           <div className="fixed top-6 right-6 z-50 animate-slide-in shadow-2xl max-w-sm">
             <div
-              className={`p-4 rounded-xl flex items-center gap-3 border ${statusMessage.type === "success"
-                ? "bg-green-950/80 border-green-800 text-green-400 backdrop-blur-md"
-                : statusMessage.type === "error"
-                  ? "bg-red-950/80 border-red-800 text-red-400 backdrop-blur-md"
-                  : "bg-blue-950/80 border-blue-800 text-blue-400 backdrop-blur-md"
-                }`}
+              className={`p-4 rounded-2xl flex items-center gap-3 border shadow-2xl backdrop-blur-xl ${
+                statusMessage.type === "success"
+                  ? "bg-emerald-950/90 border-emerald-500/40 text-emerald-300"
+                  : statusMessage.type === "error"
+                    ? "bg-red-950/90 border-red-500/40 text-red-300"
+                    : "bg-blue-950/90 border-blue-500/40 text-blue-300"
+              }`}
+              style={{
+                boxShadow: "0 20px 40px -10px rgba(0, 0, 0, 0.6)",
+              }}
             >
-              <i className={`fas ${statusMessage.type === "success" ? "fa-check-circle" : statusMessage.type === "error" ? "fa-exclamation-circle" : "fa-info-circle animate-pulse"
-                } text-base`}></i>
-              <span className="text-xs font-medium">{statusMessage.text}</span>
+              <i
+                className={`fas ${
+                  statusMessage.type === "success"
+                    ? "fa-check-circle"
+                    : statusMessage.type === "error"
+                      ? "fa-exclamation-circle"
+                      : "fa-info-circle animate-pulse"
+                } text-base shrink-0`}
+              ></i>
+              <span className="text-xs font-mono font-medium">{statusMessage.text}</span>
+              <button
+                type="button"
+                onClick={() => setStatusMessage({ text: "", type: "" })}
+                className="ml-auto text-xs opacity-60 hover:opacity-100 cursor-pointer"
+              >
+                ✕
+              </button>
             </div>
           </div>
         )}

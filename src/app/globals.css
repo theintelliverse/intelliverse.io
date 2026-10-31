@@ -2378,3 +2378,60 @@ select:focus-visible,
   color: #E4C892;
   font-style: italic;
 }
+
+/* ── HIGH-END ADMIN CONSOLE UTILITIES ───────────────────────────────────── */
+.admin-console-card {
+  background: rgba(18, 30, 68, 0.72);
+  border: 1px solid rgba(228, 218, 195, 0.14);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.admin-console-card:hover {
+  border-color: rgba(61, 123, 247, 0.28);
+}
+
+.admin-input-field {
+  width: 100%;
+  background: rgba(11, 21, 48, 0.82) !important;
+  border: 1px solid rgba(228, 218, 195, 0.14) !important;
+  color: var(--cream) !important;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.8125rem;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.admin-input-field:focus {
+  border-color: var(--blue) !important;
+  box-shadow: 0 0 0 3px rgba(61, 123, 247, 0.18) !important;
+  background: rgba(11, 21, 48, 0.95) !important;
+}
+
+.admin-input-field::placeholder {
+  color: rgba(248, 242, 228, 0.35);
+}
+
+.admin-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  background: rgba(61, 123, 247, 0.12);
+  color: var(--blue);
+  border: 1px solid rgba(61, 123, 247, 0.25);
+  transition: all 0.2s ease;
+}
+
+.admin-tag-pill:hover {
+  background: rgba(61, 123, 247, 0.2);
+  border-color: rgba(61, 123, 247, 0.4);
+}

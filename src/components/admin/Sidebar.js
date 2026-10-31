@@ -7,7 +7,8 @@ export default function Sidebar({
   setMobileMenuOpen,
   currentUser,
   dbStatus,
-  handleLogout
+  handleLogout,
+  counts = {}
 }) {
   return (
     <aside
@@ -61,15 +62,17 @@ export default function Sidebar({
         {[
           { id: "dashboard", label: "Dashboard", icon: "fa-chart-pie" },
           { id: "cms", label: "Website Content & CMS", icon: "fa-sliders-h" },
-          { id: "team", label: "Team Members", icon: "fa-users" },
-          { id: "projects", label: "Projects & Portfolio", icon: "fa-layer-group" },
-          { id: "casestudies", label: "Case Studies & Specs", icon: "fa-microchip" },
-          { id: "testimonials", label: "Client Reviews", icon: "fa-comments" },
-          { id: "chatbot", label: "Chatbot Q&A", icon: "fa-robot" },
-          { id: "crm", label: "CRM Form Leads", icon: "fa-address-book" },
+          { id: "team", label: "Team Members", icon: "fa-users", countKey: "team" },
+          { id: "projects", label: "Projects & Portfolio", icon: "fa-layer-group", countKey: "projects" },
+          { id: "casestudies", label: "Case Studies & Specs", icon: "fa-microchip", countKey: "casestudies" },
+          { id: "testimonials", label: "Client Reviews", icon: "fa-comments", countKey: "testimonials" },
+          { id: "chatbot", label: "Chatbot Q&A", icon: "fa-robot", countKey: "chatbot" },
+          { id: "crm", label: "CRM Form Leads", icon: "fa-address-book", countKey: "crm" },
           { id: "settings", label: "Manage Admins", icon: "fa-users-cog" },
         ].map((tab) => {
           const isActive = activeTab === tab.id;
+          const count = tab.countKey && counts[tab.countKey] !== undefined ? counts[tab.countKey] : null;
+
           return (
             <button
               key={tab.id}
@@ -77,7 +80,7 @@ export default function Sidebar({
                 setActiveTab(tab.id);
                 setMobileMenuOpen(false);
               }}
-              className="w-full flex items-center gap-3 px-4 py-3 text-xs font-semibold rounded-xl transition-all duration-300 relative cursor-pointer group"
+              className="w-full flex items-center justify-between px-3.5 py-3 text-xs font-semibold rounded-xl transition-all duration-300 relative cursor-pointer group"
               style={{
                 backgroundColor: isActive ? "var(--blue-deep)" : "transparent",
                 color: isActive ? "var(--cream)" : "rgba(248, 242, 228, 0.7)",
@@ -100,13 +103,27 @@ export default function Sidebar({
                 }
               }}
             >
-              <i
-                className={`fas ${tab.icon} text-sm transition-transform duration-300 group-hover:scale-110`}
-                style={{
-                  color: isActive ? "var(--orange)" : "rgba(248, 242, 228, 0.5)",
-                }}
-              ></i>
-              <span>{tab.label}</span>
+              <div className="flex items-center gap-3 min-w-0">
+                <i
+                  className={`fas ${tab.icon} text-sm transition-transform duration-300 group-hover:scale-110 shrink-0`}
+                  style={{
+                    color: isActive ? "var(--orange)" : "rgba(248, 242, 228, 0.5)",
+                  }}
+                ></i>
+                <span className="truncate">{tab.label}</span>
+              </div>
+
+              {count !== null && (
+                <span
+                  className="text-[10px] px-2 py-0.2 rounded-full font-bold font-mono transition-transform group-hover:scale-105 shrink-0"
+                  style={{
+                    backgroundColor: isActive ? "rgba(255, 255, 255, 0.2)" : "rgba(248, 242, 228, 0.08)",
+                    color: isActive ? "var(--cream)" : "rgba(248, 242, 228, 0.6)",
+                  }}
+                >
+                  {count}
+                </span>
+              )}
             </button>
           );
         })}
