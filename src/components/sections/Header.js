@@ -131,29 +131,29 @@ export default function Header() {
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-3"
+          className="flex items-center gap-3 group"
           style={{ textDecoration: "none" }}
           aria-label="The Intelliverse — home"
           data-cursor="link"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/the-intelliverse-logo.jpg"
+            src="/the-intelliverse-mark.png"
             alt="The Intelliverse"
-            width={32}
-            height={32}
-            style={{ borderRadius: "4px", border: "1px solid rgba(255,255,255,0.1)" }}
+            width={50}
+            height={40}
+            className="h-10 sm:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
           />
           <span
             style={{
               fontFamily: "'JetBrains Mono', monospace",
-              fontSize: "0.625rem",
-              letterSpacing: "0.18em",
+              fontSize: "0.75rem",
+              fontWeight: 600,
+              letterSpacing: "0.14em",
               textTransform: "uppercase",
-              color: "rgba(244,243,240,0.7)",
-              display: "none",
+              color: "var(--ink)",
             }}
-            className="sm:inline"
+            className="hidden sm:inline"
           >
             The Intelliverse
           </span>

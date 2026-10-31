@@ -17,12 +17,11 @@ export default function InnerPageHeader() {
         <Link href="/" data-cursor="link" className="flex items-center gap-3 group">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/the-intelliverse-logo.jpg"
+            src="/the-intelliverse-mark.png"
             alt="The Intelliverse"
-            width={32}
-            height={32}
-            className="rounded object-cover border"
-            style={{ borderColor: "var(--hairline)" }}
+            width={50}
+            height={40}
+            className="h-10 sm:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
           />
           <div className="flex flex-col">
             <span

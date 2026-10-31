@@ -28,10 +28,9 @@ export default function Sidebar({
         <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/the%20intelliverse%20logo.jpg"
+            src="/the-intelliverse-mark.png"
             alt="Intelliverse Logo"
-            className="w-8 h-8 rounded-lg object-cover shadow-md hover:scale-105 transition-transform duration-300"
-            style={{ border: "1px solid rgba(228, 218, 195, 0.2)" }}
+            className="w-10 h-10 object-contain hover:scale-105 transition-transform duration-300"
           />
           <div className="min-w-0">
             <h1
