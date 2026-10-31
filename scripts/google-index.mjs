@@ -27,6 +27,7 @@ const CANONICAL_URLS = [
   `${BASE_URL}/faq`,
   `${BASE_URL}/blog`,
   `${BASE_URL}/blog/what-is-the-intelliverse`,
+  `${BASE_URL}/blog/top-software-development-companies-ahmedabad`,
   `${BASE_URL}/blog/how-much-does-custom-software-cost-in-india`,
   `${BASE_URL}/blog/web-app-vs-mobile-app-how-to-choose`,
   `${BASE_URL}/blog/how-to-digitise-a-clinic-appointment-queue`,

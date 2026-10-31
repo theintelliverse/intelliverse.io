@@ -72,12 +72,18 @@ export const metadata = {
     "The Intelliverse is an engineering-first software development, web architecture, and IT services company based in Ahmedabad, Gujarat, India. Custom SaaS and cloud systems.",
   keywords: [
     "The Intelliverse",
-    "The Intelliverse Ahmedabad",
+    "Intelliverse",
     "TheIntelliverse",
+    "theintelliverse.tech",
+    "Intelliverse Tech",
+    "Intelliverse Software",
+    "The Intelliverse Ahmedabad",
     "Intelliverse Ahmedabad",
     "software development company in Ahmedabad",
+    "top software development companies in Ahmedabad",
     "web development company Ahmedabad",
     "IT services Ahmedabad",
+    "best IT company in Ahmedabad",
     "custom software development India",
     "SaaS development Ahmedabad",
     "Next.js agency Ahmedabad",
@@ -383,7 +389,7 @@ export default function RootLayout({ children }) {
         <link
           key="font-awesome-css"
           rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+c          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
           integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"

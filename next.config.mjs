@@ -38,6 +38,16 @@ const nextConfig = {
         destination: "https://theintelliverse.tech/:path*",
         permanent: true,
       },
+      {
+        source: "/robot.txt",
+        destination: "/robots.txt",
+        permanent: true,
+      },
+      {
+        source: "/sitemap",
+        destination: "/sitemap.xml",
+        permanent: true,
+      },
     ];
   },
   async rewrites() {

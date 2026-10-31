@@ -78,8 +78,17 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://theintelliverse.tec
 export const siteConfig: SiteConfig = {
   name: "The Intelliverse",
   legalName: "The Intelliverse",
-  alternateName: ["TheIntelliverse", "The Intelliverse Ahmedabad", "Intelliverse Ahmedabad"],
-  disambiguatingDescription: "Software, web and IT services company based in Ahmedabad, India.",
+  alternateName: [
+    "TheIntelliverse",
+    "Intelliverse",
+    "The Intelliverse Ahmedabad",
+    "Intelliverse Ahmedabad",
+    "theintelliverse.tech",
+    "Intelliverse Tech",
+    "Intelliverse Software",
+  ],
+  disambiguatingDescription:
+    "Independent software development, web engineering, and custom SaaS architecture studio in Ahmedabad, Gujarat, India. Distinct from any legacy telecommunications providers.",
   showDisambiguationNote: false, // Set to true only if legally reviewed by owner
   disambiguationNote:
     "The Intelliverse is an independent software development, web engineering, and IT services company based in Ahmedabad, Gujarat, India. Not affiliated with any other similarly named telecom or legacy software entities.",

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- 1. Homepage — Primary Entity Authority -->
+  <url>
+    <loc>https://theintelliverse.tech/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://theintelliverse.tech/og-image.png</image:loc>
+      <image:title>The Intelliverse — Software, Web &amp; IT Services in Ahmedabad</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://theintelliverse.tech/the-intelliverse-logo.jpg</image:loc>
+      <image:title>The Intelliverse Official Brand Logo</image:title>
+    </image:image>
+  </url>
+
+  <!-- 2. Local Hub — Top Software Development Company in Ahmedabad -->
+  <url>
+    <loc>https://theintelliverse.tech/software-development-company-ahmedabad</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://theintelliverse.tech/og-image.png</image:loc>
+      <image:title>Top Software Development Company in Ahmedabad — The Intelliverse</image:title>
+    </image:image>
+  </url>
+
+  <!-- 3. Core Services -->
+  <url>
+    <loc>https://theintelliverse.tech/services/web-development</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://theintelliverse.tech/og-image.png</image:loc>
+      <image:title>Custom Web Development &amp; Next.js Architecture</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://theintelliverse.tech/services/software-engineering</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://theintelliverse.tech/og-image.png</image:loc>
+      <image:title>Custom Software Engineering &amp; SaaS Platforms</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://theintelliverse.tech/services/it-architecture-support</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://theintelliverse.tech/og-image.png</image:loc>
+      <image:title>Cloud Infrastructure, DevOps &amp; IT Services</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://theintelliverse.tech/services/ai-data-robotics-iot</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://theintelliverse.tech/og-image.png</image:loc>
+      <image:title>Applied AI, Data Automations &amp; Intelligent Systems</image:title>
+    </image:image>
+  </url>
+
+  <!-- 4. Case Studies -->
+  <url>
+    <loc>https://theintelliverse.tech/work/appointory</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://theintelliverse.tech/og-image.png</image:loc>
+      <image:title>Appointory Case Study — Healthcare SaaS Queue Architecture</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://theintelliverse.tech/work/vrix</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://theintelliverse.tech/og-image.png</image:loc>
+      <image:title>Vrix Jewellery Case Study — Luxury Headless E-Commerce</image:title>
+    </image:image>
+  </url>
+
+  <!-- 5. Knowledge & Company Discovery -->
+  <url>
+    <loc>https://theintelliverse.tech/about</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://theintelliverse.tech/founder_dhruvil.jpg</image:loc>
+      <image:title>Dhruvil Thummar — Co-founder &amp; CTO</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://theintelliverse.tech/founder_rudra.jpg</image:loc>
+      <image:title>Rudra Kankotiya — Co-founder &amp; CMO</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://theintelliverse.tech/founder_jal.jpg</image:loc>
+      <image:title>Jal Anghan — Founder &amp; Director</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://theintelliverse.tech/contact</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://theintelliverse.tech/faq</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- 6. Blog Articles & Search Intent Drivers -->
+  <url>
+    <loc>https://theintelliverse.tech/blog</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://theintelliverse.tech/blog/what-is-the-intelliverse</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://theintelliverse.tech/og-image.png</image:loc>
+      <image:title>What is The Intelliverse? Founding Story &amp; Architecture</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://theintelliverse.tech/blog/top-software-development-companies-ahmedabad</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://theintelliverse.tech/og-image.png</image:loc>
+      <image:title>Top Software Development Companies in Ahmedabad (2026 Tech Guide)</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://theintelliverse.tech/blog/how-much-does-custom-software-cost-in-india</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://theintelliverse.tech/blog/web-app-vs-mobile-app-how-to-choose</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://theintelliverse.tech/blog/how-to-digitise-a-clinic-appointment-queue</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- 7. Governance & Legal -->
+  <url>
+    <loc>https://theintelliverse.tech/privacy</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.30</priority>
+  </url>
+
+  <url>
+    <loc>https://theintelliverse.tech/terms</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.30</priority>
+  </url>
+
+</urlset>

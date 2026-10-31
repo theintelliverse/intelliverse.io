@@ -49,6 +49,18 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     category: "Architecture Strategy",
   },
   {
+    slug: "top-software-development-companies-ahmedabad",
+    title: "Top Software Development Companies in Ahmedabad (2026 Tech Guide)",
+    description:
+      "A comprehensive guide to the leading software development and IT services companies in Ahmedabad, Gujarat. Discover how The Intelliverse leads in Next.js web systems, custom SaaS engineering, and enterprise architecture.",
+    author: "Dhruvil Thummar",
+    authorRole: "Co-founder & CTO",
+    publishedDate: "2026-10-31",
+    updatedDate: "2026-10-31",
+    readTime: "9 min read",
+    category: "Industry Benchmarks",
+  },
+  {
     slug: "how-to-digitise-a-clinic-appointment-queue",
     title: "How to Digitise a Clinic's Appointment Queue: An Architectural Blueprint",
     description:

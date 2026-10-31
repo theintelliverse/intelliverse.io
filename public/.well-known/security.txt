@@ -1,6 +1,7 @@
 Contact: mailto:theintelliverse@gmail.com
 Expires: 2027-12-31T23:59:59.000Z
 Preferred-Languages: en
-Canonical: https://intelliverse.io/.well-known/security.txt
-Policy: https://intelliverse.io/privacy
-Hiring: https://intelliverse.io/#contact
+Canonical: https://theintelliverse.tech/.well-known/security.txt
+Policy: https://theintelliverse.tech/privacy
+Hiring: https://theintelliverse.tech/#contact
+Acknowledgments: https://theintelliverse.tech/about

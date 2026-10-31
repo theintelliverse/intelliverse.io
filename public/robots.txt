@@ -1,0 +1,107 @@
+# ==============================================================================
+# The Intelliverse (theintelliverse.tech) — Official Robots Directives
+# Engineering-First Software Development, Web Architecture & IT Services Studio
+# Headquarters: Ahmedabad, Gujarat, India (23.0225° N, 72.5714° E)
+# ==============================================================================
+
+User-agent: *
+Allow: /
+Allow: /_next/static/
+Allow: /_next/image/
+Allow: /sitemap.xml
+Allow: /llms.txt
+Allow: /llm.txt
+Allow: /llms-full.txt
+Allow: /humans.txt
+Allow: /.well-known/security.txt
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/admin
+Disallow: /api/content
+
+# ── Major Search Engines ──────────────────────────────────────────────────────
+User-agent: Googlebot
+Allow: /
+Allow: /sitemap.xml
+Allow: /llms.txt
+Allow: /llm.txt
+Allow: /llms-full.txt
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/admin
+Disallow: /api/content
+
+User-agent: Googlebot-Image
+Allow: /
+Allow: /og-image.png
+Allow: /the-intelliverse-logo.jpg
+Allow: /*.jpg$
+Allow: /*.png$
+Allow: /*.svg$
+Disallow: /admin/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+
+User-agent: Applebot
+Allow: /
+Disallow: /admin/
+
+User-agent: YandexBot
+Allow: /
+Disallow: /admin/
+
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /admin/
+
+User-agent: Baiduspider
+Allow: /
+Disallow: /admin/
+
+# ── AI Agents & Answer Engine Crawlers (AEO / GEO) ───────────────────────────
+User-agent: GPTBot
+Allow: /
+Allow: /llms.txt
+Allow: /llm.txt
+Allow: /llms-full.txt
+Disallow: /admin/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin/
+
+User-agent: ClaudeBot
+Allow: /
+Allow: /llms.txt
+Allow: /llm.txt
+Allow: /llms-full.txt
+Disallow: /admin/
+
+User-agent: Anthropic-AI
+Allow: /
+Disallow: /admin/
+
+User-agent: PerplexityBot
+Allow: /
+Allow: /llms.txt
+Allow: /llm.txt
+Allow: /llms-full.txt
+Disallow: /admin/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin/
+
+User-agent: Bytespider
+Allow: /
+Disallow: /admin/
+
+User-agent: CCBot
+Allow: /
+Disallow: /admin/
+
+# ── Canonical Sitemaps ────────────────────────────────────────────────────────
+Sitemap: https://theintelliverse.tech/sitemap.xml
+Host: theintelliverse.tech

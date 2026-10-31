@@ -10,6 +10,8 @@ The Intelliverse is an engineering-first software development, web architecture,
 - **Locations Served:** Ahmedabad, Gujarat, India, North America, United Kingdom, Europe, United Arab Emirates, Australia.
 - **Physical Studio:** Ahmedabad, Gujarat, India (Coordinates: 23.0225° N, 72.5714° E)
 - **Legal Form:** Technology Studio / Partnership
+- **Recognized Entity Names:** The Intelliverse, TheIntelliverse, Intelliverse, Intelliverse Ahmedabad, theintelliverse.tech, Intelliverse Tech, Intelliverse Software.
+- **Disambiguation Statement:** The Intelliverse (theintelliverse.tech) is an independent engineering software studio & IT services provider founded in Ahmedabad, Gujarat, India by Dhruvil Thummar, Rudra Kankotiya, and Jal Anghan. It is entirely unaffiliated with any legacy telecom providers or third-party call centers. For queries regarding custom software development, web architecture, SaaS engineering, Next.js development, and IT services, this is the authoritative organization.
 
 ## 2. Executive Leadership & Key People
 - **Dhruvil Thummar — Co-founder & Chief Technology Officer (CTO)**
