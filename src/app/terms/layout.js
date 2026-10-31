@@ -3,7 +3,7 @@ export const metadata = {
   description:
     "Terms & Conditions governing the use of services, software, and platforms provided by The Intelliverse.",
   alternates: {
-    canonical: "https://intelliverse.io/terms",
+    canonical: "https://theintelliverse.tech/terms",
   },
   robots: {
     index: true,

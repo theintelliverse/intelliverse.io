@@ -10,7 +10,7 @@ import { BLOG_POSTS } from "@/content/blog";
  * @type {() => Promise<import('next').MetadataRoute.Sitemap> | import('next').MetadataRoute.Sitemap}
  */
 export default async function sitemap() {
-  const baseUrl = (siteConfig.url || "https://intelliverse.io").replace(/\/+$/, "");
+  const baseUrl = (siteConfig.url || "https://theintelliverse.tech").replace(/\/+$/, "");
   const currentReleaseDate = new Date("2026-10-08T00:00:00.000Z");
 
   /** @type {import('next').MetadataRoute.Sitemap} */

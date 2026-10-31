@@ -84,7 +84,7 @@ async function getAccessToken(clientEmail: string, privateKey: string): Promise<
 }
 
 function getAllCanonicalUrls(): string[] {
-  const baseUrl = (siteConfig.url || "https://intelliverse.io").replace(/\/+$/, "");
+  const baseUrl = (siteConfig.url || "https://theintelliverse.tech").replace(/\/+$/, "");
   return [
     `${baseUrl}`,
     `${baseUrl}/software-development-company-ahmedabad`,

@@ -191,7 +191,7 @@ export default async function Image() {
               fontWeight: 600,
             }}
           >
-            intelliverse.io
+            theintelliverse.tech
           </span>
         </div>
       </div>

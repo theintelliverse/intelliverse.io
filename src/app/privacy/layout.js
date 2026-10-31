@@ -3,7 +3,7 @@ export const metadata = {
   description:
     "Privacy Policy for The Intelliverse. Learn how we handle, protect, and respect your data.",
   alternates: {
-    canonical: "https://intelliverse.io/privacy",
+    canonical: "https://theintelliverse.tech/privacy",
   },
   robots: {
     index: true,

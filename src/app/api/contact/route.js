@@ -93,7 +93,7 @@ export async function POST(request) {
           from: `"The Intelliverse" <${smtpUser}>`,
           to: email,
           subject: "Thank you for contacting The Intelliverse",
-          text: `Hi ${name},\n\nThank you for reaching out to The Intelliverse!\n\nWe have received your message:\n"${message}"\n\nOur team will review your project requirements and get back to you within 24 hours.\n\nBest regards,\nThe Intelliverse Team\nhttps://intelliverse.io`,
+          text: `Hi ${name},\n\nThank you for reaching out to The Intelliverse!\n\nWe have received your message:\n"${message}"\n\nOur team will review your project requirements and get back to you within 24 hours.\n\nBest regards,\nThe Intelliverse Team\nhttps://theintelliverse.tech`,
           html: `
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
               <h2 style="color: #3b82f6;">The Intelliverse</h2>

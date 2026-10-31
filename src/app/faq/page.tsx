@@ -71,7 +71,7 @@ const GLOBAL_FAQS = [
     category: "Brand & Identity",
     question: "How can I contact The Intelliverse?",
     answer:
-      "You can contact The Intelliverse by emailing theintelliverse@gmail.com, submitting a brief through our website contact form at intelliverse.io/contact, or connecting directly with our founders on LinkedIn (linkedin.com/company/the-intelliverse).",
+      "You can contact The Intelliverse by emailing theintelliverse@gmail.com, submitting a brief through our website contact form at theintelliverse.tech/contact, or connecting directly with our founders on LinkedIn (linkedin.com/company/the-intelliverse).",
   },
   {
     category: "Services & Capabilities",

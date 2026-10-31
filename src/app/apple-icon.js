@@ -1,4 +1,6 @@
 import { ImageResponse } from "next/og";
+import fs from "fs";
+import path from "path";
 
 export const size = {
   width: 180,
@@ -8,9 +10,20 @@ export const contentType = "image/png";
 
 /**
  * Apple Touch Icon (180x180)
- * Renders The Intelliverse circle-cluster mark
+ * Renders The Intelliverse official logo
  */
 export default function AppleIcon() {
+  let logoDataUrl = "";
+  try {
+    const logoFilePath = path.join(process.cwd(), "public", "apple-touch-icon.png");
+    if (fs.existsSync(logoFilePath)) {
+      const buffer = fs.readFileSync(logoFilePath);
+      logoDataUrl = `data:image/png;base64,${buffer.toString("base64")}`;
+    }
+  } catch (e) {
+    console.error("Apple icon read error:", e);
+  }
+
   return new ImageResponse(
     (
       <div
@@ -20,107 +33,37 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0B1530",
-          borderRadius: "40px",
-          position: "relative",
+          background: "#FFFFFF",
+          borderRadius: "36px",
           overflow: "hidden",
         }}
       >
-        {/* Circle Cluster Discs */}
-        <div
-          style={{
-            position: "absolute",
-            width: "90px",
-            height: "90px",
-            borderRadius: "50%",
-            background: "#8B5CF6",
-            top: "38px",
-            left: "30px",
-            opacity: 0.85,
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            width: "84px",
-            height: "84px",
-            borderRadius: "50%",
-            background: "#3D7BF7",
-            top: "60px",
-            left: "45px",
-            opacity: 0.9,
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            width: "76px",
-            height: "76px",
-            borderRadius: "50%",
-            background: "#FDB347",
-            top: "34px",
-            left: "75px",
-            opacity: 0.85,
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            width: "68px",
-            height: "68px",
-            borderRadius: "50%",
-            background: "#F43F5E",
-            top: "68px",
-            left: "68px",
-            opacity: 0.85,
-          }}
-        />
-
-        {/* Orbit Dots */}
-        <div
-          style={{
-            position: "absolute",
-            width: "18px",
-            height: "18px",
-            borderRadius: "50%",
-            background: "#F43F5E",
-            top: "20px",
-            left: "78px",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            width: "18px",
-            height: "18px",
-            borderRadius: "50%",
-            background: "#3D7BF7",
-            top: "84px",
-            right: "16px",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            width: "15px",
-            height: "15px",
-            borderRadius: "50%",
-            background: "#FDB347",
-            bottom: "24px",
-            left: "30px",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            width: "14px",
-            height: "14px",
-            borderRadius: "50%",
-            background: "#FFFFFF",
-            top: "80px",
-            left: "80px",
-          }}
-        />
+        {logoDataUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={logoDataUrl}
+            alt="The Intelliverse Apple Touch Icon"
+            width="180"
+            height="180"
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        ) : (
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              backgroundColor: "#2F63E0",
+              color: "#FFFFFF",
+              fontSize: "80px",
+              fontWeight: 800,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            i
+          </div>
+        )}
       </div>
     ),
     {

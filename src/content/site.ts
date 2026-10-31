@@ -73,7 +73,7 @@ export interface SiteConfig {
   allowedBots: string[];
 }
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://intelliverse.io";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://theintelliverse.tech";
 
 export const siteConfig: SiteConfig = {
   name: "The Intelliverse",

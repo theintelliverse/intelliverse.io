@@ -6,7 +6,7 @@ import path from "path";
  * Run: node scripts/export-sitemap-xml.mjs
  */
 
-const BASE_URL = "https://intelliverse.io";
+const BASE_URL = "https://theintelliverse.tech";
 const CURRENT_DATE = "2026-10-08";
 
 const staticUrls = [

@@ -20,5 +20,5 @@ Framework: Next.js 16 (App Router), React 19, Turbopack
 Typography: Instrument Serif, JetBrains Mono, Satoshi
 Components: Custom Vanilla CSS & ThreeUI Shader Runtime
 Studio Base: Ahmedabad, Gujarat, India (23.0225° N, 72.5714° E)
-URL: https://intelliverse.io
+URL: https://theintelliverse.tech
 Contact: theintelliverse@gmail.com

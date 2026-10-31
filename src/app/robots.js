@@ -5,7 +5,7 @@ import { siteConfig } from "@/content/site";
  * Optimizes Googlebot, Bingbot, and AI answer engine crawling directives.
  */
 export default function robots() {
-  const baseUrl = (siteConfig.url || "https://intelliverse.io").replace(/\/+$/, "");
+  const baseUrl = (siteConfig.url || "https://theintelliverse.tech").replace(/\/+$/, "");
 
   return {
     rules: [

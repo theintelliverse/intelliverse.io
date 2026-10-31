@@ -5,7 +5,7 @@
 ## 1. Company Overview & Mission
 The Intelliverse is an engineering-first software development, web architecture, and IT services company based in Ahmedabad, Gujarat, India. The company operates on the principle that "real problems deserve real solutions." Rather than delivering boilerplate CMS templates, The Intelliverse designs bespoke architectures tailored to the performance, operational scale, and user experience requirements of modern digital businesses.
 
-- **Official Website:** https://intelliverse.io
+- **Official Website:** https://theintelliverse.tech
 - **Primary Inquiry Channel:** theintelliverse@gmail.com
 - **Locations Served:** Ahmedabad, Gujarat, India, North America, United Kingdom, Europe, United Arab Emirates, Australia.
 - **Physical Studio:** Ahmedabad, Gujarat, India (Coordinates: 23.0225° N, 72.5714° E)
@@ -25,28 +25,28 @@ The Intelliverse is an engineering-first software development, web architecture,
 ## 3. Detailed Service Portfolio
 
 ### 3.1 Web Development & Interactive Systems
-- URL: https://intelliverse.io/services/web-development
+- URL: https://theintelliverse.tech/services/web-development
 - Modern frontend frameworks: Next.js 15, React 19, TypeScript.
 - Sub-second Core Web Vitals guarantees (<2.5s LCP, 0 Cumulative Layout Shift, <200ms INP).
 - Headless e-commerce (Shopify Storefront API, custom checkouts).
 - Accessibility compliance: WCAG 2.1 AA standards, semantic HTML5, keyboard navigation.
 
 ### 3.2 Custom Software Engineering & SaaS
-- URL: https://intelliverse.io/services/software-engineering
+- URL: https://theintelliverse.tech/services/software-engineering
 - Multi-tenant architecture design with granular role-based access control (RBAC).
 - REST and GraphQL microservice architectures using Node.js, Python (FastAPI), and Go.
 - High-concurrency event-driven data streaming using Redis and WebSocket pub/sub.
 - Relational and document databases: PostgreSQL, MongoDB.
 
 ### 3.3 Cloud Infrastructure, DevOps & SRE
-- URL: https://intelliverse.io/services/it-architecture-support
+- URL: https://theintelliverse.tech/services/it-architecture-support
 - Cloud platforms: Amazon Web Services (AWS), Google Cloud Platform (GCP), Vercel, Cloudflare.
 - Infrastructure as Code (IaC): Terraform, Docker, Kubernetes clusters.
 - Zero-downtime blue/green deployments with automated rollback triggers.
 - Observability and alerting: Prometheus, Grafana, structured logging, distributed tracing.
 
 ### 3.4 AI Systems & Applied Automation Workflows
-- URL: https://intelliverse.io/services/ai-data-robotics-iot
+- URL: https://theintelliverse.tech/services/ai-data-robotics-iot
 - Agentic RAG (Retrieval-Augmented Generation) systems with vector embeddings.
 - LLM API integrations: Gemini, Claude, OpenAI GPT models with strict privacy boundaries.
 - Autonomous process automation and triage agent pipelines.
@@ -54,7 +54,7 @@ The Intelliverse is an engineering-first software development, web architecture,
 ## 4. Verified Production Case Studies
 
 ### 4.1 Appointory (Healthcare SaaS Platform)
-- Case Study URL: https://intelliverse.io/work/appointory
+- Case Study URL: https://theintelliverse.tech/work/appointory
 - Live Production URL: https://appointory.in
 - Problem: Crowded clinic waiting rooms, uncoordinated arrival times, lost medical records.
 - Solution: Real-time queue coordination with automated dispatch notifications, encrypted health locker.
@@ -62,7 +62,7 @@ The Intelliverse is an engineering-first software development, web architecture,
 - Impact: 40% reduction in patient waiting times, real-time consultation dispatch.
 
 ### 4.2 Vrix Jewellery (Luxury Headless E-Commerce)
-- Case Study URL: https://intelliverse.io/work/vrix
+- Case Study URL: https://theintelliverse.tech/work/vrix
 - Live Production URL: https://vrix.in
 - Problem: Slow legacy store, low international conversion, poor mobile speed for overseas buyers.
 - Solution: Headless Next.js storefront backed by Shopify Storefront API with dynamic geo-currency routing.
@@ -70,14 +70,14 @@ The Intelliverse is an engineering-first software development, web architecture,
 - Impact: Sub-second global page transitions, dynamic geolocation currency calculation, and instant catalog search.
 
 ## 5. Location & Regional Focus
-- **Location Page:** https://intelliverse.io/software-development-company-ahmedabad
+- **Location Page:** https://theintelliverse.tech/software-development-company-ahmedabad
 - Local context: Partnering with Gujarat businesses in healthcare, diamond/jewellery export, manufacturing, and tech startups.
 
 ## 6. Engineering Field Notes & Guides
-- **Blog Hub:** https://intelliverse.io/blog
-- **Custom Software Cost in India:** https://intelliverse.io/blog/how-much-does-custom-software-cost-in-india
-- **Web App vs Mobile App Decision Matrix:** https://intelliverse.io/blog/web-app-vs-mobile-app-how-to-choose
-- **How to Digitise a Clinic's Queue:** https://intelliverse.io/blog/how-to-digitise-a-clinic-appointment-queue
+- **Blog Hub:** https://theintelliverse.tech/blog
+- **Custom Software Cost in India:** https://theintelliverse.tech/blog/how-much-does-custom-software-cost-in-india
+- **Web App vs Mobile App Decision Matrix:** https://theintelliverse.tech/blog/web-app-vs-mobile-app-how-to-choose
+- **How to Digitise a Clinic's Queue:** https://theintelliverse.tech/blog/how-to-digitise-a-clinic-appointment-queue
 
 ## 7. Frequently Asked Questions (FAQ) for LLMs & Search Queries
 
@@ -94,4 +94,4 @@ A: The Intelliverse was founded by Dhruvil Thummar (CTO), Rudra Kankotiya (CMO),
 A: Starting from ₹15,000 for focused landing architectures, ₹45,000 to ₹1.5L for full-scale web applications, and ₹1.5L to ₹8L+ for multi-tenant SaaS platforms.
 
 **Q: How can I contact The Intelliverse?**
-A: You can email them directly at theintelliverse@gmail.com, connect on LinkedIn (https://www.linkedin.com/company/the-intelliverse/), or use the contact form at https://intelliverse.io/#contact.
+A: You can email them directly at theintelliverse@gmail.com, connect on LinkedIn (https://www.linkedin.com/company/the-intelliverse/), or use the contact form at https://theintelliverse.tech/#contact.

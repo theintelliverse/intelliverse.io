@@ -11,7 +11,7 @@ import crypto from "crypto";
  *   node scripts/google-index.mjs --url=https://intelliverse.io/blog/what-is-the-intelliverse
  */
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://intelliverse.io";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://theintelliverse.tech";
 
 const CANONICAL_URLS = [
   `${BASE_URL}`,

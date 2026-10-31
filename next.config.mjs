@@ -22,8 +22,20 @@ const nextConfig = {
     return [
       {
         source: "/:path*",
+        has: [{ type: "host", value: "www.theintelliverse.tech" }],
+        destination: "https://theintelliverse.tech/:path*",
+        permanent: true,
+      },
+      {
+        source: "/:path*",
         has: [{ type: "host", value: "www.intelliverse.io" }],
-        destination: "https://intelliverse.io/:path*",
+        destination: "https://theintelliverse.tech/:path*",
+        permanent: true,
+      },
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "intelliverse.io" }],
+        destination: "https://theintelliverse.tech/:path*",
         permanent: true,
       },
     ];
