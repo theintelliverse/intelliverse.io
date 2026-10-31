@@ -120,4 +120,77 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     readTime: "8 min read",
     category: "Healthcare Engineering",
   },
+  {
+    slug: "modern-full-stack-architecture-react-node-postgresql",
+    title: "Modern Full-Stack Architecture in 2026: Next.js, Node.js, and PostgreSQL at Scale",
+    description:
+      "How The Intelliverse builds resilient, production-grade full-stack web applications combining Next.js 15, Node.js micro-services, and ACID-compliant PostgreSQL with connection pooling.",
+    author: "Dhruvil Thummar",
+    authorRole: "Co-founder & CTO",
+    publishedDate: "2026-10-31",
+    updatedDate: "2026-10-31",
+    readTime: "10 min read",
+    category: "Full-Stack Systems",
+  },
+  {
+    slug: "react-native-vs-flutter-performance-comparison",
+    title: "React Native vs Flutter in 2026: Benchmark Performance, Dev Velocity & Native Bridges",
+    description:
+      "A realistic engineering benchmark comparing React Native (Fabric architecture) and Flutter (Impeller engine) for cross-platform iOS and Android apps.",
+    author: "Jal Anghan",
+    authorRole: "Founder & Director",
+    publishedDate: "2026-10-31",
+    updatedDate: "2026-10-31",
+    readTime: "9 min read",
+    category: "Mobile Engineering",
+  },
+  {
+    slug: "zero-trust-security-architecture-for-modern-web-apps",
+    title: "Zero-Trust Security for Modern Web Applications: Auth, Secrets, and API Hardening",
+    description:
+      "Defending modern cloud web applications against credential stuffing, token forgery, SSRF, and data leaks using zero-trust network boundaries and cryptographic verification.",
+    author: "Dhruvil Thummar",
+    authorRole: "Co-founder & CTO",
+    publishedDate: "2026-10-31",
+    updatedDate: "2026-10-31",
+    readTime: "11 min read",
+    category: "Cybersecurity & SecOps",
+  },
+  {
+    slug: "modular-monolith-vs-microservices-guide",
+    title: "Modular Monolith vs Microservices: Why Most Startups Choose Wrong",
+    description:
+      "Why distributed microservices often fail early-stage startups and how domain-driven modular monoliths deliver 10x faster shipping velocity with zero network latency overhead.",
+    author: "Jal Anghan",
+    authorRole: "Founder & Director",
+    publishedDate: "2026-10-31",
+    updatedDate: "2026-10-31",
+    readTime: "8 min read",
+    category: "Software Architecture",
+  },
+  {
+    slug: "automated-ci-cd-pipelines-docker-kubernetes-guide",
+    title: "Automated CI/CD Pipelines with Docker, GitHub Actions, and Kubernetes: Production Blueprint",
+    description:
+      "Step-by-step production blueprint for zero-downtime rolling deployments, immutable container registries, Helm charts, and automated testing pipelines.",
+    author: "Dhruvil Thummar",
+    authorRole: "Co-founder & CTO",
+    publishedDate: "2026-10-31",
+    updatedDate: "2026-10-31",
+    readTime: "10 min read",
+    category: "DevOps & Cloud",
+  },
+  {
+    slug: "postgresql-vs-mongodb-vs-vectordb-database-guide",
+    title: "Choosing the Right Database in 2026: PostgreSQL, MongoDB, or Vector Search?",
+    description:
+      "An engineering guide to database selection: ACID relational consistency with pgvector, document flexibility with MongoDB, or specialized vector engines like Pinecone & Qdrant.",
+    author: "Rudra Kankotiya",
+    authorRole: "Co-founder & CMO",
+    publishedDate: "2026-10-31",
+    updatedDate: "2026-10-31",
+    readTime: "9 min read",
+    category: "Database Engineering",
+  },
 ];
+

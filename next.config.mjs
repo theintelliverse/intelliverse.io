@@ -48,6 +48,16 @@ const nextConfig = {
         destination: "/sitemap.xml",
         permanent: true,
       },
+      {
+        source: "/llms",
+        destination: "/llms.txt",
+        permanent: true,
+      },
+      {
+        source: "/llm",
+        destination: "/llms.txt",
+        permanent: true,
+      },
     ];
   },
   async rewrites() {

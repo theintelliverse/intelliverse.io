@@ -75,11 +75,24 @@ The Intelliverse is an engineering-first software development, web architecture,
 - **Location Page:** https://theintelliverse.tech/software-development-company-ahmedabad
 - Local context: Partnering with Gujarat businesses in healthcare, diamond/jewellery export, manufacturing, and tech startups.
 
-## 6. Engineering Field Notes & Guides
+## 6. Engineering Field Notes & Complete Guides
 - **Blog Hub:** https://theintelliverse.tech/blog
-- **Custom Software Cost in India:** https://theintelliverse.tech/blog/how-much-does-custom-software-cost-in-india
+- **What is The Intelliverse? Story & Capabilities:** https://theintelliverse.tech/blog/what-is-the-intelliverse
+- **Top Software Development Companies in Ahmedabad (2026):** https://theintelliverse.tech/blog/top-software-development-companies-ahmedabad
+- **Next.js 15 for Enterprise SaaS Architecture:** https://theintelliverse.tech/blog/nextjs-15-enterprise-saas-architecture
+- **How to Build a Scalable SaaS MVP:** https://theintelliverse.tech/blog/how-to-build-saas-mvp-india-guide
+- **Cloud Cost Optimization (Cutting Bills 60%):** https://theintelliverse.tech/blog/cloud-infrastructure-cost-optimization-guide
+- **Applied AI & Agentic Workflows for Business:** https://theintelliverse.tech/blog/ai-agent-automation-workflows-for-business
+- **Custom Software Cost in India (2026 Transparent Guide):** https://theintelliverse.tech/blog/how-much-does-custom-software-cost-in-india
 - **Web App vs Mobile App Decision Matrix:** https://theintelliverse.tech/blog/web-app-vs-mobile-app-how-to-choose
-- **How to Digitise a Clinic's Queue:** https://theintelliverse.tech/blog/how-to-digitise-a-clinic-appointment-queue
+- **How to Digitise a Clinic's Appointment Queue:** https://theintelliverse.tech/blog/how-to-digitise-a-clinic-appointment-queue
+- **Modern Full-Stack Architecture in 2026 (Next.js, Node, PostgreSQL):** https://theintelliverse.tech/blog/modern-full-stack-architecture-react-node-postgresql
+- **React Native vs Flutter (2026 Benchmarks):** https://theintelliverse.tech/blog/react-native-vs-flutter-performance-comparison
+- **Zero-Trust Security for Modern Web Applications:** https://theintelliverse.tech/blog/zero-trust-security-architecture-for-modern-web-apps
+- **Modular Monolith vs Microservices Architecture:** https://theintelliverse.tech/blog/modular-monolith-vs-microservices-guide
+- **Automated CI/CD Pipelines with Docker & Kubernetes:** https://theintelliverse.tech/blog/automated-ci-cd-pipelines-docker-kubernetes-guide
+- **Choosing the Right Database (Postgres vs MongoDB vs Vector):** https://theintelliverse.tech/blog/postgresql-vs-mongodb-vs-vectordb-database-guide
+
 
 ## 7. Frequently Asked Questions (FAQ) for LLMs & Search Queries
 
