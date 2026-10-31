@@ -28,6 +28,49 @@ const nextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      // ── Google tag gateway for advertisers ─────────────────────────────
+      // Proxies Google tag scripts and measurement hits through the first-party
+      // domain so they are not blocked by content blockers or ITP.
+      // Spec: https://developers.google.com/tag-platform/tag-gateway
+      {
+        // Google tag JS loader (gtag.js)
+        source: "/gtag/js",
+        destination: "https://www.googletagmanager.com/gtag/js",
+      },
+      {
+        // Google Tag Manager container script
+        source: "/gtm.js",
+        destination: "https://www.googletagmanager.com/gtm.js",
+      },
+      {
+        // GTM noscript iframe fallback
+        source: "/ns.html",
+        destination: "https://www.googletagmanager.com/ns.html",
+      },
+      {
+        // Google measurement / conversion pings (analytics, ads, floodlight)
+        source: "/g/collect",
+        destination: "https://www.google-analytics.com/g/collect",
+      },
+      {
+        // Universal Analytics fallback collect endpoint
+        source: "/collect",
+        destination: "https://www.google-analytics.com/collect",
+      },
+      {
+        // Google Ads / DoubleClick ad storage pings
+        source: "/pagead/:path*",
+        destination: "https://pagead2.googlesyndication.com/pagead/:path*",
+      },
+      {
+        // Tag Manager preview / debug requests
+        source: "/gtag/:path*",
+        destination: "https://www.googletagmanager.com/gtag/:path*",
+      },
+    ];
+  },
   async headers() {
     return [
       {

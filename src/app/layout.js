@@ -395,10 +395,10 @@ export default function RootLayout({ children }) {
         <JsonLd key="json-ld-structured-data" schema={[websiteSchema, orgSchema, localBizSchema, homeFaqSchema]} />
       </head>
       <body className="font-sans antialiased">
-        {/* Google Tag Manager (noscript) */}
+        {/* Google Tag Manager (noscript) — via first-party gateway */}
         <noscript>
           <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-55LNSWG7"
+            src="/ns.html?id=GTM-55LNSWG7"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
@@ -470,29 +470,30 @@ export default function RootLayout({ children }) {
           `}
         </Script>
 
-        {/* Google Tag Manager */}
+        {/* Google Tag Manager — loaded via first-party gateway */}
         <Script id="gtm-script" strategy="afterInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            '/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
             })(window,document,'script','dataLayer','GTM-55LNSWG7');
           `}
         </Script>
 
-        {/* Google Analytics 4 (gtag.js) */}
+        {/* Google Analytics 4 — loaded via first-party gateway */}
         <Script
           key="ga4-script"
           strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=G-9G65ML1LNR"
+          src="/gtag/js?id=G-9G65ML1LNR"
         />
         <Script key="ga4-init" id="google-analytics" strategy="afterInteractive">
           {`
             gtag('js', new Date());
             gtag('config', 'G-9G65ML1LNR', {
               page_path: window.location.pathname,
-              send_page_view: true
+              send_page_view: true,
+              server_container_url: 'https://intelliverse.io'
             });
           `}
         </Script>
