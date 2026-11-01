@@ -18,17 +18,45 @@ export const metadata: Metadata = {
     canonical: `${siteConfig.url}${config.canonicalPath}`,
   },
   openGraph: {
+    type: "article",
+    locale: "en_IN",
+    alternateLocale: ["en_US"],
     title: config.title,
     description: config.description,
     url: `${siteConfig.url}${config.canonicalPath}`,
     siteName: siteConfig.name,
-    images: [{ url: "/gardens-by-the-bay.png", width: 1200, height: 630, alt: "Vrix Jewellery Plate" }],
+    images: [
+      {
+        url: `${siteConfig.url}/gardens-by-the-bay.png`,
+        secureUrl: `${siteConfig.url}/gardens-by-the-bay.png`,
+        width: 1200,
+        height: 630,
+        type: "image/png",
+        alt: "Vrix Jewellery Plate",
+      },
+      {
+        url: `${siteConfig.url}/logo-512.png`,
+        secureUrl: `${siteConfig.url}/logo-512.png`,
+        width: 512,
+        height: 512,
+        type: "image/png",
+        alt: "The Intelliverse Official Brand Logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    site: "@theintelliverse",
+    creator: "@theintelliverse",
     title: config.title,
     description: config.description,
-    images: ["/gardens-by-the-bay.png"],
+    images: [`${siteConfig.url}/gardens-by-the-bay.png`],
+  },
+  other: {
+    "image": `${siteConfig.url}/gardens-by-the-bay.png`,
+    "thumbnail": `${siteConfig.url}/logo-512.png`,
+    "og:image:secure_url": `${siteConfig.url}/gardens-by-the-bay.png`,
+    "og:logo": `${siteConfig.url}/logo-512.png`,
   },
 };
 

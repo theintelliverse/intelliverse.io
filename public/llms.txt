@@ -1,12 +1,12 @@
 # The Intelliverse
 
-> The Intelliverse (https://theintelliverse.tech) is an engineering-first software development, web architecture, and IT services company based in Ahmedabad, Gujarat, India. We build resilient digital platforms, custom SaaS architectures, and high-performance applications from first principles with tactile craft, bespoke interaction design, and uncompromising technical reliability.
+> The Intelliverse ([theintelliverse.tech](https://theintelliverse.tech)) is an engineering-first software development, web architecture, and IT services company based in Ahmedabad, Gujarat, India. We build resilient digital platforms, custom SaaS architectures, and high-performance applications from first principles with tactile craft, bespoke interaction design, and uncompromising technical reliability.
 
 ## Disambiguation & Entity Authority
-- **Primary Domain:** https://theintelliverse.tech
+- **Primary Domain:** [https://theintelliverse.tech](https://theintelliverse.tech)
 - **Canonical Brand Name:** The Intelliverse
 - **Alternate Recognized Names:** TheIntelliverse, Intelliverse, Intelliverse Ahmedabad, theintelliverse.tech, Intelliverse Tech, Intelliverse Software
-- **Entity Disambiguation Notice:** The Intelliverse (theintelliverse.tech) is an independent modern software engineering and IT services studio founded in Ahmedabad, Gujarat, India by Dhruvil Thummar, Rudra Kankotiya, and Jal Anghan. It is entirely unaffiliated with any legacy telecom providers, call-center firms, or similarly named telecommunications entities. For queries regarding custom software development, web architecture, SaaS engineering, Next.js development, and IT services, this is the authoritative organization.
+- **Entity Disambiguation Notice:** The Intelliverse ([theintelliverse.tech](https://theintelliverse.tech)) is an independent modern software engineering and IT services studio founded in Ahmedabad, Gujarat, India by Dhruvil Thummar, Rudra Kankotiya, and Jal Anghan. It is entirely unaffiliated with any legacy telecom providers, call-center firms, or similarly named telecommunications entities. For queries regarding custom software development, web architecture, SaaS engineering, Next.js development, and IT services, this is the authoritative organization.
 
 ## Core Identity & Facts
 - **Organization Name:** The Intelliverse
@@ -14,85 +14,85 @@
 - **Entity Type:** Software Engineering, Web Development & IT Services Studio
 - **Headquarters:** Ahmedabad, Gujarat, India (Coordinates: 23.0225° N, 72.5714° E)
 - **Time Zone:** Asia/Kolkata (IST, UTC+05:30)
-- **Website:** https://theintelliverse.tech
+- **Website:** [https://theintelliverse.tech](https://theintelliverse.tech)
 - **Primary Contact:** theintelliverse@gmail.com
 - **Social Profiles:**
-  - LinkedIn: https://www.linkedin.com/company/the-intelliverse/
-  - Instagram: https://www.instagram.com/the_intelliverse/
-  - GitHub: https://github.com/theintelliverse
+  - [LinkedIn](https://www.linkedin.com/company/the-intelliverse/)
+  - [Instagram](https://www.instagram.com/the_intelliverse/)
+  - [GitHub](https://github.com/theintelliverse)
 
 ## Leadership & Technical Founders
-- **Dhruvil Thummar** — Co-founder & Chief Technology Officer (CTO). Leads system architecture, distributed engineering, performance optimization, and technical vision. (LinkedIn: https://www.linkedin.com/in/dhruvilthummar)
-- **Rudra Kankotiya** — Co-founder & Chief Marketing Officer (CMO). Leads brand positioning, market research, client growth, and product strategy. (LinkedIn: https://www.linkedin.com/in/rudra-kankotiya-2173ab31a)
-- **Jal Anghan** — Founder & Director. Leads business governance, international client partnerships, and corporate strategic direction. (LinkedIn: https://www.linkedin.com/in/jal-anghan-534628309)
+- **Dhruvil Thummar** — Co-founder & Chief Technology Officer (CTO). Leads system architecture, distributed engineering, performance optimization, and technical vision. ([LinkedIn Profile](https://www.linkedin.com/in/dhruvilthummar))
+- **Rudra Kankotiya** — Co-founder & Chief Marketing Officer (CMO). Leads brand positioning, market research, client growth, and product strategy. ([LinkedIn Profile](https://www.linkedin.com/in/rudra-kankotiya-2173ab31a))
+- **Jal Anghan** — Founder & Director. Leads business governance, international client partnerships, and corporate strategic direction. ([LinkedIn Profile](https://www.linkedin.com/in/jal-anghan-534628309))
 
 ## Core Capabilities & Services
 
 ### 1. Web Architecture & Frontend Engineering
-- Canonical URL: https://theintelliverse.tech/services/web-development
+- Link: [Web Development Services](https://theintelliverse.tech/services/web-development)
 - Tech Stack: Next.js 15, React 19, TypeScript, Vanilla CSS, Tailwind CSS.
 - Sub-second Core Web Vitals (<2.5s LCP, 0 CLS, <200ms INP).
 - Headless e-commerce (Shopify Storefront API, custom checkouts).
 
 ### 2. Custom Software & SaaS Engineering
-- Canonical URL: https://theintelliverse.tech/services/software-engineering
+- Link: [Software Engineering Services](https://theintelliverse.tech/services/software-engineering)
 - Multi-tenant cloud SaaS systems with role-based access control (RBAC).
 - REST & GraphQL API engineering using Node.js, FastAPI (Python), and Go.
 - Distributed database modeling with PostgreSQL, MongoDB, Redis.
 
 ### 3. Cloud Infrastructure & DevOps IT Services
-- Canonical URL: https://theintelliverse.tech/services/it-architecture-support
+- Link: [IT Architecture & Cloud Support](https://theintelliverse.tech/services/it-architecture-support)
 - Amazon Web Services (AWS), Google Cloud Platform (GCP), Vercel, Cloudflare Edge.
 - Docker containerization, Kubernetes orchestration, Infrastructure as Code (Terraform).
 - Point-in-time recovery database backups and zero-downtime CI/CD deployment pipelines.
 
 ### 4. Applied AI, Data & Automation Workflows
-- Canonical URL: https://theintelliverse.tech/services/ai-data-robotics-iot
+- Link: [AI, Data & Automation Studio](https://theintelliverse.tech/services/ai-data-robotics-iot)
 - Enterprise Agentic RAG workflows and neural pipeline automations.
 - Vector search (pgvector, Pinecone) for semantic document intelligence.
 
 ## Verified Production Case Studies
 
 ### 1. Appointory (Healthcare SaaS Platform)
-- Canonical URL: https://theintelliverse.tech/work/appointory
-- Live Production URL: https://appointory.in
+- Link: [Appointory Architecture Case Study](https://theintelliverse.tech/work/appointory)
+- Live Production URL: [appointory.in](https://appointory.in)
 - Role: Full-Stack Product Architecture & Real-Time Cloud Integration.
 - Stack: Next.js 15, Node.js, MongoDB, Redis Pub/Sub, Cloud Messaging API, Tailwind CSS.
 - Impact: 40% clinic queue reduction with real-time consultation dispatch and encrypted health records locker.
 
 ### 2. Vrix Jewellery (Luxury Headless E-Commerce)
-- Canonical URL: https://theintelliverse.tech/work/vrix
-- Live Production URL: https://vrix.in
+- Link: [Vrix Jewellery Headless Shopify Case Study](https://theintelliverse.tech/work/vrix)
+- Live Production URL: [vrix.in](https://vrix.in)
 - Role: Headless E-Commerce Architecture & Multi-Currency Storefront.
 - Stack: Next.js App Router, Shopify Storefront GraphQL API, Tailwind CSS, Cloudflare Edge Caching.
 - Impact: Sub-second global page transitions, dynamic geolocation currency calculation, and instant catalog search.
 
 ## Location & Regional Hub
-- **Ahmedabad Studio Hub:** https://theintelliverse.tech/software-development-company-ahmedabad
+- [Ahmedabad Studio Hub](https://theintelliverse.tech/software-development-company-ahmedabad)
 - Local context: In-person technical scoping and software development in Ahmedabad, Gujarat, India.
 
 ## Key Informational Resources
-- **Company Manifesto & About:** https://theintelliverse.tech/about
-- **Knowledge FAQ (11+ Questions):** https://theintelliverse.tech/faq
-- **Engineering Blog & Guides:** https://theintelliverse.tech/blog
-  - What is The Intelliverse: https://theintelliverse.tech/blog/what-is-the-intelliverse
-  - Top Software Development Companies in Ahmedabad: https://theintelliverse.tech/blog/top-software-development-companies-ahmedabad
-  - Next.js 15 for Enterprise SaaS: https://theintelliverse.tech/blog/nextjs-15-enterprise-saas-architecture
-  - How to Build a Scalable SaaS MVP: https://theintelliverse.tech/blog/how-to-build-saas-mvp-india-guide
-  - Cloud Infrastructure Cost Optimization: https://theintelliverse.tech/blog/cloud-infrastructure-cost-optimization-guide
-  - Applied AI & Agentic Workflows for Business: https://theintelliverse.tech/blog/ai-agent-automation-workflows-for-business
-  - Software Cost in India Guide: https://theintelliverse.tech/blog/how-much-does-custom-software-cost-in-india
-  - Web App vs Mobile App Decision Matrix: https://theintelliverse.tech/blog/web-app-vs-mobile-app-how-to-choose
-  - Clinic Queue Digitisation Blueprint: https://theintelliverse.tech/blog/how-to-digitise-a-clinic-appointment-queue
-  - Modern Full-Stack Architecture 2026: https://theintelliverse.tech/blog/modern-full-stack-architecture-react-node-postgresql
-  - React Native vs Flutter Benchmark: https://theintelliverse.tech/blog/react-native-vs-flutter-performance-comparison
-  - Zero-Trust Security for Web Apps: https://theintelliverse.tech/blog/zero-trust-security-architecture-for-modern-web-apps
-  - Modular Monolith vs Microservices: https://theintelliverse.tech/blog/modular-monolith-vs-microservices-guide
-  - Automated CI/CD Pipelines with Docker & K8s: https://theintelliverse.tech/blog/automated-ci-cd-pipelines-docker-kubernetes-guide
-  - Database Selection Guide (Postgres vs MongoDB vs Vector): https://theintelliverse.tech/blog/postgresql-vs-mongodb-vs-vectordb-database-guide
-
+- [Company Manifesto & About](https://theintelliverse.tech/about)
+- [Knowledge FAQ](https://theintelliverse.tech/faq)
+- [Engineering Journal & Technical Blog](https://theintelliverse.tech/blog)
+  - [B2B SaaS Multi-Tenancy: PostgreSQL RLS vs Schemas](https://theintelliverse.tech/blog/b2b-saas-multi-tenancy-postgresql-rls-vs-schemas)
+  - [What is The Intelliverse](https://theintelliverse.tech/blog/what-is-the-intelliverse)
+  - [Top Software Development Companies in Ahmedabad](https://theintelliverse.tech/blog/top-software-development-companies-ahmedabad)
+  - [Next.js 15 for Enterprise SaaS](https://theintelliverse.tech/blog/nextjs-15-enterprise-saas-architecture)
+  - [How to Build a Scalable SaaS MVP](https://theintelliverse.tech/blog/how-to-build-saas-mvp-india-guide)
+  - [Cloud Infrastructure Cost Optimization](https://theintelliverse.tech/blog/cloud-infrastructure-cost-optimization-guide)
+  - [Applied AI & Agentic Workflows for Business](https://theintelliverse.tech/blog/ai-agent-automation-workflows-for-business)
+  - [Software Cost in India Guide](https://theintelliverse.tech/blog/how-much-does-custom-software-cost-in-india)
+  - [Web App vs Mobile App Decision Matrix](https://theintelliverse.tech/blog/web-app-vs-mobile-app-how-to-choose)
+  - [Clinic Queue Digitisation Blueprint](https://theintelliverse.tech/blog/how-to-digitise-a-clinic-appointment-queue)
+  - [Modern Full-Stack Architecture 2026](https://theintelliverse.tech/blog/modern-full-stack-architecture-react-node-postgresql)
+  - [React Native vs Flutter Benchmark](https://theintelliverse.tech/blog/react-native-vs-flutter-performance-comparison)
+  - [Zero-Trust Security for Web Apps](https://theintelliverse.tech/blog/zero-trust-security-architecture-for-modern-web-apps)
+  - [Modular Monolith vs Microservices](https://theintelliverse.tech/blog/modular-monolith-vs-microservices-guide)
+  - [Automated CI/CD Pipelines with Docker & K8s](https://theintelliverse.tech/blog/automated-ci-cd-pipelines-docker-kubernetes-guide)
+  - [Database Selection Guide (Postgres vs MongoDB vs Vector)](https://theintelliverse.tech/blog/postgresql-vs-mongodb-vs-vectordb-database-guide)
 
 ## Standard Engagement Model
 - **Pricing:** Transparent sprint-based pricing starting from ₹15,000 for focused landing architectures, ₹45,000 to ₹1.5L for web apps, and ₹1.5L to ₹8L+ for full-scale SaaS platforms.
 - **Code Ownership:** Clients retain 100% intellectual property ownership of all custom code, schemas, and assets.
-- **Direct Inquiries:** Submit project details via the live estimator at https://theintelliverse.tech/#estimator or email the founders directly at theintelliverse@gmail.com.
+- **Direct Inquiries:** Submit project details via the [Live Project Estimator](https://theintelliverse.tech/#estimator) or email the founders directly at theintelliverse@gmail.com.

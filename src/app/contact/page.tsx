@@ -6,6 +6,8 @@ import JsonLd from "@/components/seo/JsonLd";
 import Contact from "@/components/sections/Contact";
 import { siteConfig } from "@/content/site";
 
+import { defaultOpenGraphImages } from "@/content/seo";
+
 export const metadata: Metadata = {
   title: "Contact Our Engineering Team | The Intelliverse, Ahmedabad",
   description:
@@ -21,19 +23,30 @@ export const metadata: Metadata = {
     canonical: `${siteConfig.url}/contact`,
   },
   openGraph: {
+    type: "website",
+    locale: "en_IN",
+    alternateLocale: ["en_US"],
     title: "Contact Our Engineering Team | The Intelliverse, Ahmedabad",
     description:
       "Connect directly with the founding engineers at The Intelliverse in Ahmedabad, Gujarat, India. Discuss custom SaaS platforms, Next.js web applications, or cloud architecture.",
     url: `${siteConfig.url}/contact`,
     siteName: siteConfig.name,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+    images: defaultOpenGraphImages,
   },
   twitter: {
     card: "summary_large_image",
+    site: "@theintelliverse",
+    creator: "@theintelliverse",
     title: "Contact Our Engineering Team | The Intelliverse, Ahmedabad",
     description:
       "Connect directly with the founding engineers at The Intelliverse in Ahmedabad, Gujarat, India. Discuss custom SaaS platforms, Next.js web applications, or cloud architecture.",
-    images: ["/opengraph-image"],
+    images: [`${siteConfig.url}/og-image.png`],
+  },
+  other: {
+    "image": `${siteConfig.url}/og-image.png`,
+    "thumbnail": `${siteConfig.url}/logo-512.png`,
+    "og:image:secure_url": `${siteConfig.url}/og-image.png`,
+    "og:logo": `${siteConfig.url}/logo-512.png`,
   },
 };
 

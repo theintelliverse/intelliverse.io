@@ -12,6 +12,8 @@
  * - "SaaS development Ahmedabad"
  */
 
+import { siteConfig } from "./site";
+
 export interface PageSeoConfig {
   title: string;
   description: string;
@@ -21,6 +23,41 @@ export interface PageSeoConfig {
   heroAnswer: string;
   faqs?: { question: string; answer: string }[];
 }
+
+export const defaultOpenGraphImages = [
+  {
+    url: `${siteConfig.url}/og-image.png`,
+    secureUrl: `${siteConfig.url}/og-image.png`,
+    width: 1200,
+    height: 630,
+    type: "image/png",
+    alt: "The Intelliverse — Custom Software & SaaS Architecture Studio in Ahmedabad",
+  },
+  {
+    url: `${siteConfig.url}/logo-512.png`,
+    secureUrl: `${siteConfig.url}/logo-512.png`,
+    width: 512,
+    height: 512,
+    type: "image/png",
+    alt: "The Intelliverse Official Brand Logo",
+  },
+  {
+    url: `${siteConfig.url}/the-intelliverse-mark.png`,
+    secureUrl: `${siteConfig.url}/the-intelliverse-mark.png`,
+    width: 800,
+    height: 800,
+    type: "image/png",
+    alt: "The Intelliverse Brand Mark",
+  },
+  {
+    url: `${siteConfig.url}/the-intelliverse-logo.png`,
+    secureUrl: `${siteConfig.url}/the-intelliverse-logo.png`,
+    width: 281,
+    height: 299,
+    type: "image/png",
+    alt: "The Intelliverse Brand Identity",
+  },
+];
 
 export const seoConfig: Record<string, PageSeoConfig> = {
   home: {

@@ -17,17 +17,45 @@ export const metadata: Metadata = {
     canonical: `${siteConfig.url}/blog`,
   },
   openGraph: {
+    type: "website",
+    locale: "en_IN",
+    alternateLocale: ["en_US"],
     title: "Engineering Journal & Field Notes | The Intelliverse, Ahmedabad",
     description: config.description,
     url: `${siteConfig.url}/blog`,
     siteName: siteConfig.name,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+    images: [
+      {
+        url: `${siteConfig.url}/og-image.png`,
+        secureUrl: `${siteConfig.url}/og-image.png`,
+        width: 1200,
+        height: 630,
+        type: "image/png",
+        alt: "The Intelliverse Engineering Journal & Technical Insights",
+      },
+      {
+        url: `${siteConfig.url}/logo-512.png`,
+        secureUrl: `${siteConfig.url}/logo-512.png`,
+        width: 512,
+        height: 512,
+        type: "image/png",
+        alt: "The Intelliverse",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    site: "@theintelliverse",
+    creator: "@theintelliverse",
     title: "Engineering Journal & Field Notes | The Intelliverse, Ahmedabad",
     description: config.description,
-    images: ["/opengraph-image"],
+    images: [`${siteConfig.url}/og-image.png`],
+  },
+  other: {
+    "image": `${siteConfig.url}/og-image.png`,
+    "thumbnail": `${siteConfig.url}/logo-512.png`,
+    "og:image:secure_url": `${siteConfig.url}/og-image.png`,
+    "og:logo": `${siteConfig.url}/logo-512.png`,
   },
 };
 

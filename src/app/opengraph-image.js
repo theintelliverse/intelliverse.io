@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import fs from "fs";
 import path from "path";
 
-export const alt = "The Intelliverse | Innovtion Create & Grow";
+export const alt = "The Intelliverse — Custom Software & SaaS Architecture Studio in Ahmedabad";
 export const size = {
   width: 1200,
   height: 630,
@@ -12,9 +12,13 @@ export const contentType = "image/png";
 export default async function Image() {
   let logoDataUrl = "";
   try {
-    const logoFilePath = path.join(process.cwd(), "public", "the-intelliverse-logo.jpg");
-    if (fs.existsSync(logoFilePath)) {
-      const buffer = fs.readFileSync(logoFilePath);
+    const pngPath = path.join(process.cwd(), "public", "the-intelliverse-logo.png");
+    const jpgPath = path.join(process.cwd(), "public", "the-intelliverse-logo.jpg");
+    if (fs.existsSync(pngPath)) {
+      const buffer = fs.readFileSync(pngPath);
+      logoDataUrl = `data:image/png;base64,${buffer.toString("base64")}`;
+    } else if (fs.existsSync(jpgPath)) {
+      const buffer = fs.readFileSync(jpgPath);
       logoDataUrl = `data:image/jpeg;base64,${buffer.toString("base64")}`;
     }
   } catch (e) {

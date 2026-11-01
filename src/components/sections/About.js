@@ -156,7 +156,7 @@ export default function About({ data }) {
           className="flex justify-between items-center flex-wrap gap-4 mb-14"
         >
           <div className="inline-flex items-center gap-2">
-            <motion.span
+            <motion.h2
               variants={fadeUp}
               style={{
                 fontFamily: "var(--mono)",
@@ -165,10 +165,11 @@ export default function About({ data }) {
                 textTransform: "uppercase",
                 color: "var(--blue-deep)",
                 fontWeight: 700,
+                margin: 0,
               }}
             >
               STUDIO MANIFESTO &amp; PHILOSOPHY
-            </motion.span>
+            </motion.h2>
           </div>
 
           <motion.div

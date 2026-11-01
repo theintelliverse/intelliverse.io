@@ -438,7 +438,7 @@ export default function Process({ data, telemetry }) {
                         <li className="on" onClick={() => handleStepClick(0)}>
                           <span className="no">01</span>
                           <div>
-                            <h4>Map the problem</h4>
+                            <h3>Map the problem</h3>
                             <p>Who touches what, and where it hurts. One sheet, before any code.</p>
                           </div>
                         </li>
@@ -447,7 +447,7 @@ export default function Process({ data, telemetry }) {
                         <li onClick={() => handleStepClick(1)}>
                           <span className="no">02</span>
                           <div>
-                            <h4>Log every decision</h4>
+                            <h3>Log every decision</h3>
                             <p>Each call gets a number and a reason, so you can read why it was built this way.</p>
                           </div>
                         </li>
@@ -456,7 +456,7 @@ export default function Process({ data, telemetry }) {
                         <li onClick={() => handleStepClick(2)}>
                           <span className="no">03</span>
                           <div>
-                            <h4>Ship, then keep the journal</h4>
+                            <h3>Ship, then keep the journal</h3>
                             <p>Weekly demos, a launch, and a public log of what changed.</p>
                           </div>
                         </li>

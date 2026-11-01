@@ -3,8 +3,6 @@
 /*  Fonts: Local woff2 (zero CDN) | Motion: Framer Motion + GSAP              */
 /* ─────────────────────────────────────────────────────────────────────────── */
 
-/* Font Awesome retained for admin icons */
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
 @import "tailwindcss";
 
 /* ── LENIS SMOOTH SCROLL ────────────────────────────────────────────────── */
@@ -87,8 +85,8 @@ html {
   /* main text */
   --ink-2: #4A5575;
   /* secondary text (alias) */
-  --ink-3: #8A93AD;
-  /* tertiary / mono labels */
+  --ink-3: #525D7A;
+  /* tertiary / mono labels (WCAG AA compliant >4.5:1 on light) */
   --muted: #4A5575;
   /* secondary text */
   --night: #0B1530;

@@ -44,16 +44,8 @@ export default function Hero({ data = null, telemetry = null } = {}) {
   const word2 = words[1] || "Create.";
   const word3 = words.length > 2 ? words.slice(2).join(" ") : "Grow.";
 
-  const [isMounted, setIsMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(true);
   const [underlineKey, setUnderlineKey] = useState(0);
-
-  useEffect(() => {
-    // Wait briefly so entrance animation runs clearly in view
-    const timer = setTimeout(() => {
-      setIsMounted(true);
-    }, 200);
-    return () => clearTimeout(timer);
-  }, []);
 
   const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
   const [gyroOffset, setGyroOffset] = useState({ x: 0, y: 0 });
@@ -170,10 +162,7 @@ export default function Hero({ data = null, telemetry = null } = {}) {
           <div className="lg:col-span-8">
             
             {/* Eyebrow status row */}
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              animate={isMounted ? "visible" : "hidden"}
+            <div
               style={{
                 display: "inline-flex",
                 flexWrap: "wrap",
@@ -212,7 +201,7 @@ export default function Hero({ data = null, telemetry = null } = {}) {
               <span style={{ color: "var(--blue-deep)", fontWeight: 600 }}>
                 [STUDIO / 01]
               </span>
-            </motion.div>
+            </div>
 
             {/* Distinct Word-by-Word Headline & Hand-Drawn Animated Underline */}
             <h1
@@ -235,58 +224,30 @@ export default function Hero({ data = null, telemetry = null } = {}) {
                   whiteSpace: "nowrap",
                   alignItems: "baseline",
                   columnGap: "0.28em",
-                  overflow: "hidden",
+                  overflow: "visible",
                   paddingBottom: "0.08em",
                 }}
               >
                 {/* Word 1: "Innovation." */}
-                <span style={{ display: "inline-block", overflow: "hidden" }}>
+                <span style={{ display: "inline-block" }}>
                   <motion.span
-                    initial={{ y: "125%", opacity: 0, rotateZ: 2 }}
-                    animate={isMounted ? { y: "0%", opacity: 1, rotateZ: 0 } : { y: "125%", opacity: 0, rotateZ: 2 }}
-                    transition={{
-                      duration: 0.95,
-                      ease: [0.16, 1, 0.3, 1],
-                      delay: 0.1,
-                    }}
-                    style={{
-                      display: "inline-block",
-                      transformOrigin: "bottom left",
-                    }}
+                    whileHover={{ y: -3, scale: 1.01 }}
+                    transition={springs.snappy}
+                    style={{ display: "inline-block" }}
                   >
-                    <motion.span
-                      whileHover={{ y: -3, scale: 1.01 }}
-                      transition={springs.snappy}
-                      style={{ display: "inline-block" }}
-                    >
-                      {word1}
-                    </motion.span>
+                    {word1}
                   </motion.span>
                 </span>
 
                 {/* Word 2: "Create." */}
                 {word2 && (
-                  <span style={{ display: "inline-block", overflow: "hidden" }}>
+                  <span style={{ display: "inline-block" }}>
                     <motion.span
-                      initial={{ y: "125%", opacity: 0, rotateZ: -2 }}
-                      animate={isMounted ? { y: "0%", opacity: 1, rotateZ: 0 } : { y: "125%", opacity: 0, rotateZ: -2 }}
-                      transition={{
-                        duration: 0.95,
-                        ease: [0.16, 1, 0.3, 1],
-                        delay: 0.25,
-                      }}
-                      style={{
-                        display: "inline-block",
-                        transformOrigin: "bottom left",
-                      }}
+                      whileHover={{ y: -3, scale: 1.01 }}
+                      transition={springs.snappy}
+                      style={{ display: "inline-block" }}
                     >
-                      <motion.span
-                        whileHover={{ y: -3, scale: 1.01 }}
-                        transition={springs.snappy}
-                        style={{ display: "inline-block" }}
-                      >
-                        {word2}
-                      </motion.span>
+                      {word2}
                     </motion.span>
                   </span>
                 )}
@@ -310,49 +271,32 @@ export default function Hero({ data = null, telemetry = null } = {}) {
                     paddingBottom: "0.14em",
                   }}
                 >
-                  <span style={{ display: "inline-block", overflow: "hidden" }}>
-                    <motion.span
-                      initial={{ y: "125%", opacity: 0, scale: 0.94 }}
-                      animate={isMounted ? { y: "0%", opacity: 1, scale: 1 } : { y: "125%", opacity: 0, scale: 0.94 }}
-                      transition={{
-                        duration: 1.05,
-                        ease: [0.16, 1, 0.3, 1],
-                        delay: 0.4,
-                      }}
+                  <span style={{ display: "inline-block" }}>
+                    <motion.em
+                      onHoverStart={() => setUnderlineKey((k) => k + 1)}
+                      onClick={() => setUnderlineKey((k) => k + 1)}
+                      whileHover={{ scale: 1.03, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={springs.snappy}
                       style={{
+                        fontStyle: "italic",
+                        color: "var(--blue-deep)",
+                        fontWeight: 400,
                         display: "inline-block",
-                        transformOrigin: "bottom left",
+                        cursor: "pointer",
+                        position: "relative",
                       }}
                     >
-                      <motion.em
-                        onHoverStart={() => setUnderlineKey((k) => k + 1)}
-                        onClick={() => setUnderlineKey((k) => k + 1)}
-                        whileHover={{ scale: 1.03, y: -2 }}
-                        whileTap={{ scale: 0.98 }}
-                        transition={springs.snappy}
-                        style={{
-                          fontStyle: "italic",
-                          color: "var(--blue-deep)",
-                          fontWeight: 400,
-                          display: "inline-block",
-                          cursor: "pointer",
-                          position: "relative",
-                        }}
-                      >
-                        {word3 || "Grow."}
-                      </motion.em>
-                    </motion.span>
+                      {word3 || "Grow."}
+                    </motion.em>
                   </span>
 
-                  {/* Coral Hand-Drawn Underline SVG with animated path drawing */}
-                  <motion.svg
+                  {/* Coral Hand-Drawn Underline SVG */}
+                  <svg
                     key={underlineKey}
                     aria-hidden="true"
                     viewBox="0 0 280 20"
                     fill="none"
-                    initial={{ opacity: 0 }}
-                    animate={isMounted ? { opacity: 1 } : { opacity: 0 }}
-                    transition={{ delay: 0.5, duration: 0.2 }}
                     style={{
                       position: "absolute",
                       bottom: "-8px",
@@ -363,26 +307,13 @@ export default function Hero({ data = null, telemetry = null } = {}) {
                       pointerEvents: "none",
                     }}
                   >
-                    <motion.path
+                    <path
                       d="M4 14 C 70 3, 160 2, 276 11"
                       stroke="var(--coral)"
                       strokeWidth="5"
                       strokeLinecap="round"
-                      initial={{ pathLength: 0, opacity: 0 }}
-                      animate={isMounted ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
-                      transition={{
-                        pathLength: {
-                          duration: 1.15,
-                          ease: [0.16, 1, 0.3, 1],
-                          delay: 0.55,
-                        },
-                        opacity: {
-                          duration: 0.15,
-                          delay: 0.52,
-                        },
-                      }}
                     />
-                  </motion.svg>
+                  </svg>
                 </span>
               </div>
             </h1>
@@ -523,6 +454,11 @@ export default function Hero({ data = null, telemetry = null } = {}) {
               <img
                 src="/the-intelliverse-mark.png"
                 alt="The Intelliverse Brand Mark"
+                width={420}
+                height={420}
+                fetchPriority="high"
+                loading="eager"
+                decoding="async"
                 className="w-full h-full object-contain pointer-events-none"
                 style={{
                   filter: `drop-shadow(${totalOffsetX * -14}px ${25 + totalOffsetY * -14}px 45px rgba(61, 123, 247, 0.26))`,

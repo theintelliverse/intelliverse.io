@@ -135,7 +135,7 @@ function MarqueeStrip({ items, direction, duration, isSerif = false, dimmed = fa
                 : "clamp(0.6875rem, 1.1vw, 0.8125rem)",
               letterSpacing: isSerif ? "-0.02em" : "0.14em",
               textTransform: isSerif ? "none" : "uppercase",
-              color: dimmed ? "rgba(246, 247, 252, 0.42)" : "rgba(246, 247, 252, 0.95)",
+              color: dimmed ? "rgba(246, 247, 252, 0.72)" : "rgba(246, 247, 252, 0.95)",
               paddingRight: isSerif ? "2.5rem" : "1.75rem",
               fontWeight: isSerif ? 400 : 500,
             }}

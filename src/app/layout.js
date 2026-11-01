@@ -144,11 +144,13 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
+    alternateLocale: ["en_US"],
     url: siteConfig.url,
     siteName: siteConfig.name,
     title: "The Intelliverse | Custom Software & SaaS in Ahmedabad",
     description:
       "The Intelliverse is an engineering-first software & SaaS studio in Ahmedabad, India. We engineer high-performance Next.js web systems & cloud software.",
+    emails: [siteConfig.email],
     images: [
       {
         url: `${siteConfig.url}/og-image.png`,
@@ -156,7 +158,23 @@ export const metadata = {
         width: 1200,
         height: 630,
         type: "image/png",
-        alt: "The Intelliverse - Custom Software & SaaS Studio in Ahmedabad",
+        alt: "The Intelliverse — Custom Software & SaaS Architecture Studio in Ahmedabad",
+      },
+      {
+        url: `${siteConfig.url}/logo-512.png`,
+        secureUrl: `${siteConfig.url}/logo-512.png`,
+        width: 512,
+        height: 512,
+        type: "image/png",
+        alt: "The Intelliverse Official Brand Logo",
+      },
+      {
+        url: `${siteConfig.url}/the-intelliverse-mark.png`,
+        secureUrl: `${siteConfig.url}/the-intelliverse-mark.png`,
+        width: 800,
+        height: 800,
+        type: "image/png",
+        alt: "The Intelliverse Brand Mark",
       },
       {
         url: `${siteConfig.url}/the-intelliverse-logo.png`,
@@ -171,18 +189,25 @@ export const metadata = {
         width: 1200,
         height: 630,
         type: "image/png",
-        alt: "The Intelliverse - Engineering Studio",
+        alt: "The Intelliverse — Engineering Studio",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
+    site: "@theintelliverse",
+    creator: "@theintelliverse",
     title: "The Intelliverse | Custom Software & SaaS in Ahmedabad",
     description:
       "The Intelliverse is an engineering-first software & SaaS studio in Ahmedabad, India. We engineer high-performance Next.js web systems & cloud software.",
-    images: [`${siteConfig.url}/og-image.png`],
-    site: "@theintelliverse",
-    creator: "@theintelliverse",
+    images: [
+      {
+        url: `${siteConfig.url}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: "The Intelliverse — Custom Software & SaaS Architecture Studio in Ahmedabad",
+      },
+    ],
   },
   verification: {
     google: [
@@ -204,6 +229,11 @@ export const metadata = {
     statusBarStyle: "black-translucent",
   },
   other: {
+    "image": `${siteConfig.url}/og-image.png`,
+    "thumbnail": `${siteConfig.url}/logo-512.png`,
+    "og:image:secure_url": `${siteConfig.url}/og-image.png`,
+    "og:logo": `${siteConfig.url}/logo-512.png`,
+    "twitter:image:alt": "The Intelliverse — Custom Software & SaaS Architecture Studio in Ahmedabad",
     "geo.region": "IN-GJ",
     "geo.placename": "Ahmedabad",
     "geo.position": `${siteConfig.coordinates.latitude};${siteConfig.coordinates.longitude}`,
@@ -245,9 +275,18 @@ const orgSchema = {
   url: siteConfig.url,
   logo: {
     "@type": "ImageObject",
-    url: `${siteConfig.url}/the-intelliverse-logo.png`,
-    width: 281,
-    height: 299,
+    "@id": `${siteConfig.url}/#logo`,
+    url: `${siteConfig.url}/logo-512.png`,
+    caption: siteConfig.name,
+    width: 512,
+    height: 512,
+  },
+  image: {
+    "@type": "ImageObject",
+    "@id": `${siteConfig.url}/#primaryimage`,
+    url: `${siteConfig.url}/og-image.png`,
+    width: 1200,
+    height: 630,
   },
   slogan: siteConfig.tagline,
   description: siteConfig.description,
@@ -401,7 +440,21 @@ export default function RootLayout({ children }) {
       className={`${instrumentSerif.variable} ${jetbrainsMono.variable} ${plusJakartaSans.variable} ${caveat.variable}`}
     >
       <head>
-        {/* Font Awesome 6 Icons for Admin Console and UI */}
+        {/* Preconnect to external CDN to eliminate connection latency */}
+        <link key="fa-preconnect" rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
+        <link key="fa-dns-prefetch" rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+
+        {/* Preload hero LCP image with highest priority */}
+        <link
+          key="lcp-image-preload"
+          rel="preload"
+          as="image"
+          href="/the-intelliverse-mark.png"
+          fetchPriority="high"
+          type="image/png"
+        />
+
+        {/* Font Awesome 6 Icons */}
         <link
           key="font-awesome-css"
           rel="stylesheet"

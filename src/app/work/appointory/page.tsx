@@ -18,17 +18,45 @@ export const metadata: Metadata = {
     canonical: `${siteConfig.url}${config.canonicalPath}`,
   },
   openGraph: {
+    type: "article",
+    locale: "en_IN",
+    alternateLocale: ["en_US"],
     title: config.title,
     description: config.description,
     url: `${siteConfig.url}${config.canonicalPath}`,
     siteName: siteConfig.name,
-    images: [{ url: "/marina-bay-sands.png", width: 1200, height: 630, alt: "Appointory Clinic Platform Plate" }],
+    images: [
+      {
+        url: `${siteConfig.url}/marina-bay-sands.png`,
+        secureUrl: `${siteConfig.url}/marina-bay-sands.png`,
+        width: 1200,
+        height: 630,
+        type: "image/png",
+        alt: "Appointory Clinic Platform Plate",
+      },
+      {
+        url: `${siteConfig.url}/logo-512.png`,
+        secureUrl: `${siteConfig.url}/logo-512.png`,
+        width: 512,
+        height: 512,
+        type: "image/png",
+        alt: "The Intelliverse Official Brand Logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    site: "@theintelliverse",
+    creator: "@theintelliverse",
     title: config.title,
     description: config.description,
-    images: ["/marina-bay-sands.png"],
+    images: [`${siteConfig.url}/marina-bay-sands.png`],
+  },
+  other: {
+    "image": `${siteConfig.url}/marina-bay-sands.png`,
+    "thumbnail": `${siteConfig.url}/logo-512.png`,
+    "og:image:secure_url": `${siteConfig.url}/marina-bay-sands.png`,
+    "og:logo": `${siteConfig.url}/logo-512.png`,
   },
 };
 

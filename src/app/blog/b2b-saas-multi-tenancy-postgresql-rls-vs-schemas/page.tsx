@@ -25,18 +25,47 @@ export const metadata: Metadata = {
     canonical: `${siteConfig.url}/blog/b2b-saas-multi-tenancy-postgresql-rls-vs-schemas`,
   },
   openGraph: {
+    type: "article",
+    publishedTime: "2026-11-01T00:00:00Z",
+    modifiedTime: "2026-11-01T00:00:00Z",
+    authors: ["Dhruvil Thummar"],
     title: "B2B SaaS Multi-Tenancy in PostgreSQL: Row-Level Security (RLS) vs Separate Schemas",
     description:
       "A deep architectural benchmark comparing Postgres Row-Level Security (RLS), schema-per-tenant, and database-per-tenant for multi-tenant B2B SaaS platforms.",
     url: `${siteConfig.url}/blog/b2b-saas-multi-tenancy-postgresql-rls-vs-schemas`,
     siteName: siteConfig.name,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+    images: [
+      {
+        url: `${siteConfig.url}/og-image.png`,
+        secureUrl: `${siteConfig.url}/og-image.png`,
+        width: 1200,
+        height: 630,
+        type: "image/png",
+        alt: "B2B SaaS Multi-Tenancy in PostgreSQL: Row-Level Security (RLS) vs Separate Schemas",
+      },
+      {
+        url: `${siteConfig.url}/logo-512.png`,
+        secureUrl: `${siteConfig.url}/logo-512.png`,
+        width: 512,
+        height: 512,
+        type: "image/png",
+        alt: "The Intelliverse",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    site: "@theintelliverse",
+    creator: "@theintelliverse",
     title: "B2B SaaS Multi-Tenancy in PostgreSQL: Row-Level Security (RLS) vs Separate Schemas",
     description: "Architectural comparison and production benchmark by The Intelliverse CTO.",
-    images: ["/opengraph-image"],
+    images: [`${siteConfig.url}/og-image.png`],
+  },
+  other: {
+    "image": `${siteConfig.url}/og-image.png`,
+    "thumbnail": `${siteConfig.url}/logo-512.png`,
+    "og:image:secure_url": `${siteConfig.url}/og-image.png`,
+    "og:logo": `${siteConfig.url}/logo-512.png`,
   },
 };
 

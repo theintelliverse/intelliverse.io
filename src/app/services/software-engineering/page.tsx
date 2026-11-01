@@ -5,7 +5,7 @@ import Footer from "@/components/sections/Footer";
 import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import { siteConfig } from "@/content/site";
-import { seoConfig } from "@/content/seo";
+import { seoConfig, defaultOpenGraphImages } from "@/content/seo";
 
 const config = seoConfig.servicesSoftware;
 
@@ -17,17 +17,28 @@ export const metadata: Metadata = {
     canonical: `${siteConfig.url}${config.canonicalPath}`,
   },
   openGraph: {
+    type: "website",
+    locale: "en_IN",
+    alternateLocale: ["en_US"],
     title: config.title,
     description: config.description,
     url: `${siteConfig.url}${config.canonicalPath}`,
     siteName: siteConfig.name,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+    images: defaultOpenGraphImages,
   },
   twitter: {
     card: "summary_large_image",
+    site: "@theintelliverse",
+    creator: "@theintelliverse",
     title: config.title,
     description: config.description,
-    images: ["/opengraph-image"],
+    images: [`${siteConfig.url}/og-image.png`],
+  },
+  other: {
+    "image": `${siteConfig.url}/og-image.png`,
+    "thumbnail": `${siteConfig.url}/logo-512.png`,
+    "og:image:secure_url": `${siteConfig.url}/og-image.png`,
+    "og:logo": `${siteConfig.url}/logo-512.png`,
   },
 };
 

@@ -107,7 +107,10 @@ export default function Stats({ data }) {
                     fontWeight: 400,
                   }}
                 >
-                  <AnimateNumber>{inView ? stat.value : 0}</AnimateNumber>
+                  <span className="sr-only">{stat.value}</span>
+                  <span aria-hidden="true">
+                    <AnimateNumber>{inView ? stat.value : 0}</AnimateNumber>
+                  </span>
                 </span>
                 <span
                   style={{

@@ -343,6 +343,7 @@ export default function Projects({ data, caseStudies }) {
                           className="shrink-0 text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[rgba(47,99,224,0.08)] text-[var(--blue-deep)] border border-[rgba(47,99,224,0.2)] hover:bg-[var(--blue-deep)] hover:text-white transition mt-1"
                           style={{ textDecoration: "none" }}
                           title={`Read ${p.name} Case Study`}
+                          aria-label={`Read ${p.name} Case Study`}
                         >
                           Study ↗
                         </Link>

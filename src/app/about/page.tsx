@@ -5,7 +5,7 @@ import Footer from "@/components/sections/Footer";
 import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import { siteConfig } from "@/content/site";
-import { seoConfig } from "@/content/seo";
+import { seoConfig, defaultOpenGraphImages } from "@/content/seo";
 
 const config = seoConfig.about;
 
@@ -28,19 +28,30 @@ export const metadata: Metadata = {
     canonical: `${siteConfig.url}/about`,
   },
   openGraph: {
+    type: "profile",
+    locale: "en_IN",
+    alternateLocale: ["en_US"],
     title: "About Our Studio & Founders | The Intelliverse, Ahmedabad",
     description:
       "Learn about The Intelliverse: an independent software, web and IT services company founded in Ahmedabad, Gujarat, India by Dhruvil Thummar, Rudra Kankotiya, and Jal Anghan.",
     url: `${siteConfig.url}/about`,
     siteName: siteConfig.name,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+    images: defaultOpenGraphImages,
   },
   twitter: {
     card: "summary_large_image",
+    site: "@theintelliverse",
+    creator: "@theintelliverse",
     title: "About Our Studio & Founders | The Intelliverse, Ahmedabad",
     description:
       "Learn about The Intelliverse: an independent software, web and IT services company founded in Ahmedabad, Gujarat, India by Dhruvil Thummar, Rudra Kankotiya, and Jal Anghan.",
-    images: ["/opengraph-image"],
+    images: [`${siteConfig.url}/og-image.png`],
+  },
+  other: {
+    "image": `${siteConfig.url}/og-image.png`,
+    "thumbnail": `${siteConfig.url}/logo-512.png`,
+    "og:image:secure_url": `${siteConfig.url}/og-image.png`,
+    "og:logo": `${siteConfig.url}/logo-512.png`,
   },
 };
 
