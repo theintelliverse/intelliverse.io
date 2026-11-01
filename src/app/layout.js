@@ -303,7 +303,19 @@ const orgSchema = {
     siteConfig.socialLinks.linkedin,
     siteConfig.socialLinks.instagram,
     siteConfig.socialLinks.github,
+    siteConfig.socialLinks.twitter,
   ].filter(Boolean),
+  foundingLocation: {
+    "@type": "Place",
+    name: "Ahmedabad, Gujarat, India",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: siteConfig.address.locality,
+      addressRegion: siteConfig.address.region,
+      addressCountry: siteConfig.address.country,
+    },
+  },
+  knowsLanguage: ["en", "hi", "gu"],
   address: {
     "@type": "PostalAddress",
     addressLocality: siteConfig.address.locality,
@@ -466,6 +478,14 @@ export default function RootLayout({ children }) {
 
         {/* AI & LLM Machine-Readable Link */}
         <link key="llms-txt" rel="alternate" type="text/plain" href="/llms.txt" title="LLM Knowledge Dossier" />
+
+        {/* Google & Multi-Platform Favicon Suite */}
+        <link key="fav-ico" rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
+        <link key="fav-48" rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+        <link key="fav-192" rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+        <link key="fav-512" rel="icon" type="image/png" sizes="512x512" href="/logo-512.png" />
+        <link key="fav-svg" rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link key="apple-touch-icon" rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
         {/* JSON-LD Structured Data via Reusable Server Component */}
         <JsonLd key="json-ld-structured-data" schema={[websiteSchema, orgSchema, localBizSchema, homeFaqSchema]} />

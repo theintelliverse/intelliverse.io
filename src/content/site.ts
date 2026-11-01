@@ -117,7 +117,7 @@ export const siteConfig: SiteConfig = {
     linkedin: "https://www.linkedin.com/company/the-intelliverse/",
     instagram: "https://www.instagram.com/the_intelliverse/",
     github: "https://github.com/theintelliverse",
-    twitter: "",
+    twitter: "https://x.com/theintelliverse",
     youtube: "",
     clutch: "",
   },
