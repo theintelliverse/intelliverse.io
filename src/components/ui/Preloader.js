@@ -10,28 +10,35 @@ import { useEffect, useRef, useState } from "react";
  * - Skipped on repeat visits (sessionStorage)
  */
 export default function Preloader() {
-  const [visible, setVisible]   = useState(true);
+  const [visible, setVisible]   = useState(false);
   const [exiting, setExiting]   = useState(false);
   const [counter, setCounter]   = useState(0);
   const [wordmark, setWordmark] = useState(false);
 
   useEffect(() => {
-    let visitedFrame = null;
     try {
       if (typeof window !== "undefined" && window.sessionStorage?.getItem("iv-visited")) {
-        visitedFrame = requestAnimationFrame(() => setVisible(false));
-        return () => {
-          if (visitedFrame) cancelAnimationFrame(visitedFrame);
-        };
+        return;
       }
     } catch {
-      // Ignore storage restrictions
+      return;
     }
 
-    // Phase 1: reveal wordmark
-    const t0 = setTimeout(() => setWordmark(true), 60);
+    setVisible(true);
 
-    // Safety fallback: guaranteed exit after 600ms
+    const t0 = setTimeout(() => setWordmark(true), 40);
+
+    const start = Date.now();
+    const duration = 400;
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const progress = Math.min(100, Math.floor((elapsed / duration) * 100));
+      setCounter(progress);
+      if (progress >= 100) {
+        clearInterval(interval);
+      }
+    }, 20);
+
     const safety = setTimeout(() => {
       setExiting(true);
       setTimeout(() => {
@@ -39,11 +46,12 @@ export default function Preloader() {
         try {
           if (typeof window !== "undefined") window.sessionStorage?.setItem("iv-visited", "1");
         } catch {}
-      }, 300);
-    }, 600);
+      }, 400);
+    }, 550);
 
     return () => {
       clearTimeout(t0);
+      clearInterval(interval);
       clearTimeout(safety);
     };
   }, []);

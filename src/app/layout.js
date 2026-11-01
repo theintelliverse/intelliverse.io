@@ -452,6 +452,13 @@ export default function RootLayout({ children }) {
       className={`${instrumentSerif.variable} ${jetbrainsMono.variable} ${plusJakartaSans.variable} ${caveat.variable}`}
     >
       <head>
+        {/* Instant visited state detection to eliminate preloader flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(sessionStorage.getItem('iv-visited')){document.documentElement.classList.add('iv-visited');}}catch(e){}`,
+          }}
+        />
+
         {/* Preconnect to external CDN to eliminate connection latency */}
         <link key="fa-preconnect" rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
         <link key="fa-dns-prefetch" rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />

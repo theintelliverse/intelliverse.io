@@ -117,52 +117,59 @@ function MarqueeStrip({ items, direction, duration, isSerif = false, dimmed = fa
       <motion.div
         style={{
           display: "flex",
-          alignItems: "center",
-          animation: animCSS,
-          /* will-change for GPU compositing */
+          width: "max-content",
           willChange: "transform",
           skewX: skewSpring,
         }}
       >
-        {doubled.map((item, i) => (
-          <span
-            key={i}
-            className="flex items-center shrink-0"
-            style={{
-              fontFamily: isSerif ? "var(--serif)" : "var(--mono)",
-              fontSize: isSerif
-                ? "clamp(1.75rem, 3.2vw, 2.75rem)"
-                : "clamp(0.6875rem, 1.1vw, 0.8125rem)",
-              letterSpacing: isSerif ? "-0.02em" : "0.14em",
-              textTransform: isSerif ? "none" : "uppercase",
-              color: dimmed ? "rgba(246, 247, 252, 0.72)" : "rgba(246, 247, 252, 0.95)",
-              paddingRight: isSerif ? "2.5rem" : "1.75rem",
-              fontWeight: isSerif ? 400 : 500,
-            }}
-          >
-            {isSerif ? (
-              <>
-                <span>{item}</span>
-                <BrandOrbIcon />
-              </>
-            ) : (
-              <>
-                <span
-                  style={{
-                    display: "inline-block",
-                    width: "4px",
-                    height: "4px",
-                    borderRadius: "50%",
-                    backgroundColor: "var(--orange)",
-                    marginRight: "0.85rem",
-                  }}
-                  aria-hidden="true"
-                />
-                <span>{item}</span>
-              </>
-            )}
-          </span>
-        ))}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            animation: animCSS,
+            willChange: "transform",
+          }}
+        >
+          {doubled.map((item, i) => (
+            <span
+              key={i}
+              className="flex items-center shrink-0"
+              style={{
+                fontFamily: isSerif ? "var(--serif)" : "var(--mono)",
+                fontSize: isSerif
+                  ? "clamp(1.75rem, 3.2vw, 2.75rem)"
+                  : "clamp(0.6875rem, 1.1vw, 0.8125rem)",
+                letterSpacing: isSerif ? "-0.02em" : "0.14em",
+                textTransform: isSerif ? "none" : "uppercase",
+                color: dimmed ? "rgba(246, 247, 252, 0.72)" : "rgba(246, 247, 252, 0.95)",
+                paddingRight: isSerif ? "2.5rem" : "1.75rem",
+                fontWeight: isSerif ? 400 : 500,
+              }}
+            >
+              {isSerif ? (
+                <>
+                  <span>{item}</span>
+                  <BrandOrbIcon />
+                </>
+              ) : (
+                <>
+                  <span
+                    style={{
+                      display: "inline-block",
+                      width: "4px",
+                      height: "4px",
+                      borderRadius: "50%",
+                      backgroundColor: "var(--orange)",
+                      marginRight: "0.85rem",
+                    }}
+                    aria-hidden="true"
+                  />
+                  <span>{item}</span>
+                </>
+              )}
+            </span>
+          ))}
+        </div>
       </motion.div>
     </div>
   );

@@ -43,8 +43,9 @@ export default function ClientHome({ initialData }) {
   const [caseStudies, setCaseStudies] = useState(initialData?.caseStudies || []);
   const [founders, setFounders] = useState(initialData?.founders || []);
 
-  // Fetch updated content if API is available
+  // Fetch updated content if API is available and initialData was not loaded
   useEffect(() => {
+    if (initialData?.hero && initialData?.about) return;
     const fetchContent = async () => {
       try {
         const response = await fetch("/api/content", {

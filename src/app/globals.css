@@ -28,6 +28,7 @@ html.lenis body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
@@ -36,13 +37,16 @@ html.lenis body {
   width: 6px;
   height: 6px;
 }
+
 .admin-panel ::-webkit-scrollbar-track {
   background: rgba(11, 21, 48, 0.4);
 }
+
 .admin-panel ::-webkit-scrollbar-thumb {
   background: rgba(228, 218, 195, 0.2);
   border-radius: 4px;
 }
+
 .admin-panel ::-webkit-scrollbar-thumb:hover {
   background: rgba(61, 123, 247, 0.6);
 }
@@ -70,9 +74,9 @@ html {
   /* ── Font families (resolved from next/font/local CSS vars) ── */
   --font-handwritten: var(--font-hand, 'Caveat', cursive);
   --serif: var(--font-serif, 'Instrument Serif', Georgia, serif);
-  --mono:  var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  --sans:  var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
-  --hand:  var(--font-hand, 'Caveat', cursive);
+  --mono: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  --sans: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+  --hand: var(--font-hand, 'Caveat', cursive);
 
   /* Surfaces */
   --cream: #FFFFFF;
@@ -270,18 +274,24 @@ body {
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-8px);
   }
 }
 
 @keyframes blink {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0;
   }
@@ -292,10 +302,12 @@ body {
     transform: scale(0.95);
     box-shadow: 0 0 0 0 rgba(34, 165, 91, 0.7);
   }
+
   70% {
     transform: scale(1);
     box-shadow: 0 0 0 6px rgba(34, 165, 91, 0);
   }
+
   100% {
     transform: scale(0.95);
     box-shadow: 0 0 0 0 rgba(34, 165, 91, 0);
@@ -307,9 +319,11 @@ body {
     stroke-dashoffset: 320;
     opacity: 0;
   }
+
   15% {
     opacity: 1;
   }
+
   100% {
     stroke-dashoffset: 0;
     opacity: 1;
@@ -456,6 +470,10 @@ body {
   justify-content: center;
   overflow: hidden;
   pointer-events: none;
+}
+
+html.iv-visited #preloader {
+  display: none !important;
 }
 
 .preloader-exit {
@@ -1431,6 +1449,7 @@ body.cursor-drag .cursor-ring {
     opacity: 0;
     transform: translateY(14px) scale(0.96);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -1448,7 +1467,7 @@ body.cursor-drag .cursor-ring {
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid rgba(61, 123, 247, 0.25);
   border-radius: 20px;
-  box-shadow: 
+  box-shadow:
     0 25px 65px -12px rgba(3, 7, 18, 0.75),
     0 0 0 1px rgba(255, 255, 255, 0.08),
     0 0 40px -10px rgba(61, 123, 247, 0.25);
@@ -1464,13 +1483,16 @@ body.cursor-drag .cursor-ring {
 .chatbot-messages::-webkit-scrollbar {
   width: 5px;
 }
+
 .chatbot-messages::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .chatbot-messages::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 9999px;
 }
+
 .chatbot-messages::-webkit-scrollbar-thumb:hover {
   background: rgba(61, 123, 247, 0.5);
 }
@@ -1774,15 +1796,19 @@ img {
 .admin-panel .text-white {
   color: var(--cream) !important;
 }
+
 .admin-panel .text-gray-300 {
   color: rgba(248, 242, 228, 0.9) !important;
 }
+
 .admin-panel .text-gray-400 {
   color: rgba(248, 242, 228, 0.65) !important;
 }
+
 .admin-panel .text-gray-500 {
   color: rgba(248, 242, 228, 0.45) !important;
 }
+
 .admin-panel .text-gray-600 {
   color: rgba(248, 242, 228, 0.3) !important;
 }
@@ -1797,6 +1823,7 @@ img {
   font-family: 'JetBrains Mono', monospace;
   transition: all 0.2s ease-in-out;
 }
+
 .admin-panel input:focus,
 .admin-panel textarea:focus,
 .admin-panel select:focus {
@@ -1804,6 +1831,7 @@ img {
   box-shadow: 0 0 0 2px rgba(47, 99, 224, 0.25) !important;
   outline: none !important;
 }
+
 .admin-panel input::placeholder,
 .admin-panel textarea::placeholder {
   color: rgba(248, 242, 228, 0.3) !important;
@@ -1814,20 +1842,24 @@ img {
   background-color: var(--blue-deep) !important;
   color: var(--cream) !important;
 }
+
 .admin-panel .bg-blue-600:hover,
 .admin-panel .hover\:bg-blue-500:hover,
 .admin-panel .hover\:bg-blue-600:hover {
   background-color: var(--blue-press) !important;
 }
+
 .admin-panel .bg-blue-600\/10,
 .admin-panel .bg-blue-500\/10 {
   background-color: rgba(47, 99, 224, 0.15) !important;
 }
+
 .admin-panel .border-blue-500\/20,
 .admin-panel .border-blue-500\/30,
 .admin-panel .border-blue-500\/35 {
   border-color: rgba(61, 123, 247, 0.35) !important;
 }
+
 .admin-panel .text-blue-400,
 .admin-panel .text-blue-500 {
   color: var(--blue) !important;
@@ -1838,9 +1870,11 @@ img {
 .admin-panel .text-amber-500 {
   color: var(--orange) !important;
 }
+
 .admin-panel .border-amber-500\/20 {
   border-color: rgba(253, 179, 71, 0.35) !important;
 }
+
 .admin-panel .bg-amber-500\/10,
 .admin-panel .bg-amber-400\/10 {
   background-color: rgba(253, 179, 71, 0.15) !important;
@@ -1934,11 +1968,12 @@ img {
 
 /* ── OVERLAPPING MINDS CUSTOM CURSOR SYSTEM ─────────────────────── */
 @media (hover: hover) and (pointer: fine) {
+
   /* Native cursor hidden ONLY on opted-in custom cursor elements, never on inputs/dialogs/scrollbars */
   html.custom-cursor-active [data-cursor]:not([data-cursor="text"]):not([data-cursor="hide"]):not(input):not(textarea):not(select):not([contenteditable="true"]) {
     cursor: none !important;
   }
-  
+
   html.custom-cursor-active a[data-cursor]:not([data-cursor="text"]),
   html.custom-cursor-active button[data-cursor]:not([data-cursor="text"]) {
     cursor: none !important;
@@ -1996,6 +2031,7 @@ select:focus-visible,
     transform: translate3d(-50%, -50%, 0) scale(0.2);
     opacity: 0.9;
   }
+
   100% {
     transform: translate3d(-50%, -50%, 0) scale(1);
     opacity: 0;
@@ -2004,6 +2040,7 @@ select:focus-visible,
 
 /* ── SERVICES & MOBILE ALIGNMENT FIXES ───────────────────────────────────── */
 @media (max-width: 768px) {
+
   /* Hide desktop hover/interaction hints — irrelevant on touch devices */
   .services-hover-hint,
   .philosophy-flex-hint,
@@ -2016,6 +2053,7 @@ select:focus-visible,
 .process-pinsec {
   position: relative;
 }
+
 .process-pinsec .process-pin {
   height: 100vh;
   padding-top: 86px;
@@ -2025,6 +2063,7 @@ select:focus-visible,
   flex-direction: column;
   justify-content: center;
 }
+
 .process-sys {
   display: grid;
   grid-template-columns: 390px 1fr;
@@ -2032,12 +2071,14 @@ select:focus-visible,
   height: calc(100vh - 140px);
   align-items: stretch;
 }
+
 .process-sys-l {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 10px 0 16px;
 }
+
 .process-sys-l h2 {
   font-family: var(--serif);
   font-weight: 400;
@@ -2047,10 +2088,12 @@ select:focus-visible,
   margin-top: 6px;
   color: var(--ink);
 }
+
 .process-steps {
   list-style: none;
   border-top: 1px solid var(--line);
 }
+
 .process-steps li {
   display: grid;
   grid-template-columns: 44px 1fr;
@@ -2063,16 +2106,19 @@ select:focus-visible,
   cursor: pointer;
   user-select: none;
 }
+
 .process-steps li .no {
   font-family: var(--mono);
   font-size: 12px;
   padding-top: 4px;
 }
+
 .process-steps li h4 {
   font-weight: 600;
   font-size: 18px;
   line-height: 1.3;
 }
+
 .process-steps li p {
   font-size: 14.5px;
   line-height: 1.45;
@@ -2081,21 +2127,25 @@ select:focus-visible,
   opacity: 0;
   transition: all 0.4s ease;
 }
+
 .process-steps li.on {
   opacity: 1;
   transform: translateX(6px);
   color: var(--ink);
 }
+
 .process-steps li.on .no {
   color: var(--blue-deep);
   font-weight: 700;
 }
+
 .process-steps li.on p {
   max-height: 90px;
   opacity: 1;
   margin-top: 6px;
   color: var(--ink-2);
 }
+
 .process-prog {
   height: 3px;
   background: var(--line);
@@ -2104,6 +2154,7 @@ select:focus-visible,
   border-radius: 3px;
   overflow: hidden;
 }
+
 .process-prog i {
   position: absolute;
   inset: 0 auto 0 0;
@@ -2111,6 +2162,7 @@ select:focus-visible,
   background: linear-gradient(90deg, var(--indigo), var(--blue), var(--coral), var(--amber));
   border-radius: 3px;
 }
+
 .process-stage {
   position: relative;
   border: 1px solid var(--line-2);
@@ -2121,6 +2173,7 @@ select:focus-visible,
   display: flex;
   flex-direction: column;
 }
+
 .process-stage-h {
   position: relative;
   display: flex;
@@ -2133,6 +2186,7 @@ select:focus-visible,
   background: rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(12px);
 }
+
 .process-tab-pill {
   position: absolute;
   top: 4px;
@@ -2141,6 +2195,7 @@ select:focus-visible,
   background-color: var(--ink);
   pointer-events: none;
 }
+
 .pulse-dot {
   display: inline-block;
   width: 6px;
@@ -2150,76 +2205,93 @@ select:focus-visible,
   box-shadow: 0 0 8px rgba(34, 165, 91, 0.6);
   animation: pulseDot 2s infinite ease-in-out;
 }
+
 @keyframes pulseDot {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
   }
+
   50% {
     transform: scale(1.35);
     opacity: 0.7;
   }
 }
+
 .process-dg {
   position: relative;
   width: 100%;
   height: 100%;
   flex: 1;
 }
+
 .process-dg .edge {
   fill: none;
   stroke: var(--ink);
   stroke-width: 1.6;
 }
+
 .process-dg .edge.dash {
   stroke-dasharray: 6 6;
 }
+
 .process-dg .node {
   transform-box: fill-box;
   transform-origin: center center;
   cursor: pointer;
 }
+
 .process-dg .node rect {
   fill: #fff;
   stroke: var(--ink);
   stroke-width: 1.6;
   transition: stroke 0.25s ease, fill 0.25s ease, filter 0.25s ease;
 }
+
 .process-dg .node:hover rect {
   stroke: var(--blue-deep);
   fill: #F6F7FC;
   filter: drop-shadow(0 8px 16px rgba(14, 27, 61, 0.1));
 }
+
 .process-dg .node .lab {
   font-family: var(--mono);
   font-size: 10.5px;
   letter-spacing: 0.08em;
   fill: var(--ink-3);
 }
+
 .process-dg .node .nm {
   font-family: var(--sans);
   font-weight: 700;
   font-size: 17px;
   fill: var(--ink);
 }
+
 .process-dg .dec {
   pointer-events: none;
 }
+
 .process-dg .dec .txt {
   font-family: var(--hand);
   font-weight: 700;
   font-size: 21px;
 }
+
 .process-dg .dec path {
   fill: none;
   stroke-width: 1.6;
 }
+
 .process-dg .elab {
   font-family: var(--mono);
   font-size: 10.5px;
   fill: var(--ink-2);
   letter-spacing: 0.04em;
 }
+
 .process-shipv {
   position: absolute;
   inset: 58px 24px 22px 24px;
@@ -2231,6 +2303,7 @@ select:focus-visible,
   visibility: hidden;
   pointer-events: none;
 }
+
 .process-telemetry-view {
   position: absolute;
   inset: 58px 24px 22px 24px;
@@ -2242,12 +2315,14 @@ select:focus-visible,
   visibility: hidden;
   pointer-events: none;
 }
+
 .process-shipv .hd {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: 14px;
 }
+
 .process-shipv .hd h3 {
   font-family: var(--serif);
   font-weight: 400;
@@ -2256,12 +2331,14 @@ select:focus-visible,
   letter-spacing: -0.01em;
   color: var(--ink);
 }
+
 .process-prods {
   display: grid;
   grid-template-columns: 1fr 1fr 0.78fr;
   gap: 16px;
   height: calc(100% - 50px);
 }
+
 .process-prod {
   border-radius: 16px;
   overflow: hidden;
@@ -2274,10 +2351,12 @@ select:focus-visible,
   color: inherit;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .process-prod:hover {
   transform: translateY(-4px);
   box-shadow: 0 35px 70px -30px rgba(14, 27, 61, 0.25);
 }
+
 .process-prod .top {
   flex: 1;
   padding: 22px;
@@ -2287,6 +2366,7 @@ select:focus-visible,
   flex-direction: column;
   justify-content: space-between;
 }
+
 .process-prod .top .gl {
   position: absolute;
   right: -6px;
@@ -2298,6 +2378,7 @@ select:focus-visible,
   pointer-events: none;
   user-select: none;
 }
+
 .process-prod .mk {
   width: 48px;
   height: 48px;
@@ -2308,6 +2389,7 @@ select:focus-visible,
   font-family: var(--serif);
   font-size: 30px;
 }
+
 .process-prod .top h4 {
   font-family: var(--serif);
   font-weight: 400;
@@ -2315,11 +2397,13 @@ select:focus-visible,
   line-height: 1;
   letter-spacing: -0.01em;
 }
+
 .process-prod .top p {
   font-size: 14.5px;
   opacity: 0.9;
   margin-top: 6px;
 }
+
 .process-prod .bt {
   white-space: nowrap;
   display: flex;
@@ -2332,9 +2416,11 @@ select:focus-visible,
   color: var(--ink-2);
   background: #fff;
 }
+
 .process-prod .bt b {
   color: var(--blue-deep);
 }
+
 .process-prod.you {
   border: 1.5px dashed var(--line-2);
   background: rgba(255, 255, 255, 0.94);
@@ -2344,34 +2430,42 @@ select:focus-visible,
   text-align: center;
   padding: 24px;
 }
+
 .process-prod.you:hover {
   border-color: var(--blue-deep);
   background: #fff;
 }
+
 .process-prod.you .hand {
   font-size: 32px;
   line-height: 1.05;
   color: var(--ink);
   font-family: var(--hand);
 }
+
 .process-prod.you .mono {
   color: var(--blue-deep);
   margin-top: 14px;
 }
+
 .process-ap {
   background: linear-gradient(160deg, #0F7A57, #0B5A40);
 }
+
 .process-ap .mk {
   background: #fff;
   color: #0F7A57;
 }
+
 .process-vx {
   background: linear-gradient(160deg, #25211C, #14120F);
 }
+
 .process-vx .mk {
   background: #C8A46A;
   color: #14120F;
 }
+
 .process-vx h4 em {
   color: #E4C892;
   font-style: italic;
@@ -2432,4 +2526,4 @@ select:focus-visible,
 .admin-tag-pill:hover {
   background: rgba(61, 123, 247, 0.2);
   border-color: rgba(61, 123, 247, 0.4);
-}
+}
