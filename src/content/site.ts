@@ -95,11 +95,11 @@ export const siteConfig: SiteConfig = {
   url: siteUrl,
   organizationId: `${siteUrl}/#organization`,
   websiteId: `${siteUrl}/#website`,
-  tagline: "Software, Web & IT Services, Built Like a Craft",
+  tagline: "Custom Software & SaaS Architecture, Built Like a Craft",
   shortDescription:
-    "An engineering-first software development, web architecture, and IT services company in Ahmedabad, Gujarat, India.",
+    "Engineering-first software development & SaaS studio in Ahmedabad, Gujarat, India.",
   description:
-    "The Intelliverse is an engineering-first software development, web architecture, and dedicated IT services company based in Ahmedabad, Gujarat, India. We architect resilient SaaS platforms, high-throughput digital systems, and custom web infrastructure.",
+    "The Intelliverse is an engineering-first software & SaaS studio in Ahmedabad, India. We engineer high-performance Next.js web systems & cloud software.",
   email: "theintelliverse@gmail.com",
   phone: "", // Intentionally empty — not published
   address: {

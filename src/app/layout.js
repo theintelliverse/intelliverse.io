@@ -65,11 +65,11 @@ export const viewport = {
 export const metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: "The Intelliverse | Software, Web & IT Services in Ahmedabad, India",
+    default: "The Intelliverse | Custom Software & SaaS in Ahmedabad",
     template: "%s | The Intelliverse, Ahmedabad",
   },
   description:
-    "The Intelliverse is an engineering-first software development, web architecture, and IT services company based in Ahmedabad, Gujarat, India. Custom SaaS and cloud systems.",
+    "The Intelliverse is an engineering-first software & SaaS studio in Ahmedabad, India. We engineer high-performance Next.js web systems & cloud software.",
   keywords: [
     "The Intelliverse",
     "Intelliverse",
@@ -146,9 +146,9 @@ export const metadata = {
     locale: "en_IN",
     url: siteConfig.url,
     siteName: siteConfig.name,
-    title: "The Intelliverse | Software, Web & IT Services in Ahmedabad, India",
+    title: "The Intelliverse | Custom Software & SaaS in Ahmedabad",
     description:
-      "The Intelliverse is an engineering-first software development, web architecture, and IT services company based in Ahmedabad, Gujarat, India. Custom SaaS, Next.js web applications, and cloud systems.",
+      "The Intelliverse is an engineering-first software & SaaS studio in Ahmedabad, India. We engineer high-performance Next.js web systems & cloud software.",
     images: [
       {
         url: `${siteConfig.url}/og-image.png`,
@@ -156,7 +156,7 @@ export const metadata = {
         width: 1200,
         height: 630,
         type: "image/png",
-        alt: "The Intelliverse - Software, Web & IT Services in Ahmedabad, India",
+        alt: "The Intelliverse - Custom Software & SaaS Studio in Ahmedabad",
       },
       {
         url: `${siteConfig.url}/the-intelliverse-logo.png`,
@@ -177,9 +177,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Intelliverse | Software, Web & IT Services in Ahmedabad, India",
+    title: "The Intelliverse | Custom Software & SaaS in Ahmedabad",
     description:
-      "The Intelliverse is an engineering-first software development, web architecture, and IT services company based in Ahmedabad, Gujarat, India.",
+      "The Intelliverse is an engineering-first software & SaaS studio in Ahmedabad, India. We engineer high-performance Next.js web systems & cloud software.",
     images: [`${siteConfig.url}/og-image.png`],
     site: "@theintelliverse",
     creator: "@theintelliverse",

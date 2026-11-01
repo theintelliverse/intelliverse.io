@@ -13,6 +13,18 @@ export interface BlogPostMeta {
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "b2b-saas-multi-tenancy-postgresql-rls-vs-schemas",
+    title: "B2B SaaS Multi-Tenancy in PostgreSQL: Row-Level Security (RLS) vs Separate Schemas",
+    description:
+      "A deep architectural benchmark comparing Postgres Row-Level Security (RLS), schema-per-tenant, and database-per-tenant for high-scale multi-tenant SaaS platforms.",
+    author: "Dhruvil Thummar",
+    authorRole: "Co-founder & CTO",
+    publishedDate: "2026-11-01",
+    updatedDate: "2026-11-01",
+    readTime: "11 min read",
+    category: "Database & SaaS Architecture",
+  },
+  {
     slug: "appointory-healthcare-saas-architecture-case-study",
     title: "Case Study: How We Built Appointory — Real-Time Clinic Queue & OPD Token Dispatch Engine",
     description:

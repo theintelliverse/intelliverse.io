@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import fs from "fs";
 import path from "path";
 
-export const alt = "The Intelliverse — Software, Web & IT Services in Ahmedabad";
+export const alt = "The Intelliverse | Innovtion Create & Grow";
 export const size = {
   width: 1200,
   height: 630,

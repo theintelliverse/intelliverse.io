@@ -1,9 +1,33 @@
 import { getDb, localMockDb, defaultTestimonials } from "@/lib/db";
 import ClientHome from "./ClientHome";
 
+import { siteConfig } from "@/content/site";
+import { seoConfig } from "@/content/seo";
+
 // Ensure live MongoDB Atlas data is loaded dynamically on each request
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+
+export const metadata = {
+  title: seoConfig.home.title,
+  description: seoConfig.home.description,
+  alternates: {
+    canonical: siteConfig.url,
+  },
+  openGraph: {
+    title: seoConfig.home.title,
+    description: seoConfig.home.description,
+    url: siteConfig.url,
+    siteName: siteConfig.name,
+    images: [{ url: `${siteConfig.url}/og-image.png`, width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: seoConfig.home.title,
+    description: seoConfig.home.description,
+    images: [`${siteConfig.url}/og-image.png`],
+  },
+};
 
 export default async function Home() {
   let initialData = {

@@ -24,9 +24,9 @@ export interface PageSeoConfig {
 
 export const seoConfig: Record<string, PageSeoConfig> = {
   home: {
-    title: "Software & Web Development Company in Ahmedabad — The Intelliverse",
+    title: "The Intelliverse | Custom Software & SaaS in Ahmedabad",
     description:
-      "Engineering-first software development company in Ahmedabad, Gujarat. Custom SaaS platforms, Next.js web applications, and enterprise IT services built to scale.",
+      "The Intelliverse is an engineering-first software & SaaS studio in Ahmedabad, India. We engineer high-performance Next.js web systems & cloud software.",
     canonicalPath: "/",
     keywords: [
       "The Intelliverse",
